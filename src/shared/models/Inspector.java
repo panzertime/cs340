@@ -1,8 +1,8 @@
 package shared.models;
 
-import shared.models.board.locations.EdgeLocation;
-import shared.models.board.locations.HexLocation;
-import shared.models.board.locations.VertexLocation;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.vertex.VertexLocation;
 import shared.models.exceptions.NonMoveException;
 import shared.models.exceptions.PlayingException;
 import shared.models.exceptions.TradeException;
@@ -11,6 +11,8 @@ import shared.models.hand.ResourceType;
 /** This class is owned by the ModelFacade. Its purpose is to lighten the load
  * of the Facade by taking care of the can functions.
  */
+
+
 public class Inspector {
 
 	/**
@@ -66,6 +68,8 @@ public class Inspector {
 		return false;
 		
 	}
+	
+	
 	
 	/**
 	 * Checks the model to see if a user can trade that much of one resource
