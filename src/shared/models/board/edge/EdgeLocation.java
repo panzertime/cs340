@@ -1,4 +1,6 @@
-package shared.models.board.locations;
+package shared.models.board.edge;
+
+import shared.models.board.hex.HexLocation;
 
 /**
  * Represents the location of an edge on a hex map
