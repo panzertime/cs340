@@ -1,4 +1,4 @@
-package shared.models.board.tiles;
+package shared.models.board.hex.tiles.water;
 
 public enum PortType
 {

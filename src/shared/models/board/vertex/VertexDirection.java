@@ -1,4 +1,4 @@
-package shared.models.board.locations;
+package shared.models.board.vertex;
 
 public enum VertexDirection
 {
