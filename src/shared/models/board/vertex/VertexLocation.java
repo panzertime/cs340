@@ -1,4 +1,7 @@
-package shared.models.board.locations;
+package shared.models.board.vertex;
+
+import shared.models.board.edge.EdgeDirection;
+import shared.models.board.hex.HexLocation;
 
 /**
  * Represents the location of a vertex on a hex map
