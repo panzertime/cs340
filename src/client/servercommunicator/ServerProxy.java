@@ -1,13 +1,15 @@
 package cs340.client.servercommunivator;
 
 /**
- * This interface is to be implemented for use on the clients machine.
- * The object that implements this class will act like a server for the game
- * model. Simultaneously, requests will be sent to the server to retrieve
- * the necessary information for the game model.
- */
-public interface IServerProxy {
+ * Concrete implementation of IServerProxy for use with a real network server */
+public class ServerProxy implements IServerProxy{
 	
+	/**
+	 *	constructs new ServerProxy
+	 */
+	public ServerProxy(){
+		};
+		
 	/**
 	 * Checks the server to see if the given credentials are valid. If so
 	 * it logs the user into the system
@@ -20,8 +22,11 @@ public interface IServerProxy {
 	 * @return whether or not it was successful
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public boolean loginUser(JSONObject credentials) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+			return true;
+	}
 	
 	/**
 	 * Creates a new account for the given credentials. It will also log the
@@ -36,8 +41,11 @@ public interface IServerProxy {
 	 * @return whether or not it was successful
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public boolean registerUser(JSONObject credentials)
-			throws ServerProxyException;
+			throws ServerProxyException {
+			return true;
+	}
 	
 	/**
 	 * Returns a list of all games currently in progress.
@@ -47,7 +55,10 @@ public interface IServerProxy {
 	 * @return A list of all games in progress if successful. Otherwise null
 	 * @throws ServerProxyException problems with connection
 	 */
-	public JSONObject listGames() throws ServerProxyException;
+	 @Override
+	public JSONObject listGames() throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * Creates a new game on the server with the given parameters.
@@ -60,8 +71,11 @@ public interface IServerProxy {
 	 * @return description of newly created game
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public JSONObject createGame(JSONObject createGameRequest) 
-		throws ServerProxyException;
+		throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Adds a user to a given game.
@@ -72,8 +86,11 @@ public interface IServerProxy {
 	 * @return whether or not the user was successfully added
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public boolean joinGame(JSONObject joinGameRequest) 
-		throws ServerProxyException;
+		throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Saves the current state of the game. Should only be used for debugging
@@ -85,8 +102,12 @@ public interface IServerProxy {
 	 * @return Whether or not it was able to save the game
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public boolean saveGame(JSONObject saveGameRequest)
-		throws ServerProxyException;
+		throws ServerProxyException {
+		return true;
+	}
+
 	
 	/**
 	 * Loads a previous game saved for debugging purposes.
@@ -97,8 +118,11 @@ public interface IServerProxy {
 	 * @return The specified game from the file
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public JSONObject loadGame(JSONObject loadGameRequest)
-		throws ServerProxyException;
+		throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Checks to see if the given model version is current. If so, it does
@@ -111,8 +135,11 @@ public interface IServerProxy {
 	 * @return the current state of the game or true if the model is current
 	 * @throws ServerProxyException problems with connection or in request
 	 */
+	 @Override
 	public JSONObject getModel(JSONObject versionNumber)
-		throws ServerProxyException;
+		throws ServerProxyException  {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Returns a model of the state of a game right after the initial placement
@@ -123,7 +150,10 @@ public interface IServerProxy {
 	 * @return A reset game model
 	 * @throws ServerProxyException problems with connection
 	 */
-	public JSONObject reset() throws ServerProxyException;	
+	 @Override
+	public JSONObject reset() throws ServerProxyException  {
+		return new JSONObject();
+	}	
 	
 	/**
 	 * Gets a list of all the commands called in the game. Used for debugging
@@ -135,7 +165,10 @@ public interface IServerProxy {
 	 * far
 	 * @throws ServerProxyException problems with the connection
 	 */
-	public JSONObject getCommands() throws ServerProxyException;
+	 @Override
+	public JSONObject getCommands() throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Executes the given commands on the game. Ideally a game would have been
@@ -146,8 +179,11 @@ public interface IServerProxy {
 	 * @return Game model after the given commands have been applied
 	 * @throws ServerProxyException if a problem with connection or parameters
 	 */
+	 @Override
 	public JSONObject executeCommands(JSONObject listOfCommands) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Adds an AI player to the current game
@@ -159,8 +195,11 @@ public interface IServerProxy {
 	 * @return true if successful
 	 * @throws ServerProxyException Not a valid AI Request, Connection error
 	 */
+	 @Override
 	public boolean addAI(JSONObject addAIRequest) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+		return true;
+	}
 	
 	/**
 	 * Returns the different type of AI players available
@@ -169,7 +208,10 @@ public interface IServerProxy {
 	 * @return A string array of different type of AI players 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject listAI() throws ServerProxyException;
+	 @Override
+	public JSONObject listAI() throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Sends a message to chat part of the model
@@ -179,8 +221,11 @@ public interface IServerProxy {
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
+	 @Override
 	public JSONObject sendChat(JSONObject sendChat) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+		return new JSONObject();
+	}
 	/**
 	 * Tells the server what number was rolled.
 	 * @pre User is logged in, has joined a game, it's his turn and the model
@@ -190,8 +235,11 @@ public interface IServerProxy {
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
+	 @Override
 	public JSONObject rollNumber(JSONObject rollNumber) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Moves the robber and reallocates the robbed resource card, if there is
@@ -205,8 +253,11 @@ public interface IServerProxy {
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
+	 @Override
 	public JSONObject robPlayer(JSONObject robPlayer) 
-			throws ServerProxyException;
+			throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Signals that the player's turn is ended
@@ -214,7 +265,10 @@ public interface IServerProxy {
 	 * @return An updated game model
 	 * @throws ServerProxyException
 	 */
-	public JSONObject finishTurn() throws ServerProxyException;
+	 @Override
+	public JSONObject finishTurn() throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * Signals that the player would like to buy a devCard
@@ -222,7 +276,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject buyDevCard() throws ServerProxyException;
+	 @Override
+	public JSONObject buyDevCard() throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to play yearOfPlenty card
@@ -234,7 +291,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException;
+	 @Override
+	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException {
+		return new JSONObject();
+	}
 
 	/**
 	 * User wants to build a road
@@ -249,7 +309,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException;
+	 @Override
+	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to play a soldier card
@@ -264,7 +327,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to use a monopoly card
@@ -274,7 +340,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject monopoly(JSONObject resource) throws ServerProxyException;
+	 @Override
+	public JSONObject monopoly(JSONObject resource) throws ServerProxyException {
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to play a monument card
@@ -285,7 +354,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject monument() throws ServerProxyException;
+	 @Override
+	public JSONObject monument() throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to place a road on the map
@@ -299,7 +371,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject buildRoad(JSONObject buildRoadArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject buildRoad(JSONObject buildRoadArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to place a settlement on the map
@@ -313,7 +388,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject buildSettlement(JSONObject buildSettlementArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject buildSettlement(JSONObject buildSettlementArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to place a city on the map
@@ -325,7 +403,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject buildCity(JSONObject buildCityArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject buildCity(JSONObject buildCityArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to make a trade
@@ -336,7 +417,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject offerTrade(JSONObject offerTradeArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject offerTrade(JSONObject offerTradeArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User must respond to a trade offer
@@ -348,7 +432,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject acceptTrade(JSONObject acceptTradeArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject acceptTrade(JSONObject acceptTradeArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User wants to make maritime trade
@@ -360,7 +447,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject maritimeTrade(JSONObject maritimeTradeArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject maritimeTrade(JSONObject maritimeTradeArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * User intends to discard cards
@@ -371,7 +461,10 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject discardCards(JSONObject discardArgs) throws ServerProxyException;
+	 @Override
+	public JSONObject discardCards(JSONObject discardArgs) throws ServerProxyException{
+		return new JSONObject();
+	}
 	
 	/**
 	 * Client for some reason intends to adjust server log level
@@ -382,5 +475,11 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException;
+	 @Override
+	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
+		return new JSONObject();
+	}
 }
+
+
+
