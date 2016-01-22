@@ -1,4 +1,4 @@
-package cs340.client.servercommunivator;
+package client.servercommunicator;
 
 /**
  * Concrete implementation of IServerProxy for use with a real network server */
@@ -266,7 +266,7 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject finishTurn() throws ServerProxyException {
+	public JSONObject finishTurn(JSONObject JSONObject) throws ServerProxyException {
 		return new JSONObject();
 	}
 	
@@ -277,7 +277,7 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject buyDevCard() throws ServerProxyException {
+	public JSONObject buyDevCard(JSONObject JSONObject) throws ServerProxyException {
 		return new JSONObject();
 	}
 	
@@ -479,7 +479,6 @@ public class ServerProxy implements IServerProxy{
 	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
 		return new JSONObject();
 	}
+
+
 }
-
-
-
