@@ -8,6 +8,8 @@ import shared.models.board.hex.HexLocation;
 
 public class Board {
 	
+	private Robber robber;
+	
 	private Map <HexLocation, Hex> hexes = new HashMap <HexLocation, Hex>();
 	
 	private Hex getHexAtLocation(HexLocation hexLocation) throws IndexOutOfBoundsException {
@@ -16,7 +18,6 @@ public class Board {
 			throw new IndexOutOfBoundsException();
 		return hex;
 	}
-	
 	
 	
 
