@@ -1,4 +1,4 @@
-package shared.models.board.tiles;
+package shared.models.board.hex;
 
 public enum HexType
 {
