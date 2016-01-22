@@ -20,6 +20,36 @@ import shared.models.hand.ResourceType;
  */
 public class ModelFacade {
 	
+	private Inspector inspector;
+	
+	/**
+	 * Instrcutor with no params
+	 */
+	public ModelFacade() {
+	}
+	
+	/**
+	 * Instrcutor
+	 * @param inspector
+	 */
+	public ModelFacade(Inspector inspector) {
+		this.inspector = inspector;
+	}
+	
+	/**
+	 * @return the inspector
+	 */
+	public Inspector getInspector() {
+		return inspector;
+	}
+
+	/**
+	 * @param inspector the inspector to set
+	 */
+	public void setInspector(Inspector inspector) {
+		this.inspector = inspector;
+	}
+
 	/**
 	 * Initially it sends the message to the game model. If there were no 
 	 * errors it then proceeds to send the message to the server facade to 
