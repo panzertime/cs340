@@ -1,5 +1,7 @@
 package client.servercommunicator;
 
+import shared.models.translator.JSONObject;
+
 /**
  * This interface is to be implemented for use on the clients machine.
  * The object that implements this class will act like a server for the game
