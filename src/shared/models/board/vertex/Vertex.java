@@ -2,8 +2,10 @@ package shared.models.board.vertex;
 
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
-import shared.models.board.peice.Building;
-import shared.models.board.peice.PositionTakenException;
+import shared.models.board.piece.Building;
+import shared.models.board.piece.PositionTakenException;
+import shared.models.hand.ResourceException;
+import shared.models.hand.ResourceType;
 
 public class Vertex {
 	
@@ -59,6 +61,11 @@ public class Vertex {
 	 */
 	public void setVertexLocation(VertexLocation vertexLocation) {
 		this.vertexLocation = vertexLocation.getNormalizedLocation();
+	}
+	
+	public void produce(ResourceType type) throws ResourceException {
+		if (building != null)
+			building.produce(type);
 	}
 
 	/**
