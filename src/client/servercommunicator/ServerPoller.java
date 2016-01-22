@@ -1,4 +1,4 @@
-package cs340.client.servercommunicator;
+package client.servercommunicator;
 
 
 /**
@@ -19,6 +19,6 @@ public class ServerPoller {
 	 * periodically polls server
 	 * @pre serverproxy is properly set up
 	 */
-	public void JSONObject poll(){
+	public void poll(){
 	};
 }
