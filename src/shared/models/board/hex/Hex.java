@@ -1,15 +1,24 @@
 package shared.models.board.hex;
 
+import shared.models.board.edge.BadEdgeDirectionException;
 import shared.models.board.edge.Edge;
+import shared.models.board.edge.EdgeDirection;
+import shared.models.board.vertex.BadVertexDirectionException;
 import shared.models.board.vertex.Vertex;
+import shared.models.board.vertex.VertexDirection;
 
-public class Hex {
+public abstract class Hex {
 	
-	private HexType hexType;
+	protected HexType hexType;
 	private HexLocation hexlocation;
 	private Edge[] edges = new Edge[6];
-	private Vertex[] verts = new Vertex[6];
+	protected Vertex[] verts = new Vertex[6];
 
+	/**
+	 * @return Boolean the ability of the hex to hold pieces
+	 */
+	public abstract Boolean isBuildable();
+	
 	/**
 	 * @return the hexType
 	 */
@@ -25,172 +34,109 @@ public class Hex {
 	}
 	
 	/**
-	 * @param edge the edge to set at the North Position
+	 * @param dir the direction of the edge to set
+	 * @param edge the edge to set
+	 * @throws BadEdgeDirectionException
 	 */
-	public void setEdgeN(Edge edge) {
-		this.edges[0] = edge;
-	}
-	
-	/**
-	 * @param edge the edge to set at the NorthEast Position
-	 */
-	public void setEdgeNE(Edge edge) {
-		this.edges[1] = edge;
-	}
-	
-	/**
-	 * @param edge the edge to set at the SouthEast Position
-	 */
-	public void setEdgeSE(Edge edge) {
-		this.edges[2] = edge;
-	}
-
-	/**
-	 * @param edge the edge to set at the South Position
-	 */
-	public void setEdgeS(Edge edge) {
-		this.edges[3] = edge;
-	}
-	
-	/**
-	 * @param edge the edge to set at the SouthWest Position
-	 */
-	public void setEdgeSW(Edge edge) {
-		this.edges[4] = edge;
+	public void setEdge(EdgeDirection dir, Edge edge) throws BadEdgeDirectionException {
+		switch (dir) {
+			case North: 
+				edges[0] = edge;
+				return;
+			case NorthEast: 
+				edges[1] = edge;
+				return;
+			case SouthEast: 
+				edges[2] = edge;
+				return;
+			case South: 
+				edges[3] = edge;
+				return;
+			case SouthWest: 
+				edges[4] = edge;
+				return;
+			case NorthWest: 
+				edges[5] = edge;
+				return;
+		}
+		throw new BadEdgeDirectionException();
 	}
 
 	/**
-	 * @param edge the edge to set at the NorthWest Position
+	 * @param dir the direction of the edge to get
+	 * @param edge the edge to get
+	 * @throws BadEdgeDirectionException
 	 */
-	public void setEdgeNW(Edge edge) {
-		this.edges[5] = edge;
+	public Edge getEdge(EdgeDirection dir) throws BadEdgeDirectionException {
+		switch (dir) {
+			case North: 
+				return edges[0];
+			case NorthEast: 
+				return edges[1];
+			case SouthEast: 
+				return edges[2];
+			case South: 
+				return edges[3];
+			case SouthWest: 
+				return edges[4];
+			case NorthWest: 
+				return edges[5];
+		}
+		throw new BadEdgeDirectionException();
 	}
 
 	/**
-	 * @return edge the edge at the North Position
+	 * @param dir the direction of the vertex to set
+	 * @param edge the vertex to set
+	 * @throws BadEdgeDirectionException
 	 */
-	public Edge getEdgeN() {
-		return this.edges[0];
-	}
-	
-	/**
-	 * @return edge the edge at the NorthEast Position
-	 */
-	public Edge getEdgeNE() {
-		return this.edges[1];
-	}
-	
-	/**
-	 * @return edge the edge at the SouthEast Position
-	 */
-	public Edge getEdgeSE() {
-		return this.edges[2];
-	}
-
-	/**
-	 * @return edge the edge at the South Position
-	 */
-	public Edge getEdgeS() {
-		return this.edges[3];
-	}
-	
-	/**
-	 * @return edge the edge at the SouthWest Position
-	 */
-	public Edge getEdgeSW() {
-		return this.edges[4];
+	public void setVertex(VertexDirection dir, Vertex vertex) throws BadVertexDirectionException {
+		switch (dir) {
+			case NorthEast: 
+				verts[0] = vertex;
+				return;
+			case East: 
+				verts[1] = vertex;
+				return;
+			case SouthEast: 
+				verts[2] = vertex;
+				return;
+			case SouthWest: 
+				verts[3] = vertex;
+				return;
+			case West: 
+				verts[4] = vertex;
+				return;
+			case NorthWest: 
+				verts[5] = vertex;
+				return;
+		}
+		throw new BadVertexDirectionException();
 	}
 
 	/**
-	 * @return edge the edge at the NorthWest Position
+	 * @param dir the direction of the vertex to get
+	 * @param edge the vertex to get
+	 * @throws BadEdgeDirectionException
 	 */
-	public Edge getEdgeNW() {
-		return this.edges[5];
-	}
-	
-	/**
-	 * @param vertex the vertex to set at the NorthEast Position
-	 */
-	public void setVertexNE(Vertex vertex) {
-		this.verts[0] = vertex;
-	}
-
-	/**
-	 * @param vertex the vertex to set at the East Position
-	 */
-	public void setVertexE(Vertex vertex) {
-		this.verts[1] = vertex;
-	}
-	
-	/**
-	 * @param vertex the vertex to set at the SouthEast Position
-	 */
-	public void setVertexSE(Vertex vertex) {
-		this.verts[2] = vertex;
+	public Vertex getVertex(VertexDirection dir) throws BadVertexDirectionException {
+		switch (dir) {
+			case NorthEast: 
+				return verts[0];
+			case East: 
+				return verts[1];
+			case SouthEast: 
+				return verts[2];
+			case SouthWest: 
+				return verts[3];
+			case West: 
+				return verts[4];
+			case NorthWest: 
+				return verts[5];
+		}
+		throw new BadVertexDirectionException();
 	}
 
-	/**
-	 * @param vertex the vertex to set at the SouthWest Position
-	 */
-	public void setVertexSW(Vertex vertex) {
-		this.verts[3] = vertex;
-	}
-
-	/**
-	 * @param vertex the vertex to set at the West Position
-	 */
-	public void setVertexW(Vertex vertex) {
-		this.verts[4] = vertex;
-	}
-	
-	/**
-	 * @param vertex the vertex to set at the NorthWest Position
-	 */
-	public void setVertexNW(Vertex vertex) {
-		this.verts[5] = vertex;
-	}
-
-	/**
-	 * @return vertex the vertex at the NorthEast Position
-	 */
-	public Vertex getVertexNE() {
-		return this.verts[0];
-	}
-
-	/**
-	 * @return vertex the vertex at the East Position
-	 */
-	public Vertex getVertexE() {
-		return this.verts[1];
-	}
-	
-	/**
-	 * @return vertex the vertex at the SouthEast Position
-	 */
-	public Vertex getVertexSE() {
-		return this.verts[2];
-	}
-
-	/**
-	 * @return vertex the vertex at the SouthWest Position
-	 */
-	public Vertex getVertexSW() {
-		return this.verts[3];
-	}
-
-	/**
-	 * @return vertex the vertex at the West Position
-	 */
-	public Vertex getVertexW() {
-		return this.verts[4];
-	}
-	
-	/**
-	 * @return vertex the vertex at the NorthWest Position
-	 */
-	public Vertex getVertexNW() {
-		return this.verts[5];
-	}
 
 	/**
 	 * @return the hexlocation

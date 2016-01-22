@@ -40,7 +40,7 @@ public class Hand {
 				ore += num;
 				return;
 		}
-		throw new NotAResourceTypeException();
+		throw new BadResourceTypeException();
 	}
 
 
@@ -77,9 +77,9 @@ public class Hand {
 	 * @param type the type of resource to checked
 	 * @param num the number of resource to be checked
 	 * @return Boolean Indicating if the player has the resources of type and nun
-	 * @throws NotAResourceTypeException
+	 * @throws BadResourceTypeException
 	 */
-	private Boolean hasResource(ResourceType type, Integer num) throws NotAResourceTypeException {
+	private Boolean hasResource(ResourceType type, Integer num) throws BadResourceTypeException {
 		switch (type) {
 			case WOOD: 
 				if (wood >= num) {
@@ -107,7 +107,7 @@ public class Hand {
 				}
 				return false;
 		}
-		throw new NotAResourceTypeException();
+		throw new BadResourceTypeException();
 	}
 	
 	/**
