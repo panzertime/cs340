@@ -1,4 +1,4 @@
-MountainHex.javapackage shared.models.board.hex.tiles.land;
+package shared.models.board.hex.tiles.land;
 
 import shared.models.board.hex.HexType;
 
