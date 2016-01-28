@@ -1,4 +1,6 @@
-package cs340.client.servercommunivator;
+package client.servercommunicator;
+
+import shared.models.translator.JSONObject;
 
 /**
  * Concrete implementation of IServerProxy for use with no server in a testing situation  */
@@ -57,7 +59,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject listGames() throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject createGame(JSONObject createGameRequest) 
 		throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -89,7 +91,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public boolean joinGame(JSONObject joinGameRequest) 
 		throws ServerProxyException {
-		return new JSONObject();
+		return false;
 	}
 	
 	/**
@@ -121,7 +123,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject loadGame(JSONObject loadGameRequest)
 		throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -138,7 +140,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject getModel(JSONObject versionNumber)
 		throws ServerProxyException  {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -152,7 +154,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject reset() throws ServerProxyException  {
-		return new JSONObject();
+		return null;
 	}	
 	
 	/**
@@ -167,7 +169,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject getCommands() throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -182,7 +184,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject executeCommands(JSONObject listOfCommands) 
 			throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -210,7 +212,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject listAI() throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -224,7 +226,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject sendChat(JSONObject sendChat) 
 			throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	/**
 	 * Tells the server what number was rolled.
@@ -238,7 +240,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject rollNumber(JSONObject rollNumber) 
 			throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -256,7 +258,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject robPlayer(JSONObject robPlayer) 
 			throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -265,9 +267,8 @@ public class FakeProxy implements IServerProxy{
 	 * @return An updated game model
 	 * @throws ServerProxyException
 	 */
-	 @Override
-	public JSONObject finishTurn() throws ServerProxyException {
-		return new JSONObject();
+	 public JSONObject finishTurn() throws ServerProxyException {
+		return null;
 	}
 	
 	/**
@@ -276,9 +277,8 @@ public class FakeProxy implements IServerProxy{
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	 @Override
-	public JSONObject buyDevCard() throws ServerProxyException {
-		return new JSONObject();
+	 public JSONObject buyDevCard() throws ServerProxyException {
+		return null;
 	}
 	
 	/**
@@ -293,7 +293,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 
 	/**
@@ -311,7 +311,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -329,7 +329,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -342,7 +342,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject monopoly(JSONObject resource) throws ServerProxyException {
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -356,7 +356,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject monument() throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -373,7 +373,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildRoad(JSONObject buildRoadArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -390,7 +390,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildSettlement(JSONObject buildSettlementArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -405,7 +405,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildCity(JSONObject buildCityArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -419,7 +419,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject offerTrade(JSONObject offerTradeArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -434,7 +434,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject acceptTrade(JSONObject acceptTradeArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -449,7 +449,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject maritimeTrade(JSONObject maritimeTradeArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -463,7 +463,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject discardCards(JSONObject discardArgs) throws ServerProxyException{
-		return new JSONObject();
+		return null;
 	}
 	
 	/**
@@ -477,7 +477,19 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
-		return new JSONObject();
+		return null;
+	}
+
+	@Override
+	public JSONObject finishTurn(JSONObject JSONObject) throws ServerProxyException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JSONObject buyDevCard(JSONObject buyDevCard) throws ServerProxyException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

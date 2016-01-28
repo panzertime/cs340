@@ -1,4 +1,13 @@
+
 package shared.models.hand;
+
+import java.util.ArrayList;
+
+import shared.models.hand.development.Knight;
+import shared.models.hand.development.Monopoly;
+import shared.models.hand.development.RoadBuilding;
+import shared.models.hand.development.Victory;
+import shared.models.hand.development.YearOfPlenty;
 
 public class Hand {
 	
@@ -8,6 +17,61 @@ public class Hand {
 	private Integer wheat = 0;
 	private Integer ore = 0;
 	
+	private ArrayList<Knight> knightCards;
+	private ArrayList<YearOfPlenty>  yearofplentyCards;
+	private ArrayList<Victory>  victoryCards;
+	private ArrayList<Monopoly>  monopolyCards;
+	private ArrayList<RoadBuilding>  roadbuildingCards;
+	
+	/**
+	 * 
+	 * @return wood
+	 */
+	public Integer getWood() {
+		return wood;
+	}
+
+	/**
+	 * 
+	 * @return brick
+	 */
+	public Integer getBrick() {
+		return brick;
+	}
+
+	/**
+	 * 
+	 * @return sheep
+	 */
+	
+	public Integer getSheep() {
+		return sheep;
+	}
+
+	/**
+	 * 
+	 * @return wheat
+	 */
+	public Integer getWheat() {
+		return wheat;
+	}
+
+	/**
+	 * 
+	 * @return ore
+	 */
+	public Integer getOre() {
+		return ore;
+	}
+	
+	/**
+	 * 
+	 * @param wood
+	 * @param brick
+	 * @param sheep
+	 * @param wheat
+	 * @param ore
+	 */
 	public Hand(Integer wood, Integer brick, Integer sheep, Integer wheat, Integer ore) {
 		this.wood = wood;
 		this.brick = brick;
@@ -15,6 +79,12 @@ public class Hand {
 		this.wheat = wheat;
 		this.ore = ore;
 	}
+	
+	/**
+	 * @return Total: wood + brick + sheep + wheat + ore
+	 */
+	public int getHandSize() {
+		return getWood() + getBrick() + getSheep() + getWheat() + getOre();}
 	
 	/**
 	 * @param type the type of resource to add
@@ -179,4 +249,70 @@ public class Hand {
 		}
 		return false;
 	}
+	
+
+	/**
+	 * @pre hasSettlementCost
+	 * @post wood = wood - 1
+	 * @post brick = brick - 1
+	 * @post wheat = wheat - 1
+	 * @post sheep = sheep - 1
+	 * 			
+	 */
+	public void buySettlement() {}
+	
+	
+	/**
+	 * 
+	 * @pre hasCityCost
+	 * @post wheat = wheat - 2
+	 * @post ore = ore - 3
+	 */
+	public void buyCity() {}
+	
+	
+	/**
+	 * @pre hasRoadCost
+	 * @post wood = wood - 1
+	 * @post brick = brick - 1
+	 */
+	public void buyRoad() {}
+	
+	
+	/**
+	 * @pre hasDevelopmentCost
+	 * @post wheat = wheat - 1
+	 * @post sheep = sheep - 1
+	 * @post ore = ore - 1
+	 * 
+	 */
+	public void buyDevelopment() {}
+	
+	
+	/**
+	 * @param given The type of card being given by the player
+	 * @param received The type of card being received by the player
+	 * @post type given = type - 4
+	 * @post type received = type + 1
+	 * 
+	 */
+	public void buyResource(ResourceType given, ResourceType received) {}
+	
+	
+	/**
+	 * @param given The type of card being given by the player
+	 * @param received The type of card being received by the player
+	 * @post type given = type - 3
+	 * @post type received = type + 1
+	 */
+	public void buyResourceWith3Port(ResourceType given, ResourceType received) {}
+
+	/**
+	 * @param given The type of card being given by the player
+	 * @param received The type of card being received by the player
+	 * @post type given = type - 2
+	 * @post type received = type + 1
+	 */
+	public void buyResourceWith2Port(ResourceType given, ResourceType received) {}
+	
 }

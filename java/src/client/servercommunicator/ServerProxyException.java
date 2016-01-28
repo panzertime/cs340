@@ -1,4 +1,4 @@
-package cs340.client.servercommunivator;
+package client.servercommunicator;
 
 public class ServerProxyException extends Exception {
 

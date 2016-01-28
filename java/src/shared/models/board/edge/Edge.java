@@ -2,8 +2,8 @@ package shared.models.board.edge;
 
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
-import shared.models.board.peice.PositionTakenException;
-import shared.models.board.peice.Road;
+import shared.models.board.piece.PositionTakenException;
+import shared.models.board.piece.Road;
 
 public class Edge {
 	

@@ -1,4 +1,6 @@
-package cs340.client.servercommunivator;
+package client.servercommunicator;
+
+import shared.models.translator.JSONObject;
 
 /**
  * This interface is to be implemented for use on the clients machine.
@@ -208,63 +210,73 @@ public interface IServerProxy {
 	public JSONObject robPlayer(JSONObject robPlayer) 
 			throws ServerProxyException;
 	
-	/**
-	 * Signals that the player's turn is ended
-	 * @pre User logged in and member of game
-	 * @return An updated game model
-	 * @throws ServerProxyException
-	 */
-	public JSONObject finishTurn() throws ServerProxyException;
+    /**
+     * tells the server that the current state for the player is over
+     * @pre User is logged in, in a game, it his turn, and the client is
+     * 'playing'
+     * @post cards in new dev hand are transfered to old dev card hand and the
+     * next player has his turn.
+     * @return gameModel
+     * @throws ServerProxyException Problem with connection
+     */
+	public JSONObject finishTurn(JSONObject JSONObject) 
+			throws ServerProxyException;
 	
-	/**
-	 * Signals that the player would like to buy a devCard
-	 * @pre User is logged in and member of game
-	 * @return an updated game model 
-	 * @throws ServerProxyException
-	 */
-	public JSONObject buyDevCard() throws ServerProxyException;
+    /**
+     * Tells server that player is buying a dev card
+     * @pre User is logged in and in a game, user has required resources, and
+     * there are still dev cards left.
+     * @post If the user is eligible to buy a dev card, he will receive one at
+     * random. If it's a monument card it will be added to the old devcard
+     * hand, otherwise it goes to the new hand.
+     * @param buyDevCard and playerIndex
+     * @return updated Game Model
+     * @throws ServerProxyException Problem with connection
+     */
+	public JSONObject buyDevCard(JSONObject buyDevCard) 
+			throws ServerProxyException;
 	
-	/**
-	 * User wants to play yearOfPlenty card
-	 * @pre User is logged in and member of game, users's turn, client is "Playing," 
-	 *	user owns the card, has not played non-monument card this turn,
-	 *	specified resources are in the bank
-	 * @post User gains the two specified resources
-	 * @param resources type(resources), resource1 and resource2
-	 * @return an updated game model 
-	 * @throws ServerProxyException
-	 */
-	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException;
-
-	/**
-	 * User wants to build a road
-	 * @pre User is logged in and member of game, users's turn, client is "Playing," 
-	 *	user owns the card, has not played non-monument card this turn,
-	 *	first road loc. is connected to your existing road, second road loc. is 
-	 *	connected to that or another one of your roads, neither is on water,
-	 *	you have at least two unused roads
-	 * @post User has two fewer unused roads, two new roads appear at specified location, 
-	 *	Player with longest road has "longest road" award
-	 * @param edgeLocations type(edgeLocations), spot1, spot2
-	 * @return an updated game model 
-	 * @throws ServerProxyException
-	 */
-	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException;
+    /**
+     * Tells the server what cards the player took from the bank
+     * @pre User is logged in, in a game, on his turn, client model is
+     * 'playing', he has not yet used a non-monument dev card, the two
+     * specified dev cards are in the bank.
+     * @post User gains two specified resources
+     * @param Year_of_Plenty, playerIndex, resource1, resource 2
+     * @return updated game model
+     * @throws ServerProxyException Problem with connection
+     */
+	public JSONObject yearOfPlenty(JSONObject yearOfPlenty) 
+			throws ServerProxyException;
 	
-	/**
-	 * User wants to play a soldier card
-	 * @pre User is logged in and member of game, users's turn, client is "Playing," 
-	 *	user owns the card, has not played non-monument card this turn,
-	 *	robber not already at that location, if the player is being robbed,
-	 *	they must have resource cards
-	 * @post Robber in new location, player being robbed gives you a resource card,
-	 *	player with most soldier cards owns "largest army" award, player may not
-	 *	play other dev cards, aside from monument cards
-	 * @param soldierArgs type(soldierArgs), location, victimIndex
-	 * @return an updated game model 
-	 * @throws ServerProxyException
-	 */
-	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException;
+    /**
+     * Tells the server what road was built
+     * @pre User is logged in, in a game, its his turn, the client is
+     * 'playing', the road location is valid, open, connected to another road
+     * owned by the player, the location is not on water, the required
+     * resources are had, and it has no adjacent road in the setup round
+     * @param Road_Building, playerIndex, (edgeLocation) spot1, spot2
+     * @param 	edgeLocation(x,y, direction)
+     * @return updated Game Model
+     * @throws ServerProxyException Problem with connection
+     */
+	public JSONObject roadBuilding(JSONObject roadBuilding) 
+			throws ServerProxyException;
+	
+    /**
+     * updates the soldier command on the server
+     * @pre User is logged in, in a game, it is her turn, client model status
+     * is 'playing', she has not yet played non-monument dev card. Robber is
+     * not being kept in the same location, player being robbed (if exists)
+     * has resource cards.
+     * @post robber has new location, robbed player loses cards, current player
+     * gains them, largest army is awarded - if applicable, you are no longer
+     * able to play more development cards.
+     * @param type, playerIndex, victimIndex, location(x,y)
+     * @return updated game model
+     * @throws ServerProxyException Problem with connection
+     */
+	public JSONObject soldier(JSONObject soldier) throws ServerProxyException;
 	
 	/**
 	 * User wants to use a monopoly card

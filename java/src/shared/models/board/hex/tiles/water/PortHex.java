@@ -14,6 +14,13 @@ public class PortHex extends WaterHex{
 	}
 
 	/**
+	 * @param portType the portType to set
+	 */
+	public void setPortType(PortType portType) {
+		this.portType = portType;
+	}
+
+	/**
 	 * @return the portDirection
 	 */
 	public EdgeDirection getPortDirection() {
