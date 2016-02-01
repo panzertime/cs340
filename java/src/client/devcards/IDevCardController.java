@@ -1,7 +1,7 @@
 package client.devcards;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.hand.ResourceType;
 
 /**
  * "Dev card" controller interface

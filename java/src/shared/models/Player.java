@@ -2,21 +2,21 @@ package shared.models;
 
 import java.util.ArrayList;
 
-import shared.definitions.CatanColor;
 import shared.models.board.edge.Edge;
 import shared.models.board.piece.City;
+import shared.models.board.piece.NullPlayerException;
 import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
+import shared.models.definitions.CatanColor;
 import shared.models.exceptions.BadResourceTypeException;
 import shared.models.exceptions.NoDevCardFoundException;
-import shared.models.exceptions.NullPlayerException;
 import shared.models.exceptions.PositionTakenException;
 import shared.models.exceptions.ResourceException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
-import shared.models.hand.development.DevType;
+import shared.models.hand.development.DevCardType;
 
 public class Player {
 	
@@ -265,7 +265,7 @@ public class Player {
 	public Boolean hasYearOfPlenty() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.YEAROFPLENTY) return true;
+			if (card.getType() == DevCardType.YEAROFPLENTY) return true;
 		}
 		return false;}
 	/**
@@ -274,7 +274,7 @@ public class Player {
 	public Boolean hasYearOfPlentyToUse() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.YEAROFPLENTY && card.isEnabled()) return true;
+			if (card.getType() == DevCardType.YEAROFPLENTY && card.isEnabled()) return true;
 		}
 		return false;}
 
@@ -302,7 +302,7 @@ public class Player {
 	public Boolean hasRoadBuilding() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.ROADBUILDING) return true;
+			if (card.getType() == DevCardType.ROADBUILDING) return true;
 		}
 		return false;}
 
@@ -312,7 +312,7 @@ public class Player {
 	public Boolean hasRoadBuildingToUse() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.ROADBUILDING && card.isEnabled()) return true;
+			if (card.getType() == DevCardType.ROADBUILDING && card.isEnabled()) return true;
 		}
 		return false;}
 	/**
@@ -330,7 +330,7 @@ public class Player {
 	public Boolean hasMonopoly() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.MONOPOLY) return true;
+			if (card.getType() == DevCardType.MONOPOLY) return true;
 		}
 		return false;}
 
@@ -340,7 +340,7 @@ public class Player {
 	public Boolean hasMonopolyToUse() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.MONOPOLY && card.isEnabled()) return true;
+			if (card.getType() == DevCardType.MONOPOLY && card.isEnabled()) return true;
 		}
 		return false;}
 	/**
@@ -369,7 +369,7 @@ public class Player {
 	public Boolean hasKnight() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.KNIGHT) return true;
+			if (card.getType() == DevCardType.KNIGHT) return true;
 		}
 		return false;}
 
@@ -379,7 +379,7 @@ public class Player {
 	public Boolean hasKnightToUse() {
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.KNIGHT && card.isEnabled()) return true;
+			if (card.getType() == DevCardType.KNIGHT && card.isEnabled()) return true;
 		}
 		return false;}
 	/**
@@ -532,7 +532,7 @@ public class Player {
 		int points = 0;
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevType.VICTORY) points++;
+			if (card.getType() == DevCardType.VICTORY) points++;
 		}
 		if (game.getAchievements().isLargestArmy(this)) points += 2;
 		if (game.getAchievements().isLongestRoad(this)) points += 2;

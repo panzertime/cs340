@@ -5,6 +5,7 @@ import java.util.Map;
 
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexLocation;
+import shared.models.board.piece.Robber;
 
 public class Board {
 	

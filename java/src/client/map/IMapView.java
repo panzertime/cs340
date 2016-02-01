@@ -1,8 +1,13 @@
 package client.map;
 
-import shared.definitions.*;
-import shared.locations.*;
 import client.base.*;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.hex.HexType;
+import shared.models.board.hex.tiles.water.PortType;
+import shared.models.board.piece.PieceType;
+import shared.models.board.vertex.VertexLocation;
+import shared.models.definitions.CatanColor;
 
 /**
  * Interface for the map view

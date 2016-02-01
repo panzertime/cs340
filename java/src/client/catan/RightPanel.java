@@ -2,9 +2,9 @@ package client.catan;
 
 import javax.swing.*;
 
-import shared.definitions.PieceType;
 import client.points.*;
 import client.resources.*;
+import shared.models.board.piece.PieceType;
 import client.base.*;
 import client.map.*;
 import client.devcards.*;

@@ -1,7 +1,7 @@
 package client.turntracker;
 
-import shared.definitions.CatanColor;
 import client.base.*;
+import shared.models.definitions.CatanColor;
 
 
 /**

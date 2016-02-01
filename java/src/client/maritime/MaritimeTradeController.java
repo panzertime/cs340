@@ -1,7 +1,7 @@
 package client.maritime;
 
-import shared.definitions.*;
 import client.base.*;
+import shared.models.hand.ResourceType;
 
 
 /**

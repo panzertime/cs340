@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.List;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.definitions.CatanColor;
 
 
 /**

@@ -2,10 +2,10 @@ package shared.models;
 
 import java.util.Map;
 
-import shared.definitions.CatanColor;
-import shared.locations.EdgeLocation;
-import shared.locations.HexLocation;
-import shared.locations.VertexLocation;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.piece.PieceType;
+import shared.models.board.vertex.VertexLocation;
 import shared.models.exceptions.DevCardException;
 import shared.models.exceptions.DiscardException;
 import shared.models.exceptions.MessageException;
@@ -244,7 +244,7 @@ public class ModelFacade {
 	 * @param color Color to represent player
 	 * @throws NotMoveException Pre condition violation
 	 */
-	public void joinGame(int gameID, CatanColor color) 
+	public void joinGame(int gameID, PieceType color) 
 			throws NotMoveException {
 		
 	}

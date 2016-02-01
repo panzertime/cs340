@@ -1,8 +1,8 @@
 package client.discard;
 
-import shared.definitions.*;
 import client.base.*;
 import client.misc.*;
+import shared.models.hand.ResourceType;
 
 
 /**

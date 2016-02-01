@@ -1,7 +1,7 @@
 package client.devcards;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.hand.development.DevCardType;
 
 /**
  * "Play dev card" view interface

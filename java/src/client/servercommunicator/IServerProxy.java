@@ -1,6 +1,5 @@
 package client.servercommunicator;
 
-import shared.models.translator.JSONObject;
 
 /**
  * This interface is to be implemented for use on the clients machine.

@@ -7,7 +7,7 @@ import java.io.File;
 
 import javax.swing.*;
 
-import shared.definitions.*;
+import shared.models.hand.ResourceType;
 import client.base.*;
 import client.utils.ImageUtils;
 

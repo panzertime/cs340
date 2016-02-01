@@ -1,7 +1,7 @@
 package client.domestic;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.hand.ResourceType;
 
 /**
  * Interface for the accept trade overlay, which allows the user to accept or

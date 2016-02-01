@@ -4,7 +4,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import shared.definitions.*;
+import shared.models.board.piece.PieceType;
+import shared.models.definitions.CatanColor;
 import client.base.*;
 import client.catan.*;
 import client.utils.ImageUtils;
@@ -77,7 +78,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 
 	@Override
 	public void initializePlayer(int playerIndex, String playerName,
-			CatanColor playerColor) {
+			PieceType playerColor) {
 				
 		playerPanel[playerIndex].setLayout(new BorderLayout());
 		

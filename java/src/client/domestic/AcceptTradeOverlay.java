@@ -14,9 +14,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import shared.definitions.*;
 import client.base.*;
 import client.utils.ImageUtils;
+import shared.models.hand.ResourceType;
 
 
 /**

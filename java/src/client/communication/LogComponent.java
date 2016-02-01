@@ -8,8 +8,8 @@ import java.awt.geom.*;
 
 import javax.swing.*;
 
-import shared.definitions.*;
 import client.utils.*;
+import shared.models.definitions.CatanColor;
 
 /**
  * Custom component that displays a log of messages. Used in both the chat and

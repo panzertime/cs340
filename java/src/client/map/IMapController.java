@@ -2,8 +2,10 @@ package client.map;
 
 import client.base.*;
 import client.data.*;
-import shared.definitions.*;
-import shared.locations.*;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.piece.PieceType;
+import shared.models.board.vertex.VertexLocation;
 
 /**
  * Interface for the map controller

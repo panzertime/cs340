@@ -40,10 +40,10 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-import shared.definitions.ResourceType;
 import client.base.OverlayView;
 import client.custom.cwt.RoundedButton;
 import client.utils.ImageUtils;
+import shared.models.hand.ResourceType;
 import client.utils.FontUtils;
 
 /*

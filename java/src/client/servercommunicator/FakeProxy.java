@@ -1,6 +1,5 @@
 package client.servercommunicator;
 
-import shared.models.translator.JSONObject;
 
 /**
  * Concrete implementation of IServerProxy for use with no server in a testing situation  */

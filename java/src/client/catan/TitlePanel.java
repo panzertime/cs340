@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import shared.definitions.*;
+import shared.models.definitions.CatanColor;
 
 @SuppressWarnings("serial")
 public class TitlePanel extends JPanel

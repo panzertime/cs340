@@ -1,9 +1,9 @@
 package client.join;
 
-import shared.definitions.CatanColor;
 import client.base.*;
 import client.data.*;
 import client.misc.*;
+import shared.models.definitions.CatanColor;
 
 
 /**

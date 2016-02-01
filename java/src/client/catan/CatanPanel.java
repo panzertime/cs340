@@ -6,14 +6,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import shared.definitions.ResourceType;
 import client.discard.DiscardController;
 import client.discard.DiscardView;
 import client.misc.WaitView;
 import client.roll.RollController;
 import client.roll.RollResultView;
 import client.roll.RollView;
+import shared.models.hand.ResourceType;
 
 @SuppressWarnings("serial")
 public class CatanPanel extends JPanel

@@ -1,7 +1,7 @@
 package client.devcards;
 
-import shared.definitions.ResourceType;
 import client.base.*;
+import shared.models.hand.ResourceType;
 
 
 /**

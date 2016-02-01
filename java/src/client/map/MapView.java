@@ -6,8 +6,13 @@ import javax.swing.*;
 
 import client.base.*;
 import client.data.*;
-import shared.definitions.*;
-import shared.locations.*;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.hex.HexType;
+import shared.models.board.hex.tiles.water.PortType;
+import shared.models.board.piece.PieceType;
+import shared.models.board.vertex.VertexLocation;
+import shared.models.definitions.CatanColor;
 
 /**
  * Implementation for the map view

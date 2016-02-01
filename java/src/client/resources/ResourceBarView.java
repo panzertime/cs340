@@ -20,7 +20,6 @@ import java.util.Map;
 
 import javax.swing.*;
 
-import shared.definitions.ResourceType;
 import client.base.*;
 import client.discard.DiscardView;
 import client.utils.FontUtils;

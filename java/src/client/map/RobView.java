@@ -8,7 +8,6 @@ import javax.swing.border.Border;
 
 import java.util.*;
 
-import shared.definitions.PieceType;
 import client.base.*;
 import client.data.*;
 

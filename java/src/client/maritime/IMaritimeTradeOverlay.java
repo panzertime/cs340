@@ -1,7 +1,7 @@
 package client.maritime;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.hand.ResourceType;
 
 /**
  * Interface for the maritime trade overlay, which lets the user make a maritime

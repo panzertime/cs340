@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import shared.definitions.*;
 import client.base.*;
+import shared.models.definitions.CatanColor;
 
 /**
  * Implementation for the select color view, which lets the user select the

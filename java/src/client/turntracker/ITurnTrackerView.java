@@ -1,7 +1,8 @@
 package client.turntracker;
 
 import client.base.*;
-import shared.definitions.*;
+import shared.models.board.piece.PieceType;
+import shared.models.definitions.CatanColor;
 
 /**
  * Interface for the turn tracker view, which displays whose turn it is, and
@@ -29,7 +30,7 @@ public interface ITurnTrackerView extends IView
 	 *            The player's color
 	 */
 	void initializePlayer(int playerIndex, String playerName,
-						  CatanColor playerColor);
+						  PieceType playerColor);
 	
 	/**
 	 * Updates the properties for a player in the turn tracker display

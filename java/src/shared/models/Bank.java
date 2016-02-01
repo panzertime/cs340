@@ -8,7 +8,7 @@ import shared.models.exceptions.ResourceException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
-import shared.models.hand.development.DevType;
+import shared.models.hand.development.DevCardType;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;

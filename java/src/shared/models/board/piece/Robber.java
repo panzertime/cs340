@@ -1,4 +1,4 @@
-package shared.models.board;
+package shared.models.board.piece;
 
 import shared.models.board.hex.HexLocation;
 

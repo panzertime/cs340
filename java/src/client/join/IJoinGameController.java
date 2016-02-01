@@ -2,7 +2,7 @@ package client.join;
 
 import client.base.*;
 import client.data.*;
-import shared.definitions.*;
+import shared.models.definitions.CatanColor;
 
 /**
  * Interface for the join game controller

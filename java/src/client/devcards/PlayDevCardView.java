@@ -8,9 +8,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import shared.definitions.*;
 import client.base.*;
 import client.utils.*;
+import shared.models.hand.ResourceType;
+import shared.models.hand.development.DevCardType;
 
 import java.util.*;
 
@@ -156,7 +157,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 					closeModal();
 					getController().playMonopolyCard(resCard1.getSelectedResourceCard());
 				}
-				else if (devCards.getSelectedDevCard() == DevCardType.YEAR_OF_PLENTY) {
+				else if (devCards.getSelectedDevCard() == DevCardType.YEAROFPLENTY) {
 					closeModal();
 					getController().playYearOfPlentyCard(resCard1.getSelectedResourceCard(),
 														resCard2.getSelectedResourceCard());
@@ -178,7 +179,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
 			}
-			else if (selectedDevCard == DevCardType.MONUMENT) {
+			else if (selectedDevCard == DevCardType.VICTORY) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -187,7 +188,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				closeModal();
 				getController().playMonumentCard();
 			}
-			else if (selectedDevCard == DevCardType.ROAD_BUILD) {
+			else if (selectedDevCard == DevCardType.ROADBUILDING) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -196,7 +197,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				closeModal();
 				getController().playRoadBuildCard();
 			}
-			else if (selectedDevCard == DevCardType.SOLDIER) {
+			else if (selectedDevCard == DevCardType.KNIGHT) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -211,7 +212,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(true);
 				resCard2.setEnabled(false);
 			}
-			else if (selectedDevCard == DevCardType.YEAR_OF_PLENTY) {
+			else if (selectedDevCard == DevCardType.YEAROFPLENTY) {
 				useButton.setText("use year of plenty");
 				useButton.setEnabled(resCard1.getSelectedResourceCard() != null &&
 										resCard2.getSelectedResourceCard() != null);
@@ -423,11 +424,11 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		roadbuilding = createDevCardButton("0", "images/cards/road-building.jpg");
 		monument = createDevCardButton("0", "images/cards/monument.jpg");
 
-		this.add(DevCardType.SOLDIER, soldier);
-		this.add(DevCardType.YEAR_OF_PLENTY, yearofplenty);
+		this.add(DevCardType.KNIGHT, soldier);
+		this.add(DevCardType.YEAROFPLENTY, yearofplenty);
 		this.add(DevCardType.MONOPOLY, monopoly);
-		this.add(DevCardType.ROAD_BUILD, roadbuilding);
-		this.add(DevCardType.MONUMENT, monument);
+		this.add(DevCardType.ROADBUILDING, roadbuilding);
+		this.add(DevCardType.VICTORY, monument);
 	}
 	
 	private JToggleButton createDevCardButton(String text, String imageFile) {
@@ -498,15 +499,15 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		ButtonModel selection = getSelection();
 		
 		if (selection == soldier.getModel())
-			return DevCardType.SOLDIER;
+			return DevCardType.KNIGHT;
 		else if (selection == yearofplenty.getModel())
-			return DevCardType.YEAR_OF_PLENTY;
+			return DevCardType.YEAROFPLENTY;
 		else if (selection == monopoly.getModel())
 			return DevCardType.MONOPOLY;
 		else if (selection == roadbuilding.getModel())
-			return DevCardType.ROAD_BUILD;
+			return DevCardType.ROADBUILDING;
 		else if (selection == monument.getModel())
-			return DevCardType.MONUMENT;
+			return DevCardType.VICTORY;
 		else
 			return null;		
 	}
