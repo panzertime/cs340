@@ -1,6 +1,7 @@
 package shared.models.board.vertex;
 
 import shared.models.board.edge.Edge;
+import shared.models.board.edge.EdgeNotLinkedException;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.Building;

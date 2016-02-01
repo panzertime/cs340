@@ -3,14 +3,14 @@ package shared.models;
 import java.util.ArrayList;
 
 import shared.models.board.edge.Edge;
-import shared.models.board.edge.VertexNotLinkedException;
+import shared.models.board.edge.EdgeNotLinkedException;
 import shared.models.board.piece.City;
 import shared.models.board.piece.NullPlayerException;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
-import shared.models.board.vertex.EdgeNotLinkedException;
 import shared.models.board.vertex.Vertex;
+import shared.models.board.vertex.VertexNotLinkedException;
 import shared.models.definitions.CatanColor;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;

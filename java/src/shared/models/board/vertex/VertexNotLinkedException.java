@@ -1,4 +1,4 @@
-package shared.models.board.edge;
+package shared.models.board.vertex;
 
 public class VertexNotLinkedException extends Exception {
 

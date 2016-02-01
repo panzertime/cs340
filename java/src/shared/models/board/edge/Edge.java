@@ -7,6 +7,7 @@ import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.vertex.Vertex;
+import shared.models.board.vertex.VertexNotLinkedException;
 
 public class Edge {
 	
