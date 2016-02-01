@@ -541,7 +541,7 @@ public class Player {
 		int points = 0;
 		for (DevCard card: this.getHand().getDevCards())
 		{
-			if (card.getType() == DevCardType.VICTORY) points++;
+			if (card.getType() == DevCardType.MONUMENT) points++;
 		}
 		if (game.getAchievements().isLargestArmy(this)) points += 2;
 		if (game.getAchievements().isLongestRoad(this)) points += 2;

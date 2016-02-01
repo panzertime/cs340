@@ -9,7 +9,7 @@ import shared.models.hand.development.DevCard;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
-import shared.models.hand.development.Victory;
+import shared.models.hand.development.Monument;
 import shared.models.hand.development.YearOfPlenty;
 import shared.models.hand.exceptions.ResourceException;
 
@@ -36,7 +36,7 @@ public class Bank {
 		}
 		for (int i = 0; i < 5; i++)
 		{
-			this.giveDevCardToBank(new Victory());
+			this.giveDevCardToBank(new Monument());
 		}
 		for (int i = 0; i < 2; i++)
 		{
