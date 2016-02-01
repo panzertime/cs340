@@ -12,7 +12,10 @@ public class GameModel {
 	private Achievements achievements;
 	private Boolean setup;
 	private Player turn;
-	
+	private Player winner;
+	private int version;
+	private final String[] turnTypes = {"Playing", "Robbing", "Discarding", "FirstRound", "SecondRound"};
+	private int turnStatus;
 	
 	/**
 	 * @param board the board to  initialize
@@ -171,5 +174,42 @@ public class GameModel {
 	public void setTurn(Player turn) {
 		this.turn = turn;
 	}
+
+
+	public Player getWinner() {
+		return winner;
+	}
+
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	public int getVersion() {
+		return version;
+	}
+
+
+	public void setWinner(Player winner) {
+		this.winner = winner;
+	}
+
+
+	public String getTurnStatus(int i) {
+		return turnTypes[i];
+	}
+
+
+
+	public int getTurnStatus() {
+		return turnStatus;
+	}
+
+
+	public void setTurnStatus(int turnStatus) {
+		this.turnStatus = turnStatus;
+	}
+	
+	
 
 }

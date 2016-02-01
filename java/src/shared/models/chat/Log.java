@@ -1,5 +1,7 @@
 package shared.models.chat;
 
-public class Log {
+import java.util.ArrayList;
 
+public class Log {
+	private ArrayList<Message> messageList;
 }
