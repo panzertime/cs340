@@ -3,6 +3,7 @@ package shared.models;
 import java.util.ArrayList;
 
 import shared.models.board.Board;
+import shared.models.exceptions.BadPlayerIndexException;
 
 public class GameModel {
 	
@@ -145,6 +146,16 @@ public class GameModel {
 	public void getNextTurn()
 	{
 		
+	}
+	
+	
+	public Player whichPlayer(int index) throws BadPlayerIndexException
+	{
+		for (Player p: players)
+		{
+			if (p.getUserIndex() == index) return p;
+		}
+		throw new BadPlayerIndexException();
 	}
 	
 	/**

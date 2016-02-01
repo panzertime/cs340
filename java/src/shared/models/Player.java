@@ -622,4 +622,21 @@ public boolean equals(Object obj) {
 }
 
 
+public int getUserIndex() {
+	return userIndex;
+}
+
+
+public void setUserIndex(int userIndex) {
+	this.userIndex = userIndex;
+}
+
+
+public int getRoads()
+{
+	return 0;
+}
+
+
+
 }
