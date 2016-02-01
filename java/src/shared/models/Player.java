@@ -3,14 +3,15 @@ package shared.models;
 import java.util.ArrayList;
 
 import shared.models.board.edge.Edge;
+import shared.models.board.edge.VertexNotLinkedException;
 import shared.models.board.piece.City;
 import shared.models.board.piece.NullPlayerException;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
+import shared.models.board.vertex.EdgeNotLinkedException;
 import shared.models.board.vertex.Vertex;
 import shared.models.definitions.CatanColor;
-import shared.models.exceptions.BadResourceTypeException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
@@ -409,16 +410,21 @@ public class Player {
 	 * @return True if a settlement can be build
 	 */
 	public Boolean canBuildSettlement(Vertex v) {
-		if (v.getBuilding() != null) return false;
+		if (v.hasBuilding()) return false;
 		if (!v.isBuildable()) return false;
-		ArrayList<Edge> edges = v.getAllEdges();
-		for (Edge e: edges)
-		{
-			if (e.getOtherVertex(v).getBuilding() != null) return false;
-		}
-		for (Edge e: edges)
-		{
-			if (e.getRoad().getOwner().equals(this)) return true;
+		try {
+			Edge[] edges = v.getAllEdges();
+			for (Edge e: edges)
+			{
+				if (e.getOtherVertex(v).getBuilding() != null) return false;
+			}
+			for (Edge e: edges)
+			{
+				if (e.getRoad().getOwner().equals(this)) return true;
+			}
+			return false;
+		} catch (VertexNotLinkedException e) {
+			// TODO Log exception
 		}
 		return false;
 	}
@@ -442,26 +448,29 @@ public class Player {
 	 * @param e - An edge to be checked
 	 * @return - True if a Road can be built
 	 */
-	public Boolean canBuildRoad(Edge e) {
-		if (e.getRoad() != null) return false;
-		if (!e.isBuildable()) return false;
-		ArrayList<Vertex> vertices = e.getAllVertices();
-		for (Vertex v: vertices)
-		{
-			if (v.getBuilding().getOwner().equals(this)) return true;
-			if (v.getBuilding() == null)
+	public Boolean canBuildRoad(Edge edge) {
+		if (edge.hasRoad()) return false;
+		if (!edge.isBuildable()) return false;
+		try {
+			for (Vertex v: edge.getAllVertices())
 			{
-				if (v.getLeftEdge(e).getRoad().getOwner().equals(this)) return true;
-				if (v.getRightEdge(e).getRoad().getOwner().equals(this)) return true;
+				if (v.getBuilding().getOwner().equals(this)) return true;
+				if (v.getBuilding() == null)
+				{
+					
+					if (v.getLeftEdge(edge).getRoad().getOwner().equals(this)) return true;
+					if (v.getRightEdge(edge).getRoad().getOwner().equals(this)) return true;
+				}
 			}
+		} catch (EdgeNotLinkedException e) {
+			//TODO Log Exception
 		}
 		return false;
-		
-		
+	}
 //Check if is empty
 //Check if adjacent vertices' (that don't have building of other player) edges have road (CHECK ALL VERTICES)
 //Check if road is owned by player
-		return null;}
+	
 	/**
 	 * 
 	 * @pre canBuildSettlement()

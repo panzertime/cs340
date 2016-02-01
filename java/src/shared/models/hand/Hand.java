@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import shared.models.Bank;
-import shared.models.exceptions.BadResourceTypeException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.development.DevCard;
 import shared.models.hand.development.DevCardType;
@@ -14,6 +13,7 @@ import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
 import shared.models.hand.development.Victory;
 import shared.models.hand.development.YearOfPlenty;
+import shared.models.hand.exceptions.BadResourceTypeException;
 import shared.models.hand.exceptions.NoRemainingResourceException;
 import shared.models.hand.exceptions.ResourceException;
 

@@ -1,13 +1,11 @@
 package shared.models;
 
-import java.util.ArrayDeque;
 import java.util.Random;
 
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
-import shared.models.hand.development.DevCardType;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
