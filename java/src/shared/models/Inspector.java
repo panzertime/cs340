@@ -1,9 +1,9 @@
 package shared.models;
 
-import shared.models.board.edge.EdgeLocation;
-import shared.models.board.hex.HexLocation;
-import shared.models.board.vertex.VertexLocation;
-import shared.models.exceptions.NotMoveException;
+import shared.models.board.locations.EdgeLocation;
+import shared.models.board.locations.HexLocation;
+import shared.models.board.locations.VertexLocation;
+import shared.models.exceptions.NonMoveException;
 import shared.models.exceptions.PlayingException;
 import shared.models.exceptions.TradeException;
 import shared.models.hand.ResourceType;
@@ -11,8 +11,6 @@ import shared.models.hand.ResourceType;
 /** This class is owned by the ModelFacade. Its purpose is to lighten the load
  * of the Facade by taking care of the can functions.
  */
-
-
 public class Inspector {
 
 	/**
@@ -21,10 +19,10 @@ public class Inspector {
 	 * @post Map shows if a city may be placed there
 	 * @param vertLoc
 	 * @return True if user may place city there, false otherwise
-	 * @throws NotMoveException Pre conditions violated
+	 * @throws NonMoveException Pre conditions violated
 	 */
 	public boolean canPlaceCity(VertexLocation vertLoc) 
-			throws NotMoveException {
+			throws NonMoveException {
 				return false;
 		
 	}
@@ -35,9 +33,9 @@ public class Inspector {
 	 * @post Map reflects valid result
 	 * @param edgeLoc location of edge to place road
 	 * @return Whether or not a user may place a road
-	 * @throws NotMoveException Pre condition violated
+	 * @throws NonMoveException Pre condition violated
 	 */
-	public boolean canPlaceRoad(EdgeLocation edgeLoc) throws NotMoveException {
+	public boolean canPlaceRoad(EdgeLocation edgeLoc) throws NonMoveException {
 		return false;
 		
 	}
@@ -48,9 +46,9 @@ public class Inspector {
 	 * @post Robbers ability to move on the map is shown
 	 * @param hexLoc Location of hex to place robber
 	 * @return Whether or not a robber can move there
-	 * @throws NotMoveException Pre-condition violation
+	 * @throws NonMoveException Pre-condition violation
 	 */
-	public boolean canPlaceRobber(HexLocation hexLoc) throws NotMoveException {
+	public boolean canPlaceRobber(HexLocation hexLoc) throws NonMoveException {
 		return false;
 		
 	}
@@ -61,15 +59,13 @@ public class Inspector {
 	 * @post Screen will reflect result
 	 * @param vertLoc Location to put the user
 	 * @return Whether or not a user may build a settlement there
-	 * @throws NotMoveException Pre-Conditions violated
+	 * @throws NonMoveException Pre-Conditions violated
 	 */
 	public boolean canPlaceSettlement(VertexLocation vertLoc) 
-			throws NotMoveException {
+			throws NonMoveException {
 		return false;
 		
 	}
-	
-	
 	
 	/**
 	 * Checks the model to see if a user can trade that much of one resource

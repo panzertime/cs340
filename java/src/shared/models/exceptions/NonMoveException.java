@@ -1,9 +1,9 @@
 package shared.models.exceptions;
 
 /** This class is the exception when a function that is called during the
- * trade state.
+ * non move state.
  */
 @SuppressWarnings("serial")
-public class TradeException extends Exception {
+public class NonMoveException extends Exception {
 
 }
