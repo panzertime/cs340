@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import shared.models.board.edge.Edge;
 import shared.models.board.piece.City;
 import shared.models.board.piece.NullPlayerException;
+import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.definitions.CatanColor;
 import shared.models.exceptions.BadResourceTypeException;
 import shared.models.exceptions.NoDevCardFoundException;
-import shared.models.exceptions.PositionTakenException;
-import shared.models.exceptions.ResourceException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
 import shared.models.hand.development.DevCardType;
+import shared.models.hand.exceptions.ResourceException;
 
 public class Player {
 	
@@ -470,7 +470,7 @@ public class Player {
 	 * @throws PositionTakenException 
 	 * @post 
 	 */
-	public void buildSettlement(Vertex v) throws BuildException, PositionTakenException {
+	public void buildSettlement(Vertex v) throws BuildException, PositionTakenException{
 		for (Settlement s: settlements)
 		{
 			if (s.getVertex() == null)
@@ -490,7 +490,7 @@ public class Player {
 	 * @throws PositionTakenException 
 	 * @post 
 	 */
-	public void buildCity(Vertex v) throws BuildException, PositionTakenException {
+	public void buildCity(Vertex v) throws BuildException, PositionTakenException{
 		for (City c: cities)
 		{
 			if (c.getVertex() == null)

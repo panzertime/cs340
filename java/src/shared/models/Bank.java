@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.Random;
 
 import shared.models.exceptions.NoDevCardFoundException;
-import shared.models.exceptions.ResourceException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
@@ -14,6 +13,7 @@ import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
 import shared.models.hand.development.Victory;
 import shared.models.hand.development.YearOfPlenty;
+import shared.models.hand.exceptions.ResourceException;
 
 public class Bank {
 	

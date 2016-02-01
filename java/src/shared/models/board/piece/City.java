@@ -1,8 +1,8 @@
 package shared.models.board.piece;
 
 import shared.models.Player;
-import shared.models.hand.ResourceException;
 import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.ResourceException;
 
 public class City extends Building{
 
@@ -17,7 +17,7 @@ public class City extends Building{
 	 */
 	@Override
 	public void produce(ResourceType type) throws ResourceException {
-		owner.giveResource(type, 2);
+		owner.receiveResource(type, 2);
 	}
 
 }

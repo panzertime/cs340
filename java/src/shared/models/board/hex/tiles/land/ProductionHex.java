@@ -1,7 +1,7 @@
 package shared.models.board.hex.tiles.land;
 
 import shared.models.board.vertex.Vertex;
-import shared.models.hand.ResourceException;
+import shared.models.hand.exceptions.ResourceException;
 
 public abstract class ProductionHex extends LandHex{
 	

@@ -2,12 +2,20 @@
 package shared.models.hand;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import shared.models.Bank;
+import shared.models.exceptions.BadResourceTypeException;
+import shared.models.exceptions.NoDevCardFoundException;
+import shared.models.hand.development.DevCard;
+import shared.models.hand.development.DevCardType;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
 import shared.models.hand.development.Victory;
 import shared.models.hand.development.YearOfPlenty;
+import shared.models.hand.exceptions.NoRemainingResourceException;
+import shared.models.hand.exceptions.ResourceException;
 
 public class Hand {
 	
@@ -17,11 +25,7 @@ public class Hand {
 	private Integer wheat = 0;
 	private Integer ore = 0;
 	
-	private ArrayList<Knight> knightCards;
-	private ArrayList<YearOfPlenty>  yearofplentyCards;
-	private ArrayList<Victory>  victoryCards;
-	private ArrayList<Monopoly>  monopolyCards;
-	private ArrayList<RoadBuilding>  roadbuildingCards;
+	private ArrayList<DevCard> devCards;
 	
 	/**
 	 * 
@@ -78,6 +82,7 @@ public class Hand {
 		this.sheep = sheep;
 		this.wheat = wheat;
 		this.ore = ore;
+		devCards = new ArrayList<DevCard>();
 	}
 	
 	/**
@@ -92,7 +97,7 @@ public class Hand {
 	 * @throws ResourceException
 	 * @post hand now has addition resources of type and num 
 	 */
-	public void giveResource(ResourceType type, Integer num) throws ResourceException {
+	public void receiveResource(ResourceType type, Integer num) throws ResourceException {
 		switch (type) {
 			case WOOD: 
 				wood += num;
@@ -120,7 +125,7 @@ public class Hand {
 	 * @throws ResourceException
 	 * @post hand now has less resources of type and num 
 	 */
-	public void takeResource(ResourceType type, Integer num) throws ResourceException {
+	public void sendResource(ResourceType type, Integer num) throws ResourceException {
 		if (!hasResource(type, num)) {
 			throw new NoRemainingResourceException();
 		}
@@ -143,13 +148,28 @@ public class Hand {
 		}
 	}
 	
+	public int getResourceAmount(ResourceType type) throws BadResourceTypeException {
+		switch (type) {
+			case WOOD: 
+			return wood;
+			case BRICK:
+			return brick;
+			case WHEAT:
+			return wheat;
+			case SHEEP:
+			return sheep;
+			case ORE:
+			return ore;
+		}
+		throw new BadResourceTypeException();
+	}
 	/**
 	 * @param type the type of resource to checked
 	 * @param num the number of resource to be checked
 	 * @return Boolean Indicating if the player has the resources of type and nun
 	 * @throws BadResourceTypeException
 	 */
-	private Boolean hasResource(ResourceType type, Integer num) throws BadResourceTypeException {
+	public Boolean hasResource(ResourceType type, Integer num) throws BadResourceTypeException {
 		switch (type) {
 			case WOOD: 
 				if (wood >= num) {
@@ -179,6 +199,61 @@ public class Hand {
 		}
 		throw new BadResourceTypeException();
 	}
+
+	public ResourceType drawRandomCard() throws ResourceException 
+	{
+		if (getHandSize() == 0) throw new NoRemainingResourceException();
+		Random generator = new Random();
+		int r = generator.nextInt(getHandSize()) + 1;
+		int k = 0;
+		for (int i = 0; i < wood; i++)
+		{
+			k++;
+			if (k == r)
+			{
+				wood--;
+				return ResourceType.WOOD;
+			}
+		}
+		for (int i = 0; i < brick; i++)
+		{
+			k++;
+			if (k == r)
+			{
+				brick--;
+				return ResourceType.BRICK;
+			}
+		}
+		for (int i = 0; i < wheat; i++)
+		{
+			k++;
+			if (k == r)
+			{
+				wheat--;
+				return ResourceType.WHEAT;
+			}
+		}
+		for (int i = 0; i < sheep; i++)
+		{
+			k++;
+			if (k == r)
+			{
+				sheep--;
+				return ResourceType.SHEEP;
+			}
+		}
+		for (int i = 0; i < ore; i++)
+		{
+			k++;
+			if (k == r)
+			{
+				ore--;
+				return ResourceType.ORE;
+			}
+		}
+		throw new ResourceException();
+	}
+	
 	
 	/**
 	 * @return Boolean indicating if player has resources for road
@@ -250,69 +325,38 @@ public class Hand {
 		return false;
 	}
 	
+	
+	/**
+	 * @return true if bank hand has >=1 Dev cards
+	 */
+	public Boolean hasDevCard() {
+	return (devCards.size() > 0);
+	}
+	
+	public int getNumberOfDevCards()
+	{
+		return devCards.size();
+	}
+	
+//	public void shuffleDevCards()
+//	{
+//		Random generator = new Random(); 
+//		ArrayList<DevCard> shuffledList = new ArrayList<DevCard>();
+//		while (devCards.size() > 0)
+//		{
+//		int r = generator.nextInt(devCards.size());
+//		shuffledList.add(devCards.get(r));
+//		devCards.remove(r);
+//		}
+//		devCards = shuffledList;
+//	}
 
 	/**
-	 * @pre hasSettlementCost
-	 * @post wood = wood - 1
-	 * @post brick = brick - 1
-	 * @post wheat = wheat - 1
-	 * @post sheep = sheep - 1
-	 * 			
+	 * @return the devCards
 	 */
-	public void buySettlement() {}
-	
-	
-	/**
-	 * 
-	 * @pre hasCityCost
-	 * @post wheat = wheat - 2
-	 * @post ore = ore - 3
-	 */
-	public void buyCity() {}
-	
-	
-	/**
-	 * @pre hasRoadCost
-	 * @post wood = wood - 1
-	 * @post brick = brick - 1
-	 */
-	public void buyRoad() {}
-	
-	
-	/**
-	 * @pre hasDevelopmentCost
-	 * @post wheat = wheat - 1
-	 * @post sheep = sheep - 1
-	 * @post ore = ore - 1
-	 * 
-	 */
-	public void buyDevelopment() {}
-	
-	
-	/**
-	 * @param given The type of card being given by the player
-	 * @param received The type of card being received by the player
-	 * @post type given = type - 4
-	 * @post type received = type + 1
-	 * 
-	 */
-	public void buyResource(ResourceType given, ResourceType received) {}
-	
-	
-	/**
-	 * @param given The type of card being given by the player
-	 * @param received The type of card being received by the player
-	 * @post type given = type - 3
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith3Port(ResourceType given, ResourceType received) {}
+	public ArrayList<DevCard> getDevCards() {
+		return devCards;
+	}
 
-	/**
-	 * @param given The type of card being given by the player
-	 * @param received The type of card being received by the player
-	 * @post type given = type - 2
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith2Port(ResourceType given, ResourceType received) {}
 	
 }

@@ -4,8 +4,8 @@ import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.Building;
 import shared.models.board.piece.PositionTakenException;
-import shared.models.hand.ResourceException;
 import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.ResourceException;
 
 public class Vertex {
 	

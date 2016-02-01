@@ -2,8 +2,8 @@ package shared.models.board.piece;
 
 import shared.models.Player;
 import shared.models.board.vertex.Vertex;
-import shared.models.hand.ResourceException;
 import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.ResourceException;
 
 public abstract class Building {
 	

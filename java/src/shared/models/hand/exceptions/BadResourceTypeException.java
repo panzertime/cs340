@@ -1,4 +1,4 @@
-package shared.models.hand;
+package shared.models.hand.exceptions;
 
 public class BadResourceTypeException extends ResourceException {
 
