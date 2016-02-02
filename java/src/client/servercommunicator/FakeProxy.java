@@ -1,5 +1,6 @@
 package client.servercommunicator;
 
+import org.json.simple.JSONObject;
 
 /**
  * Concrete implementation of IServerProxy for use with no server in a testing situation  */

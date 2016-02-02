@@ -1,5 +1,6 @@
 package client.servercommunicator;
 
+import org.json.simple.JSONObject;
 
 /**
  * This interface is to be implemented for use on the clients machine.
