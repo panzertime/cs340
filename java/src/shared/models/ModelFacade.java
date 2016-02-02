@@ -1,20 +1,21 @@
 
 package shared.models;
 
+import java.util.List;
 import java.util.Map;
 
 import client.servercommunicator.ServerFacade;
-import shared.definitions.CatanColor;
-import shared.models.board.locations.EdgeLocation;
-import shared.models.board.locations.HexLocation;
-import shared.models.board.locations.VertexLocation;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.vertex.VertexLocation;
+import shared.models.definitions.CatanColor;
 import shared.models.exceptions.DevCardException;
-import shared.models.exceptions.DiscardException;
+import shared.models.exceptions.JoinGameException;
 import shared.models.exceptions.MessageException;
-import shared.models.exceptions.NonMoveException;
+import shared.models.exceptions.ModelAccessException;
 import shared.models.exceptions.PlayingException;
+import shared.models.exceptions.PreGameException;
 import shared.models.exceptions.SignInException;
-import shared.models.exceptions.TradeException;
 import shared.models.hand.ResourceType;
 
 /**
@@ -24,7 +25,7 @@ import shared.models.hand.ResourceType;
 public class ModelFacade {
 	
 	private Inspector inspector;
-	private Model gameModel;
+	private GameModel gameModel;
 	
 	/**
 	 * Instrcutor with no params
@@ -50,14 +51,6 @@ public class ModelFacade {
 	}
 
 	//TODO: getters and setters
-
-	/**
-	 * TODO
-	 */
-	private void importGameModel(Model modelFromServer) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	//Controller to Server Interactions
 	
@@ -68,26 +61,26 @@ public class ModelFacade {
 	 * @post User is logged in if credentials are valid. If not, rejected.
 	 * @param username Username
 	 * @param password Password
-	 * @throws NonMoveException  Pre condition violated
+	 * @throws SignInException  Pre condition violated
 	 */
 	public void signIn(String username, String password) 
 			throws SignInException {
-		ServerFacade.get_Instance().login(username, password);
+		ServerFacade.get_instance().login(username, password);
 	}
 	
 	/**
-	 * Creates a new user name on the server, if the usernamee is not already
+	 * Creates a new user name on the server, if the usernamee is not already 
 	 * taken. Logs them in simultaneously.
 	 * @pre Params are not null. Username is not already taken.
 	 * @post In the case of success, a new user is created on the server and
 	 * logged in. In case of failure, the user is notified. 
 	 * @param username Username
 	 * @param password Password
-	 * @throws NonMoveException Precondition violation
+	 * @throws SignInException Precondition violation
 	 */
 	public void register(String username, String password) 
 			throws SignInException {
-		ServerFacade.get_Instance().register(username, password);
+		ServerFacade.get_instance().register(username, password);
 	}
 	
 	//games (pre-joining)
@@ -95,10 +88,10 @@ public class ModelFacade {
 	 * Gets a list from the server of all the games available to join
 	 * @pre User is logged in
 	 * @post displays a list of all the games
-	 * @throws NonMoveException User not logged in
+	 * @throws PreGameException User not logged in
 	 */
-	public void setupJoinGame() throws NonMoveException {
-		ServerFacade.get_Instance().getGames();
+	public void setupJoinGame() throws PreGameException {
+		ServerFacade.get_instance().getGames();
 	}
 	
 	
@@ -110,13 +103,13 @@ public class ModelFacade {
 	 * @param randomTiles Set the tiles randomly?
 	 * @param randomNumbers Set the numbers randomly?
 	 * @param randomPorts Set the ports Randomly?
-	 * @throws NonMoveException Precondition violated
+	 * @throws PreGameException Precondition violated
 	 */
 	public void createNewGame(String name, boolean randomTiles, 
 			boolean randomNumbers, boolean randomPorts) 
-					throws NonMoveException {
-		NewGame newGame = ServerFacade.get_Instance().createNewGame(randomTiles, randomNumbers,
-				randomPorts, name);
+					throws PreGameException {
+		Map newGame = ServerFacade.get_instance().createNewGame(randomTiles,
+				randomNumbers, randomPorts, name);
 	}
 	
 	/**
@@ -126,36 +119,38 @@ public class ModelFacade {
 	 * @post Player is added to game
 	 * @param gameID Game to be added to
 	 * @param color Color to represent player
-	 * @throws NonMoveException Pre condition violation
+	 * @throws PreGameException Pre condition violation
 	 */
 	public void joinGame(int gameID, CatanColor color) 
-			throws NonMoveException {
-		ServerFacade.get_Instance().joinGame(gameID, color);
+			throws PreGameException {
+		ServerFacade.get_instance().joinGame(gameID, color);
 	}
-	
-	//TODO : Game save?
-	//TODO : Game load?
 	
 	//games (game you're in)
 	/**
 	 * adds an AI to the given game on the server
-	 * @pre user is logged in and has joined a game. There is space for another
-	 * player, and the ai is LARGEST_ARMY
+	 * @pre user is logged in and has joined a game. There is space for 
+	 * another player, and the ai is LARGEST_ARMY
 	 * @param aiType LARGEST_ARMY
-	 * @throws NonMoveException precondtion violation
+	 * @throws JoinGameException precondition violation
 	 */
-	public void addAI(String aiType) throws NonMoveException {
-		ServerFacade.get_Instance().addAI(aiType);
+	public void addAI(String aiType) throws JoinGameException {
+		ServerFacade.get_instance().addAI(aiType);
 	}
 	
-	public void getAI() throws NonMoveException {
-		ServerFacade.get_Instance().getAI();
+	/**
+	 * Checks with the server for the different AI types available
+	 * @pre user is logged in and has joined a game. This is space for another
+	 * player
+	 * @post a map of AI players is returned
+	 * @return List of AI players
+	 * @throws JoinGameException
+	 */
+	public Map getAI() throws JoinGameException {
+		return ServerFacade.get_instance().listAI();
 	}
-	
-	//TODO: reset, commandsIn commandsOut,
 
 	//moves
-	
 	/**
 	 * Initially it sends the message to the server facade to 
 	 * update the server. If that was successful, it will then update the
@@ -169,9 +164,9 @@ public class ModelFacade {
 	public void sendMessage(String message) 
 			throws MessageException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().sendMessage(
+		Map modelFromServer = ServerFacade.get_instance().sendChat(
 				playerIndex, message);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -190,9 +185,9 @@ public class ModelFacade {
 	public void placeRobber(HexLocation location, int victimIndex) 
 			throws PlayingException{
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().robPlayer(
+		Map modelFromServer = ServerFacade.get_instance().robPlayer(
 				playerIndex, victimIndex, location);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -207,9 +202,9 @@ public class ModelFacade {
 	 */
 	public void endTurn()  throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().endTurn(
+		Map modelFromServer = ServerFacade.get_instance().finishTurn(
 				playerIndex);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -221,13 +216,13 @@ public class ModelFacade {
 	 * @post If the user is eligible to buy a dev card, he will receive one at
 	 * random
 	 * @return Whether or not the user received a card
-	 * @throws DevCardException
+	 * @throws PlayingException
 	 */
-	public void buyDevCard() throws DevCardException {
+	public void buyDevCard() throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().buyDevCard(
+		Map modelFromServer = ServerFacade.get_instance().buyDevCard(
 				playerIndex);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -245,19 +240,33 @@ public class ModelFacade {
 	public void playYearOfPlentyCard(ResourceType resource1, 
 			ResourceType resource2)	throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().yearOfPlentyCard(
+		Map modelFromServer = ServerFacade.get_instance().yearOfPlenty(
 				playerIndex, resource1,	resource2);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
+	
 	/**
-	 * TODOL
+	 * Initially it sends the message to the server facade to 
+	 * update the server. If that was successful, it will then update the
+	 * model to match the newly updated version handed from the server.
+	 * @pre It is the users turn, the client model status is playing,
+	 * The user has this card, the user has not played any other dev card,
+	 * the first and second location are connected to one of the user's roads,
+	 * neither road location is on water, the user has at least two unused
+	 * roads.
+	 * @post The user has two fewer roads, two new roads appear on the map at
+	 * the given location and, if applicable, the user receives the longest
+	 * road award
+	 * @param spot1 edge Location 1
+	 * @param spot2 Edge Location 2
+	 * @throws DevCardException this card cannot be played
 	 */
 	public void roadBuilding(EdgeLocation spot1, EdgeLocation spot2) 
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().playRoadBuildCard(
+		Map modelFromServer = ServerFacade.get_instance().roadBuilding(
 				playerIndex, spot1, spot2);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -268,9 +277,9 @@ public class ModelFacade {
 	 * is 'playing', she has not yet played non-monument dev card. Robber is
 	 * not being kept in the same location, player being robbed (if exists)
 	 * has resource cards.
-	 * @post robber has new location, robbed player loses cards, current player
-	 * gains them, largest army is awarded - if applicable, you are no longer
-	 * able to play more development cards.
+	 * @post robber has new location, robbed player loses cards, current 
+	 * player gains them, largest army is awarded - if applicable, you are no
+	 * longer able to play more development cards.
 	 * @param location new location of the robber
 	 * @param victimIndex player you robbing (-1 for no one)
 	 * @throws DevCardException pre condition violation
@@ -278,9 +287,9 @@ public class ModelFacade {
 	public void playSoldierCard(HexLocation location, int victimIndex)
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().playSoldierCard(
+		Map modelFromServer = ServerFacade.get_instance().soldier(
 				playerIndex, victimIndex,location);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -296,9 +305,9 @@ public class ModelFacade {
 	public void playMonopolyCard(ResourceType resource) 
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().playMonopolyCard(
+		Map modelFromServer = ServerFacade.get_instance().monopoly(
 				resource, playerIndex);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -312,17 +321,33 @@ public class ModelFacade {
 	 */
 	public void playMonumentCard() throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Model modelFromServer = ServerFacade.get_Instance().playMonumentCard(
+		Map modelFromServer = ServerFacade.get_instance().monument(
 				playerIndex);
-		importGameModel(modelFromServer);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
-	 * TODO
+	 * Initially it sends the message to the server facade to 
+	 * update the server. If that was successful, it will then update the
+	 * model to match the newly updated version handed from the server.
+	 * @pre It is the users turn, the client model status is playing, the road
+	 * location is open, connected to another road owned by the player, not
+	 * on water, the user has the necessary resources and, if in setup round,
+	 * the road must be placed by settlement owned by the player with no
+	 * adjacent road.
+	 * @post The user loses the resources necessary to build the road,
+	 * the road is on the map at the given spot, and, if applicable,
+	 * the user receives the longestRoad award
+	 * @param roadLocation Where to place the road
+	 * @throws PlayingException Play could not be made
 	 */
-	public void buildRoad(EdgeLocation spot1, EdgeLocation spot2) 
-			throws DevCardException {
-		//TODO
+	public void buildRoad(EdgeLocation roadLocation) 
+			throws PlayingException {
+		int playerIndex = this.gameModel.getPlayerIndex();
+		boolean free = this.gameModel.inSetupMode();
+		Map modelFromServer = ServerFacade.get_instance().buildRoad(
+				playerIndex, roadLocation, free);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -340,7 +365,10 @@ public class ModelFacade {
 	 */
 	public void placeSettlement(boolean setupMode, VertexLocation vertLoc)
 			throws PlayingException {
-		
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().buildSettlement(
+				playerIndex, vertLoc, setupMode);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -356,7 +384,10 @@ public class ModelFacade {
 	 * @throws PlayingException invalid pre condition
 	 */
 	public void buildCity(VertexLocation vertLoc) throws PlayingException {
-		
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().buildCity(
+				playerIndex, vertLoc);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -367,11 +398,32 @@ public class ModelFacade {
 	 * @param offer Resources and their amounts to be given (-numbers mean
 	 * the user gets those cards)
 	 * @param receiver ID of the recipient of the cards
-	 * @throws TradeException Pre Condition failure
+	 * @throws PlayingException Pre Condition failure
 	 */
 	public void sendTradeOffer(Map<ResourceType, Integer> offer, int receiver)
-		throws TradeException {
-		
+		throws PlayingException {
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().offerTrade(
+				playerIndex, offer, receiver);
+		gameModel.initModel(modelFromServer);
+	}
+	
+	/**
+	 * Initially it sends the message to the server facade to 
+	 * update the server. If that was successful, it will then update the
+	 * model to match the newly updated version handed from the server.
+	 * @pre user is logged in, in a game, been offered a domestic trade, and
+	 * has the required resources
+	 * @post If trade is accepted, resources are swapper, other wise there are
+	 * no trades. Trade offer is removed.
+	 * @param willAccept Whether or not the user accepts the trade
+	 * @throws PlayingException Pre condition not met
+	 */
+	public void acceptTrade(boolean willAccept) throws PlayingException {
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().acceptTrade(
+				playerIndex, willAccept);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -389,22 +441,10 @@ public class ModelFacade {
 	 */
 	public void makeMaritimeTrade(int ratio, ResourceType inputResource,
 			ResourceType outputResource) throws PlayingException {
-		
-	}
-	
-	/**
-	 * Initially it sends the message to the server facade to 
-	 * update the server. If that was successful, it will then update the
-	 * model to match the newly updated version handed from the server.
-	 * @pre user is logged in, in a game, been offered a domestic trade, and
-	 * has the required resources
-	 * @post If trade is accepted, resources are swapper, other wise there are
-	 * no trades. Trade offer is removed.
-	 * @param willAccept Whether or not the user accepts the trade
-	 * @throws TradeException Pre condition not met
-	 */
-	public void acceptTrade(boolean willAccept) throws TradeException {
-		
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().maritimeTrade(
+				playerIndex, ratio, inputResource, outputResource);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	/**
@@ -416,62 +456,89 @@ public class ModelFacade {
 	 * @post user loses specified cards, client model changes to 'robbing' if
 	 * they are the last to discard
 	 * @param discardedCards
-	 * @throws DiscardException Pre-conditions not met
+	 * @throws PlayingException Pre-conditions not met
 	 */
-	public void discard(ResourceType[] discardedCards) 
-			throws DiscardException {
-		Model modelFromServer = ServerFacade.get_Instance().discard(discardedCards);
-		importGameModel(modelFromServer);
+	public void discard(List<ResourceType> discardedCards) 
+			throws PlayingException {
+		int playerIndex = this.gameModel.getPlayerIndex();
+		Map modelFromServer = ServerFacade.get_instance().discard(
+				playerIndex, discardedCards);
+		gameModel.initModel(modelFromServer);
 	}
 	
-	
-	//util
-	
 	//Controller to Game Model and Server Interactions
-	
 	/**
-	 * Simulates two die, sends the result to the model and server and compares
-	 * the result models.
+	 * Simulates two die, sends the result to the model and server and 
+	 * compares the result models.
 	 * @pre User is logged in, in a game, model state is 'rolling', it's
 	 * the user's turn
 	 * @post client state now becomes 'discarding', 'robbing' or 'playing'
 	 * @throws PlayingException pre condition violation
 	 */
 	public void rollDice() throws PlayingException {
-		
+		int playerIndex = this.gameModel.getPlayerIndex();
+		int number = this.gameModel.getDiceNumber();
+		Map modelFromServer = ServerFacade.get_instance().rollNumber(
+				playerIndex, number);
+		gameModel.initModel(modelFromServer);
 	}
 	
 	//Controller to Game Model Interactions
 	
+	public boolean canSendChat() throws ModelAccessException {
+		 return this.inspector.canSendChat();
+	 }
+
 	/**
-	 * Checks the model to see if a user can increase a given resource.
-	 * @pre user is logged in, in a game, slient model is 'discarding',
-	 * user has over 7 cards
-	 * @post increase button the gui will reflect limitations
-	 * @param resource User's resource to increase
-	 * @param amount Amount to increase it by 
-	 * @return Whether or not the amount of a user's resource can decrease
-	 * @throws DiscardException Pre-conditions not met
+	 * 
+	 * @return
+	 * @throws ModelAccessException
 	 */
-	public boolean increaseAmount(ResourceType resource, int amount) 
-			throws DiscardException, TradeException {
-		return false;
+	public boolean canRollNumber() throws ModelAccessException {
+		 return this.inspector.canRollNumber();
 	}
-	
+
 	/**
-	 * Asks the inspector if a city may be placed in the given vertex
-	 * @pre vertLoc is valid, and game is in stater where user can build a city
-	 * @post Map shows if a city may be placed there
-	 * @param vertLoc
-	 * @return True if user may place city there, false otherwise
-	 * @throws NonMoveException Pre conditions violated
+	 * Asks the inspector if the robber may be placed on the given hex
+	 * @pre hexLoc is valid, game is in state to move robber
+	 * @post Robbers ability to move on the map is shown
+	 * @param hexLoc Location of hex to place robber
+	 * @return Whether or not a robber can move there
+	 * @throws ModelAccessException Pre-condition violation
 	 */
-	public boolean canBuildCity(VertexLocation vertLoc) 
-			throws NonMoveException {
-				return false;
-		
+	public boolean canPlaceRobber(HexLocation hexLoc) 
+			throws ModelAccessException {
+		 return this.inspector.canPlaceRobber();
 	}
-	
+
+	public boolean canFinishTurn() throws ModelAccessException {
+		 return this.inspector.canFinishTurn();
+	}
+
+	public boolean canBuyDevCard() throws ModelAccessException {
+		 return this.inspector.canBuyDevCard();
+	}
+
+	public boolean canUseYearOfPlenty() throws ModelAccessException {
+		 return this.inspector.canUseYearOfPlenty();
+	}
+
+	public boolean canUseRoadBuilder() throws ModelAccessException {
+		 return this.inspector.canUseRoadBuilder();
+	}
+
+	public boolean canUseSoldier() throws ModelAccessException {
+		 return this.inspector.canUseSoldier();
+	}
+
+	public boolean canUseMonopoly() throws ModelAccessException {
+		 return this.inspector.canUseMonopoly();
+	}
+
+	public boolean canUseMonument() throws ModelAccessException {
+		 return this.inspector.canUseMonument();
+	}
+
 	/**
 	 * Checks to see if a user may place a road at a given edge by calling the
 	 * inspector.
@@ -479,101 +546,71 @@ public class ModelFacade {
 	 * @post Map reflects valid result
 	 * @param edgeLoc location of edge to place road
 	 * @return Whether or not a user may place a road
-	 * @throws NonMoveException Pre condition violated
+	 * @throws ModelAccessException Pre condition violated
 	 */
-	public boolean canBuildRoad(EdgeLocation edgeLoc) throws NonMoveException {
-		return false;
-		
+	public boolean canBuildRoad(EdgeLocation edgeLoc) 
+			throws ModelAccessException {
+		 return this.inspector.canBuildRoad();
 	}
-	
-	/**
-	 * Asks the inspector if the robber may be placed on the given hex
-	 * @pre hexLoc is valid, game is in state to move robber
-	 * @post Robbers ability to move on the map is shown
-	 * @param hexLoc Location of hex to place robber
-	 * @return Whether or not a robber can move there
-	 * @throws NonMoveException Pre-condition violation
-	 */
-	public boolean canPlaceRobber(HexLocation hexLoc) throws NonMoveException {
-		return false;
-		
-	}
-	
+
 	/**
 	 * Asks the inspector if a user may place a settlement there.
-	 * @pre vertLoc is valid, game is in state where user can place settlement.
+	 * @pre vertLoc is valid, game is in state where user can place settlement
 	 * @post Screen will reflect result
 	 * @param vertLoc Location to put the user
 	 * @return Whether or not a user may build a settlement there
-	 * @throws NonMoveException Pre-Conditions violated
+	 * @throws ModelAccessException Pre-Conditions violated
 	 */
 	public boolean canBuildSettlement(VertexLocation vertLoc) 
-			throws NonMoveException {
-		return false;
-		
+			throws ModelAccessException {
+		 return this.inspector.canBuildSettlement();
+	}
+
+	/**
+	 * Asks the inspector if a city may be placed in the given vertex
+	 * @pre vertLoc is valid, and game is in stater where user can build a 
+	 * city
+	 * @post Map shows if a city may be placed there
+	 * @param vertLoc
+	 * @return True if user may place city there, false otherwise
+	 * @throws ModelAccessException Pre conditions violated
+	 */
+	public boolean canBuildCity(VertexLocation vertLoc) 
+			throws ModelAccessException {
+		 return this.inspector.canBuildCity();
 	}
 	
 	/**
-	 * Checks the model to see if a user can trade that much of one resource
+	 * Checks the model through the inspector to see if a user can trade
 	 * @pre User is logged in, in a game, in his turn
 	 * @post nothing
 	 * @param resource Resource to trade
 	 * @param amount Amount of resource
 	 * @return Whether or not the user can trade
-	 * @throws TradeException Pre condtion violation
+	 * @throws ModelAccessException Pre condtion violation
 	 */
 	public boolean canOfferTrade(ResourceType resource, int amount)
-		throws PlayingException {
-			return false;
+		throws ModelAccessException {
+		 return this.inspector.canOfferTrade();
 	}
 	
-	public boolean canRollNumber() throws PlayingException {
-		return false;
+	public boolean canAcceptTrade() throws ModelAccessException {
+		 return this.inspector.canAcceptTrade();
+	 }
+
+	public boolean canMaritimeTrade() throws ModelAccessException {
+		 return this.inspector.canMaritimeTrade();
+	}
+
+	public boolean canDiscardCards() throws ModelAccessException {
+		 return this.inspector.canDiscardCards();
 	}
 	
-	public boolean canDiscardCards() throws PlayingException {
-		return false;
-	}
-	
-	public boolean canMaritimeTrade() throws PlayingException {
-		return false;
-	}
-	
-	public boolean canFinishTurn() throws PlayingException {
-		return false;
-	}
-	
-	public boolean canBuyDevCard() throws PlayingException {
-		return false;
-	}
-	
-	 public boolean canUseYearOfPlenty() throws PlayingException {
-		return false;
-	}
-	 
-	public boolean canUseRoadBuilder() throws PlayingException {
-		return false;
-	}
-	
-	public boolean canUseSoldier() throws PlayingException {
-		return false;
-	}
-	
-	public boolean canUseMonopoly() throws PlayingException {
-		return false;
-	}
-	
-	 public boolean canUseMonument() throws PlayingException {
-		return false;
-	}
-	 
-	 //Model to Controller Interactions
-	
+	//Model to Controller Interactions
 	/**
 	 * Imports the model into the controller/view
 	 * @pre none
 	 * @post Map view now refelcts everything in the model
-	 * @retrun Model parts
 	 */
 	public void initFromModel() {
 		

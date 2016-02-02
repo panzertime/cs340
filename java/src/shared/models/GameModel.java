@@ -1,8 +1,10 @@
 package shared.models;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import shared.models.board.Board;
+import shared.models.exceptions.EmptyPlayerListException;
 
 public class GameModel {
 	
@@ -170,6 +172,24 @@ public class GameModel {
 	 */
 	public void setTurn(Player turn) {
 		this.turn = turn;
+	}
+
+
+	public int getPlayerIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public void initModel(Map modelFromServer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public boolean inSetupMode() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
