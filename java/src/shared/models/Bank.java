@@ -1,5 +1,6 @@
 package shared.models;
 
+import java.util.Map;
 import java.util.Random;
 
 import shared.models.exceptions.NoDevCardFoundException;
@@ -16,6 +17,9 @@ import shared.models.hand.exceptions.ResourceException;
 public class Bank {
 	
 	
+	
+	
+	
 	/**
 	 * @return the hand
 	 */
@@ -23,6 +27,11 @@ public class Bank {
 		return hand;
 	}
 	private Hand hand;
+	
+	public Bank(Map<String, Object> resourceList)
+	{
+		hand = new Hand((Integer)resourceList.get("wood"),(Integer)resourceList.get("brick"),(Integer)resourceList.get("sheep"),(Integer)resourceList.get("wheat"),(Integer)resourceList.get("ore"));
+	}
 
 	/**
 	 * @pre New game

@@ -8,6 +8,11 @@ public class Achievements {
 	private Player largestArmy;
 	private Player longestRoad;
 	
+	public Achievements (Player longestRoad, Player largestArmy)
+	{
+		this.largestArmy = largestArmy;
+		this.longestRoad = longestRoad;
+	}
 	
 	/**
 	 * @pre A Road has been built on the board by every player

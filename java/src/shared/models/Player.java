@@ -1,6 +1,7 @@
 package shared.models;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeNotLinkedException;
@@ -32,7 +33,34 @@ public class Player {
 	private int armies;
 	private Boolean playedDevelopmentCard;
 	
-	public Player(String userName, int userIndex, GameModel game) {
+
+	public Player(Map<String, Object> player) {
+		userColor = getColor((String)player.get("color"));
+		userName = (String)player.get("name");
+		userIndex = (Integer)player.get("playerIndex");
+		
+	}
+	
+	public CatanColor getColor(String s)
+	{
+		s = s.toUpperCase();
+		switch (s)
+		{
+		case "RED": return CatanColor.RED;
+		case "ORANGE": return CatanColor.ORANGE;
+		case "YELLOW": return CatanColor.YELLOW;
+		case "BLUE": return CatanColor.BLUE;
+		case "GREEN": return CatanColor.GREEN;
+		case "PURPLE": return CatanColor.PURPLE;
+		case "PUCE": return CatanColor.PUCE;
+		case "WHITE": return CatanColor.WHITE;
+		case "BROWN": return CatanColor.BROWN;
+		default: return null;
+		}
+	}
+
+	
+/*	public Player(String userName, int userIndex, GameModel game) {
 		this.game = game;
 		try {
 			for (int i = 0; i < 5; i++)
@@ -40,14 +68,15 @@ public class Player {
 			for (int i = 0; i < 4; i++) 
 				cities[i] = new City(this);
 			for (int i = 0; i < 15; i++)
-				roads[i] = new Road(this);
+			roads[i] = new Road(this);
 		} catch (NullPlayerException e) {
 			//TODO log "no player passed to building or Road Constructors at" print stack trace
 		}
 		setUserName(userName);
 	}
+*/	
 	
-	
+
 	/**
 	 * @param type the type of resource to add
 	 * @param num the number of resource to be added
