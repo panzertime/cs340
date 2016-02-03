@@ -1,6 +1,9 @@
 package client.servercommunicator;
 
 import org.json.simple.JSONObject;
+import java.net.*;
+import java.io.*;
+
 
 /**
  * Concrete implementation of IServerProxy for use with a real network server */
@@ -10,7 +13,50 @@ public class ServerProxy implements IServerProxy{
 	 *	constructs new ServerProxy
 	 */
 	public ServerProxy(){
-		};
+		serverURL = "";
+		userCookie = "";
+		gameCookie = "";
+	}
+
+	private String serverURL;
+
+	private String userCookie;
+
+	private String gameCookie;
+
+	public void setURL(String URL){
+		serverURL = URL;
+	}
+
+
+	private JSONObject submitRequest(String method, JSONObject arguments)
+			throws ServerProxyException {
+			// wrap in try-catch
+		String cookie = userCookie + "; " + gameCookie;
+		URLConnection connection = new URL(serverURL + method);
+		connection.setRequestProperty("Cookie", gameCookie);
+		DataOutputStream requestBody = 
+			new DataOutputStream(BufferedOutputStream(connection.getOutputStream()));
+		requestBody.writeChars(arguments.toJSONString());
+
+
+		DataInputStream responseBody = 
+			new DataInputStream(BufferedInputStream(connection.getInputStream()));
+
+		StringBuilder JSONBuilder = new StringBuilder();
+		InputStreamReader JSONReader = new InputStreamReader(responseBody);
+		if(JSONReader.ready()){
+			int letter = JSONReader.read();
+			while(letter != -1){
+				JSONBuilder.append((char) letter);
+				letter = JSONReader.read();
+			}
+		}
+		JSONReader.close();
+
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
+	}
 		
 	/**
 	 * Checks the server to see if the given credentials are valid. If so
@@ -27,6 +73,12 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public boolean loginUser(JSONObject credentials) 
 			throws ServerProxyException {
+
+			// do not use submitRequest here;
+			// rather do it manually, extract the cookie,
+			// set the cookie, and return a bool
+			
+
 			return true;
 	}
 	
