@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import shared.models.board.Board;
+import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.vertex.VertexLocation;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadPlayerIndexException;
 import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.EmptyPlayerListException;
+import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.BadResourceTypeException;
 
 public class GameModel {
 	
@@ -277,6 +282,161 @@ public class GameModel {
 	public boolean inSetupMode() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	
+	
+	public Boolean canDiscardCard(Map<String, Object> resourceList)
+	{
+		//check status Discarding
+		return (this.getTurn().getHand().canDiscardCard() && this.getTurn().getHand().hasCards(resourceList));
+	}
+	
+	public Boolean canRollNumber()
+	{
+		//check status Rolling
+		//check turn
+		return null;
+	}
+	
+	public Boolean canOfferTrade(Map<String, Object> resourceList)
+	{
+		//check status Playing
+		//check turn
+		return this.getTurn().getHand().hasCards(resourceList);
+	}
+	
+	public Boolean canMaritimeTrade(int ratio, ResourceType type)
+	{
+		//check status Playing
+		//check turn
+		//check Player is on correct ratio port
+		Boolean b = false;
+		try {
+			 b = this.getTurn().getHand().hasResource(type, ratio);
+		} catch (BadResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return b;
+	}
+	
+	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	{
+		//check status Playing
+		//check turn
+		//robber has different location
+		//player being robbed has resource cards
+		return null;
+	}
+	
+	public Boolean canFinishTurn()
+	{
+		//check status Playing
+				//check turn
+		return null;
+	}
+	
+	public Boolean canBuyDevCard()
+	{
+		//check status Playing
+				//check turn
+		//Bank.getDevCards.size > 0
+		this.getTurn().getHand().hasDevelopmentCost();
+		return null;
+	}
+	
+	public Boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().canPlayDevelopmentCard();
+		this.getTurn().hasKnightToUse();
+		canRobPlayer(newRobberLocation, playerIndex);
+		return null;
+	}
+	
+	public Boolean canUseYearOfPlenty(ResourceType one, ResourceType two)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().canPlayDevelopmentCard();
+		this.getTurn().hasYearOfPlentyToUse();
+		try {
+			this.getBank().getHand().hasResource(one, 1);
+			this.getBank().getHand().hasResource(two, 1);
+		} catch (BadResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().canPlayDevelopmentCard();
+		this.getTurn().hasRoadBuildingToUse();
+		//canBuildRoad
+		//canBuildRoad (also on first location)
+		return null;
+	}
+	
+	public Boolean canUseMonopoly(ResourceType type)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().canPlayDevelopmentCard();
+		this.getTurn().hasMonopolyToUse();
+		return null;
+	}
+	
+	public Boolean canUseMonument()
+	{
+		//check status Playing
+		//check turn
+		//enough monuments to win game
+		return null;
+	}
+	
+	public Boolean canBuildRoad(EdgeLocation edge)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().getHand().hasRoadCost();
+		//check if can Build
+		return null;
+	}
+	
+	public Boolean canBuildSettlement(VertexLocation vertex)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().getHand().hasSettlementCost();
+		//check if can Build
+		return null;
+	}
+	
+	public Boolean canBuildCity(VertexLocation vertex)
+	{
+		//check status Playing
+		//check turn
+		this.getTurn().getHand().hasCityCost();
+		//check if can Build
+		return null;
+	}
+	
+	public Boolean canAcceptTrade()
+	{
+		
+		return null;
+	}
+	
+	public Boolean canSendChat()
+	{
+		
+		return null;
 	}
 
 }
