@@ -13,6 +13,7 @@ import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexNotLinkedException;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BuildException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;

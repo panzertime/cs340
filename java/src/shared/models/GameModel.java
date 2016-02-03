@@ -7,6 +7,7 @@ import shared.models.board.Board;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadPlayerIndexException;
 import shared.models.exceptions.BadTurnStatusException;
+import shared.models.exceptions.EmptyPlayerListException;
 
 public class GameModel {
 	
@@ -261,6 +262,21 @@ public class GameModel {
 		this.turnStatus = turnStatus;
 	}
 	
-	
+	public int getPlayerIndex() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public void initModel(Map modelFromServer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public boolean inSetupMode() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

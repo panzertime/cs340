@@ -1,5 +1,6 @@
 package client.servercommunicator;
 
+import org.json.simple.JSONObject;
 
 /**
  * Concrete implementation of IServerProxy for use with a real network server */
