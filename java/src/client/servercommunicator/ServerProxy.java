@@ -36,7 +36,7 @@ public class ServerProxy implements IServerProxy{
 		try {
 			String cookie = userCookie + "; " + gameCookie;
 			URLConnection connection = new URL(serverURL + method).openConnection();
-			connection.setRequestProperty("Cookie", gameCookie);
+			connection.setRequestProperty("Cookie", cookie);
 			DataOutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
 			requestBody.writeChars(arguments.toJSONString());
@@ -58,7 +58,6 @@ public class ServerProxy implements IServerProxy{
 	
 			JSONParser parser = new JSONParser();
 			JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
-		//	JSONObject json = new JSONObject(JSONBuilder.toString());
 	
 			return json;
 		}
@@ -67,6 +66,43 @@ public class ServerProxy implements IServerProxy{
 			throw new ServerProxyException();
 		}
 	}
+
+	private JSONObject submitRequest(String method)
+			throws ServerProxyException {
+
+		try {
+			String cookie = userCookie + "; " + gameCookie;
+			URLConnection connection = new URL(serverURL + method).openConnection();
+			connection.setRequestProperty("Cookie", cookie);
+				
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
+
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			if(JSONReader.ready()){
+				int letter = JSONReader.read();
+				while(letter != -1){
+					JSONBuilder.append((char) letter);
+					letter = JSONReader.read();
+				}
+			}
+			JSONReader.close();
+	
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
+	
+			return json;
+		}
+
+		catch(Exception e){
+			throw new ServerProxyException();
+		}
+	}
+
+	// 	now apparently create *boolean* versions of these which return based on status
+	//	possibly use string and translate it in the individual endpoints?
+
 		
 	/**
 	 * Checks the server to see if the given credentials are valid. If so
@@ -121,7 +157,7 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject listGames() throws ServerProxyException{
-		return null;
+		return submitRequest("/games/list");
 	}
 	
 	/**
@@ -138,10 +174,10 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject createGame(JSONObject createGameRequest) 
 		throws ServerProxyException {
-		return null;
+		return submitRequest("/games/create", createGameRequest);
 	}
 	
-	/**
+	/**
 	 * Adds a user to a given game.
 	 * @pre joinGameRequest contains a valid game ID and color
 	 * @post User is added to the given game. In the case the server is unable
@@ -153,7 +189,7 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public boolean joinGame(JSONObject joinGameRequest) 
 		throws ServerProxyException {
-		return false;
+		return submitRequest("/games/join", joinGameRequest);
 	}
 	
 	/**
@@ -169,7 +205,7 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public boolean saveGame(JSONObject saveGameRequest)
 		throws ServerProxyException {
-		return true;
+		return submitRequest("/games/save", saveGameRequest);
 	}
 
 	
@@ -185,7 +221,7 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject loadGame(JSONObject loadGameRequest)
 		throws ServerProxyException {
-		return null;
+		return submitRequest("/
 	}
 	
 	/**
