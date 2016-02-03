@@ -11,7 +11,7 @@ import shared.models.hand.development.DevCardType;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
-import shared.models.hand.development.Victory;
+import shared.models.hand.development.Monument;
 import shared.models.hand.development.YearOfPlenty;
 import shared.models.hand.exceptions.BadResourceTypeException;
 import shared.models.hand.exceptions.NoRemainingResourceException;

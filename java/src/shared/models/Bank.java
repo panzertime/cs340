@@ -1,5 +1,6 @@
 package shared.models;
 
+import java.util.Map;
 import java.util.Random;
 
 import shared.models.exceptions.NoDevCardFoundException;
@@ -9,11 +10,14 @@ import shared.models.hand.development.DevCard;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
-import shared.models.hand.development.Victory;
+import shared.models.hand.development.Monument;
 import shared.models.hand.development.YearOfPlenty;
 import shared.models.hand.exceptions.ResourceException;
 
 public class Bank {
+	
+	
+	
 	
 	
 	/**
@@ -23,6 +27,11 @@ public class Bank {
 		return hand;
 	}
 	private Hand hand;
+	
+	public Bank(Map<String, Object> resourceList)
+	{
+		hand = new Hand((Integer)resourceList.get("wood"),(Integer)resourceList.get("brick"),(Integer)resourceList.get("sheep"),(Integer)resourceList.get("wheat"),(Integer)resourceList.get("ore"));
+	}
 
 	/**
 	 * @pre New game
@@ -36,7 +45,7 @@ public class Bank {
 		}
 		for (int i = 0; i < 5; i++)
 		{
-			this.giveDevCardToBank(new Victory());
+			this.giveDevCardToBank(new Monument());
 		}
 		for (int i = 0; i < 2; i++)
 		{

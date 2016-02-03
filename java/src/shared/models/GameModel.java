@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import shared.models.board.Board;
+import shared.models.chat.ChatModel;
+import shared.models.exceptions.BadPlayerIndexException;
+import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.EmptyPlayerListException;
 
 public class GameModel {
@@ -14,21 +17,49 @@ public class GameModel {
 	private Achievements achievements;
 	private Boolean setup;
 	private Player turn;
-	
+	private Player winner;
+	private int version;
+	private final String[] turnTypes = {"Playing", "Robbing", "Discarding", "FirstRound", "SecondRound"};
+	private int turnStatus;
+	private ChatModel chatModel;
 	
 	/**
 	 * @param board the board to  initialize
 	 * @param players the players to initialize
 	 * @param bank the bank to initialize
 	 * @param achievements the achievements to initialize
+	 * @throws BadPlayerIndexException 
+	 * @throws BadTurnStatusException 
 	 * @throws Exception
 	 */
-	public GameModel(Board board, ArrayList <Player> players, Bank bank, Achievements achievements) throws Exception {
+	
+	public GameModel(Map<String, Object> clientModel) throws BadPlayerIndexException, BadTurnStatusException
+	{
+		this.bank = new Bank((Map<String,Object>)clientModel.get("bank"));
+		this.chatModel = new ChatModel((Map<String,Object>)clientModel.get("chat"),(Map<String,Object>)clientModel.get("log"));
+		this.board = new Board((Map<String,Object>)clientModel.get("map"));
+		this.version = (Integer)clientModel.get("version");
+		this.winner = whichPlayer((Integer)clientModel.get("winner"));
+		Map<String,Object> turnTracker = (Map<String,Object>)clientModel.get("TurnTracker");
+		this.winner = whichPlayer((Integer)turnTracker.get("currentTurn"));
+		this.turnStatus = whichTurnStatus((String)turnTracker.get("status"));
+		achievements = new Achievements(whichPlayer((Integer)turnTracker.get("longestRoad")),whichPlayer((Integer)turnTracker.get("largestArmy")));
+		Map<String,Object>[] playerList = (Map<String,Object>[])clientModel.get("players");
+		for (Map<String,Object> p: playerList)
+		{
+			players.add(new Player(p));
+		}
+		
+		
+	}
+	
+	
+	/*public GameModel(Board board, ArrayList <Player> players, Bank bank, Achievements achievements) throws Exception {
 		setBoard(board);
 		setPlayers(players);
 		setBank(bank);
 		setAchievements(achievements);
-	}
+	}*/
 	
 	
 	/**
@@ -146,6 +177,28 @@ public class GameModel {
 		
 	}
 	
+	
+	public Player whichPlayer(int index) throws BadPlayerIndexException
+	{
+		if (index == -1)
+		{ return null; }
+		for (Player p: players)
+		{
+			if (p.getUserIndex() == index) return p;
+		}
+		throw new BadPlayerIndexException();
+	}
+	
+	public int whichTurnStatus(String turnType) throws BadTurnStatusException
+	{
+		for (int i = 0; i < this.turnTypes.length; i++)
+		{
+			if (turnType.equals(turnTypes[i])) return i;
+		}
+		throw new BadTurnStatusException();
+	}
+	
+	
 	/**
 	 * @return True if setup
 	 */
@@ -175,6 +228,40 @@ public class GameModel {
 	}
 
 
+	public Player getWinner() {
+		return winner;
+	}
+
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
+	public int getVersion() {
+		return version;
+	}
+
+
+	public void setWinner(Player winner) {
+		this.winner = winner;
+	}
+
+
+	public String getTurnStatus(int i) {
+		return turnTypes[i];
+	}
+
+
+
+	public int getTurnStatus() {
+		return turnStatus;
+	}
+
+
+	public void setTurnStatus(int turnStatus) {
+		this.turnStatus = turnStatus;
+	}
+	
 	public int getPlayerIndex() {
 		// TODO Auto-generated method stub
 		return 0;

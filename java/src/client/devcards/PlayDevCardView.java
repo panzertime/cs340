@@ -179,7 +179,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
 			}
-			else if (selectedDevCard == DevCardType.VICTORY) {
+			else if (selectedDevCard == DevCardType.MONUMENT) {
 				useButton.setText(DEFAULT_USE_BUTTON_LABEL);
 				useButton.setEnabled(false);
 				resCard1.setEnabled(false);
@@ -428,7 +428,7 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		this.add(DevCardType.YEAROFPLENTY, yearofplenty);
 		this.add(DevCardType.MONOPOLY, monopoly);
 		this.add(DevCardType.ROADBUILDING, roadbuilding);
-		this.add(DevCardType.VICTORY, monument);
+		this.add(DevCardType.MONUMENT, monument);
 	}
 	
 	private JToggleButton createDevCardButton(String text, String imageFile) {
@@ -507,7 +507,7 @@ class DevelopmentCardChooser extends ButtonGroupPanel {
 		else if (selection == roadbuilding.getModel())
 			return DevCardType.ROADBUILDING;
 		else if (selection == monument.getModel())
-			return DevCardType.VICTORY;
+			return DevCardType.MONUMENT;
 		else
 			return null;		
 	}
