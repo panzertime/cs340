@@ -2,6 +2,7 @@
 package shared.models.hand;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 import shared.models.Bank;
@@ -357,6 +358,21 @@ public class Hand {
 	public ArrayList<DevCard> getDevCards() {
 		return devCards;
 	}
-
+	
+	
+	public Boolean canDiscardCard()
+	{
+		return (getHandSize() > 7);
+	}
+	
+	public Boolean hasCards(Map<String, Object> resourceList)
+	{
+		if (getWood() != (Integer)resourceList.get("wood")) return false;
+		if (getBrick() != (Integer)resourceList.get("brick")) return false;
+		if (getSheep() != (Integer)resourceList.get("sheep")) return false;
+		if (getWheat() != (Integer)resourceList.get("wheat")) return false;
+		if (getOre() != (Integer)resourceList.get("ore")) return false;
+		return true;
+	}
 	
 }

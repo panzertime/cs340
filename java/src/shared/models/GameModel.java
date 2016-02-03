@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import shared.models.board.Board;
+import shared.models.board.hex.HexLocation;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadPlayerIndexException;
 import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.EmptyPlayerListException;
+import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.BadResourceTypeException;
 
 public class GameModel {
 	
@@ -278,5 +281,54 @@ public class GameModel {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	
+	
+	public Boolean canDiscardCard(Map<String, Object> resourceList)
+	{
+		//check status Discarding
+		return (this.getTurn().getHand().canDiscardCard() && this.getTurn().getHand().hasCards(resourceList));
+	}
+	
+	public Boolean canRollNumber()
+	{
+		//check status Rolling
+		//check turn
+		return null;
+	}
+	
+	public Boolean canOfferTrade(Map<String, Object> resourceList)
+	{
+		//check status Playing
+		//check turn
+		return this.getTurn().getHand().hasCards(resourceList);
+	}
+	
+	public Boolean canMaritimeTrade(int ratio, ResourceType type)
+	{
+		//check status Playing
+		//check turn
+		//check Player is on correct ratio port
+		Boolean b = false;
+		try {
+			 b = this.getTurn().getHand().hasResource(type, ratio);
+		} catch (BadResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return b;
+	}
+	
+	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	{
+		//check status Playing
+		//check turn
+		//robber has different location
+		//player being robbed has resource cards
+		return null;
+	}
+	
+	
+	
 
 }
