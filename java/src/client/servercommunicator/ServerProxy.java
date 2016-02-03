@@ -1,6 +1,7 @@
 package client.servercommunicator;
 
-import org.json.simple.JSONObject;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 import java.net.*;
 import java.io.*;
 
@@ -31,31 +32,40 @@ public class ServerProxy implements IServerProxy{
 
 	private JSONObject submitRequest(String method, JSONObject arguments)
 			throws ServerProxyException {
-			// wrap in try-catch
-		String cookie = userCookie + "; " + gameCookie;
-		URLConnection connection = new URL(serverURL + method);
-		connection.setRequestProperty("Cookie", gameCookie);
-		DataOutputStream requestBody = 
-			new DataOutputStream(BufferedOutputStream(connection.getOutputStream()));
-		requestBody.writeChars(arguments.toJSONString());
 
+		try {
+			String cookie = userCookie + "; " + gameCookie;
+			URLConnection connection = new URL(serverURL + method).openConnection();
+			connection.setRequestProperty("Cookie", gameCookie);
+			DataOutputStream requestBody = 
+				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
+			requestBody.writeChars(arguments.toJSONString());
+	
 
-		DataInputStream responseBody = 
-			new DataInputStream(BufferedInputStream(connection.getInputStream()));
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
-		StringBuilder JSONBuilder = new StringBuilder();
-		InputStreamReader JSONReader = new InputStreamReader(responseBody);
-		if(JSONReader.ready()){
-			int letter = JSONReader.read();
-			while(letter != -1){
-				JSONBuilder.append((char) letter);
-				letter = JSONReader.read();
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			if(JSONReader.ready()){
+				int letter = JSONReader.read();
+				while(letter != -1){
+					JSONBuilder.append((char) letter);
+					letter = JSONReader.read();
+				}
 			}
+			JSONReader.close();
+	
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
+		//	JSONObject json = new JSONObject(JSONBuilder.toString());
+	
+			return json;
 		}
-		JSONReader.close();
 
-		JSONParser parser = new JSONParser();
-		JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
+		catch(Exception e){
+			throw new ServerProxyException();
+		}
 	}
 		
 	/**
