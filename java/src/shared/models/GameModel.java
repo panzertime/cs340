@@ -24,8 +24,8 @@ public class GameModel {
 	private Player turn;
 	private Player winner;
 	private int version;
-	private final String[] turnTypes = {"Playing", "Robbing", "Discarding", "FirstRound", "SecondRound"};
-	private int turnStatus;
+	private String status;
+	private int currentTurn;
 	private ChatModel chatModel;
 	
 	/**
@@ -51,8 +51,9 @@ public class GameModel {
 		this.version = (Integer)clientModel.get("version");
 		this.winner = whichPlayer((Integer)clientModel.get("winner"));
 		Map<String,Object> turnTracker = (Map<String,Object>)clientModel.get("TurnTracker");
-		this.winner = whichPlayer((Integer)turnTracker.get("currentTurn"));
-		this.turnStatus = whichTurnStatus((String)turnTracker.get("status"));
+		this.currentTurn = (Integer)turnTracker.get("currentTurn");
+		this.turn = whichPlayer(this.currentTurn);
+		this.status = (String)turnTracker.get("status");
 		achievements = new Achievements(whichPlayer((Integer)turnTracker.get("longestRoad")),whichPlayer((Integer)turnTracker.get("largestArmy")));
 		
 	}
@@ -191,17 +192,7 @@ public class GameModel {
 			if (p.getUserIndex() == index) return p;
 		}
 		throw new BadPlayerIndexException();
-	}
-	
-	public int whichTurnStatus(String turnType) throws BadTurnStatusException
-	{
-		for (int i = 0; i < this.turnTypes.length; i++)
-		{
-			if (turnType.equals(turnTypes[i])) return i;
-		}
-		throw new BadTurnStatusException();
-	}
-	
+	}	
 	
 	/**
 	 * @return True if setup
@@ -250,30 +241,25 @@ public class GameModel {
 		this.winner = winner;
 	}
 
-
-	public String getTurnStatus(int i) {
-		return turnTypes[i];
+	public String getTurnStatus() {
+		return status;
 	}
 
 
-
-	public int getTurnStatus() {
-		return turnStatus;
-	}
-
-
-	public void setTurnStatus(int turnStatus) {
-		this.turnStatus = turnStatus;
+	public void setTurnStatus(String status) {
+		this.status = status;
 	}
 	
 	public int getPlayerIndex() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.currentTurn;
 	}
 
 	public boolean inSetupMode() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = false;
+		if(status.equals("FirstRound") || status.equals("SecondRound")) {
+			result = true;
+		}
+		return result;
 	}
 	
 	
@@ -426,8 +412,7 @@ public class GameModel {
 	}
 	
 	public Boolean canSendChat()
-	{
-		
+	{	
 		return null;
 	}
 
