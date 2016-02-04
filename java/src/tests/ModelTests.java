@@ -13,17 +13,16 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.GameModel;
+import shared.models.ModelFacade;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
-import shared.models.exceptions.BadPlayerIndexException;
-import shared.models.exceptions.BadTurnStatusException;
+import shared.models.exceptions.ModelAccessException;
 import shared.models.hand.ResourceType;
 
 public class ModelTests {
 	
-	GameModel gameModel;
+	ModelFacade modelFacade;
 
 	@Before
 	private void initModel() {
@@ -43,116 +42,218 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			gameModel = new GameModel(jsonModel);
-		} catch (FileNotFoundException | ParseException | 
-				BadPlayerIndexException | BadTurnStatusException e) {
+			modelFacade = new ModelFacade(jsonModel);
+		} catch (FileNotFoundException | ParseException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private boolean correctModel() {
+		//TODO: Individual element check
 		return false;
 	}
 	
 	@Test
-	public void testcanSendChat() {
+	public void testCanSendChat() {
+		try {
+			modelFacade.canSendChat();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanRollNumber() {
+	public void testCanRollNumber() {
+		try {
+			modelFacade.canRollNumber();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanPlaceRobber() {
-		HexLocation hexLoc;
-		int playerIndex;
+	public void testCanPlaceRobber() {
+		HexLocation hexLoc = null;
+		int playerIndex = 0;
+		try {
+			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanFinishTurn() {
+	public void testCanFinishTurn() {
+		try {
+			modelFacade.canFinishTurn();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanBuyDevCard() {
+	public void testCanBuyDevCard() {
+		try {
+			modelFacade.canBuyDevCard();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanUseYearOfPlenty() {
-		ResourceType one;
-		ResourceType two;
+	public void testCanUseYearOfPlenty() {
+		ResourceType one = null;
+		ResourceType two = null;
+		try {
+			modelFacade.canUseYearOfPlenty(one, two);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanUseRoadBuilder() {
-		EdgeLocation one;
-		EdgeLocation two;
+	public void testCanUseRoadBuilder() {
+		EdgeLocation one = null;
+		EdgeLocation two = null;
+		try {
+			modelFacade.canUseRoadBuilder(one, two);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanUseSoldier() {
-		HexLocation newRobberLocation;
-		int playerIndex;
+	public void testCanUseSoldier() {
+		HexLocation newRobberLocation = null;
+		int playerIndex = 0;
+		try {
+			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanUseMonopoly() {
-		ResourceType type;
+	public void testCanUseMonopoly() {
+		ResourceType type = null;
+		try {
+			modelFacade.canUseMonopoly(type);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanUseMonument() {
+	public void testCanUseMonument() {
+		try {
+			modelFacade.canUseMonument();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanBuildRoad() {
-		EdgeLocation edgeLoc;
+	public void testCanBuildRoad() {
+		EdgeLocation edgeLoc = null;
+		try {
+			modelFacade.canBuildRoad(edgeLoc);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanBuildSettlement() {
-		VertexLocation vertLoc;
+	public void testCanBuildSettlement() {
+		VertexLocation vertLoc = null;
+		try {
+			modelFacade.canBuildSettlement(vertLoc);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanBuildCity() {
-		VertexLocation vertLoc;
+	public void testCanBuildCity() {
+		VertexLocation vertLoc = null;
+		try {
+			modelFacade.canBuildCity(vertLoc);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanOfferTrade() {
-		Map<String, Object> resource;
-		int amount;
+	public void testCanOfferTrade() {
+		Map<String, Object> resource = null;
+		int amount = 0;
+		try {
+			modelFacade.canOfferTrade(resource, amount);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanAcceptTrade() {
+	public void testCanAcceptTrade() {
+		try {
+			modelFacade.canAcceptTrade();
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanMaritimeTrade() {
-		int ratio;
-		ResourceType type;
+	public void testCanMaritimeTrade() {
+		int ratio = 0;
+		ResourceType type = null;
+		try {
+			modelFacade.canMaritimeTrade(ratio, type);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 	
 	@Test
-	public void testcanDiscardCards() {
-		Map<String, Object> resourceList;
+	public void testCanDiscardCards() {
+		Map<String, Object> resourceList = null;
+		try {
+			modelFacade.canDiscardCards(resourceList);
+		} catch (ModelAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		fail("Not yet implemented");
 	}
 }
