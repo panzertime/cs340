@@ -40,8 +40,13 @@ public class GameModel {
 	
 	public GameModel(Map<String, Object> clientModel) throws BadPlayerIndexException, BadTurnStatusException
 	{
-		this.bank = new Bank((Map<String,Object>)clientModel.get("bank"));
+		this.bank = new Bank((Map<String,Object>)clientModel.get("bank"), (Map<String,Object>)clientModel.get("deck"));
 		this.chatModel = new ChatModel((Map<String,Object>)clientModel.get("chat"),(Map<String,Object>)clientModel.get("log"));
+		Map<String,Object>[] playerList = (Map<String,Object>[])clientModel.get("players");
+		for (Map<String,Object> p: playerList)
+		{
+			players.add(new Player(p));
+		}
 		this.board = new Board((Map<String,Object>)clientModel.get("map"));
 		this.version = (Integer)clientModel.get("version");
 		this.winner = whichPlayer((Integer)clientModel.get("winner"));
@@ -49,12 +54,6 @@ public class GameModel {
 		this.winner = whichPlayer((Integer)turnTracker.get("currentTurn"));
 		this.turnStatus = whichTurnStatus((String)turnTracker.get("status"));
 		achievements = new Achievements(whichPlayer((Integer)turnTracker.get("longestRoad")),whichPlayer((Integer)turnTracker.get("largestArmy")));
-		Map<String,Object>[] playerList = (Map<String,Object>[])clientModel.get("players");
-		for (Map<String,Object> p: playerList)
-		{
-			players.add(new Player(p));
-		}
-		
 		
 	}
 	

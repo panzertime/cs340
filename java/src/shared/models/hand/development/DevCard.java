@@ -3,7 +3,7 @@ package shared.models.hand.development;
 public abstract class DevCard {
 
 	protected DevCardType type;
-	private boolean enabled; //Enabled means it has sat in hand one turn
+	private boolean enabled = false; //Enabled means it has sat in hand one turn
 	
 	/**
 	 * 

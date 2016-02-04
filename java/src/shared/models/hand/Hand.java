@@ -77,13 +77,114 @@ public class Hand {
 	 * @param wheat
 	 * @param ore
 	 */
-	public Hand(Integer wood, Integer brick, Integer sheep, Integer wheat, Integer ore) {
-		this.wood = wood;
-		this.brick = brick;
-		this.sheep = sheep;
-		this.wheat = wheat;
-		this.ore = ore;
+	public Hand(Map<String, Object> resourceList, Map<String, Object> deckList) {
+		wood = (Integer)resourceList.get("wood");
+		brick = (Integer)resourceList.get("brick");
+		sheep = (Integer)resourceList.get("sheep");
+		wheat = (Integer)resourceList.get("wheat");
+		ore = (Integer)resourceList.get("ore");		devCards = new ArrayList<DevCard>();
+		for (int i = 0; i < (Integer)deckList.get("yearOfPlenty"); i++)
+		{
+			DevCard card = new YearOfPlenty();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)deckList.get("monopoly"); i++)
+		{
+			DevCard card = new Monopoly();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)deckList.get("soldier"); i++)
+		{
+			DevCard card = new Knight();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)deckList.get("roadBuilding"); i++)
+		{
+			DevCard card = new RoadBuilding();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)deckList.get("monument"); i++)
+		{
+			DevCard card = new Monument();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		
+	}
+	
+	public Hand(Map<String, Object> resourceList, Map<String, Object> oldDevList, Map<String, Object> newDevList) {
+		wood = (Integer)resourceList.get("wood");
+		brick = (Integer)resourceList.get("brick");
+		sheep = (Integer)resourceList.get("sheep");
+		wheat = (Integer)resourceList.get("wheat");
+		ore = (Integer)resourceList.get("ore");
 		devCards = new ArrayList<DevCard>();
+		for (int i = 0; i < (Integer)oldDevList.get("yearOfPlenty"); i++)
+		{
+			DevCard card = new YearOfPlenty();
+			card.setEnabled(true);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)oldDevList.get("monopoly"); i++)
+		{
+			DevCard card = new Monopoly();
+			card.setEnabled(true);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)oldDevList.get("soldier"); i++)
+		{
+			DevCard card = new Knight();
+			card.setEnabled(true);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)oldDevList.get("roadBuilding"); i++)
+		{
+			DevCard card = new RoadBuilding();
+			card.setEnabled(true);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)oldDevList.get("monument"); i++)
+		{
+			DevCard card = new Monument();
+			card.setEnabled(true);
+			devCards.add(card);
+		}
+
+		for (int i = 0; i < (Integer)newDevList.get("yearOfPlenty"); i++)
+		{
+			DevCard card = new YearOfPlenty();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)newDevList.get("monopoly"); i++)
+		{
+			DevCard card = new Monopoly();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)newDevList.get("soldier"); i++)
+		{
+			DevCard card = new Knight();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)newDevList.get("roadBuilding"); i++)
+		{
+			DevCard card = new RoadBuilding();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+		for (int i = 0; i < (Integer)newDevList.get("monument"); i++)
+		{
+			DevCard card = new Monument();
+			card.setEnabled(false);
+			devCards.add(card);
+		}
+
 	}
 	
 	/**
@@ -201,7 +302,7 @@ public class Hand {
 		throw new BadResourceTypeException();
 	}
 
-	public ResourceType drawRandomCard() throws ResourceException 
+	public ResourceType drawRandomResourceCard() throws ResourceException 
 	{
 		if (getHandSize() == 0) throw new NoRemainingResourceException();
 		Random generator = new Random();
