@@ -29,10 +29,14 @@ public class ModelFacade {
 	private GameModel gameModel;
 	
 	/**
-	 * Instrcutor with no params
+	 * Instrcutor with GameModel input
 	 */
-	public ModelFacade() {
-		
+	public ModelFacade(Map<String, Object> gameModel) {
+		try {
+			this.gameModel = new GameModel(gameModel);
+		} catch (BadPlayerIndexException | BadTurnStatusException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//TODO: getters and setters
