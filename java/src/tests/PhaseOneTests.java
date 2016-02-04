@@ -1,5 +1,4 @@
 package tests;
-
 public class PhaseOneTests {
 	
 	public static void main(String[] args) {

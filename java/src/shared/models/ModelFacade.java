@@ -38,11 +38,17 @@ public class ModelFacade {
 			e.printStackTrace();
 		}
 	}
+	
+	public GameModel getGameModel() {
+		return gameModel;
+	}
 
-	//TODO: getters and setters
+	public void setGameModel(GameModel gameModel) {
+		this.gameModel = gameModel;
+	}
 	
 	//Controller to Server Interactions
-	
+
 	//user
 	/**
 	 * Uses the given username and password to try and enter the server.
