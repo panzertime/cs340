@@ -9,6 +9,8 @@ import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BadPlayerIndexException;
+import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.DevCardException;
 import shared.models.exceptions.JoinGameException;
 import shared.models.exceptions.MessageException;
@@ -24,30 +26,13 @@ import shared.models.hand.ResourceType;
  */
 public class ModelFacade {
 	
-	private Inspector inspector;
 	private GameModel gameModel;
 	
 	/**
 	 * Instrcutor with no params
 	 */
 	public ModelFacade() {
-
-	}
-
-	//TODO: Second constructor
-	
-	/**
-	 * @return the inspector
-	 */
-	public Inspector getInspector() {
-		return inspector;
-	}
-
-	/**
-	 * @param inspector the inspector to set
-	 */
-	public void setInspector(Inspector inspector) {
-		this.inspector = inspector;
+		
 	}
 
 	//TODO: getters and setters
@@ -166,7 +151,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().sendChat(
 				playerIndex, message);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -187,7 +180,24 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().robPlayer(
 				playerIndex, victimIndex, location);
-		gameModel.initModel(modelFromServer);
+		try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -204,7 +214,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().finishTurn(
 				playerIndex);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -222,7 +240,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().buyDevCard(
 				playerIndex);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -242,7 +268,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().yearOfPlenty(
 				playerIndex, resource1,	resource2);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -266,7 +300,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().roadBuilding(
 				playerIndex, spot1, spot2);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -289,7 +331,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().soldier(
 				playerIndex, victimIndex,location);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -307,7 +357,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().monopoly(
 				resource, playerIndex);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -323,7 +381,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().monument(
 				playerIndex);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -347,7 +413,15 @@ public class ModelFacade {
 		boolean free = this.gameModel.inSetupMode();
 		Map modelFromServer = ServerFacade.get_instance().buildRoad(
 				playerIndex, roadLocation, free);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -368,7 +442,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().buildSettlement(
 				playerIndex, vertLoc, setupMode);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -387,7 +469,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().buildCity(
 				playerIndex, vertLoc);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -405,7 +495,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().offerTrade(
 				playerIndex, offer, receiver);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -423,7 +521,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().acceptTrade(
 				playerIndex, willAccept);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -444,7 +550,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().maritimeTrade(
 				playerIndex, ratio, inputResource, outputResource);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -463,7 +577,15 @@ public class ModelFacade {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		Map modelFromServer = ServerFacade.get_instance().discard(
 				playerIndex, discardedCards);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Controller to Game Model and Server Interactions
@@ -480,13 +602,21 @@ public class ModelFacade {
 		int number = this.gameModel.getDiceNumber();
 		Map modelFromServer = ServerFacade.get_instance().rollNumber(
 				playerIndex, number);
-		gameModel.initModel(modelFromServer);
+				try {
+			gameModel = new GameModel(modelFromServer);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Controller to Game Model Interactions
 	
 	public boolean canSendChat() throws ModelAccessException {
-		 return this.inspector.canSendChat();
+		 return this.gameModel.canSendChat();
 	 }
 
 	/**
@@ -495,7 +625,7 @@ public class ModelFacade {
 	 * @throws ModelAccessException
 	 */
 	public boolean canRollNumber() throws ModelAccessException {
-		 return this.inspector.canRollNumber();
+		 return this.gameModel.canRollNumber();
 	}
 
 	/**
@@ -503,40 +633,41 @@ public class ModelFacade {
 	 * @pre hexLoc is valid, game is in state to move robber
 	 * @post Robbers ability to move on the map is shown
 	 * @param hexLoc Location of hex to place robber
+	 * @param playerIndex 
 	 * @return Whether or not a robber can move there
 	 * @throws ModelAccessException Pre-condition violation
 	 */
-	public boolean canPlaceRobber(HexLocation hexLoc) 
+	public boolean canPlaceRobber(HexLocation hexLoc, int playerIndex) 
 			throws ModelAccessException {
-		 return this.inspector.canPlaceRobber();
+		 return this.gameModel.canRobPlayer(hexLoc, playerIndex);
 	}
 
 	public boolean canFinishTurn() throws ModelAccessException {
-		 return this.inspector.canFinishTurn();
+		 return this.gameModel.canFinishTurn();
 	}
 
 	public boolean canBuyDevCard() throws ModelAccessException {
-		 return this.inspector.canBuyDevCard();
+		 return this.gameModel.canBuyDevCard();
 	}
 
-	public boolean canUseYearOfPlenty() throws ModelAccessException {
-		 return this.inspector.canUseYearOfPlenty();
+	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) throws ModelAccessException {
+		 return this.gameModel.canUseYearOfPlenty(one, two);
 	}
 
-	public boolean canUseRoadBuilder() throws ModelAccessException {
-		 return this.inspector.canUseRoadBuilder();
+	public boolean canUseRoadBuilder(EdgeLocation one, EdgeLocation two) throws ModelAccessException {
+		 return this.gameModel.canUseRoadBuilding(one, two);
 	}
 
-	public boolean canUseSoldier() throws ModelAccessException {
-		 return this.inspector.canUseSoldier();
+	public boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex) throws ModelAccessException {
+		 return this.gameModel.canUseSoldier(newRobberLocation, playerIndex);
 	}
 
-	public boolean canUseMonopoly() throws ModelAccessException {
-		 return this.inspector.canUseMonopoly();
+	public boolean canUseMonopoly(ResourceType type) throws ModelAccessException {
+		 return this.gameModel.canUseMonopoly(type);
 	}
 
 	public boolean canUseMonument() throws ModelAccessException {
-		 return this.inspector.canUseMonument();
+		 return this.gameModel.canUseMonument();
 	}
 
 	/**
@@ -550,7 +681,7 @@ public class ModelFacade {
 	 */
 	public boolean canBuildRoad(EdgeLocation edgeLoc) 
 			throws ModelAccessException {
-		 return this.inspector.canBuildRoad();
+		 return this.gameModel.canBuildRoad(edgeLoc);
 	}
 
 	/**
@@ -563,7 +694,7 @@ public class ModelFacade {
 	 */
 	public boolean canBuildSettlement(VertexLocation vertLoc) 
 			throws ModelAccessException {
-		 return this.inspector.canBuildSettlement();
+		 return this.gameModel.canBuildSettlement(vertLoc);
 	}
 
 	/**
@@ -577,7 +708,7 @@ public class ModelFacade {
 	 */
 	public boolean canBuildCity(VertexLocation vertLoc) 
 			throws ModelAccessException {
-		 return this.inspector.canBuildCity();
+		 return this.gameModel.canBuildCity(vertLoc);
 	}
 	
 	/**
@@ -589,21 +720,21 @@ public class ModelFacade {
 	 * @return Whether or not the user can trade
 	 * @throws ModelAccessException Pre condtion violation
 	 */
-	public boolean canOfferTrade(ResourceType resource, int amount)
+	public boolean canOfferTrade(Map<String, Object> resource, int amount)
 		throws ModelAccessException {
-		 return this.inspector.canOfferTrade();
+		 return this.gameModel.canOfferTrade(resource);
 	}
 	
 	public boolean canAcceptTrade() throws ModelAccessException {
-		 return this.inspector.canAcceptTrade();
+		 return this.gameModel.canAcceptTrade();
 	 }
 
-	public boolean canMaritimeTrade() throws ModelAccessException {
-		 return this.inspector.canMaritimeTrade();
+	public boolean canMaritimeTrade(int ratio, ResourceType type) throws ModelAccessException {
+		 return this.gameModel.canMaritimeTrade(ratio, type);
 	}
 
-	public boolean canDiscardCards() throws ModelAccessException {
-		 return this.inspector.canDiscardCards();
+	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException {
+		 return this.gameModel.canDiscardCard(resourceList);
 	}
 	
 	//Model to Controller Interactions

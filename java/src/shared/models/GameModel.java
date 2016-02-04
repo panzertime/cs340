@@ -271,13 +271,6 @@ public class GameModel {
 		return 0;
 	}
 
-
-	public void initModel(Map modelFromServer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	public boolean inSetupMode() {
 		// TODO Auto-generated method stub
 		return false;
