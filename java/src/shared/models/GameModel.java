@@ -53,32 +53,32 @@ public class GameModel {
 		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		players = new ArrayList<Player>();
 		for (int i = 0; i < playerList.size(); i++)
 		{
-			players.add(new Player((JSONObject) playerList.get(i)));
+			JSONObject player = (JSONObject) playerList.get(i);
+			players.add(new Player(player));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"));
-		version = (Integer)jsonMap.get("version");
+		version = ((Long) jsonMap.get("version")).intValue();
 		if (version == null) throw new BadJSONException();
-		Integer w = (Integer)jsonMap.get("winner");
+		Integer w = ((Long) jsonMap.get("winner")).intValue();
 		if (w == null) throw new BadJSONException();
 		try {
 			winner = GameModel.whichPlayer(w);
 		} catch (BadPlayerIndexException e) {
-			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
 		
-		JSONObject turnTracker = (JSONObject)jsonMap.get("TurnTracker");
+		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
 		if (turnTracker == null) throw new BadJSONException();
 
-		currentTurn = (Integer)turnTracker.get("currentTurn");
+		currentTurn = ((Long) turnTracker.get("currentTurn")).intValue();
 		if (currentTurn == null) throw new BadJSONException();
 
 		try {
 			turn = GameModel.whichPlayer(this.currentTurn);
 		} catch (BadPlayerIndexException e) {
-			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
 		String s = (String)turnTracker.get("status");
@@ -89,8 +89,8 @@ public class GameModel {
 			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
-		Integer lR = (Integer)turnTracker.get("longestRoad");
-		Integer lA = (Integer)turnTracker.get("largestArmy");
+		Integer lR = ((Long) turnTracker.get("longestRoad")).intValue();
+		Integer lA = ((Long) turnTracker.get("largestArmy")).intValue();
 		if (lR == null || lA == null) throw new BadJSONException();
 		try {
 			achievements = new Achievements(GameModel.whichPlayer(lR),GameModel.whichPlayer(lA));

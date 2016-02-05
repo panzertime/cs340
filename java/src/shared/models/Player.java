@@ -46,11 +46,11 @@ public class Player {
 		userColor = getColor(c);
 		userName = (String) player.get("name");
 		if (userName == null) throw new BadJSONException();
-		userIndex = (Integer) player.get("playerIndex");
+		userIndex = (Integer) ((Long)  player.get("playerIndex")).intValue();
 		if (userIndex == null) throw new BadJSONException();		
-		armies = (Integer) player.get("soldiers");
+		armies = (Integer) ((Long)  player.get("soldiers")).intValue();
 		if (armies == null) throw new BadJSONException();		
-		monuments = (Integer) player.get("monuments");
+		monuments = (Integer) ((Long)  player.get("monuments")).intValue();
 		if (monuments == null) throw new BadJSONException();		
 		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
 		if (playedDevelopmentCard == null) throw new BadJSONException();		
@@ -58,7 +58,7 @@ public class Player {
 				(JSONObject) player.get("newDevCards"));
 		hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null) throw new BadJSONException();		
-		playerID = (Integer) player.get("playerID");
+		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
 		if (playerID == null) throw new BadJSONException();		
 		settlements = new Settlement[5];
 		cities = new City[4];
