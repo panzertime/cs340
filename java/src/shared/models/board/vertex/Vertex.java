@@ -11,41 +11,55 @@ import shared.models.hand.exceptions.ResourceException;
 
 public class Vertex {
 	
-	private Hex hexs[] = new Hex[3];
-	private Edge edges[] = new Edge[3];
+	private Hex[] hexes;
+	private Edge[] edges;
 	private VertexLocation vertexLocation;
 	private Building building;
+	
+	public Vertex (VertexLocation vertexLoc, Hex hex0, Edge edge0, Hex hex1, Edge edge1, Hex hex2, Edge edge2) {
+		hexes = new Hex[3];
+		edges = new Edge[3];
+		this.vertexLocation = vertexLoc;
+		building = null;
+		
+		hexes[0] = hex0;
+		hexes[1] = hex1;
+		hexes[2] = hex2;
+		edges[0] = edge0;
+		edges[1] = edge1;
+		edges[2] = edge2;
+	}
 
 	/**
-	 * @pre hex is either hexs[0], hexs[1], or hexs[2];
+	 * @pre hex is either hexes[0], hexes[1], or hexes[2];
 	 * @param hex one of three possible hexes attached to this
 	 * @throws HexNotLinkedException 
 	 * @return hex the Left hex attached to this if facing the vertex from param hex
 	 */
 	public Hex getLeftHex(Hex hex) throws HexNotLinkedException {
-		if (hex == hexs[0]) {
-			return hexs[1];
-		} else if (hex == hexs[1]) {
-			return hexs[2];
-		} else if (hex == hexs[2]) {
-			return hexs[0];
+		if (hex == hexes[0]) {
+			return hexes[1];
+		} else if (hex == hexes[1]) {
+			return hexes[2];
+		} else if (hex == hexes[2]) {
+			return hexes[0];
 		}
 		throw new HexNotLinkedException();
 	}
 	
 	/**
-	 * @pre hex is either hexs[0], hexs[1], or hexs[2];
+	 * @pre hex is either hexes[0], hexes[1], or hexes[2];
 	 * @param hex one of three possible hexes attached to this
 	 * @throws HexNotLinkedException 
 	 * @return hex the Right hex attached to this if facing the vertex from param hex
 	 */
 	public Hex getRightHex(Hex hex) throws HexNotLinkedException {
-		if (hex == hexs[0]) {
-			return hexs[2];
-		} else if (hex == hexs[2]) {
-			return hexs[1];
-		} else if (hex == hexs[1]) {
-			return hexs[0];
+		if (hex == hexes[0]) {
+			return hexes[2];
+		} else if (hex == hexes[2]) {
+			return hexes[1];
+		} else if (hex == hexes[1]) {
+			return hexes[0];
 		}
 		throw new HexNotLinkedException();
 	}
@@ -87,11 +101,11 @@ public class Vertex {
 	}
 
 	public boolean isBuildable() {
-		if (hexs[0].isBuildable())
+		if (hexes[0].isBuildable())
 			return true;
-		if (hexs[1].isBuildable())
+		if (hexes[1].isBuildable())
 			return true;
-		if (hexs[2].isBuildable())
+		if (hexes[2].isBuildable())
 			return true;
 		return false;
 	}

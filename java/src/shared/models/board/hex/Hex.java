@@ -38,7 +38,7 @@ public abstract class Hex {
 	 * @param edge the edge to set
 	 * @throws BadEdgeDirectionException
 	 */
-	public void setEdge(EdgeDirection dir, Edge edge) throws BadEdgeDirectionException {
+	public void setEdge(EdgeDirection dir, Edge edge) {
 		switch (dir) {
 			case North: 
 				edges[0] = edge;
@@ -59,7 +59,7 @@ public abstract class Hex {
 				edges[5] = edge;
 				return;
 		}
-		throw new BadEdgeDirectionException();
+		assert false;
 	}
 
 	/**
@@ -67,7 +67,7 @@ public abstract class Hex {
 	 * @param edge the edge to get
 	 * @throws BadEdgeDirectionException
 	 */
-	public Edge getEdge(EdgeDirection dir) throws BadEdgeDirectionException {
+	public Edge getEdge(EdgeDirection dir) {
 		switch (dir) {
 			case North: 
 				return edges[0];
@@ -82,7 +82,8 @@ public abstract class Hex {
 			case NorthWest: 
 				return edges[5];
 		}
-		throw new BadEdgeDirectionException();
+		assert false;
+		return null;
 	}
 
 	/**
@@ -90,7 +91,7 @@ public abstract class Hex {
 	 * @param edge the vertex to set
 	 * @throws BadEdgeDirectionException
 	 */
-	public void setVertex(VertexDirection dir, Vertex vertex) throws BadVertexDirectionException {
+	public void setVertex(VertexDirection dir, Vertex vertex) {
 		switch (dir) {
 			case NorthEast: 
 				verts[0] = vertex;
@@ -111,7 +112,7 @@ public abstract class Hex {
 				verts[5] = vertex;
 				return;
 		}
-		throw new BadVertexDirectionException();
+		assert false;
 	}
 
 	/**
@@ -119,7 +120,7 @@ public abstract class Hex {
 	 * @param edge the vertex to get
 	 * @throws BadEdgeDirectionException
 	 */
-	public Vertex getVertex(VertexDirection dir) throws BadVertexDirectionException {
+	public Vertex getVertex(VertexDirection dir) {
 		switch (dir) {
 			case NorthEast: 
 				return verts[0];
@@ -134,7 +135,8 @@ public abstract class Hex {
 			case NorthWest: 
 				return verts[5];
 		}
-		throw new BadVertexDirectionException();
+		assert false;
+		return null;
 	}
 
 

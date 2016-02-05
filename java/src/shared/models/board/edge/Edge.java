@@ -1,43 +1,69 @@
 package shared.models.board.edge;
 
-import java.util.ArrayList;
-
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.vertex.Vertex;
-import shared.models.board.vertex.VertexNotLinkedException;
 
 public class Edge {
 	
-	private Hex hexs[] = new Hex[2];
-	private Vertex verts[] = new Vertex[2];
+	private Hex[] hexs = new Hex[2];
+	private Vertex[] verts = new Vertex[2];
 	private EdgeLocation edgeLocation;
 	private Road road;
 
+	
+	public Edge(EdgeLocation edgeLocation, Hex hex0, Hex hex1) {
+		this.edgeLocation = edgeLocation;
+		hexs = new Hex[2];
+		hexs[0] = hex0;
+		hexs[1] = hex1;
+		verts = new Vertex[2];
+		road = null;
+	}
 	/**
 	 * @pre hex is either hexs[0] or hexs[1];
 	 * @param hex one of two possible hexes attached to this
 	 * @throws HexNotLinkedException 
 	 * @return hex the Other hex attached to this
 	 */
-	public Hex getOtherHex(Hex hex) throws HexNotLinkedException {
+	public Hex getOtherHex(Hex hex) {
 		if (hex == hexs[0]) {
 			return hexs[1];
 		} else if (hex == hexs[1]) {
 			return hexs[0];
 		}
-		throw new HexNotLinkedException();
+		assert false;
+		return null;
 	}
 	
-	public Vertex getOtherVertex(Vertex vertex) throws VertexNotLinkedException {
+	public Vertex getOtherVertex(Vertex vertex) {
 		if (vertex == verts[0]) {
 			return verts[1];
 		} else if (vertex == verts[1]) {
 			return verts[0];
 		}
-		throw new VertexNotLinkedException();
+		assert false;
+		return null;
+	}
+	
+	public void setLeftVertex(Hex hex, Vertex vertex) {
+		if (hex == hexs[0]) {
+			verts[0] = vertex;
+		} else if (hex == hexs[1]) {
+			verts[1] = vertex;
+		}
+		assert false;
+	}
+	
+	public void setRightVertex(Hex hex, Vertex vertex) {
+		if (hex == hexs[0]) {
+			verts[1] = vertex;
+		} else if (hex == hexs[1]) {
+			verts[0] = vertex;
+		}
+		assert false;
 	}
 
 	/**
@@ -45,13 +71,6 @@ public class Edge {
 	 */
 	public EdgeLocation getEdgeLocation() {
 		return edgeLocation;
-	}
-
-	/**
-	 * @param edgeLocation the edgeLocation to set
-	 */
-	public void setEdgeLocation(EdgeLocation edgeLocation) {
-		this.edgeLocation = edgeLocation.getNormalizedLocation();
 	}
 
 	/**
