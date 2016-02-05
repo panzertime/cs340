@@ -29,19 +29,38 @@ public class ServerProxy implements IServerProxy{
 		serverURL = URL;
 	}
 
+	private JSONObject makeJSON(String stringJSON){
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(stringJSON);
+	
+		return json;
+	}
 
-	private JSONObject submitRequest(String method, JSONObject arguments)
+	/**
+	*	Returns a String which represents the body of the HTTP Response
+	*	@param method HTTP method of call
+	*	@param endpoint the API endpoint to call
+	*	@param arguments the JSON to send to that endpoint
+	*/
+	private String submitRequest(String method, String endpoint, JSONObject arguments)
 			throws ServerProxyException {
 
 		try {
 			String cookie = userCookie + "; " + gameCookie;
-			URLConnection connection = new URL(serverURL + method).openConnection();
+			URLConnection connection = new URL(serverURL + endpoint).openConnection();
 			connection.setRequestProperty("Cookie", cookie);
+			connection.setRequestMethod(method);
+
 			DataOutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
 			requestBody.writeChars(arguments.toJSONString());
 	
-
+			if (connection.responseCode() != 200) {
+				String problemMessage = "Request returned 400, " + endpoint + " says: "
+					+ connection.responseMessage();
+				throw new ServerProxyException();
+			}
+			
 			DataInputStream responseBody = 
 				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
@@ -55,25 +74,36 @@ public class ServerProxy implements IServerProxy{
 				}
 			}
 			JSONReader.close();
+
+			return JSONBuilder.toString();
 	
-			JSONParser parser = new JSONParser();
-			JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
-	
-			return json;
 		}
 
 		catch(Exception e){
-			throw new ServerProxyException();
+			throw new ServerProxyException(e, "Exception during HTTP request submission");
 		}
 	}
 
-	private JSONObject submitRequest(String method)
+	/**
+	*	Returns a String which represents the body of the HTTP Response
+	*	@param method HTTP method of call
+	*	@param endpoint the API endpoint to call
+	*/
+	private String submitRequest(String method, String endpoint)
 			throws ServerProxyException {
 
 		try {
 			String cookie = userCookie + "; " + gameCookie;
-			URLConnection connection = new URL(serverURL + method).openConnection();
+			URLConnection connection = new URL(serverURL + endpoint).openConnection();
 			connection.setRequestProperty("Cookie", cookie);
+			connection.setRequestMethod(method);
+
+			if (connection.responseCode() != 200) {
+				String problemMessage = "Request returned 400, " + endpoint + " says: "
+					+ connection.responseMessage();
+				throw new ServerProxyException();
+			}
+
 				
 			DataInputStream responseBody = 
 				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
@@ -89,19 +119,13 @@ public class ServerProxy implements IServerProxy{
 			}
 			JSONReader.close();
 	
-			JSONParser parser = new JSONParser();
-			JSONObject json = (JSONObject) parser.parse(JSONBuilder.toString());
-	
-			return json;
+			return JSONBuilder.toString();
 		}
 
 		catch(Exception e){
-			throw new ServerProxyException();
+			throw new ServerProxyException(e, "Exception during HTTP request submission");
 		}
 	}
-
-	// 	now apparently create *boolean* versions of these which return based on status
-	//	possibly use string and translate it in the individual endpoints?
 
 		
 	/**
@@ -125,6 +149,8 @@ public class ServerProxy implements IServerProxy{
 			// set the cookie, and return a bool
 			
 
+			// post
+
 			return true;
 	}
 	
@@ -144,7 +170,10 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public boolean registerUser(JSONObject credentials)
 			throws ServerProxyException {
-			return true;
+
+			// post 
+
+		return true;
 	}
 	
 	/**
@@ -157,7 +186,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject listGames() throws ServerProxyException{
-		return submitRequest("/games/list");
+		try {
+			return makeJSON(submitRequest("GET", "/games/list"));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}			
 	}
 	
 	/**
@@ -173,8 +207,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject createGame(JSONObject createGameRequest) 
-		throws ServerProxyException {
-		return submitRequest("/games/create", createGameRequest);
+			throws ServerProxyException {
+		try{
+			return makeJSON(submitRequest("/games/create", createGameRequest));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}			
 	}
 	
 	/**
@@ -188,8 +227,17 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public boolean joinGame(JSONObject joinGameRequest) 
-		throws ServerProxyException {
-		return submitRequest("/games/join", joinGameRequest);
+			throws ServerProxyException {
+		try {
+			if(submitRequest("POST", "/games/join", joinGameRequest).equals("Success")){
+				return true;
+			}
+			return false;
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
+
 	}
 	
 	/**
@@ -204,8 +252,17 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public boolean saveGame(JSONObject saveGameRequest)
-		throws ServerProxyException {
-		return submitRequest("/games/save", saveGameRequest);
+			throws ServerProxyException {
+		try {
+			if(submitRequest("POST", "/games/save", saveGameRequest).equals("Success")){
+				return true;
+			}
+			return false;
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
+
 	}
 
 	
@@ -220,8 +277,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject loadGame(JSONObject loadGameRequest)
-		throws ServerProxyException {
-		return submitRequest("/
+			throws ServerProxyException {
+		try {
+			return makeJSON(submitRequest("POST", "/games/load", loadGameRequest));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
 	}
 	
 	/**
@@ -236,9 +298,15 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject getModel(JSONObject versionNumber)
-		throws ServerProxyException  {
-		return null;
+	public JSONObject getModel(int currentVersion)
+			throws ServerProxyException  {
+		try {
+			String call = "/game/model?version=" + currentVersion.toString();
+			return makeJSON(submitRequest("GET", call));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
 	}
 	
 	/**
@@ -252,7 +320,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject reset() throws ServerProxyException  {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/game/reset"));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
 	}	
 	
 	/**
@@ -267,7 +340,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject getCommands() throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("GET", "/game/commands"));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
 	}
 	
 	/**
@@ -282,7 +360,12 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject executeCommands(JSONObject listOfCommands) 
 			throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/game/commands", listOfCommands));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}	
 	}
 	
 	/**
@@ -298,7 +381,12 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public boolean addAI(JSONObject addAIRequest) 
 			throws ServerProxyException {
-		return true;
+		try {
+			return makeJSON(submitRequest("POST", "/game/addAI", addAIRequest));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -310,7 +398,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject listAI() throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("GET", "/game/listAI"));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -324,7 +417,12 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject sendChat(JSONObject sendChat) 
 			throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/sendChat", sendChat));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	/**
 	 * Tells the server what number was rolled.
@@ -338,7 +436,12 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject rollNumber(JSONObject rollNumber) 
 			throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/rollNumber", rollNumber));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -356,7 +459,13 @@ public class ServerProxy implements IServerProxy{
 	 @Override
 	public JSONObject robPlayer(JSONObject robPlayer) 
 			throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/robPlayer", robPlayer));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -366,8 +475,14 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject finishTurn(JSONObject JSONObject) throws ServerProxyException {
-		return null;
+	public JSONObject finishTurn(JSONObject finishMove) throws ServerProxyException {
+		try {
+			return makeJSON(submitRequest("POST", "/moves/finishTurn", finishMove));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -377,8 +492,13 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject buyDevCard(JSONObject JSONObject) throws ServerProxyException {
-		return null;
+	public JSONObject buyDevCard(JSONObject buyDev) throws ServerProxyException {
+		try {
+			return makeJSON(submitRequest("POST", "/moves/buyDevCard", buyDev));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -393,7 +513,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/Year_of_Plenty", resources));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 
 	/**
@@ -411,7 +537,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/Road_Building", edgeLocations));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -429,7 +560,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/Soldier", soldierArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -442,7 +579,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject monopoly(JSONObject resource) throws ServerProxyException {
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/Monopoly", resource));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -455,8 +598,14 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject monument() throws ServerProxyException{
-		return null;
+	public JSONObject monument(JSONObject monumentArgs) throws ServerProxyException{
+		try {
+			return makeJSON(submitRequest("POST", "/moves/Monument", monumentArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -473,7 +622,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildRoad(JSONObject buildRoadArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/buildRoad", buildRoadArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -490,7 +645,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildSettlement(JSONObject buildSettlementArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/buildSettlement", buildSettlementArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -505,7 +666,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildCity(JSONObject buildCityArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/buildCity", buildCityArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -519,7 +686,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject offerTrade(JSONObject offerTradeArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/offerTrade", offerTradeArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -534,7 +707,12 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject acceptTrade(JSONObject acceptTradeArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/acceptTrade", acceptTradeArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
 	}
 	
 	/**
@@ -549,7 +727,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject maritimeTrade(JSONObject maritimeTradeArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/maritimeTrade", maritimeTradeArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -563,7 +747,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject discardCards(JSONObject discardArgs) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/moves/discardCards", discardArgs));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 	
 	/**
@@ -577,7 +767,13 @@ public class ServerProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
-		return null;
+		try {
+			return makeJSON(submitRequest("POST", "/util/changeLogLevel", logLevel));
+		}
+		catch(Exception e) {
+			throw new ServerProxyException(e);
+		}
+
 	}
 
 

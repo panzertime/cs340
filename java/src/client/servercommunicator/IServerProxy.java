@@ -1,6 +1,5 @@
 package client.servercommunicator;
 
-import org.json.simple.JSONObject;
 
 /**
  * This interface is to be implemented for use on the clients machine.
@@ -113,7 +112,7 @@ public interface IServerProxy {
 	 * @return the current state of the game or true if the model is current
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public JSONObject getModel(JSONObject versionNumber)
+	public JSONObject getModel(int currentVersion)
 		throws ServerProxyException;
 	
 	/**
