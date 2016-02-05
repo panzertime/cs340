@@ -1,7 +1,7 @@
 package shared.models.board.vertex;
 
+import shared.logger.Log;
 import shared.models.board.edge.Edge;
-import shared.models.board.edge.EdgeNotLinkedException;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.Building;
@@ -36,7 +36,7 @@ public class Vertex {
 	 * @throws HexNotLinkedException 
 	 * @return hex the Left hex attached to this if facing the vertex from param hex
 	 */
-	public Hex getLeftHex(Hex hex) throws HexNotLinkedException {
+	public Hex getLeftHex(Hex hex){
 		if (hex == hexes[0]) {
 			return hexes[1];
 		} else if (hex == hexes[1]) {
@@ -44,7 +44,9 @@ public class Vertex {
 		} else if (hex == hexes[2]) {
 			return hexes[0];
 		}
-		throw new HexNotLinkedException();
+		Log.error("Board is Broken");
+		assert false;
+		return null;
 	}
 	
 	/**
@@ -53,7 +55,7 @@ public class Vertex {
 	 * @throws HexNotLinkedException 
 	 * @return hex the Right hex attached to this if facing the vertex from param hex
 	 */
-	public Hex getRightHex(Hex hex) throws HexNotLinkedException {
+	public Hex getRightHex(Hex hex) {
 		if (hex == hexes[0]) {
 			return hexes[2];
 		} else if (hex == hexes[2]) {
@@ -61,7 +63,9 @@ public class Vertex {
 		} else if (hex == hexes[1]) {
 			return hexes[0];
 		}
-		throw new HexNotLinkedException();
+		Log.error("Board is Broken");
+		assert false;
+		return null;
 	}
 
 	/**
@@ -120,7 +124,7 @@ public class Vertex {
 		return edges;
 	}
 
-	public Edge getLeftEdge(Edge edge) throws EdgeNotLinkedException {
+	public Edge getLeftEdge(Edge edge) {
 		if (edge == edges[0]) {
 			return edges[1];
 		} else if (edge == edges[1]) {
@@ -128,10 +132,12 @@ public class Vertex {
 		} else if (edge == edges[2]) {
 			return edges[0];
 		}
-		throw new EdgeNotLinkedException();
+		Log.error("Board is Broken");
+		assert false;
+		return null;
 	}
 	
-	public Edge getRightEdge(Edge edge) throws EdgeNotLinkedException {
+	public Edge getRightEdge(Edge edge) {
 		if (edge == edges[0]) {
 			return edges[2];
 		} else if (edge == edges[2]) {
@@ -139,7 +145,9 @@ public class Vertex {
 		} else if (edge == edges[1]) {
 			return edges[0];
 		}
-		throw new EdgeNotLinkedException();
+		Log.error("Board is Broken");
+		assert false;
+		return null;
 	}
 
 }

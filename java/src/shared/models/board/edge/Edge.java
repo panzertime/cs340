@@ -1,5 +1,6 @@
 package shared.models.board.edge;
 
+import shared.logger.Log;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
 import shared.models.board.piece.PositionTakenException;
@@ -34,6 +35,7 @@ public class Edge {
 		} else if (hex == hexs[1]) {
 			return hexs[0];
 		}
+		Log.error("Board is Broken");
 		assert false;
 		return null;
 	}
@@ -44,6 +46,7 @@ public class Edge {
 		} else if (vertex == verts[1]) {
 			return verts[0];
 		}
+		Log.error("Board is Broken");
 		assert false;
 		return null;
 	}
@@ -54,6 +57,7 @@ public class Edge {
 		} else if (hex == hexs[1]) {
 			verts[1] = vertex;
 		}
+		Log.error("Board is Broken");
 		assert false;
 	}
 	
@@ -63,6 +67,7 @@ public class Edge {
 		} else if (hex == hexs[1]) {
 			verts[0] = vertex;
 		}
+		Log.error("Board is Broken");
 		assert false;
 	}
 

@@ -1,11 +1,13 @@
 package shared.models.board.hex.tiles.water;
 
 import shared.models.board.hex.Hex;
+import shared.models.board.hex.HexLocation;
 import shared.models.board.hex.HexType;
 
 public class WaterHex extends Hex {
 
-	public WaterHex() {
+	public WaterHex(HexLocation hexLocation) {
+		super(hexLocation);
 		hexType = HexType.WATER;
 	}
 

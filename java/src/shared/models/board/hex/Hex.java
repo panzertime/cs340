@@ -1,9 +1,8 @@
 package shared.models.board.hex;
 
-import shared.models.board.edge.BadEdgeDirectionException;
+import shared.logger.Log;
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeDirection;
-import shared.models.board.vertex.BadVertexDirectionException;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexDirection;
 
@@ -13,7 +12,10 @@ public abstract class Hex {
 	private HexLocation hexlocation;
 	private Edge[] edges = new Edge[6];
 	protected Vertex[] verts = new Vertex[6];
-
+	
+	public Hex(HexLocation hexLocation) {
+		this.hexlocation = hexLocation;
+	}
 	/**
 	 * @return Boolean the ability of the hex to hold pieces
 	 */
@@ -59,6 +61,7 @@ public abstract class Hex {
 				edges[5] = edge;
 				return;
 		}
+		Log.error("Board is Broken");
 		assert false;
 	}
 
@@ -82,6 +85,7 @@ public abstract class Hex {
 			case NorthWest: 
 				return edges[5];
 		}
+		Log.error("Board is Broken");
 		assert false;
 		return null;
 	}
@@ -112,6 +116,7 @@ public abstract class Hex {
 				verts[5] = vertex;
 				return;
 		}
+		Log.error("Board is Broken");
 		assert false;
 	}
 
@@ -135,6 +140,7 @@ public abstract class Hex {
 			case NorthWest: 
 				return verts[5];
 		}
+		Log.error("Board is Broken");
 		assert false;
 		return null;
 	}

@@ -4,14 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 
 import shared.models.Player;
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeDirection;
 import shared.models.board.edge.EdgeLocation;
-import shared.models.board.edge.EdgeNotLinkedException;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexLocation;
+import shared.models.board.hex.tiles.land.ClayHex;
+import shared.models.board.hex.tiles.land.FieldHex;
+import shared.models.board.hex.tiles.land.ForestHex;
+import shared.models.board.hex.tiles.land.LandHex;
+import shared.models.board.hex.tiles.land.MountainHex;
+import shared.models.board.hex.tiles.land.PastureHex;
 import shared.models.board.piece.City;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
@@ -20,6 +26,7 @@ import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexDirection;
 import shared.models.board.vertex.VertexLocation;
+import shared.models.exceptions.BadJSONException;
 
 public class Board {
 
@@ -27,23 +34,88 @@ public class Board {
 
 	private Map<HexLocation, Hex> hexes;
 
-	public Board(JSONObject jsonMap) {
+	public Board(JSONObject jsonMap) throws BadJSONException {
 		hexes = new HashMap<HexLocation, Hex>();
-		
+		JSONArray hexes = (JSONArray) jsonMap.get("hexes");
+		if (hexes == null)
+			throw new BadJSONException();
+		if (hexes.size() != 17)
+			throw new BadJSONException();
+
+		JSONArray ports = (JSONArray) jsonMap.get("ports");
+		if (ports == null)
+			throw new BadJSONException();
+		if (ports.size() != 9)
+			throw new BadJSONException();
+
+		JSONArray roads = (JSONArray) jsonMap.get("roads");
+		if (roads == null)
+			throw new BadJSONException();
+
+		JSONArray settlements = (JSONArray) jsonMap.get("settlements");
+		if (settlements == null)
+			throw new BadJSONException();
+
+		JSONArray cities = (JSONArray) jsonMap.get("cities");
+		if (cities == null)
+			throw new BadJSONException();
+
+		JSONObject robber = (JSONObject) jsonMap.get("robber");
+		if (robber == null)
+			throw new BadJSONException();
+
+		for (Object hexObject : hexes) {
+			JSONObject jsonHex = (JSONObject) hexObject;
+
+			JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
+			if (jsonHexLoc == null)
+				throw new BadJSONException();
+			HexLocation hexLoc = new HexLocation(jsonHexLoc);
+
+			Integer number = (Integer) jsonHex.get("number");
+			String resource = (String) jsonHex.get("resource");
+
+			if (number != null && resource != null) {
+				switch (resource) {
+				case "Wood":
+					this.hexes.put(hexLoc, new ForestHex(hexLoc, number));
+					break;
+				case "Brick":
+					this.hexes.put(hexLoc, new ClayHex(hexLoc, number));
+					break;
+				case "Sheep":
+					this.hexes.put(hexLoc, new PastureHex(hexLoc, number));
+					break;
+				case "Wheat":
+					this.hexes.put(hexLoc, new FieldHex(hexLoc, number));
+					break;
+				case "Ore":
+					this.hexes.put(hexLoc, new MountainHex(hexLoc, number));
+					break;
+				default:
+					throw new BadJSONException();
+				}
+			} else if (number == null && resource == null)
+				this.hexes.put(hexLoc, new LandHex(hexLoc));
+			else
+				throw new BadJSONException();
+		}
+		// TODO Keep Building Shit!
+
 	}
 
-	private Hex getHexAt(HexLocation hexLocation) {
+	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
 
-	private Vertex getVertexAt(VertexLocation vertexLoc) {
+	public Vertex getVertexAt(VertexLocation vertexLoc) {
 		Hex hex = getHexAt(vertexLoc.getHexLoc());
 		Vertex vertex = null;
 		vertex = hex.getVertex(vertexLoc.getDir());
 		return vertex;
 	}
 
-	private Edge getEdgeAt(EdgeLocation edgeLoc) {
+	public Edge getEdgeAt(EdgeLocation edgeLoc) {
 		Hex hex = getHexAt(edgeLoc.getHexLoc());
 		Edge edge = null;
 		edge = hex.getEdge(edgeLoc.getDir());
@@ -61,7 +133,7 @@ public class Board {
 			return false;
 		if (!vertex.isBuildable())
 			return false;
-		
+
 		Edge[] edges = vertex.getAllEdges();
 		for (Edge edge : edges) {
 			if (edge.getOtherVertex(vertex).getBuilding() != null)
@@ -102,20 +174,17 @@ public class Board {
 			return false;
 		if (!edge.isBuildable())
 			return false;
-		try {
-			for (Vertex vertex : edge.getAllVertices()) {
-				if (vertex.getBuilding().getOwner().equals(this))
-					return true;
-				if (vertex.getBuilding() == null) {
 
-					if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player))
-						return true;
-					if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player))
-						return true;
-				}
+		for (Vertex vertex : edge.getAllVertices()) {
+			if (vertex.getBuilding().getOwner().equals(this))
+				return true;
+			if (vertex.getBuilding() == null) {
+
+				if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player))
+					return true;
+				if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player))
+					return true;
 			}
-		} catch (EdgeNotLinkedException e) {
-			// TODO Log Exception
 		}
 		return false;
 	}
@@ -173,7 +242,7 @@ public class Board {
 		EdgeLocation edgeLoc = new EdgeLocation(hex.getHexlocation(), edgeDir).getNormalizedLocation();
 
 		Edge edge = new Edge(edgeLoc, hex, adjacent);
-		
+
 		hex.setEdge(edgeDir, edge);
 
 		if (adjacent != null) {

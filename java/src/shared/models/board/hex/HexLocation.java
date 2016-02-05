@@ -1,12 +1,30 @@
 package shared.models.board.hex;
 
+import org.json.simple.JSONObject;
+
 import shared.models.board.edge.EdgeDirection;
+import shared.models.exceptions.BadJSONException;
 
 /**
  * Represents the location of a hex on a hex map
  */
 public class HexLocation
 {
+	public HexLocation(JSONObject json) throws BadJSONException {
+		Integer x = (Integer) json.get("x");
+		if (x == null)
+			throw new BadJSONException();
+		Integer y = (Integer) json.get("y");
+		if (y == null)
+			throw new BadJSONException();
+		setX(x);
+		setY(y);
+	}
+	
+	public HexLocation(Integer x, Integer y) {
+		setX(x);
+		setY(y);
+	}
 	
 	private int x;
 	private int y;

@@ -1,15 +1,17 @@
 package shared.models.board.hex.tiles.water;
 
 import shared.models.board.edge.EdgeDirection;
+import shared.models.board.hex.HexLocation;
 
 public class PortHex extends WaterHex{
 	
 	private EdgeDirection portDirection;
 	private PortType portType;
 	
-	public PortHex(PortType portType) throws NullPortTypeException {
+	public PortHex(HexLocation hexLocation, PortType portType) throws IllegalArgumentException {
+		super(hexLocation);
 		if (portType == null) 
-			throw new NullPortTypeException();
+			throw new IllegalArgumentException();
 		this.setPortType(portType);
 	}
 
