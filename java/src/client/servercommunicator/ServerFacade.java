@@ -130,7 +130,7 @@ public class ServerFacade {
 	
 	
 	public void loadGame(String fileName) 
-				throws ServerException{
+				throws ServerException {
 		try {
 			String loadGame = "{ id : " + gameID
 				+ ", name : \"" + fileName + "\"}";
@@ -151,20 +151,28 @@ public class ServerFacade {
 	 * @param version current Version number of game(optional = null)
 	 * @return Updated game model OR Null if there is no update
 	 */
-	public Map getModel(Integer version) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map getModel(Integer version) 
+			throws ServerException{
+		try {
+			return proxy.getModel(version);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 		//THIS METHOD IS JUST USED BY THE SERVER COMMUNICATOR
 	/**
 	 * Just used by the server communicator
-	 * @param gameID
-	 * @param color
 	 */
-	public void reset(int gameID, CatanColor color) {
-		// TODO Auto-generated method stub
-		
+	public Map reset()
+			throws ServerException {
+		try {
+			return proxy.reset();
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 	/**
@@ -172,24 +180,42 @@ public class ServerFacade {
 	 * @param commands list of commands in the game
 	 * @return Game Model
 	 */
-	public Map postCommands(Map commands) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map postCommands(Map commands)
+			throws ServerException {
+		try {
+			return proxy.executeCommands(commands);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 	/**
 	 * 
 	 * @return list of commands in the game thus far
 	 */
-	public Map getCommands() {
-		// TODO Auto-generated method stub
-		return null;
+	public Map getCommands()
+			throws ServerException {
+		try {
+			return proxy.getCommands();
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 		//USED BY MODEL AS WELL
-	public void addAI(String aiType) {
-		// TODO Auto-generated method stub
-		
+	public void addAI(String aiType)
+			throws ServerException {
+		try {
+			JSONObject args = new JSONObject("{ AIType : \"" + aiType + "\"}");
+			if(!proxy.addAI(args)){
+				throw new ServerException("Problem adding AI player");
+			}
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	/**
@@ -197,8 +223,13 @@ public class ServerFacade {
 	 * @return list of AI Types
 	 */
 	public Map listAI() {
-		// TODO Auto-generated method stub
-		return null;
+		throws ServerException {
+		try {
+			return proxy.listAI();
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	//MOVES
