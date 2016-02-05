@@ -9,7 +9,7 @@ public class Achievements {
 	private Player longestRoad;
 	
 	public Achievements (Player longestRoad, Player largestArmy)
-	{
+	{ 
 		this.largestArmy = largestArmy;
 		this.longestRoad = longestRoad;
 	}

@@ -20,6 +20,7 @@ import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexDirection;
 import shared.models.board.vertex.VertexLocation;
+import shared.models.exceptions.BadJSONException;
 
 public class Board {
 
@@ -27,7 +28,8 @@ public class Board {
 
 	private Map<HexLocation, Hex> hexes;
 
-	public Board(JSONObject jsonMap) {
+	public Board(JSONObject jsonMap) throws BadJSONException {
+		if (jsonMap == null) throw new BadJSONException();
 		hexes = new HashMap<HexLocation, Hex>();
 		
 	}
