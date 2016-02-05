@@ -638,7 +638,7 @@ public class Player {
 		return hand.hasResource(type, num);
 	}
 	
-	public Boolean hasCards(Map<String, Object> resourceList) throws BadResourceTypeException {
+	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
 		return hand.hasCards(resourceList);
 	}
 

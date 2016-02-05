@@ -329,37 +329,42 @@ public class GameModel {
 	}
 	
 	
+	public String getStatus() {
+		return status;
+	}
+
 	
-	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadResourceTypeException
+//	Preconditions
+//	The status of the client model is 'Discarding'
+//	You have over 7 cards
+//	You have the cards you're choosing to discard
+	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadJSONException
 	{
-		//check status Discarding
-		return (this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
+		return (this.getStatus().equalsIgnoreCase("Discarding") && this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
 	}
 	
+//	Preconditions
+//	It is your turn
+//	The client model’s status is ‘Rolling’
 	public Boolean canRollNumber()
 	{
-		//check status Rolling
+		this.getStatus().equalsIgnoreCase("Rolling");
 		//check turn
 		return null;
 	}
 	
-	public Boolean canOfferTrade(Map<String, Object> resourceList)
+	public Boolean canOfferTrade(Map<String, Object> resourceList) throws BadJSONException
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		Boolean canOfferTrade = false;
-		try {
-			canOfferTrade = getActivePlayer().hasCards(resourceList);
-		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		canOfferTrade = getActivePlayer().hasCards(resourceList);
 		return canOfferTrade;
 	}
 	
 	public Boolean canMaritimeTrade(int ratio, ResourceType type)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//check Player is on correct ratio port
 		Boolean canMaritimeTrade = false;
@@ -374,7 +379,7 @@ public class GameModel {
 	
 	public Boolean canRobPlayer(HexLocation location, int playerIndex)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//robber has different location
 		//player being robbed has resource cards
@@ -383,14 +388,14 @@ public class GameModel {
 	
 	public Boolean canFinishTurn()
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
 		return null;
 	}
 	
 	public Boolean canBuyDevCard()
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
 		//Bank.getDevCards.size > 0
 		this.getActivePlayer().hasDevelopmentCost();
@@ -399,7 +404,7 @@ public class GameModel {
 	
 	public Boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		this.getActivePlayer().canPlayDevelopmentCard();
 		this.getActivePlayer().hasKnightToUse();
@@ -409,7 +414,7 @@ public class GameModel {
 	
 	public Boolean canUseYearOfPlenty(ResourceType one, ResourceType two)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		this.getActivePlayer().canPlayDevelopmentCard();
 		this.getActivePlayer().hasYearOfPlentyToUse();
@@ -425,7 +430,7 @@ public class GameModel {
 	
 	public Boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		this.getActivePlayer().canPlayDevelopmentCard();
 		this.getActivePlayer().hasRoadBuildingToUse();
@@ -436,7 +441,7 @@ public class GameModel {
 	
 	public Boolean canUseMonopoly(ResourceType type)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		this.getActivePlayer().canPlayDevelopmentCard();
 		this.getActivePlayer().hasMonopolyToUse();
@@ -500,17 +505,14 @@ public class GameModel {
 	 * @pre none
 	 * @post game will run
 	 * @return if a given trade can be made
+	 * @throws BadJSONException 
 	 */
-	public Boolean canAcceptTrade()
+	public Boolean canAcceptTrade() throws BadJSONException
 	{
 		boolean result = false;
 		//TODO add current player
 		Player receiver = this.tradeModel.getReceiver();
-			try {
-				result = receiver.hasCards(this.tradeModel.getResources());
-			} catch (BadResourceTypeException e) {
-				
-			}
+			result = receiver.hasCards(this.tradeModel.getResources());
 		return result;
 	}
 

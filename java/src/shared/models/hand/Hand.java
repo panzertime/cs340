@@ -20,11 +20,11 @@ import shared.models.hand.exceptions.ResourceException;
 
 public class Hand {
 
-	private Integer wood = 0;
-	private Integer brick = 0;
-	private Integer sheep = 0;
-	private Integer wheat = 0;
-	private Integer ore = 0;
+	private int wood = 0;
+	private int brick = 0;
+	private int sheep = 0;
+	private int wheat = 0;
+	private int ore = 0;
 
 	private ArrayList<DevCard> devCards;
 
@@ -80,12 +80,17 @@ public class Hand {
 	 */
 	public Hand(JSONObject resourceList, JSONObject deckList) throws BadJSONException {
 		if (resourceList == null || deckList == null) throw new BadJSONException(); 
-		wood = (Integer) resourceList.get("wood");
-		brick = (Integer) resourceList.get("brick");
-		sheep = (Integer) resourceList.get("sheep");
-		wheat = (Integer) resourceList.get("wheat");
-		ore = (Integer) resourceList.get("ore");
+		Integer wood = (Integer) resourceList.get("wood");
+		Integer brick = (Integer) resourceList.get("brick");
+		Integer sheep = (Integer) resourceList.get("sheep");
+		Integer wheat = (Integer) resourceList.get("wheat");
+		Integer ore = (Integer) resourceList.get("ore");
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) throw new BadJSONException(); 
+		this.wood = wood;
+		this.brick = brick;
+		this.sheep = sheep;
+		this.wheat = wheat;
+		this.ore = ore;
 		devCards = new ArrayList<DevCard>();
 		Integer yOP = (Integer) deckList.get("yearOfPlenty");
 		Integer mono = (Integer) deckList.get("monopoly");
@@ -123,12 +128,17 @@ public class Hand {
 
 	public Hand(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) throws BadJSONException {
 		if (resourceList == null || oldDevList == null || newDevList == null) throw new BadJSONException(); 
-		wood = (Integer) resourceList.get("wood");
-		brick = (Integer) resourceList.get("brick");
-		sheep = (Integer) resourceList.get("sheep");
-		wheat = (Integer) resourceList.get("wheat");
-		ore = (Integer) resourceList.get("ore");
+		Integer wood = (Integer) resourceList.get("wood");
+		Integer brick = (Integer) resourceList.get("brick");
+		Integer sheep = (Integer) resourceList.get("sheep");
+		Integer wheat = (Integer) resourceList.get("wheat");
+		Integer ore = (Integer) resourceList.get("ore");
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) throw new BadJSONException(); 
+		this.wood = wood;
+		this.brick = brick;
+		this.sheep = sheep;
+		this.wheat = wheat;
+		this.ore = ore;
 		devCards = new ArrayList<DevCard>();
 
 		Integer yOP = (Integer) oldDevList.get("yearOfPlenty");
@@ -469,16 +479,25 @@ public class Hand {
 		return (getHandSize() > 7);
 	}
 
-	public Boolean hasCards(Map<String, Object> resourceList) {
-		if (getWood() != (Integer) resourceList.get("wood"))
+	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
+		
+		if (resourceList == null || resourceList == null) throw new BadJSONException(); 
+		Integer w = (Integer) resourceList.get("wood");
+		Integer b = (Integer) resourceList.get("brick");
+		Integer s = (Integer) resourceList.get("sheep");
+		Integer wh = (Integer) resourceList.get("wheat");
+		Integer o = (Integer) resourceList.get("ore");
+		if (w == null || b == null || s == null || wh == null || o == null) throw new BadJSONException(); 
+		
+		if (getWood() != w)
 			return false;
-		if (getBrick() != (Integer) resourceList.get("brick"))
+		if (getBrick() != b)
 			return false;
-		if (getSheep() != (Integer) resourceList.get("sheep"))
+		if (getSheep() != s)
 			return false;
-		if (getWheat() != (Integer) resourceList.get("wheat"))
+		if (getWheat() != wh)
 			return false;
-		if (getOre() != (Integer) resourceList.get("ore"))
+		if (getOre() != o)
 			return false;
 		return true;
 	}

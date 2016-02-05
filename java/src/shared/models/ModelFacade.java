@@ -802,7 +802,14 @@ public class ModelFacade {
 	 */
 	public boolean canOfferTrade(Map<String, Object> resource, int amount)
 		throws ModelAccessException {
-		 return this.gameModel.canOfferTrade(resource);
+		Boolean b = false; 
+		try {
+			b = this.gameModel.canOfferTrade(resource);
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	}
 	
 	/**
@@ -813,7 +820,14 @@ public class ModelFacade {
 	 * @throws ModelAccessException
 	 */
 	public boolean canAcceptTrade() throws ModelAccessException {
-		 return this.gameModel.canAcceptTrade();
+		Boolean b = false;
+		try {
+			b = this.gameModel.canAcceptTrade();
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	 }
 
 	/**
@@ -839,7 +853,14 @@ public class ModelFacade {
 	 * @throws BadResourceTypeException
 	 */
 	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException, BadResourceTypeException {
-		 return this.gameModel.canDiscardCard(resourceList);
+		Boolean b = false; 
+		try {
+			b = this.gameModel.canDiscardCard(resourceList);
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	}
 	
 	//Model to Controller Interactions
