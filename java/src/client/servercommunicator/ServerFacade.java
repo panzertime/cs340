@@ -9,13 +9,18 @@ import shared.models.board.vertex.VertexLocation;
 import shared.models.definitions.CatanColor;
 import shared.models.hand.ResourceType;
 
+import org.json.simple.*;
+
+
 public class ServerFacade {
 	
 	private static ServerFacade _instance;
 	
-	private ServerFacade() {
-		// TODO Auto-generated method stub
+	private ServerFacade(){
+		proxy = new FakeProxy();
 	}
+
+	private IServerProxy proxy;
 	
 	public static ServerFacade get_instance() {
 		if(_instance == null) {
@@ -25,32 +30,87 @@ public class ServerFacade {
 		return _instance;
 	}
 
-	//USER
-	public void login(String username, String password) {
-		// TODO Auto-generated method stub
-		
+	public void setProxy(IServerProxy newProxy){
+		proxy = newProxy;
 	}
 
-	public void register(String username, String password) {
-		// TODO Auto-generated method stub
+	
+
+	//USER
+	public int login(String username, String password) 
+			throws ServerException {
+		try {
+			String credentials = "{ username : \"" + username 
+						+ "\", password : \"" + password
+						+ "\" }";
+			JSONObject args = new JSONObject(credentials);
+			JSONObject cookie = proxy.loginUser(args);
+			return cookie.get("playerID");
+		}
+		catch(Exception e){
+			throw new ServerException("Problem logging in", e);
+		}
+
+	}
+
+	public int register(String username, String password) {
+		try {
+			String credentials = "{ username : \"" + username 
+						+ "\", password : \"" + password
+						+ "\" }";
+			JSONObject args = new JSONObject(credentials);
+			JSONObject cookie = proxy.registerUser(args);
+			return cookie.get("playerID");
+		}
+		catch(Exception e){
+			throw new ServerException("Problem registering user", e);
+		}
+
 		
 	}
 
 	//GAMES(PRE-GAME)
 		//USED BY MODEL
-	public Map getGames() {
-		// TODO Auto-generated method stub
-				return null;
+	public Map getGames() 
+			throws ServerException {
+		try {
+			return proxy.listGames();
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map createNewGame(boolean randomTiles, boolean randomNumbers, 
-			boolean randomPorts, String name) {
-		// TODO Auto-generated method stub
-		return null;
+				boolean randomPorts, String name) 
+				throws ServerException{
+		try {
+			String newGame = "{ randomTiles : " + randomTiles
+					+ ", randomNumbers : " + randomNumbers
+					+ ", randomPorts : " + randomPorts
+					+ ", name : \"" + name + "\"}";
+			JSONObject args = new JSONObject(newGame);
+			return proxy.createGame(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public void joinGame(int gameID, CatanColor color) {
-		// TODO Auto-generated method stub
+				throws ServerException{
+		try {
+			String joinGame = "{ id : " + gameID
+					+ ", color : \"" + color.toString() + "\"}";
+			JSONObject args = new JSONObject(joinGame);
+			if(proxy.joinGame(args) == false){
+				throw ServerException("Join game failed");
+			}
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
+
 		
 	}
 	

@@ -14,6 +14,13 @@ import java.io.*;
  * the necessary information for the game model.
  */
 public interface IServerProxy {
+
+	/**
+	 * used to set the URL of a proxy
+	 * @param URL the new URL of the proxy
+	 */
+	public void setURL(String URL){
+	
 	
 	/**
 	 * Checks the server to see if the given credentials are valid. If so

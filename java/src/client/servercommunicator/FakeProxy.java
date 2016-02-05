@@ -16,6 +16,10 @@ public class FakeProxy implements IServerProxy{
 	 */
 	public FakeProxy(){
 		};
+
+	public void setURL(String URL){ // do nothing 
+		};
+	
 		
 	/**
 	 * Checks the server to see if the given credentials are valid. If so

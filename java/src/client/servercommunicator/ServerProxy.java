@@ -150,17 +150,51 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public boolean loginUser(JSONObject credentials) 
+	public JSONObject loginUser(JSONObject credentials) 
 			throws ServerProxyException {
+		try {
+			URLConnection connectionSeed = new URL(serverURL + "/user/loginUser").openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
+			connection.setRequestMethod("POST");
 
-			// do not use submitRequest here;
-			// rather do it manually, extract the cookie,
-			// set the cookie, and return a bool
+			DataOutputStream requestBody = 
+				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
+			requestBody.writeChars(credentials.toJSONString());
+	
+			if (connection.getResponseCode() != 200) {
+				String problemMessage = "Request returned 400, " + endpoint + " says: "
+					+ connection.getResponseMessage();
+				throw new ServerProxyException(problemMessage);
+			}
 			
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
-			// post
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			if(JSONReader.ready()){
+				int letter = JSONReader.read();
+				while(letter != -1){
+					JSONBuilder.append((char) letter);
+					letter = JSONReader.read();
+				}
+			}
+			JSONReader.close();
 
-			return true;
+			if (JSONBuilder.toString().equals("Success")){
+				userCookie = connection.getHeaderField("Set-cookie");
+				userCookie = userCookie.subString(11);
+				userCookie = userCookie.subString(0, userCookie.length() - 9);
+				
+				return new JSONObject(URLDecoder.decode(userCookie, "UTF-8");
+			}
+			return null;
+		}
+
+		catch(Exception e){
+			throw new ServerProxyException("Exception during HTTP request submission", e);
+		}
+
 	}
 	
 	/**
@@ -177,12 +211,51 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public boolean registerUser(JSONObject credentials)
+	public JSONObject registerUser(JSONObject credentials)
 			throws ServerProxyException {
+		try {
+			URLConnection connectionSeed = new URL(serverURL + "/user/registerUser").openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
+			connection.setRequestMethod("POST");
 
-			// post 
+			DataOutputStream requestBody = 
+				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
+			requestBody.writeChars(credentials.toJSONString());
+	
+			if (connection.getResponseCode() != 200) {
+				String problemMessage = "Request returned 400, " + endpoint + " says: "
+					+ connection.getResponseMessage();
+				throw new ServerProxyException(problemMessage);
+			}
+			
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
-		return true;
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			if(JSONReader.ready()){
+				int letter = JSONReader.read();
+				while(letter != -1){
+					JSONBuilder.append((char) letter);
+					letter = JSONReader.read();
+				}
+			}
+			JSONReader.close();
+
+			if (JSONBuilder.toString().equals("Success")){
+				userCookie = connection.getHeaderField("Set-cookie");
+				userCookie = userCookie.subString(11);
+				userCookie = userCookie.subString(0, userCookie.length() - 9);
+
+				return new JSONObject(URLDecoder.decode(userCookie, "UTF-8");
+			}
+			return null;
+		}
+
+		catch(Exception e){
+			throw new ServerProxyException("Exception during HTTP request submission", e);
+		}
+
 	}
 	
 	/**
@@ -238,15 +311,46 @@ public class ServerProxy implements IServerProxy{
 	public boolean joinGame(JSONObject joinGameRequest) 
 			throws ServerProxyException {
 		try {
-			if(submitRequest("POST", "/games/join", joinGameRequest).equals("Success")){
+			URLConnection connectionSeed = new URL(serverURL + "/games/join").openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
+			connection.setRequestMethod("POST");
+
+			DataOutputStream requestBody = 
+				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
+			requestBody.writeChars(joinGameRequest.toJSONString());
+	
+			if (connection.getResponseCode() != 200) {
+				String problemMessage = "Request returned 400, " + endpoint + " says: "
+					+ connection.getResponseMessage();
+				throw new ServerProxyException(problemMessage);
+			}
+			
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
+
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			if(JSONReader.ready()){
+				int letter = JSONReader.read();
+				while(letter != -1){
+					JSONBuilder.append((char) letter);
+					letter = JSONReader.read();
+				}
+			}
+			JSONReader.close();
+
+			if (JSONBuilder.toString().equals("Success")){
+				gameCookie = connection.getHeaderField("Set-cookie");
+				gameCookie = gameCookie.subString(0, gameCookie.length() - 9);
+				
 				return true;
 			}
 			return false;
 		}
-		catch(Exception e) {
-			throw new ServerProxyException(e);
-		}	
 
+		catch(Exception e){
+			throw new ServerProxyException("Exception during HTTP request submission", e);
+		}
 	}
 	
 	/**
