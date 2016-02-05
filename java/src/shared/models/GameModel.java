@@ -9,6 +9,7 @@ import shared.logger.Log;
 import shared.models.board.Board;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadJSONException;
@@ -364,7 +365,34 @@ public class GameModel {
 	
 	public Boolean canMaritimeTrade(int ratio, ResourceType type)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		PortType portType;
+		if (ratio == 3)
+		{
+			portType = PortType.THREE;
+		}
+		else if (ratio == 2)
+		{
+			switch (type)
+			{
+			case WOOD:
+				portType = PortType.WOOD;
+				break;
+			case BRICK:
+				portType = PortType.BRICK;	
+				break;
+			case SHEEP:
+				portType = PortType.SHEEP;
+				break;
+			case WHEAT:
+				portType = PortType.WHEAT;
+				break;
+			case ORE:
+				portType = PortType.ORE;
+				break;
+			}
+		}
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//check Player is on correct ratio port
 		Boolean canMaritimeTrade = false;
@@ -414,38 +442,41 @@ public class GameModel {
 	
 	public Boolean canUseYearOfPlenty(ResourceType one, ResourceType two)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasYearOfPlentyToUse();
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
-			this.getBank().getHand().hasResource(one, 1);
-			this.getBank().getHand().hasResource(two, 1);
+			b = b && this.getBank().getHand().hasResource(one, 1);
+			b = b && this.getBank().getHand().hasResource(two, 1);
 		} catch (BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return b;
 	}
 	
 	public Boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasRoadBuildingToUse();
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasRoadBuildingToUse();
 		//canBuildRoad
 		//canBuildRoad (also on first location)
-		return null;
+		return b;
 	}
 	
 	public Boolean canUseMonopoly(ResourceType type)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasMonopolyToUse();
-		return null;
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasMonopolyToUse();
+		return b;
 	}
 	
 	public Boolean canUseMonument()
