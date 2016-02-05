@@ -6,4 +6,8 @@ package shared.models.exceptions;
 @SuppressWarnings("serial")
 public class DevCardException extends Exception {
 
+	public DevCardException(Exception e) {
+		super(e);
+	}
+
 }

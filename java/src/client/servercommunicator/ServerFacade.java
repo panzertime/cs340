@@ -78,8 +78,6 @@ public class ServerFacade {
 		catch(Exception e){
 			throw new ServerException("Problem registering user", e);
 		}
-
-		
 	}
 
 	//GAMES(PRE-GAME)
