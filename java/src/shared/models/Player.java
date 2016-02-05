@@ -25,21 +25,36 @@ public class Player {
 	
 	private GameModel game;
 	private Hand hand;
-	private Settlement[] settlements = new Settlement[5];
-	private City[] cities = new City[4];
-	private Road[] roads = new Road[15];
+	private Settlement[] settlements;
+	private City[] cities;
+	private Road[] roads;
 	private String userName;
 	private int userIndex;
 	private CatanColor userColor;
 	private int armies;
+	private int monuments;
+	private int points;
 	private Boolean playedDevelopmentCard;
+	private Boolean hasDiscarded;
+	private int playerID;
+	private int citiesFree;
+	private int settlementsFree;
+	private int roadsFree;
 	
 
 	public Player(Map<String, Object> player) {
 		userColor = getColor((String)player.get("color"));
 		userName = (String)player.get("name");
 		userIndex = (Integer)player.get("playerIndex");
-		
+		armies = (Integer)player.get("soldiers");
+		monuments = (Integer)player.get("monuments");
+		playedDevelopmentCard = (Boolean)player.get("playedDevCard");
+		hand = new Hand((Map<String, Object>)player.get("resources"),(Map<String, Object>)player.get("oldDevCards"),(Map<String, Object>)player.get("newDevCards"));
+		hasDiscarded = (Boolean)player.get("discarded");
+		playerID = (Integer)player.get("playerID");
+		settlements = new Settlement[5];
+		cities = new City[4];
+		roads = new Road[15];
 	}
 	
 	public CatanColor getColor(String s)
@@ -289,6 +304,10 @@ public class Player {
 		return playedDevelopmentCard;
 	}
 
+	public Boolean hasDiscarded()
+	{
+		return hasDiscarded;
+	}
 	
 	/**
 	 * @return true if player has a YearOfPlenty card available and enabled
@@ -430,7 +449,7 @@ public class Player {
 	 * @post Player type++; p type--
 	 */
 	public void steal(Player p) throws ResourceException {
-		this.receiveResource(p.getHand().drawRandomCard(), 1);
+		this.receiveResource(p.getHand().drawRandomResourceCard(), 1);
 		}
 	
 	
@@ -620,6 +639,14 @@ public class Player {
 	public int getArmies() {
 		return armies;
 	}
+	
+	public int getMonuments() {
+		return monuments;
+	}
+	
+	public int getPoints() {
+		return points;
+	}
 
 
 /* (non-Javadoc)
@@ -662,10 +689,40 @@ public void setUserIndex(int userIndex) {
 }
 
 
-public int getRoads()
+public int getRoadLength()
 {
+	//return size of interconnectedRoads
 	return 0;
 }
+
+public int getCitiesFree() {
+	return citiesFree;
+}
+
+public void setCitiesFree(int citiesFree) {
+	this.citiesFree = citiesFree;
+}
+
+public int getSettlementsFree() {
+	return settlementsFree;
+}
+
+public void setSettlementsFree(int settlementsFree) {
+	this.settlementsFree = settlementsFree;
+}
+
+public int getRoadsFree() {
+	return roadsFree;
+}
+
+public void setRoadsFree(int roadsFree) {
+	this.roadsFree = roadsFree;
+}
+
+
+
+
+
 
 
 }

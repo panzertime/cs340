@@ -23,17 +23,17 @@ public class Achievements {
 		{
 			for (Player p: players)
 			{
-				if (p.getRoads() >= 5)
+				if (p.getRoadLength() >= 5)
 				longestRoad = p;
 				return true;
 			}			
 		}
 		else
 		{
-			int max = longestRoad.getRoads();
+			int max = longestRoad.getRoadLength();
 			for (Player p: players)
 			{
-				if (p.getRoads() > max)
+				if (p.getRoadLength() > max)
 					longestRoad = p;
 				return true;
 			}
@@ -50,17 +50,17 @@ public class Achievements {
 		{
 			for (Player p: players)
 			{
-				if (p.getRoads() >= 3)
+				if (p.getRoadLength() >= 3)
 					largestArmy = p;
 				return true;
 			}			
 		}
 		else
 		{
-			int max = longestRoad.getRoads();
+			int max = longestRoad.getRoadLength();
 			for (Player p: players)
 			{
-				if (p.getRoads() > max)
+				if (p.getRoadLength() > max)
 					largestArmy = p;
 				return true;
 			}

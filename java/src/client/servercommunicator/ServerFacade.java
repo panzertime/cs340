@@ -3,8 +3,6 @@ package client.servercommunicator;
 import java.util.List;
 import java.util.Map;
 
-
-import shared.models.NewGame;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
