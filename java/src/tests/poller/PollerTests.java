@@ -1,4 +1,4 @@
-package tests;
+package tests.poller;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
