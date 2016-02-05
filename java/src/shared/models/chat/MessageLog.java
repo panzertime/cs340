@@ -6,14 +6,22 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Log {
+import shared.models.exceptions.BadJSONException;
+
+public class MessageLog {
 	private ArrayList<Message> messageList;
 	
-	public Log(JSONArray jsonArray)
+	public MessageLog()
 	{
-		for (int i = 0; i < jsonArray.size(); i++)
+		messageList = new ArrayList<Message>();
+	}
+
+	public MessageLog(JSONArray messageLine) throws BadJSONException
+	{
+		messageList = new ArrayList<Message>();
+		for (int i = 0; i < messageLine.size(); i++)
 		{
-			messageList.add(new Message((JSONObject)jsonArray.get(i)));
+			messageList.add(new Message((JSONObject)messageLine.get(i)));
 		}
 	}
 	

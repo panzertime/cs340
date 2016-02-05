@@ -12,6 +12,7 @@ import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BuildException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
@@ -26,29 +27,39 @@ public class Player {
 	private GameModel game;
 	private Hand hand;
 	private Settlement[] settlements;
-	private City[] cities;
 	private Road[] roads;
+	private City[] cities;
 	private String userName;
-	private int userIndex;
+	private Integer userIndex;
 	private CatanColor userColor;
-	private int armies;
-	private int monuments;
-	private int points;
+	private Integer armies;
+	private Integer monuments;
+	private Integer points;
 	private Boolean playedDevelopmentCard;
 	private Boolean hasDiscarded;
-	private int playerID;
+	private Integer playerID;
 
-	public Player(Map player) {
-		userColor = getColor((String) player.get("color"));
+	public Player(JSONObject player) throws BadJSONException {
+		if (player == null) throw new BadJSONException();
+		String c = (String) player.get("color");
+		if (c == null) throw new BadJSONException();
+		userColor = getColor(c);
 		userName = (String) player.get("name");
+		if (userName == null) throw new BadJSONException();
 		userIndex = (Integer) player.get("playerIndex");
+		if (userIndex == null) throw new BadJSONException();		
 		armies = (Integer) player.get("soldiers");
+		if (armies == null) throw new BadJSONException();		
 		monuments = (Integer) player.get("monuments");
+		if (monuments == null) throw new BadJSONException();		
 		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null) throw new BadJSONException();		
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
 		hasDiscarded = (Boolean) player.get("discarded");
+		if (hasDiscarded == null) throw new BadJSONException();		
 		playerID = (Integer) player.get("playerID");
+		if (playerID == null) throw new BadJSONException();		
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -627,7 +638,7 @@ public class Player {
 		return hand.hasResource(type, num);
 	}
 	
-	public Boolean hasCards(Map<String, Object> resourceList) throws BadResourceTypeException {
+	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
 		return hand.hasCards(resourceList);
 	}
 

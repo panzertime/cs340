@@ -6,9 +6,11 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import shared.logger.Log;
 import shared.models.board.Board;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadJSONException;
@@ -28,9 +30,9 @@ public class GameModel {
 	private Boolean setup;
 	private Player turn;
 	private Player winner;
-	private int version;
+	private Integer version;
 	private String status;
-	private int currentTurn;
+	private Integer currentTurn;
 	private ChatModel chatModel;
 	private TradeModel tradeModel;
 	
@@ -45,25 +47,61 @@ public class GameModel {
 	 * @throws Exception
 	 */
 	
-	public GameModel(JSONObject jsonMap) throws BadPlayerIndexException, BadTurnStatusException, BadStatusException, BadJSONException
+	public GameModel(JSONObject jsonMap) throws BadJSONException
 	{
+		if (jsonMap == null) throw new BadJSONException();
 		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
 		for (int i = 0; i < playerList.size(); i++)
 		{
-			players.add(new Player((Map) playerList.get(i)));
+			players.add(new Player((JSONObject) playerList.get(i)));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"));
 		version = (Integer)jsonMap.get("version");
-		winner = GameModel.whichPlayer((Integer)jsonMap.get("winner"));
+		if (version == null) throw new BadJSONException();
+		Integer w = (Integer)jsonMap.get("winner");
+		if (w == null) throw new BadJSONException();
+		try {
+			winner = GameModel.whichPlayer(w);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
 		
 		JSONObject turnTracker = (JSONObject)jsonMap.get("TurnTracker");
+		if (turnTracker == null) throw new BadJSONException();
+
 		currentTurn = (Integer)turnTracker.get("currentTurn");
-		turn = GameModel.whichPlayer(this.currentTurn);
-		setStatus((String)turnTracker.get("status"));
-		achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
-		tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
+		if (currentTurn == null) throw new BadJSONException();
+
+		try {
+			turn = GameModel.whichPlayer(this.currentTurn);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
+		String s = (String)turnTracker.get("status");
+		if (s == null) throw new BadJSONException();
+		try {
+			setStatus(s);
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
+		Integer lR = (Integer)turnTracker.get("longestRoad");
+		Integer lA = (Integer)turnTracker.get("largestArmy");
+		if (lR == null || lA == null) throw new BadJSONException();
+		try {
+			achievements = new Achievements(GameModel.whichPlayer(lR),GameModel.whichPlayer(lA));
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
+		if ((JSONObject)jsonMap.get("tradeOffer") == null)
+		{}
+		else
+			tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
 	
 	
@@ -292,37 +330,69 @@ public class GameModel {
 	}
 	
 	
+	public String getStatus() {
+		return status;
+	}
+
 	
-	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadResourceTypeException
+//	Preconditions
+//	The status of the client model is 'Discarding'
+//	You have over 7 cards
+//	You have the cards you're choosing to discard
+	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadJSONException
 	{
-		//check status Discarding
-		return (this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
+		return (this.getStatus().equalsIgnoreCase("Discarding") && this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
 	}
 	
+//	Preconditions
+//	It is your turn
+//	The client model�s status is �Rolling�
 	public Boolean canRollNumber()
 	{
-		//check status Rolling
+		this.getStatus().equalsIgnoreCase("Rolling");
 		//check turn
 		return null;
 	}
 	
-	public Boolean canOfferTrade(Map<String, Object> resourceList)
+	public Boolean canOfferTrade(Map<String, Object> resourceList) throws BadJSONException
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		Boolean canOfferTrade = false;
-		try {
-			canOfferTrade = getActivePlayer().hasCards(resourceList);
-		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		canOfferTrade = getActivePlayer().hasCards(resourceList);
 		return canOfferTrade;
 	}
 	
 	public Boolean canMaritimeTrade(int ratio, ResourceType type)
 	{
-		//check status Playing
+		PortType portType;
+		if (ratio == 3)
+		{
+			portType = PortType.THREE;
+		}
+		else if (ratio == 2)
+		{
+			switch (type)
+			{
+			case WOOD:
+				portType = PortType.WOOD;
+				break;
+			case BRICK:
+				portType = PortType.BRICK;	
+				break;
+			case SHEEP:
+				portType = PortType.SHEEP;
+				break;
+			case WHEAT:
+				portType = PortType.WHEAT;
+				break;
+			case ORE:
+				portType = PortType.ORE;
+				break;
+			}
+		}
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//check Player is on correct ratio port
 		Boolean canMaritimeTrade = false;
@@ -337,7 +407,7 @@ public class GameModel {
 	
 	public Boolean canRobPlayer(HexLocation location, int playerIndex)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//robber has different location
 		//player being robbed has resource cards
@@ -346,14 +416,14 @@ public class GameModel {
 	
 	public Boolean canFinishTurn()
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
 		return null;
 	}
 	
 	public Boolean canBuyDevCard()
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
 		//Bank.getDevCards.size > 0
 		this.getActivePlayer().hasDevelopmentCost();
@@ -362,7 +432,7 @@ public class GameModel {
 	
 	public Boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex)
 	{
-		//check status Playing
+		this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		this.getActivePlayer().canPlayDevelopmentCard();
 		this.getActivePlayer().hasKnightToUse();
@@ -372,38 +442,41 @@ public class GameModel {
 	
 	public Boolean canUseYearOfPlenty(ResourceType one, ResourceType two)
 	{
-		//check status Playing
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasYearOfPlentyToUse();
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
-			this.getBank().getHand().hasResource(one, 1);
-			this.getBank().getHand().hasResource(two, 1);
+			b = b && this.getBank().getHand().hasResource(one, 1);
+			b = b && this.getBank().getHand().hasResource(two, 1);
 		} catch (BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return b;
 	}
 	
 	public Boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two)
 	{
-		//check status Playing
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasRoadBuildingToUse();
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasRoadBuildingToUse();
 		//canBuildRoad
 		//canBuildRoad (also on first location)
-		return null;
+		return b;
 	}
 	
 	public Boolean canUseMonopoly(ResourceType type)
 	{
-		//check status Playing
+		Boolean b = true;
+		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasMonopolyToUse();
-		return null;
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasMonopolyToUse();
+		return b;
 	}
 	
 	public Boolean canUseMonument()
@@ -463,17 +536,14 @@ public class GameModel {
 	 * @pre none
 	 * @post game will run
 	 * @return if a given trade can be made
+	 * @throws BadJSONException 
 	 */
-	public Boolean canAcceptTrade()
+	public Boolean canAcceptTrade() throws BadJSONException
 	{
 		boolean result = false;
 		//TODO add current player
 		Player receiver = this.tradeModel.getReceiver();
-			try {
-				result = receiver.hasCards(this.tradeModel.getResources());
-			} catch (BadResourceTypeException e) {
-				
-			}
+			result = receiver.hasCards(this.tradeModel.getResources());
 		return result;
 	}
 
