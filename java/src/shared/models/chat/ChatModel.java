@@ -2,6 +2,7 @@ package shared.models.chat;
 
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class ChatModel {
@@ -9,8 +10,8 @@ public class ChatModel {
 	private Log gameLog;
 	public ChatModel(JSONObject chatList, JSONObject gameList)
 	{
-		chatLog = new Log((JSONObject[])chatList.get("lines"));
-		gameLog = new Log((JSONObject[])gameList.get("lines"));
+		chatLog = new Log((JSONArray)chatList.get("lines"));
+		gameLog = new Log((JSONArray)gameList.get("lines"));
 	}
 	public Log getChatLog() {
 		return chatLog;

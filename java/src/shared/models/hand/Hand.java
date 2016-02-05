@@ -77,33 +77,33 @@ public class Hand {
 	 * @param ore
 	 */
 	public Hand(JSONObject resourceList, JSONObject deckList) {
-		wood = (Integer) resourceList.get("wood");
-		brick = (Integer) resourceList.get("brick");
-		sheep = (Integer) resourceList.get("sheep");
-		wheat = (Integer) resourceList.get("wheat");
-		ore = (Integer) resourceList.get("ore");
+		wood = ((Long)resourceList.get("wood")).intValue();
+		brick = ((Long) resourceList.get("brick")).intValue();
+		sheep = ((Long) resourceList.get("sheep")).intValue();
+		wheat = ((Long) resourceList.get("wheat")).intValue();
+		ore = ((Long) resourceList.get("ore")).intValue();
 		devCards = new ArrayList<DevCard>();
-		for (int i = 0; i < (Integer) deckList.get("yearOfPlenty"); i++) {
+		for (int i = 0; i < ((Long) deckList.get("yearOfPlenty")).intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) deckList.get("monopoly"); i++) {
+		for (int i = 0; i < ((Long) deckList.get("monopoly")).intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) deckList.get("soldier"); i++) {
+		for (int i = 0; i < ((Long) deckList.get("soldier")).intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) deckList.get("roadBuilding"); i++) {
+		for (int i = 0; i < ((Long) deckList.get("roadBuilding")).intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) deckList.get("monument"); i++) {
+		for (int i = 0; i < ((Long) deckList.get("monument")).intValue(); i++) {
 			DevCard card = new Monument();
 			card.setEnabled(false);
 			devCards.add(card);
@@ -112,59 +112,59 @@ public class Hand {
 	}
 
 	public Hand(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) {
-		wood = (Integer) resourceList.get("wood");
-		brick = (Integer) resourceList.get("brick");
-		sheep = (Integer) resourceList.get("sheep");
-		wheat = (Integer) resourceList.get("wheat");
-		ore = (Integer) resourceList.get("ore");
+		wood = ((Long) resourceList.get("wood")).intValue();
+		brick = ((Long) resourceList.get("brick")).intValue();
+		sheep = ((Long) resourceList.get("sheep")).intValue();
+		wheat = ((Long) resourceList.get("wheat")).intValue();
+		ore = ((Long) resourceList.get("ore")).intValue();
 		devCards = new ArrayList<DevCard>();
-		for (int i = 0; i < (Integer) oldDevList.get("yearOfPlenty"); i++) {
+		for (int i = 0; i < ((Long) oldDevList.get("yearOfPlenty")).intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) oldDevList.get("monopoly"); i++) {
+		for (int i = 0; i < ((Long) oldDevList.get("monopoly")).intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) oldDevList.get("soldier"); i++) {
+		for (int i = 0; i < ((Long) oldDevList.get("soldier")).intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) oldDevList.get("roadBuilding"); i++) {
+		for (int i = 0; i < ((Long) oldDevList.get("roadBuilding")).intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) oldDevList.get("monument"); i++) {
+		for (int i = 0; i < ((Long) oldDevList.get("monument")).intValue(); i++) {
 			DevCard card = new Monument();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
 
-		for (int i = 0; i < (Integer) newDevList.get("yearOfPlenty"); i++) {
+		for (int i = 0; i < ((Long) newDevList.get("yearOfPlenty")).intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) newDevList.get("monopoly"); i++) {
+		for (int i = 0; i < ((Long) newDevList.get("monopoly")).intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) newDevList.get("soldier"); i++) {
+		for (int i = 0; i < ((Long) newDevList.get("soldier")).intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) newDevList.get("roadBuilding"); i++) {
+		for (int i = 0; i < ((Long) newDevList.get("roadBuilding")).intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < (Integer) newDevList.get("monument"); i++) {
+		for (int i = 0; i < ((Long) newDevList.get("monument")).intValue(); i++) {
 			DevCard card = new Monument();
 			card.setEnabled(false);
 			devCards.add(card);
@@ -445,15 +445,15 @@ public class Hand {
 	}
 
 	public Boolean hasCards(Map<String, Object> resourceList) {
-		if (getWood() != (Integer) resourceList.get("wood"))
+		if (getWood() != ((Long) resourceList.get("wood")).intValue())
 			return false;
-		if (getBrick() != (Integer) resourceList.get("brick"))
+		if (getBrick() != ((Long) resourceList.get("brick")).intValue())
 			return false;
-		if (getSheep() != (Integer) resourceList.get("sheep"))
+		if (getSheep() != ((Long) resourceList.get("sheep")).intValue())
 			return false;
-		if (getWheat() != (Integer) resourceList.get("wheat"))
+		if (getWheat() != ((Long) resourceList.get("wheat")).intValue())
 			return false;
-		if (getOre() != (Integer) resourceList.get("ore"))
+		if (getOre() != ((Long) resourceList.get("ore")).intValue())
 			return false;
 		return true;
 	}

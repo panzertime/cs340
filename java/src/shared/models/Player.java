@@ -38,7 +38,7 @@ public class Player {
 	private Boolean hasDiscarded;
 	private int playerID;
 
-	public Player(JSONObject player) {
+	public Player(Map player) {
 		userColor = getColor((String) player.get("color"));
 		userName = (String) player.get("name");
 		userIndex = (Integer) player.get("playerIndex");

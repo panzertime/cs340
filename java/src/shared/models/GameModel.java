@@ -3,6 +3,7 @@ package shared.models;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import shared.models.board.Board;
@@ -48,10 +49,10 @@ public class GameModel {
 	{
 		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
-		JSONObject[] playerList = (JSONObject[])jsonMap.get("players");
-		for (JSONObject p: playerList)
+		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		for (int i = 0; i < playerList.size(); i++)
 		{
-			players.add(new Player(p));
+			players.add(new Player((Map) playerList.get(i)));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"));
 		version = (Integer)jsonMap.get("version");

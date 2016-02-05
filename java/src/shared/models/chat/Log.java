@@ -3,16 +3,17 @@ package shared.models.chat;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class Log {
 	private ArrayList<Message> messageList;
 	
-	public Log(JSONObject[] messageLine)
+	public Log(JSONArray jsonArray)
 	{
-		for (int i = 0; i < messageLine.length; i++)
+		for (int i = 0; i < jsonArray.size(); i++)
 		{
-			messageList.add(new Message((JSONObject)messageLine[i]));
+			messageList.add(new Message((JSONObject)jsonArray.get(i)));
 		}
 	}
 	

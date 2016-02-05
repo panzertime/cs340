@@ -3,10 +3,10 @@ public class PhaseOneTests {
 	
 	public static void main(String[] args) {
 		String[] tests = {
-				"tests.poller.PollerTests",
-				"tests.proxy.ProxyTests",
+				//"tests.poller.PollerTests",
+				//"tests.proxy.ProxyTests",
 				
-				"tests.model.ModelTests",
+				"tests.model.ModelTests"/*,
 				"tests.model.CanSendChatTests",
 				"tests.model.CanRollNumberTests",
 				"tests.model.CanPlaceRobberTests",
@@ -23,7 +23,7 @@ public class PhaseOneTests {
 				"tests.model.CanOfferTradeTests",
 				"tests.model.CanAcceptTradeTests",
 				"tests.model.CanMaritimeTradeTests",
-				"tests.model.CanDiscardCardsTests"
+				"tests.model.CanDiscardCardsTests"*/
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);
