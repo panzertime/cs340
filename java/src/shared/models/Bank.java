@@ -28,17 +28,17 @@ public class Bank {
 	}
 	private Hand hand;
 	
-	public Bank(Map<String, Object> resourceList)
+	public Bank(Map<String, Object> resourceList, Map<String, Object> deckList)
 	{
-		hand = new Hand((Integer)resourceList.get("wood"),(Integer)resourceList.get("brick"),(Integer)resourceList.get("sheep"),(Integer)resourceList.get("wheat"),(Integer)resourceList.get("ore"));
+		hand = new Hand(resourceList, deckList);
 	}
 
 	/**
 	 * @pre New game
 	 * @post Bank hand has the amount of cards and resources specified by game rules
 	 */
-	public void initializeBank() {
-		hand = new Hand(19, 19, 19, 19, 19);
+/*	public void initializeBank() {
+//		hand = new Hand(19, 19, 19, 19, 19);
 		for (int i = 0; i < 14; i++)
 		{
 			this.giveDevCardToBank(new Knight());
@@ -55,7 +55,7 @@ public class Bank {
 		}
 		
 		
-	}
+	}*/
 	
 	//public Boolean hasResources(ResourceType type, Integer num) throws ResourceException {}
 
