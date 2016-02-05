@@ -162,7 +162,7 @@ public class ServerProxy implements IServerProxy{
 			requestBody.writeChars(credentials.toJSONString());
 	
 			if (connection.getResponseCode() != 200) {
-				String problemMessage = "Request returned 400, " + endpoint + " says: "
+				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
 				throw new ServerProxyException(problemMessage);
 			}
@@ -183,10 +183,10 @@ public class ServerProxy implements IServerProxy{
 
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
-				userCookie = userCookie.subString(11);
-				userCookie = userCookie.subString(0, userCookie.length() - 9);
+				userCookie = userCookie.substring(11);
+				userCookie = userCookie.substring(0, userCookie.length() - 9);
 				
-				return new JSONObject(URLDecoder.decode(userCookie, "UTF-8");
+				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
 			return null;
 		}
@@ -223,7 +223,7 @@ public class ServerProxy implements IServerProxy{
 			requestBody.writeChars(credentials.toJSONString());
 	
 			if (connection.getResponseCode() != 200) {
-				String problemMessage = "Request returned 400, " + endpoint + " says: "
+				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
 				throw new ServerProxyException(problemMessage);
 			}
@@ -244,10 +244,10 @@ public class ServerProxy implements IServerProxy{
 
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
-				userCookie = userCookie.subString(11);
-				userCookie = userCookie.subString(0, userCookie.length() - 9);
+				userCookie = userCookie.substring(11);
+				userCookie = userCookie.substring(0, userCookie.length() - 9);
 
-				return new JSONObject(URLDecoder.decode(userCookie, "UTF-8");
+				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
 			return null;
 		}
@@ -320,7 +320,7 @@ public class ServerProxy implements IServerProxy{
 			requestBody.writeChars(joinGameRequest.toJSONString());
 	
 			if (connection.getResponseCode() != 200) {
-				String problemMessage = "Request returned 400, " + endpoint + " says: "
+				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
 				throw new ServerProxyException(problemMessage);
 			}
@@ -341,7 +341,7 @@ public class ServerProxy implements IServerProxy{
 
 			if (JSONBuilder.toString().equals("Success")){
 				gameCookie = connection.getHeaderField("Set-cookie");
-				gameCookie = gameCookie.subString(0, gameCookie.length() - 9);
+				gameCookie = gameCookie.substring(0, gameCookie.length() - 9);
 				
 				return true;
 			}
@@ -349,7 +349,7 @@ public class ServerProxy implements IServerProxy{
 		}
 
 		catch(Exception e){
-			throw new ServerProxyException("Exception during HTTP request submission", e);
+			throw new ServerProxyException("Exception joining game", e);
 		}
 	}
 	
@@ -391,7 +391,7 @@ public class ServerProxy implements IServerProxy{
 	public boolean loadGame(JSONObject loadGameRequest)
 			throws ServerProxyException {
 		try {
-			if(submitRequest("POST", "/games/load", saveGameRequest).equals("Success")){
+			if(submitRequest("POST", "/games/load", loadGameRequest).equals("Success")){
 				return true;
 			}
 			return false;
@@ -885,15 +885,16 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
-		try {
-			return makeJSON(submitRequest("POST", "/util/changeLogLevel", logLevel));
+	public boolean changeLogLevel(JSONObject logLevel) throws ServerProxyException{
+		try {	
+			 if (submitRequest("POST", "/util/changeLogLevel", logLevel).equals("Success")) {
+			 	return true;
+			}
+			return false;
+
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);
 		}
-
 	}
-
-
 }

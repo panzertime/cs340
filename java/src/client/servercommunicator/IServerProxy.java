@@ -19,7 +19,7 @@ public interface IServerProxy {
 	 * used to set the URL of a proxy
 	 * @param URL the new URL of the proxy
 	 */
-	public void setURL(String URL){
+	public void setURL(String URL);
 	
 	
 	/**
@@ -34,7 +34,7 @@ public interface IServerProxy {
 	 * @return whether or not it was successful
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public boolean loginUser(JSONObject credentials) 
+	public JSONObject loginUser(JSONObject credentials) 
 			throws ServerProxyException;
 	
 	/**
@@ -50,7 +50,7 @@ public interface IServerProxy {
 	 * @return whether or not it was successful
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public boolean registerUser(JSONObject credentials)
+	public JSONObject registerUser(JSONObject credentials)
 			throws ServerProxyException;
 	
 	/**
@@ -111,7 +111,7 @@ public interface IServerProxy {
 	 * @return The specified game from the file
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public JSONObject loadGame(JSONObject loadGameRequest)
+	public boolean loadGame(JSONObject loadGameRequest)
 		throws ServerProxyException;
 	
 	/**
@@ -406,5 +406,5 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException;
+	public boolean changeLogLevel(JSONObject logLevel) throws ServerProxyException;
 }

@@ -34,9 +34,9 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public boolean loginUser(JSONObject credentials) 
+	public JSONObject loginUser(JSONObject credentials) 
 			throws ServerProxyException {
-			return true;
+			return null;
 	}
 	
 	/**
@@ -53,9 +53,9 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public boolean registerUser(JSONObject credentials)
+	public JSONObject registerUser(JSONObject credentials)
 			throws ServerProxyException {
-			return true;
+			return null;
 	}
 	
 	/**
@@ -130,9 +130,9 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject loadGame(JSONObject loadGameRequest)
+	public boolean loadGame(JSONObject loadGameRequest)
 		throws ServerProxyException {
-		return null;
+		return true;
 	}
 	
 	/**
@@ -485,8 +485,8 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject changeLogLevel(JSONObject logLevel) throws ServerProxyException{
-		return null;
+	public boolean changeLogLevel(JSONObject logLevel) throws ServerProxyException{
+		return false;
 	}
 
 	@Override
