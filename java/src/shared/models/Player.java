@@ -12,6 +12,7 @@ import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BuildException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
@@ -38,7 +39,8 @@ public class Player {
 	private Boolean hasDiscarded;
 	private int playerID;
 
-	public Player(JSONObject player) {
+	public Player(JSONObject player) throws BadJSONException {
+		if (player == null) throw new BadJSONException();
 		userColor = getColor((String) player.get("color"));
 		userName = (String) player.get("name");
 		userIndex = (Integer) player.get("playerIndex");
