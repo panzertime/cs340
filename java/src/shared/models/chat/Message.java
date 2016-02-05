@@ -1,5 +1,32 @@
 package shared.models.chat;
 
-public class Message {
+import java.util.Map;
 
+import org.json.simple.JSONObject;
+
+import shared.models.Player;
+
+public class Message {
+	private String source;
+	private String message;
+	public Message(JSONObject messageLine)
+	{
+		this.message = (String) messageLine.get("message");
+		this.source = (String) messageLine.get("source"); //Static method to change this to PLAYER class
+		
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 }

@@ -36,6 +36,12 @@ public abstract class Building {
 	public Player getOwner() {
 		return owner;
 	}
+
+	public Boolean isPlaced() {
+		if (vertex == null)
+			return false;
+		return true;
+	}
 	
 	/**
 	 * @param type the resource to generate

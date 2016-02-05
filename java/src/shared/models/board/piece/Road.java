@@ -34,4 +34,10 @@ public class Road {
 	public Player getOwner() {
 		return owner;
 	}
+	
+	public Boolean isPlaced() {
+		if (edge == null)
+			return false;
+		return true;
+	}
 }

@@ -88,8 +88,10 @@
 	<property name="java.build" location="${java.dir}/build"/>
 	<property name="java.dist" location="${java.dir}/dist"/>
 	<property name="java.lib" location="${java.dir}/lib"/>
+	<property name="tests.dir" location="${java.dir}/tests"/>
+	<property name="tests.build" location="${java.build}/tests"/>
  
-	<target name="init" description="create build directories">
+	<target name="init" depends="clean" description="create build directories">
 		<tstamp/>
 		<mkdir dir="${java.build}"/>
 		<mkdir dir="${java.dist}"/>
@@ -156,6 +158,18 @@
     <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">
         <zip destfile="./tester.zip" basedir="${java.dist}" />
     </target>
-  
+	
+	<target name="test" depends="compile" description="compiles and runs the JUnit tests " >
+		<java classname="tests.PhaseOneTests" fork="yes">
+			<classpath>
+				<pathelement path="${java.build}"/>
+				<path refid="java.lib.classpath"/>
+			</classpath>
+			<assertions>
+				<enable/>
+			</assertions>
+		</java>
+	</target>
+	
 </project>
 

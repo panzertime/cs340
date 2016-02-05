@@ -1,6 +1,9 @@
 package shared.models;
 
+import java.util.Map;
 import java.util.Random;
+
+import org.json.simple.JSONObject;
 
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
@@ -9,11 +12,14 @@ import shared.models.hand.development.DevCard;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
 import shared.models.hand.development.RoadBuilding;
-import shared.models.hand.development.Victory;
+import shared.models.hand.development.Monument;
 import shared.models.hand.development.YearOfPlenty;
 import shared.models.hand.exceptions.ResourceException;
 
 public class Bank {
+	
+	
+	
 	
 	
 	/**
@@ -23,20 +29,25 @@ public class Bank {
 		return hand;
 	}
 	private Hand hand;
+	
+	public Bank(JSONObject resourceList, JSONObject deckList)
+	{
+		hand = new Hand(resourceList, deckList);
+	}
 
 	/**
 	 * @pre New game
 	 * @post Bank hand has the amount of cards and resources specified by game rules
 	 */
-	public void initializeBank() {
-		hand = new Hand(19, 19, 19, 19, 19);
+/*	public void initializeBank() {
+//		hand = new Hand(19, 19, 19, 19, 19);
 		for (int i = 0; i < 14; i++)
 		{
 			this.giveDevCardToBank(new Knight());
 		}
 		for (int i = 0; i < 5; i++)
 		{
-			this.giveDevCardToBank(new Victory());
+			this.giveDevCardToBank(new Monument());
 		}
 		for (int i = 0; i < 2; i++)
 		{
@@ -46,7 +57,7 @@ public class Bank {
 		}
 		
 		
-	}
+	}*/
 	
 	//public Boolean hasResources(ResourceType type, Integer num) throws ResourceException {}
 
