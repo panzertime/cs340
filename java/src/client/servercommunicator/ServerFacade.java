@@ -97,7 +97,7 @@ public class ServerFacade {
 		}
 	}
 
-	public void joinGame(int gameID, CatanColor color) {
+	public void joinGame(int gameID, CatanColor color) 
 				throws ServerException{
 		try {
 			String joinGame = "{ id : " + gameID
@@ -110,20 +110,38 @@ public class ServerFacade {
 		catch(Exception e){
 			throw new ServerException(e);
 		}
-
-		
 	}
 	
 		//ONLY USED BY SERVER COMMUNICATOR	
-	public void saveGame(int gameID, String fileName) {
-		// TODO Auto-generated method stub
-		
+	public void saveGame(int gameID, String fileName) 
+				throws ServerException{
+		try {
+			String saveGame = "{ id : " + gameID
+				+ ", name : \"" + fileName + "\"}";
+			JSONObject args = new JSONObject(saveGame);
+			if(proxy.saveGame(args) == false){
+				throw ServerException("Save game failed");
+			}
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 	
-	public void loadGame(String fileName) {
-		// TODO Auto-generated method stub
-		
+	public void loadGame(String fileName) 
+				throws ServerException{
+		try {
+			String loadGame = "{ id : " + gameID
+				+ ", name : \"" + fileName + "\"}";
+			JSONObject args = new JSONObject(loadGame);
+			if(proxy.loadGame(args) == false){
+				throw ServerException("Load game failed");
+			}
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 	//GAMES(POST-JOIN)

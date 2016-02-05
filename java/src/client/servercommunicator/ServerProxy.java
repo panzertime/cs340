@@ -375,7 +375,6 @@ public class ServerProxy implements IServerProxy{
 		catch(Exception e) {
 			throw new ServerProxyException(e);
 		}	
-
 	}
 
 	
@@ -389,10 +388,13 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject loadGame(JSONObject loadGameRequest)
+	public boolean loadGame(JSONObject loadGameRequest)
 			throws ServerProxyException {
 		try {
-			return makeJSON(submitRequest("POST", "/games/load", loadGameRequest));
+			if(submitRequest("POST", "/games/load", saveGameRequest).equals("Success")){
+				return true;
+			}
+			return false;
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);
