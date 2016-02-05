@@ -9,6 +9,7 @@ import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.chat.ChatModel;
 import shared.models.exceptions.BadPlayerIndexException;
+import shared.models.exceptions.BadStatusException;
 import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.EmptyPlayerListException;
 import shared.models.hand.ResourceType;
@@ -17,7 +18,7 @@ import shared.models.hand.exceptions.BadResourceTypeException;
 public class GameModel {
 	
 	private Board board;
-	private ArrayList <Player> players;
+	private static ArrayList <Player> players;
 	private Bank bank;
 	private Achievements achievements;
 	private Boolean setup;
@@ -27,6 +28,7 @@ public class GameModel {
 	private String status;
 	private int currentTurn;
 	private ChatModel chatModel;
+	private TradeModel tradeModel;
 	
 	/**
 	 * @param board the board to  initialize
@@ -35,10 +37,11 @@ public class GameModel {
 	 * @param achievements the achievements to initialize
 	 * @throws BadPlayerIndexException 
 	 * @throws BadTurnStatusException 
+	 * @throws BadStatusException 
 	 * @throws Exception
 	 */
 	
-	public GameModel(Map<String, Object> clientModel) throws BadPlayerIndexException, BadTurnStatusException
+	public GameModel(Map<String, Object> clientModel) throws BadPlayerIndexException, BadTurnStatusException, BadStatusException
 	{
 		this.bank = new Bank((Map<String,Object>)clientModel.get("bank"), (Map<String,Object>)clientModel.get("deck"));
 		this.chatModel = new ChatModel((Map<String,Object>)clientModel.get("chat"),(Map<String,Object>)clientModel.get("log"));
@@ -49,14 +52,52 @@ public class GameModel {
 		}
 		this.board = new Board((Map<String,Object>)clientModel.get("map"));
 		this.version = (Integer)clientModel.get("version");
-		this.winner = whichPlayer((Integer)clientModel.get("winner"));
+		this.winner = GameModel.whichPlayer((Integer)clientModel.get("winner"));
 		Map<String,Object> turnTracker = (Map<String,Object>)clientModel.get("TurnTracker");
 		this.currentTurn = (Integer)turnTracker.get("currentTurn");
-		this.turn = whichPlayer(this.currentTurn);
-		this.status = (String)turnTracker.get("status");
-		achievements = new Achievements(whichPlayer((Integer)turnTracker.get("longestRoad")),whichPlayer((Integer)turnTracker.get("largestArmy")));
-		
+		this.turn = GameModel.whichPlayer(this.currentTurn);
+		this.setStatus((String)turnTracker.get("status"));
+		achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
+		tradeModel = new TradeModel((Map<String,Object>)clientModel.get("tradeOffer"));
 	}
+	
+	
+	public void setStatus(String status) throws BadStatusException
+	{
+		if (status.equalsIgnoreCase("Rolling")) 
+		{
+			this.status = status;
+			return;
+		}
+		else if (status.equalsIgnoreCase("Robbing")) 
+		{
+			this.status = status;
+			return;
+		}
+		else if (status.equalsIgnoreCase("Playing")) 
+		{
+			this.status = status;
+			return;
+		}
+		else if (status.equalsIgnoreCase("Discarding")) 
+		{
+			this.status = status;
+			return;
+		}
+		else if (status.equalsIgnoreCase("FirstRound")) 
+		{
+			this.status = status;
+			return;
+		}
+		else if (status.equalsIgnoreCase("SecondRound")) 
+		{
+			this.status = status;
+			return;
+		}
+		throw new BadStatusException();
+			
+	}
+	
 	
 	/**
 	 * @return the bank
@@ -166,7 +207,7 @@ public class GameModel {
 	}
 	
 	
-	public Player whichPlayer(int index) throws BadPlayerIndexException
+	public static Player whichPlayer(int index) throws BadPlayerIndexException
 	{
 		if (index == -1)
 		{ return null; }
