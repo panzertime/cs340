@@ -17,7 +17,7 @@ import shared.models.hand.exceptions.BadResourceTypeException;
 public class GameModel {
 	
 	private Board board;
-	private ArrayList <Player> players;
+	private static ArrayList <Player> players;
 	private Bank bank;
 	private Achievements achievements;
 	private Boolean setup;
@@ -27,6 +27,7 @@ public class GameModel {
 	private String status;
 	private int currentTurn;
 	private ChatModel chatModel;
+	private TradeModel tradeModel;
 	
 	/**
 	 * @param board the board to  initialize
@@ -49,13 +50,13 @@ public class GameModel {
 		}
 		this.board = new Board((Map<String,Object>)clientModel.get("map"));
 		this.version = (Integer)clientModel.get("version");
-		this.winner = whichPlayer((Integer)clientModel.get("winner"));
+		this.winner = GameModel.whichPlayer((Integer)clientModel.get("winner"));
 		Map<String,Object> turnTracker = (Map<String,Object>)clientModel.get("TurnTracker");
 		this.currentTurn = (Integer)turnTracker.get("currentTurn");
-		this.turn = whichPlayer(this.currentTurn);
+		this.turn = GameModel.whichPlayer(this.currentTurn);
 		this.status = (String)turnTracker.get("status");
-		achievements = new Achievements(whichPlayer((Integer)turnTracker.get("longestRoad")),whichPlayer((Integer)turnTracker.get("largestArmy")));
-		
+		achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
+		tradeModel = new TradeModel((Map<String,Object>)clientModel.get("tradeOffer"));
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class GameModel {
 	}
 	
 	
-	public Player whichPlayer(int index) throws BadPlayerIndexException
+	public static Player whichPlayer(int index) throws BadPlayerIndexException
 	{
 		if (index == -1)
 		{ return null; }
