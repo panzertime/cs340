@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-public class Log {
+public class MessageLog {
 	private ArrayList<Message> messageList;
 	
-	public Log(JSONObject[] messageLine)
+	public MessageLog(JSONObject[] messageLine)
 	{
 		for (int i = 0; i < messageLine.length; i++)
 		{

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import shared.logger.Log;
 import shared.models.board.Board;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
@@ -44,8 +45,9 @@ public class GameModel {
 	 * @throws Exception
 	 */
 	
-	public GameModel(JSONObject jsonMap) throws BadPlayerIndexException, BadTurnStatusException, BadStatusException, BadJSONException
+	public GameModel(JSONObject jsonMap) throws BadJSONException
 	{
+		if (jsonMap == null) throw new BadJSONException();
 		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
 		JSONObject[] playerList = (JSONObject[])jsonMap.get("players");
@@ -55,13 +57,33 @@ public class GameModel {
 		}
 		board = new Board((JSONObject)jsonMap.get("map"));
 		version = (Integer)jsonMap.get("version");
-		winner = GameModel.whichPlayer((Integer)jsonMap.get("winner"));
+		try {
+			winner = GameModel.whichPlayer((Integer)jsonMap.get("winner"));
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
 		
 		JSONObject turnTracker = (JSONObject)jsonMap.get("TurnTracker");
 		currentTurn = (Integer)turnTracker.get("currentTurn");
-		turn = GameModel.whichPlayer(this.currentTurn);
-		setStatus((String)turnTracker.get("status"));
-		achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
+		try {
+			turn = GameModel.whichPlayer(this.currentTurn);
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
+		try {
+			setStatus((String)turnTracker.get("status"));
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
+		try {
+			achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
+		} catch (BadPlayerIndexException e) {
+			// TODO Auto-generated catch block
+			Log.exception(e);
+		}
 		tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
 	
