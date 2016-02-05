@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class CanUseMonopolyTests {
 	ModelFacade modelFacade;
 
 	@Before
-	private void initModel() {
+	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");
 		FileInputStream fis;
@@ -40,7 +41,7 @@ public class CanUseMonopolyTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade(jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel);
 		} catch (FileNotFoundException | ParseException e) {
 			e.printStackTrace();
 		}

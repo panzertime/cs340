@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Scanner;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class ModelTests {
 
 	//minimum model
 	@Test
-	private void initModel1() {
+	public void initModel1() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/minjson.txt");
 		FileInputStream fis;
@@ -35,7 +36,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
 			
 			if (!correctModel1(modelFacade)) {
 				fail("Current model does not match Minimal JSON model");
@@ -48,7 +49,7 @@ public class ModelTests {
 	
 	//maximum model
 	@Test
-	private void initModel2() {
+	public void initModel2() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/fulljson.txt");
 		FileInputStream fis;
@@ -65,7 +66,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
 			if (!correctModel2(modelFacade)) {
 				fail("Current model does not match full JSON model");
 			}
@@ -77,7 +78,7 @@ public class ModelTests {
 	
 	//error model
 	@Test
-	private void initModel3() {
+	public void initModel3() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/badjson.txt");
 		FileInputStream fis;
@@ -94,7 +95,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
 		} catch (FileNotFoundException | ParseException e) {
 			fail("Error with bad JSON input\n");
 		}

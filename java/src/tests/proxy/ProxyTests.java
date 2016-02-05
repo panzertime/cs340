@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
@@ -22,22 +23,34 @@ public class ProxyTests {
 	public void testlogin200() {
 		String username = null;
 		String password = null;
-		serverFacade.login(username, password);
-		fail("Not yet implemented");
+		try {
+			serverFacade.login(username, password);
+		} catch (ServerException e) {
+			fail("Failed login Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testregister200() {
 		String username = null;
 		String password = null;
-		serverFacade.register(username, password);
-		fail("Not yet implemented");
+		try {
+			serverFacade.register(username, password);
+		} catch (ServerException e) {
+			fail("Failed register Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testgetGames200() {
-		serverFacade.getGames();
-		fail("Not yet implemented");
+		try {
+			serverFacade.getGames();
+		} catch (ServerException e) {
+			fail("Failed getGames Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -46,88 +59,134 @@ public class ProxyTests {
 		boolean randomNumbers = false;
 		boolean randomPorts = false;
 		String name = null;
-		serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
-		fail("Not yet implemented");
+		try {
+			serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
+		} catch (ServerException e) {
+			fail("Failed createNewGame Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testjoinGame200() {
 		CatanColor color = null;
 		int gameID = 0;
-		serverFacade.joinGame(gameID, color);
-		fail("Not yet implemented");
+		try {
+			serverFacade.joinGame(gameID, color);
+		} catch (ServerException e) {
+			fail("Failed joinGame Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testsaveGame200() {
 		String fileName = null;
 		int gameID = 0;
-		serverFacade.saveGame(gameID, fileName);
-		fail("Not yet implemented");
+		try {
+			serverFacade.saveGame(gameID, fileName);
+		} catch (ServerException e) {
+			fail("Failed saveGame Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testloadGame200() {
 		String fileName = null;
-		serverFacade.loadGame(fileName);
-		fail("Not yet implemented");
+		try {
+			serverFacade.loadGame(fileName);
+		} catch (ServerException e) {
+			fail("Failed loadGame Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testgetModel200() {
 		Integer version = null;
-		serverFacade.getModel(version);
-		fail("Not yet implemented");
+		try {
+			serverFacade.getModel(version);
+		} catch (ServerException e) {
+			fail("Failed getModel Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testreset200() {
-		int gameID = 0;
-		CatanColor color = null;
-		serverFacade.reset(gameID, color);
-		fail("Not yet implemented");
+		try {
+			serverFacade.reset();
+		} catch (ServerException e) {
+			fail("Failed reset Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testpostCommands200() {
 		Map commands = null;
-		serverFacade.postCommands(commands);
-		fail("Not yet implemented");
+		try {
+			serverFacade.postCommands(commands);
+		} catch (ServerException e) {
+			fail("Failed postCommandss Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testgetCommands200() {
-		serverFacade.getCommands();
-		fail("Not yet implemented");
+		try {
+			serverFacade.getCommands();
+		} catch (ServerException e) {
+			fail("Failed getCommands Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testaddAI200() {
 		String aiType = null;
-		serverFacade.addAI(aiType);
-		fail("Not yet implemented");
+		try {
+			serverFacade.addAI(aiType);
+		} catch (ServerException e) {
+			fail("Failed addAI Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testlistAI200() {
-		serverFacade.listAI();
-		fail("Not yet implemented");
+		try {
+			serverFacade.listAI();
+		} catch (ServerException e) {
+			fail("Failed listAI Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testsendChat200() {
 		int playerIndex = 0;
 		String message = null;
-		serverFacade.sendChat(playerIndex, message);
-		fail("Not yet implemented");
+		try {
+			serverFacade.sendChat(playerIndex, message);
+		} catch (ServerException e) {
+			fail("Failed sendChat Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testrollNumber200() {
 		int playerIndex = 0;
 		int number = 0;
-		serverFacade.rollNumber(playerIndex, number);
-		fail("Not yet implemented");
+		try {
+			serverFacade.rollNumber(playerIndex, number);
+		} catch (ServerException e) {
+			fail("Failed rollNumber Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -135,22 +194,34 @@ public class ProxyTests {
 		int playerIndex = 0;
 		int victimIndex = 0;
 		HexLocation location = null;
-		serverFacade.robPlayer(playerIndex, victimIndex, location);
-		fail("Not yet implemented");
+		try {
+			serverFacade.robPlayer(playerIndex, victimIndex, location);
+		} catch (ServerException e) {
+			fail("Failed robPlayer Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testfinishTurn200() {
 		int playerIndex = 0;
-		serverFacade.finishTurn(playerIndex);
-		fail("Not yet implemented");
+		try {
+			serverFacade.finishTurn(playerIndex);
+		} catch (ServerException e) {
+			fail("Failed finishTurn Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testbuyDevCard200() {
 		int playerIndex = 0;
-		serverFacade.buyDevCard(playerIndex);
-		fail("Not yet implemented");
+		try {
+			serverFacade.buyDevCard(playerIndex);
+		} catch (ServerException e) {
+			fail("Failed buyDevCard Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -158,8 +229,12 @@ public class ProxyTests {
 		int playerIndex = 0;
 		ResourceType resource1 = null;
 		ResourceType resource2 = null;
-		serverFacade.yearOfPlenty(playerIndex, resource1, resource2);
-		fail("Not yet implemented");
+		try {
+			serverFacade.yearOfPlenty(playerIndex, resource1, resource2);
+		} catch (ServerException e) {
+			fail("Failed yearOfPlenty Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -167,8 +242,12 @@ public class ProxyTests {
 		int playerIndex = 0;
 		EdgeLocation spot1 = null;
 		EdgeLocation spot2 = null;
-		serverFacade.roadBuilding(playerIndex, spot1, spot2);
-		fail("Not yet implemented");
+		try {
+			serverFacade.roadBuilding(playerIndex, spot1, spot2);
+		} catch (ServerException e) {
+			fail("Failed roadBuilding Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -176,23 +255,35 @@ public class ProxyTests {
 		int playerIndex = 0;
 		int victimIndex = 0;
 		HexLocation location = null;
-		serverFacade.soldier(playerIndex, victimIndex, location);
-		fail("Not yet implemented");
+		try {
+			serverFacade.soldier(playerIndex, victimIndex, location);
+		} catch (ServerException e) {
+			fail("Failed soldier Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testmonopoly200() {
 		ResourceType resource = null;
 		int playerIndex = 0;
-		serverFacade.monopoly(resource, playerIndex);
-		fail("Not yet implemented");
+		try {
+			serverFacade.monopoly(resource, playerIndex);
+		} catch (ServerException e) {
+			fail("Failed monopoly Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testmonument200() {
 		int playerIndex = 0;
-		serverFacade.monument(playerIndex);
-		fail("Not yet implemented");
+		try {
+			serverFacade.monument(playerIndex);
+		} catch (ServerException e) {
+			fail("Failed monument Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -200,8 +291,12 @@ public class ProxyTests {
 		int playerIndex = 0;
 		EdgeLocation roadLocation = null;
 		boolean free = false;
-		serverFacade.buildRoad(playerIndex, roadLocation, free);
-		fail("Not yet implemented");
+		try {
+			serverFacade.buildRoad(playerIndex, roadLocation, free);
+		} catch (ServerException e) {
+			fail("Failed Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -209,16 +304,24 @@ public class ProxyTests {
 		int playerIndex = 0;
 		VertexLocation vertLoc = null;
 		boolean setupMode = false;
-		serverFacade.buildSettlement(playerIndex, vertLoc, setupMode);
-		fail("Not yet implemented");
+		try {
+			serverFacade.buildSettlement(playerIndex, vertLoc, setupMode);
+		} catch (ServerException e) {
+			fail("Failed buildSettlement Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testbuildCity200() {
 		int playerIndex = 0;
 		VertexLocation vertLoc = null;
-		serverFacade.buildCity(playerIndex, vertLoc);
-		fail("Not yet implemented");
+		try {
+			serverFacade.buildCity(playerIndex, vertLoc);
+		} catch (ServerException e) {
+			fail("Failed buildCity Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -226,16 +329,24 @@ public class ProxyTests {
 		int playerIndex = 0;
 		Map<ResourceType, Integer> offer = null;
 		int receiver = 0;
-		serverFacade.offerTrade(playerIndex, offer, receiver);
-		fail("Not yet implemented");
+		try {
+			serverFacade.offerTrade(playerIndex, offer, receiver);
+		} catch (ServerException e) {
+			fail("Failed offerTrade Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testacceptTrade200() {
 		int playerIndex = 0;
 		boolean willAccept = false;
-		serverFacade.acceptTrade(playerIndex, willAccept);
-		fail("Not yet implemented");
+		try {
+			serverFacade.acceptTrade(playerIndex, willAccept);
+		} catch (ServerException e) {
+			fail("Failed acceptTrade Proxy test");
+		}
+		
 	}
 
 	@Test
@@ -244,22 +355,33 @@ public class ProxyTests {
 		int ratio = 0;
 		ResourceType inputResource = null;
 		ResourceType outputResource = null;
-		serverFacade.maritimeTrade(playerIndex, ratio, inputResource, outputResource);
-		fail("Not yet implemented");
+		try {
+			serverFacade.maritimeTrade(playerIndex, ratio, inputResource, outputResource);
+		} catch (ServerException e) {
+			fail("Failed maritimeTrade Proxy test");
+		}
+		
 	}
 
 	@Test
 	public void testdiscard200() {
 		int playerIndex = 0;
 		List<ResourceType> discardedCards = null;
-		serverFacade.discard(playerIndex, discardedCards);
-		fail("Not yet implemented");
+		try {
+			serverFacade.discard(playerIndex, discardedCards);
+		} catch (ServerException e) {
+			fail("Failed discard Proxy test");
+		}
+
 	}
 
 	@Test
 	public void testchangeLogLevel200() {
 		String logLevel = null;
-		serverFacade.changeLogLevel(logLevel);
-		fail("Not yet implemented");
+		try {
+			serverFacade.changeLogLevel(logLevel);
+		} catch (ServerException e) {
+			fail("Failed change log level Proxy test");
+		}
 	}
 }
