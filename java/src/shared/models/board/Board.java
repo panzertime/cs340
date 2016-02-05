@@ -27,7 +27,7 @@ public class Board {
 
 	private Map<HexLocation, Hex> hexes;
 
-	public Board(JSONObject map) {
+	public Board(JSONObject jsonMap) {
 		hexes = new HashMap<HexLocation, Hex>();
 		
 	}

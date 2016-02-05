@@ -2,6 +2,8 @@ package shared.models;
 
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.piece.City;
@@ -36,15 +38,15 @@ public class Player {
 	private Boolean hasDiscarded;
 	private int playerID;
 
-	public Player(Map<String, Object> player) {
+	public Player(JSONObject player) {
 		userColor = getColor((String) player.get("color"));
 		userName = (String) player.get("name");
 		userIndex = (Integer) player.get("playerIndex");
 		armies = (Integer) player.get("soldiers");
 		monuments = (Integer) player.get("monuments");
 		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		hand = new Hand((Map<String, Object>) player.get("resources"), (Map<String, Object>) player.get("oldDevCards"),
-				(Map<String, Object>) player.get("newDevCards"));
+		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
+				(JSONObject) player.get("newDevCards"));
 		hasDiscarded = (Boolean) player.get("discarded");
 		playerID = (Integer) player.get("playerID");
 		settlements = new Settlement[5];

@@ -4,12 +4,16 @@ package shared.models;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import client.servercommunicator.ServerFacade;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BadPlayerIndexException;
+import shared.models.exceptions.BadStatusException;
 import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.DevCardException;
 import shared.models.exceptions.JoinGameException;
@@ -32,10 +36,16 @@ public class ModelFacade {
 	/**
 	 * Instrcutor with GameModel input
 	 */
-	public ModelFacade(Map<String, Object> gameModel) {
+	public ModelFacade(JSONObject gameModel) {
 		try {
 			this.gameModel = new GameModel(gameModel);
 		} catch (BadPlayerIndexException | BadTurnStatusException e) {
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -104,7 +114,7 @@ public class ModelFacade {
 	public void createNewGame(String name, boolean randomTiles, 
 			boolean randomNumbers, boolean randomPorts) 
 					throws PreGameException {
-		Map newGame = ServerFacade.get_instance().createNewGame(randomTiles,
+		JSONObject newGame = (JSONObject) ServerFacade.get_instance().createNewGame(randomTiles,
 				randomNumbers, randomPorts, name);
 	}
 	
@@ -143,7 +153,7 @@ public class ModelFacade {
 	 * @throws JoinGameException
 	 */
 	public Map getAI() throws JoinGameException {
-		return ServerFacade.get_instance().listAI();
+		return (JSONObject) ServerFacade.get_instance().listAI();
 	}
 
 	//moves
@@ -160,7 +170,7 @@ public class ModelFacade {
 	public void sendMessage(String message) 
 			throws MessageException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().sendChat(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().sendChat(
 				playerIndex, message);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -168,6 +178,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -189,7 +205,7 @@ public class ModelFacade {
 	public void placeRobber(HexLocation location, int victimIndex) 
 			throws PlayingException{
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().robPlayer(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().robPlayer(
 				playerIndex, victimIndex, location);
 		try {
 			gameModel = new GameModel(modelFromServer);
@@ -199,6 +215,12 @@ public class ModelFacade {
 		} catch (BadTurnStatusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -206,6 +228,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -223,7 +251,7 @@ public class ModelFacade {
 	 */
 	public void endTurn()  throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().finishTurn(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().finishTurn(
 				playerIndex);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -231,6 +259,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -249,7 +283,7 @@ public class ModelFacade {
 	 */
 	public void buyDevCard() throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().buyDevCard(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buyDevCard(
 				playerIndex);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -257,6 +291,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -277,7 +317,7 @@ public class ModelFacade {
 	public void playYearOfPlentyCard(ResourceType resource1, 
 			ResourceType resource2)	throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().yearOfPlenty(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().yearOfPlenty(
 				playerIndex, resource1,	resource2);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -285,6 +325,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -309,7 +355,7 @@ public class ModelFacade {
 	public void roadBuilding(EdgeLocation spot1, EdgeLocation spot2) 
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().roadBuilding(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().roadBuilding(
 				playerIndex, spot1, spot2);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -317,6 +363,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -340,7 +392,7 @@ public class ModelFacade {
 	public void playSoldierCard(HexLocation location, int victimIndex)
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().soldier(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().soldier(
 				playerIndex, victimIndex,location);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -348,6 +400,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -366,7 +424,7 @@ public class ModelFacade {
 	public void playMonopolyCard(ResourceType resource) 
 			throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().monopoly(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monopoly(
 				resource, playerIndex);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -374,6 +432,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -390,7 +454,7 @@ public class ModelFacade {
 	 */
 	public void playMonumentCard() throws DevCardException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().monument(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monument(
 				playerIndex);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -398,6 +462,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -422,7 +492,7 @@ public class ModelFacade {
 			throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		boolean free = this.gameModel.inSetupMode();
-		Map modelFromServer = ServerFacade.get_instance().buildRoad(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildRoad(
 				playerIndex, roadLocation, free);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -430,6 +500,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -451,7 +527,7 @@ public class ModelFacade {
 	public void placeSettlement(boolean setupMode, VertexLocation vertLoc)
 			throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().buildSettlement(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildSettlement(
 				playerIndex, vertLoc, setupMode);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -459,6 +535,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -478,7 +560,7 @@ public class ModelFacade {
 	 */
 	public void buildCity(VertexLocation vertLoc) throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().buildCity(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildCity(
 				playerIndex, vertLoc);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -486,6 +568,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -504,7 +592,7 @@ public class ModelFacade {
 	public void sendTradeOffer(Map<ResourceType, Integer> offer, int receiver)
 		throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().offerTrade(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().offerTrade(
 				playerIndex, offer, receiver);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -512,6 +600,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -530,7 +624,7 @@ public class ModelFacade {
 	 */
 	public void acceptTrade(boolean willAccept) throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().acceptTrade(
+		JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().acceptTrade(
 				playerIndex, willAccept);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -538,6 +632,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -559,7 +659,7 @@ public class ModelFacade {
 	public void makeMaritimeTrade(int ratio, ResourceType inputResource,
 			ResourceType outputResource) throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().maritimeTrade(
+		JSONObject modelFromServer = (JSONObject) (JSONObject) ServerFacade.get_instance().maritimeTrade(
 				playerIndex, ratio, inputResource, outputResource);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -567,6 +667,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -586,7 +692,7 @@ public class ModelFacade {
 	public void discard(List<ResourceType> discardedCards) 
 			throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
-		Map modelFromServer = ServerFacade.get_instance().discard(
+		JSONObject modelFromServer = (JSONObject) (JSONObject) ServerFacade.get_instance().discard(
 				playerIndex, discardedCards);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -594,6 +700,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -611,7 +723,7 @@ public class ModelFacade {
 	public void rollDice() throws PlayingException {
 		int playerIndex = this.gameModel.getPlayerIndex();
 		int number = this.gameModel.getDiceNumber();
-		Map modelFromServer = ServerFacade.get_instance().rollNumber(
+		JSONObject modelFromServer = (JSONObject) (JSONObject) ServerFacade.get_instance().rollNumber(
 				playerIndex, number);
 				try {
 			gameModel = new GameModel(modelFromServer);
@@ -619,6 +731,12 @@ public class ModelFacade {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadTurnStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadStatusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -3,6 +3,8 @@ package shared.models;
 import java.util.Map;
 import java.util.Random;
 
+import org.json.simple.JSONObject;
+
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
@@ -28,7 +30,7 @@ public class Bank {
 	}
 	private Hand hand;
 	
-	public Bank(Map<String, Object> resourceList, Map<String, Object> deckList)
+	public Bank(JSONObject resourceList, JSONObject deckList)
 	{
 		hand = new Hand(resourceList, deckList);
 	}

@@ -3,6 +3,8 @@ package shared.models;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import shared.models.exceptions.BadPlayerIndexException;
 
 public class TradeModel {
@@ -16,7 +18,7 @@ public class TradeModel {
 	private int ore;
 	
 	
-	public TradeModel(Map<String, Object> tradeOffer)
+	public TradeModel(JSONObject tradeOffer)
 	{
 		if (tradeOffer == null) return;
 		int s = (Integer)tradeOffer.get("sender");
@@ -27,7 +29,7 @@ public class TradeModel {
 		} catch (BadPlayerIndexException e) {
 			e.printStackTrace();
 		}
-		Map<String, Object> offer = (Map<String, Object>)tradeOffer.get("offer");
+		JSONObject offer = (JSONObject)tradeOffer.get("offer");
 		wood = (Integer)offer.get("wood");
 		brick = (Integer)offer.get("brick");
 		sheep = (Integer)offer.get("sheep");

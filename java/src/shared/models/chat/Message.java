@@ -2,12 +2,14 @@ package shared.models.chat;
 
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import shared.models.Player;
 
 public class Message {
 	private String source;
 	private String message;
-	public Message(Map<String, Object> messageLine)
+	public Message(JSONObject messageLine)
 	{
 		this.message = (String) messageLine.get("message");
 		this.source = (String) messageLine.get("source"); //Static method to change this to PLAYER class

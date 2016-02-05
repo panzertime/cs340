@@ -3,11 +3,14 @@ package shared.models;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 import shared.models.board.Board;
 import shared.models.board.edge.EdgeLocation;
 import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.chat.ChatModel;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BadPlayerIndexException;
 import shared.models.exceptions.BadStatusException;
 import shared.models.exceptions.BadTurnStatusException;
@@ -41,24 +44,25 @@ public class GameModel {
 	 * @throws Exception
 	 */
 	
-	public GameModel(Map<String, Object> clientModel) throws BadPlayerIndexException, BadTurnStatusException, BadStatusException
+	public GameModel(JSONObject jsonMap) throws BadPlayerIndexException, BadTurnStatusException, BadStatusException, BadJSONException
 	{
-		this.bank = new Bank((Map<String,Object>)clientModel.get("bank"), (Map<String,Object>)clientModel.get("deck"));
-		this.chatModel = new ChatModel((Map<String,Object>)clientModel.get("chat"),(Map<String,Object>)clientModel.get("log"));
-		Map<String,Object>[] playerList = (Map<String,Object>[])clientModel.get("players");
-		for (Map<String,Object> p: playerList)
+		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
+		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
+		JSONObject[] playerList = (JSONObject[])jsonMap.get("players");
+		for (JSONObject p: playerList)
 		{
 			players.add(new Player(p));
 		}
-		this.board = new Board((Map<String,Object>)clientModel.get("map"));
-		this.version = (Integer)clientModel.get("version");
-		this.winner = GameModel.whichPlayer((Integer)clientModel.get("winner"));
-		Map<String,Object> turnTracker = (Map<String,Object>)clientModel.get("TurnTracker");
-		this.currentTurn = (Integer)turnTracker.get("currentTurn");
-		this.turn = GameModel.whichPlayer(this.currentTurn);
-		this.setStatus((String)turnTracker.get("status"));
+		board = new Board((JSONObject)jsonMap.get("map"));
+		version = (Integer)jsonMap.get("version");
+		winner = GameModel.whichPlayer((Integer)jsonMap.get("winner"));
+		
+		JSONObject turnTracker = (JSONObject)jsonMap.get("TurnTracker");
+		currentTurn = (Integer)turnTracker.get("currentTurn");
+		turn = GameModel.whichPlayer(this.currentTurn);
+		setStatus((String)turnTracker.get("status"));
 		achievements = new Achievements(GameModel.whichPlayer((Integer)turnTracker.get("longestRoad")),GameModel.whichPlayer((Integer)turnTracker.get("largestArmy")));
-		tradeModel = new TradeModel((Map<String,Object>)clientModel.get("tradeOffer"));
+		tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
 	
 	

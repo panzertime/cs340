@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
+import org.json.simple.JSONObject;
+
 import shared.models.hand.development.DevCard;
 import shared.models.hand.development.Knight;
 import shared.models.hand.development.Monopoly;
@@ -74,7 +76,7 @@ public class Hand {
 	 * @param wheat
 	 * @param ore
 	 */
-	public Hand(Map<String, Object> resourceList, Map<String, Object> deckList) {
+	public Hand(JSONObject resourceList, JSONObject deckList) {
 		wood = (Integer) resourceList.get("wood");
 		brick = (Integer) resourceList.get("brick");
 		sheep = (Integer) resourceList.get("sheep");
@@ -109,7 +111,7 @@ public class Hand {
 
 	}
 
-	public Hand(Map<String, Object> resourceList, Map<String, Object> oldDevList, Map<String, Object> newDevList) {
+	public Hand(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) {
 		wood = (Integer) resourceList.get("wood");
 		brick = (Integer) resourceList.get("brick");
 		sheep = (Integer) resourceList.get("sheep");
