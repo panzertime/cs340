@@ -1,5 +1,11 @@
 package client.servercommunicator;
 
+import org.json.simple.*;
+import org.json.simple.parser.*;
+import java.net.*;
+import java.io.*;
+
+
 
 /**
  * This interface is to be implemented for use on the clients machine.
@@ -296,7 +302,7 @@ public interface IServerProxy {
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject monument() throws ServerProxyException;
+	public JSONObject monument(JSONObject monumentArgs) throws ServerProxyException;
 	
 	/**
 	 * User wants to place a road on the map

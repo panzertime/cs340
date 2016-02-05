@@ -29,11 +29,17 @@ public class ServerProxy implements IServerProxy{
 		serverURL = URL;
 	}
 
-	private JSONObject makeJSON(String stringJSON){
-		JSONParser parser = new JSONParser();
-		JSONObject json = (JSONObject) parser.parse(stringJSON);
+	private JSONObject makeJSON(String stringJSON)
+			throws ServerProxyException{
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(stringJSON);
 	
-		return json;
+			return json;
+		}
+		catch(Exception e){
+			throw new ServerProxyException("JSON probably invalid", e);
+		}
 	}
 
 	/**
@@ -47,7 +53,8 @@ public class ServerProxy implements IServerProxy{
 
 		try {
 			String cookie = userCookie + "; " + gameCookie;
-			URLConnection connection = new URL(serverURL + endpoint).openConnection();
+			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
 			connection.setRequestMethod(method);
 
@@ -55,10 +62,10 @@ public class ServerProxy implements IServerProxy{
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
 			requestBody.writeChars(arguments.toJSONString());
 	
-			if (connection.responseCode() != 200) {
+			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, " + endpoint + " says: "
-					+ connection.responseMessage();
-				throw new ServerProxyException();
+					+ connection.getResponseMessage();
+				throw new ServerProxyException(problemMessage);
 			}
 			
 			DataInputStream responseBody = 
@@ -80,7 +87,7 @@ public class ServerProxy implements IServerProxy{
 		}
 
 		catch(Exception e){
-			throw new ServerProxyException(e, "Exception during HTTP request submission");
+			throw new ServerProxyException("Exception during HTTP request submission", e);
 		}
 	}
 
@@ -94,14 +101,15 @@ public class ServerProxy implements IServerProxy{
 
 		try {
 			String cookie = userCookie + "; " + gameCookie;
-			URLConnection connection = new URL(serverURL + endpoint).openConnection();
+			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
 			connection.setRequestMethod(method);
 
-			if (connection.responseCode() != 200) {
+			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, " + endpoint + " says: "
-					+ connection.responseMessage();
-				throw new ServerProxyException();
+					+ connection.getResponseMessage();
+				throw new ServerProxyException(problemMessage);
 			}
 
 				
@@ -123,7 +131,8 @@ public class ServerProxy implements IServerProxy{
 		}
 
 		catch(Exception e){
-			throw new ServerProxyException(e, "Exception during HTTP request submission");
+			throw new ServerProxyException("Exception during HTTP request submission", e);
+
 		}
 	}
 
@@ -209,7 +218,7 @@ public class ServerProxy implements IServerProxy{
 	public JSONObject createGame(JSONObject createGameRequest) 
 			throws ServerProxyException {
 		try{
-			return makeJSON(submitRequest("/games/create", createGameRequest));
+			return makeJSON(submitRequest("POST", "/games/create", createGameRequest));
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);
@@ -301,7 +310,7 @@ public class ServerProxy implements IServerProxy{
 	public JSONObject getModel(int currentVersion)
 			throws ServerProxyException  {
 		try {
-			String call = "/game/model?version=" + currentVersion.toString();
+			String call = "/game/model?version=" + currentVersion;
 			return makeJSON(submitRequest("GET", call));
 		}
 		catch(Exception e) {
@@ -382,7 +391,11 @@ public class ServerProxy implements IServerProxy{
 	public boolean addAI(JSONObject addAIRequest) 
 			throws ServerProxyException {
 		try {
-			return makeJSON(submitRequest("POST", "/game/addAI", addAIRequest));
+			 if (submitRequest("POST", "/game/addAI", addAIRequest).equals("Success")) {
+			 	return true;
+			}
+			return false;
+
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);

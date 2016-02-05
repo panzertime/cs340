@@ -1,6 +1,11 @@
 package client.servercommunicator;
 
-import org.json.simple.JSONObject;
+import org.json.simple.*;
+import org.json.simple.parser.*;
+import java.net.*;
+import java.io.*;
+
+
 
 /**
  * Concrete implementation of IServerProxy for use with no server in a testing situation  */
@@ -138,7 +143,7 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject getModel(JSONObject versionNumber)
+	public JSONObject getModel(int versionNumber)
 		throws ServerProxyException  {
 		return null;
 	}
@@ -355,7 +360,7 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject monument() throws ServerProxyException{
+	public JSONObject monument(JSONObject monumentArgs) throws ServerProxyException{
 		return null;
 	}
 	
