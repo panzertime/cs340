@@ -15,14 +15,12 @@ import org.junit.Test;
 import shared.models.ModelFacade;
 
 public class ModelTests {
-	
-	ModelFacade modelFacade;
 
 	//minimum model
 	@Test
 	private void initModel1() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/minimumjson.txt");
+		File jsonFile = new File("java/src/tests/minjson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -37,9 +35,14 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade(jsonModel);
+			
+			if (!correctModel1(modelFacade)) {
+				fail("Current model does not match Minimal JSON model");
+			}
+			System.out.println("Model passed minimal JSON init test");
 		} catch (FileNotFoundException | ParseException e) {
-			e.printStackTrace();
+			fail("Error with JSON input with minimul options\n");
 		}
 	}
 	
@@ -47,7 +50,7 @@ public class ModelTests {
 	@Test
 	private void initModel2() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/maxjson.txt");
+		File jsonFile = new File("java/src/tests/fulljson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -62,9 +65,13 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade(jsonModel);
+			if (!correctModel2(modelFacade)) {
+				fail("Current model does not match full JSON model");
+			}
+			System.out.println("Model passed full JSON init test");
 		} catch (FileNotFoundException | ParseException e) {
-			e.printStackTrace();
+			fail("Error with JSON input with all options\n");
 		}
 	}
 	
@@ -87,18 +94,22 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade(jsonModel);
+			ModelFacade modelFacade = new ModelFacade(jsonModel);
 		} catch (FileNotFoundException | ParseException e) {
-			e.printStackTrace();
+			fail("Error with bad JSON input\n");
 		}
+		//TODO Some catch here that says {
+		// System.out.println("Model passed bad JSON init test");
+		//}
+		fail("Did not catch error with bad JSON input\n");
 	}
 	
-	private boolean correctModel1() {
+	private boolean correctModel1(ModelFacade modelFacade) {
 		//TODO: Individual element check
 		return false;
 	}
 
-	private boolean correctModel2() {
+	private boolean correctModel2(ModelFacade modelFacade) {
 		//TODO: Individual element check
 		return false;
 	}

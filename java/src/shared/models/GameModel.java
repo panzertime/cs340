@@ -401,9 +401,15 @@ public class GameModel {
 		return null;
 	}
 	
+	/**
+	 * If a game is in state, this will always return true
+	 * @post game in state
+	 * @post true
+	 * @return true
+	 */
 	public Boolean canSendChat()
 	{	
-		return null;
+		return true;
 	}
 
 }

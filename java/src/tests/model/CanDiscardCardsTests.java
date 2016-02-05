@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import shared.models.ModelFacade;
 import shared.models.exceptions.ModelAccessException;
+import shared.models.hand.exceptions.BadResourceTypeException;
 
 public class CanDiscardCardsTests {
 	
@@ -51,7 +52,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -63,7 +64,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -75,7 +76,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -88,7 +89,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -100,7 +101,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -112,7 +113,7 @@ public class CanDiscardCardsTests {
 		Map<String, Object> resourceList = null;
 		try {
 			modelFacade.canDiscardCards(resourceList);
-		} catch (ModelAccessException e) {
+		} catch (ModelAccessException | BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
