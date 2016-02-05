@@ -19,6 +19,7 @@ import shared.models.exceptions.PlayingException;
 import shared.models.exceptions.PreGameException;
 import shared.models.exceptions.SignInException;
 import shared.models.hand.ResourceType;
+import shared.models.hand.exceptions.BadResourceTypeException;
 
 /**
  * This class sits between the Game Model, the Controllers and Server Facade.
@@ -743,7 +744,7 @@ public class ModelFacade {
 		 return this.gameModel.canMaritimeTrade(ratio, type);
 	}
 
-	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException {
+	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException, BadResourceTypeException {
 		 return this.gameModel.canDiscardCard(resourceList);
 	}
 	

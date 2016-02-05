@@ -58,28 +58,11 @@ public class GameModel {
 		
 	}
 	
-	
-	/*public GameModel(Board board, ArrayList <Player> players, Bank bank, Achievements achievements) throws Exception {
-		setBoard(board);
-		setPlayers(players);
-		setBank(bank);
-		setAchievements(achievements);
-	}*/
-	
-	
 	/**
 	 * @return the bank
 	 */
 	public Bank getBank() {
 		return bank;
-	}
-
-
-	/**
-	 * @param bank the bank to set
-	 */
-	public void setBank(Bank bank) {
-		this.bank = bank;
 	}
 
 	
@@ -211,7 +194,7 @@ public class GameModel {
 	/**
 	 * @return the player who has the turn
 	 */
-	public Player getTurn() {
+	public Player getActivePlayer() {
 		return turn;
 	}
 
@@ -241,7 +224,7 @@ public class GameModel {
 		this.winner = winner;
 	}
 
-	public String getTurnStatus() {
+	public String getActivePlayerStatus() {
 		return status;
 	}
 
@@ -264,10 +247,10 @@ public class GameModel {
 	
 	
 	
-	public Boolean canDiscardCard(Map<String, Object> resourceList)
+	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadResourceTypeException
 	{
 		//check status Discarding
-		return (this.getTurn().getHand().canDiscardCard() && this.getTurn().getHand().hasCards(resourceList));
+		return (this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
 	}
 	
 	public Boolean canRollNumber()
@@ -281,7 +264,14 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		return this.getTurn().getHand().hasCards(resourceList);
+		Boolean canOfferTrade = false;
+		try {
+			canOfferTrade = getActivePlayer().hasCards(resourceList);
+		} catch (BadResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return canOfferTrade;
 	}
 	
 	public Boolean canMaritimeTrade(int ratio, ResourceType type)
@@ -289,14 +279,14 @@ public class GameModel {
 		//check status Playing
 		//check turn
 		//check Player is on correct ratio port
-		Boolean b = false;
+		Boolean canMaritimeTrade = false;
 		try {
-			 b = this.getTurn().getHand().hasResource(type, ratio);
+			canMaritimeTrade = getActivePlayer().hasResource(type, ratio);
 		} catch (BadResourceTypeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		return b;
+		return canMaritimeTrade;
 	}
 	
 	public Boolean canRobPlayer(HexLocation location, int playerIndex)
@@ -320,7 +310,7 @@ public class GameModel {
 		//check status Playing
 				//check turn
 		//Bank.getDevCards.size > 0
-		this.getTurn().getHand().hasDevelopmentCost();
+		this.getActivePlayer().hasDevelopmentCost();
 		return null;
 	}
 	
@@ -328,8 +318,8 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().canPlayDevelopmentCard();
-		this.getTurn().hasKnightToUse();
+		this.getActivePlayer().canPlayDevelopmentCard();
+		this.getActivePlayer().hasKnightToUse();
 		canRobPlayer(newRobberLocation, playerIndex);
 		return null;
 	}
@@ -338,8 +328,8 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().canPlayDevelopmentCard();
-		this.getTurn().hasYearOfPlentyToUse();
+		this.getActivePlayer().canPlayDevelopmentCard();
+		this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
 			this.getBank().getHand().hasResource(one, 1);
 			this.getBank().getHand().hasResource(two, 1);
@@ -354,8 +344,8 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().canPlayDevelopmentCard();
-		this.getTurn().hasRoadBuildingToUse();
+		this.getActivePlayer().canPlayDevelopmentCard();
+		this.getActivePlayer().hasRoadBuildingToUse();
 		//canBuildRoad
 		//canBuildRoad (also on first location)
 		return null;
@@ -365,8 +355,8 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().canPlayDevelopmentCard();
-		this.getTurn().hasMonopolyToUse();
+		this.getActivePlayer().canPlayDevelopmentCard();
+		this.getActivePlayer().hasMonopolyToUse();
 		return null;
 	}
 	
@@ -382,7 +372,7 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().getHand().hasRoadCost();
+		this.getActivePlayer().hasRoadCost();
 		//check if can Build
 		return null;
 	}
@@ -391,7 +381,7 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().getHand().hasSettlementCost();
+		this.getActivePlayer().hasSettlementCost();
 		//check if can Build
 		return null;
 	}
@@ -400,7 +390,7 @@ public class GameModel {
 	{
 		//check status Playing
 		//check turn
-		this.getTurn().getHand().hasCityCost();
+		this.getActivePlayer().hasCityCost();
 		//check if can Build
 		return null;
 	}

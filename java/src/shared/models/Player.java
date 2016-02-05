@@ -1,17 +1,14 @@
 package shared.models;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import shared.models.board.edge.Edge;
-import shared.models.board.edge.EdgeNotLinkedException;
+import shared.models.board.edge.EdgeLocation;
 import shared.models.board.piece.City;
-import shared.models.board.piece.NullPlayerException;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
-import shared.models.board.vertex.VertexNotLinkedException;
 import shared.models.definitions.CatanColor;
 import shared.models.exceptions.BuildException;
 import shared.models.exceptions.NoDevCardFoundException;
@@ -19,6 +16,7 @@ import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
 import shared.models.hand.development.DevCard;
 import shared.models.hand.development.DevCardType;
+import shared.models.hand.exceptions.BadResourceTypeException;
 import shared.models.hand.exceptions.ResourceException;
 
 public class Player {
@@ -37,9 +35,6 @@ public class Player {
 	private Boolean playedDevelopmentCard;
 	private Boolean hasDiscarded;
 	private int playerID;
-	private int citiesFree;
-	private int settlementsFree;
-	private int roadsFree;
 
 	public Player(Map<String, Object> player) {
 		userColor = getColor((String) player.get("color"));
@@ -120,28 +115,6 @@ public class Player {
 	public void discardCard(ResourceType type, Integer num) throws ResourceException {
 		hand.sendResource(type, num);
 		game.getBank().receiveResource(type, num);
-	}
-
-	/**
-	 * @return the userName
-	 */
-	public String getUserName() {
-		return userName;
-	}
-
-	/**
-	 * @param userName
-	 *            the userName to set
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	/**
-	 * @return the hand
-	 */
-	public Hand getHand() {
-		return hand;
 	}
 
 	/**
@@ -306,7 +279,7 @@ public class Player {
 	 * @return true if player has a YearOfPlenty card available and enabled
 	 */
 	public Boolean hasYearOfPlenty() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.YEAROFPLENTY)
 				return true;
 		}
@@ -317,7 +290,7 @@ public class Player {
 	 * @return true if player has a YearOfPlenty card available and enabled
 	 */
 	public Boolean hasYearOfPlentyToUse() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.YEAROFPLENTY && card.isEnabled())
 				return true;
 		}
@@ -347,7 +320,7 @@ public class Player {
 	 * @return true if player has a RoadBuilder card available and enabled
 	 */
 	public Boolean hasRoadBuilding() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.ROADBUILDING)
 				return true;
 		}
@@ -358,7 +331,7 @@ public class Player {
 	 * @return true if player has a RoadBuilder card available and enabled
 	 */
 	public Boolean hasRoadBuildingToUse() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.ROADBUILDING && card.isEnabled())
 				return true;
 		}
@@ -378,7 +351,7 @@ public class Player {
 	 * @return true if player has a Monopoly card available and enabled
 	 */
 	public Boolean hasMonopoly() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONOPOLY)
 				return true;
 		}
@@ -389,7 +362,7 @@ public class Player {
 	 * @return true if player has a Monopoly card available and enabled
 	 */
 	public Boolean hasMonopolyToUse() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONOPOLY && card.isEnabled())
 				return true;
 		}
@@ -408,8 +381,8 @@ public class Player {
 	public void playMonopoly(ResourceType type) throws NoDevCardFoundException, ResourceException {
 		playedDevelopmentCard = true;
 		for (Player p : this.game.getPlayers()) {
-			if (p.getHand().hasResource(type, 1)) {
-				int n = p.getHand().getResourceAmount(type);
+			if (p.hand.hasResource(type, 1)) {
+				int n = p.hand.getResourceAmount(type);
 				p.sendResource(type, n);
 				this.receiveResource(type, n);
 			}
@@ -420,7 +393,7 @@ public class Player {
 	 * @return true if player has a Knight card available and enabled
 	 */
 	public Boolean hasKnight() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.KNIGHT)
 				return true;
 		}
@@ -431,7 +404,7 @@ public class Player {
 	 * @return true if player has a Knight card available and enabled
 	 */
 	public Boolean hasKnightToUse() {
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.KNIGHT && card.isEnabled())
 				return true;
 		}
@@ -454,76 +427,21 @@ public class Player {
 	 * @throws ResourceException
 	 * @post Player type++; p type--
 	 */
-	public void steal(Player p) throws ResourceException {
-		this.receiveResource(p.getHand().drawRandomResourceCard(), 1);
-	}
-
-	/**
-	 * 
-	 * @pre canBuildSettlement()
-	 * @param v
-	 *            - A vertex to be checked
-	 * @throws BuildException
-	 * @throws PositionTakenException
-	 * @post
-	 */
-	public void buildSettlement(Vertex v) throws BuildException, PositionTakenException {
-		for (Settlement s : settlements) {
-			if (s.getVertex() == null) {
-				s.setVertex(v);
-				v.setBuilding(s);
-				return;
-			}
+	public void steal(Player p) {
+		try {
+			this.receiveResource(p.drawRandomResourceCard(), 1);
+		} catch (ResourceException e) {
+			//TODO Log something about stealing failed because of no cards
+			e.printStackTrace();
 		}
-		throw new BuildException();
-	}
-
-	/**
-	 * @pre canBuildCity()
-	 * @param v
-	 *            - A vertex to be checked
-	 * @throws BuildException
-	 * @throws PositionTakenException
-	 * @post
-	 */
-	public void buildCity(Vertex v) throws BuildException, PositionTakenException {
-		for (City c : cities) {
-			if (c.getVertex() == null) {
-				v.getBuilding().setVertex(null);
-				v.setBuilding(c);
-				c.setVertex(v);
-				return;
-			}
-		}
-		throw new BuildException();
-	}
-
-	/**
-	 * @pre canBuildRoad()
-	 * @param e
-	 *            - An edge to be checked
-	 * @throws BuildException
-	 * @throws PositionTakenException
-	 * @post
-	 */
-	public void buildRoad(Edge e) throws BuildException, PositionTakenException {
-		for (Road r : roads) {
-			if (r.getEdge() == null) {
-				r.setEdge(e);
-				e.setRoad(r);
-				return;
-			}
-		}
-		throw new BuildException();
 	}
 
 	/**
 	 * @return The number of Victory Points a player has.
-	 * 
 	 */
 	public int getVictoryPoints() {
 		int points = 0;
-		for (DevCard card : this.getHand().getDevCards()) {
+		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
 		}
@@ -571,25 +489,8 @@ public class Player {
 		throw new NoDevCardFoundException();
 	}
 
-	/**
-	 * 
-	 * @return number of played knights
-	 */
-	public int getArmies() {
-		return armies;
-	}
-
-	public int getMonuments() {
-		return monuments;
-	}
-
-	public int getPoints() {
-		return points;
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -602,7 +503,6 @@ public class Player {
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -628,28 +528,109 @@ public class Player {
 		return 0;
 	}
 
+	/**
+	 * @return number of played knights
+	 */
+	public int getArmies() {
+		return armies;
+	}
+
+	public int getMonuments() {
+		return monuments;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
 	public int getCitiesFree() {
+		Integer citiesFree = 0;
+		for (City city : cities) {
+			if (!city.isPlaced())
+				citiesFree++;
+		}
 		return citiesFree;
 	}
 
-	public void setCitiesFree(int citiesFree) {
-		this.citiesFree = citiesFree;
-	}
-
 	public int getSettlementsFree() {
+		Integer settlementsFree = 0;
+		for (Settlement settlement : settlements) {
+			if (!settlement.isPlaced())
+				settlementsFree++;
+		}
 		return settlementsFree;
 	}
 
-	public void setSettlementsFree(int settlementsFree) {
-		this.settlementsFree = settlementsFree;
-	}
-
 	public int getRoadsFree() {
+		Integer roadsFree = 0;
+		for (Road road : roads) {
+			if (!road.isPlaced())
+				roadsFree++;
+		}
 		return roadsFree;
 	}
+	
+	public City getFreeCity() {
+		for (City city : cities) {
+			if (!city.isPlaced())
+				return city;
+		}
+		return null;
+	}
 
-	public void setRoadsFree(int roadsFree) {
-		this.roadsFree = roadsFree;
+	public Settlement getFreeSettlement() {
+		for (Settlement settlement : settlements) {
+			if (!settlement.isPlaced())
+				return settlement;
+		}
+		return null;
+	}
+
+	public Road getFreeRoad() {
+		for (Road road : roads) {
+			if (!road.isPlaced())
+				return road;
+		}
+		return null;
+	}
+	
+	public Boolean hasRoadCost() {
+		return hand.hasRoadCost();
+	}
+	
+	public Boolean hasCityCost() {
+		return hand.hasCityCost();
+	}
+	
+	public Boolean hasSettlementCost() {
+		return hand.hasSettlementCost();
+	}
+	
+	public Boolean hasDevelopmentCost() {
+		return hand.hasDevelopmentCost();
+	}
+	
+	public ResourceType drawRandomResourceCard() throws ResourceException {
+		return hand.drawRandomResourceCard();
+	}
+	
+	public Boolean hasResource(ResourceType type, Integer num) throws BadResourceTypeException {
+		return hand.hasResource(type, num);
+	}
+	
+	public Boolean hasCards(Map<String, Object> resourceList) throws BadResourceTypeException {
+		return hand.hasCards(resourceList);
+	}
+
+	public boolean canDiscardCard() {
+		return hand.canDiscardCard();
 	}
 
 }

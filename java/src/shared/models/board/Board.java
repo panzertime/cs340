@@ -10,12 +10,16 @@ import shared.models.board.edge.EdgeLocation;
 import shared.models.board.edge.EdgeNotLinkedException;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexLocation;
+import shared.models.board.piece.City;
+import shared.models.board.piece.PositionTakenException;
+import shared.models.board.piece.Road;
 import shared.models.board.piece.Robber;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.BadVertexDirectionException;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.board.vertex.VertexNotLinkedException;
+import shared.models.exceptions.BuildException;
 
 public class Board {
 
@@ -129,4 +133,24 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public void buildSettlement(Settlement settlement, VertexLocation vertexLoc) throws PositionTakenException {
+		Vertex vertex = getVertexAt(vertexLoc);
+		settlement.setVertex(vertex);
+		vertex.setBuilding(settlement);
+	}
+	
+	public void buildCity(City city, VertexLocation vertexLoc) throws PositionTakenException {
+		Vertex vertex = getVertexAt(vertexLoc);
+		city.setVertex(vertex);
+		vertex.setBuilding(city);
+	}
+
+	public void buildSettlement(Road road, EdgeLocation edgeLoc) throws PositionTakenException {
+		Edge edge = getEdgeAt(edgeLoc);
+		road.setEdge(edge);
+		edge.setRoad(road);
+	}
+	
+	
 }
