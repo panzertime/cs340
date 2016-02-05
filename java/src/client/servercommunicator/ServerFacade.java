@@ -222,7 +222,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of AI Types
 	 */
-	public Map listAI() {
+	public Map listAI() 
 		throws ServerException {
 		try {
 			return proxy.listAI();
@@ -233,101 +233,284 @@ public class ServerFacade {
 	}
 
 	//MOVES
-	public Map sendChat(int playerIndex, String message) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map sendChat(int playerIndex, String message)
+			throws ServerException {
+		try {
+			String content = "{type: \"sendChat\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"content: \"" + message + "\"}";
+			JSONObject args = new JSONObject(content);
+			return proxy.sendChat(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
-	public Map rollNumber(int playerIndex, int number) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map rollNumber(int playerIndex, int number) 
+			throws ServerException {
+		try {
+			String content = "{type: \"rollNumber\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"number: " + number + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.rollNumber(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map robPlayer(int playerIndex, int victimIndex, 
-			HexLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+			HexLocation location) 
+			throws ServerException {
+		try {
+			String content = "{type: \"robPlayer\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"victimIndex: " + victimIndex + ", " +
+						"location: " + location + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.robPlayer(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map finishTurn(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map finishTurn(int playerIndex) throws ServerException {
+		try {
+			String content = "{type: \"finishTurn\", " +
+						"playerIndex: " + playerIndex +  "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.finishTurn(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map buyDevCard(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map buyDevCard(int playerIndex) throws ServerException {
+		try {
+			String content = "{type: \"buyDevCard\", " +
+						"playerIndex: " + playerIndex + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.buyDevCard(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map yearOfPlenty(int playerIndex, ResourceType resource1, 
-			ResourceType resource2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Map roadBuilding(int playerIndex, EdgeLocation spot1, 
-			EdgeLocation spot2) {
-		// TODO Auto-generated method stub
-		return null;
+			ResourceType resource2) throws ServerException {
+		try {
+			String content = "{type: \"Year_of_Plenty\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"resource1: \"" + resource1.toString() + "\", " +
+						"resource2: \"" + resource2.toString() + "\"}";
+			JSONObject args = new JSONObject(content);
+			return proxy.yearOfPlenty(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map soldier(int playerIndex, int victimIndex, 
-			HexLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+			HexLocation location) throws ServerException {
+		try {
+			String content = "{type: \"Soldier\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"victimIndex: " + victimIndex + ", " +
+						"location: " + location.toString() + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.soldier(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map monopoly(ResourceType resource, int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map monopoly(ResourceType resource, int playerIndex) 
+			throws ServerException {
+		try {
+			String content = "{type: \"Monopoly\", " +
+						"resource: \"" + resource.toString() + "\", " +
+						"playerIndex: " + playerIndex + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.monopoly(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map monument(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map monument(int playerIndex) throws ServerException {
+		try {
+			String content = "{type: \"Monument\", " +
+						"playerIndex: " + playerIndex + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.monument(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map buildRoad(int playerIndex, EdgeLocation roadLocation, 
-			boolean free) {
-		// TODO Auto-generated method stub
-		return null;
+			boolean free) throws ServerException {
+		try {
+			String content = "{type: \"buildRoad\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"roadLocation: \"" + roadLocation.toString() + "\", " +
+						"free: " + free + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.buildRoad(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map buildSettlement(int playerIndex, VertexLocation vertLoc, 
-			boolean setupMode) {
-		// TODO Auto-generated method stub
-		return null;
+			boolean setupMode) throws ServerException {
+		try {
+			String content = "{type: \"buildSettlement\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"vertexLocation: " + vertLoc.toString() + ", " +
+						"free: " + setupMode + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.buildSettlement(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map buildCity(int playerIndex, VertexLocation vertLoc) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map buildCity(int playerIndex, VertexLocation vertLoc) 
+			throws ServerException {
+		try {
+			String content = "{type: \"buildCity\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"vertexLocation: " + vertLoc.toString() +  "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.buildCity(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map offerTrade(int playerIndex, Map<ResourceType, Integer> offer,
-			int receiver) {
-		// TODO Auto-generated method stub
-		return null;
+			int receiver) throws ServerException {
+		try {
+			String resList = "{brick: " + offer.getValue(ResourceType.BRICK) +
+						", ore: " + offer.getValue(ResourceType.ORE) +
+						", sheep: " + offer.getValue(ResourceType.SHEEP) +
+						", wheat: " + offer.getValue(ResourceType.WHEAT) +
+						", wood: " + offer.getValue(ResourceType.WOOD) + "}";
+
+			String content = "{type: \"offerTrade\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"offer: " + resList + ", " +
+						"receiver : " + receiver + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.offerTrade(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map acceptTrade(int playerIndex, boolean willAccept) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map acceptTrade(int playerIndex, boolean willAccept) 
+			throws ServerException {
+		try {
+			String content = "{type: \"acceptTrade\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"willAccept: " + willAccept +  "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.acceptTrade(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
 	public Map maritimeTrade(int playerIndex, int ratio,
-			ResourceType inputResource, ResourceType outputResource) {
-		// TODO Auto-generated method stub
-		return null;
+			ResourceType inputResource, ResourceType outputResource) 
+			throws ServerException {
+		try {
+			String content = "{type: \"maritimeTrade\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"ratio: " + ratio + ", " +
+						"inputResource: " + inputResource + ", " +
+						"outputResource: " + outputResource + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.maritimeTrade(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 
-	public Map discard(int playerIndex, List<ResourceType> discardedCards) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map discard(int playerIndex, List<ResourceType> discardedCards)
+			throws ServerException {
+		try {
+			StringBuilder resList = new StringBuilder();
+			if(discardedCards.contains(ResourceType.BRICK)){
+				resList.append("{brick : 1,");
+			}
+			else {
+				resList.append("{brick : 0,");
+			}
+			if(discardedCards.contains(ResourceType.ORE)){
+				resList.append("ore : 1,");
+			}
+			else {
+				resList.append("ore : 0,");
+			}
+			if(discardedCards.contains(ResourceType.SHEEP)){
+				resList.append("sheep : 1,");
+			}
+			else {
+				resList.append("sheep : 0,");
+			}
+			if(discardedCards.contains(ResourceType.WHEAT)){
+				resList.append("wheat : 1,");
+			}
+			else {
+				resList.append("wheat : 0,");
+			}
+			if(discardedCards.contains(ResourceType.WOOD)){
+				resList.append("wood : 1}");
+			}
+			else {
+				resList.append("wood : 0}");
+			}
+
+
+			String content = "{type: \"discardCards\", " +
+						"playerIndex: " + playerIndex + ", " +
+						"discardedCards: " + resList.toString() + "}";
+			JSONObject args = new JSONObject(content);
+			return proxy.discardCards(args);
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 	
 	//UTIL - ONLY IMPLEMENTED BY SERVER COMMUNICATOR
-	public void changeLogLevel(String logLevel) {
-		// TODO Auto-generated method stub
+	public void changeLogLevel(String logLevel) throws ServerException{
+		try {
+			String content = "{ logLegel : \"" + logLevel + "\"}";
+			JSONObject args = new JSONObject(content);
+			if(proxy.changeLogLevel(args) == false){
+				throw ServerException("Log-level change failed");
+			}
+		}
+		catch(Exception e){
+			throw new ServerException(e);
+		}
 	}
 }
