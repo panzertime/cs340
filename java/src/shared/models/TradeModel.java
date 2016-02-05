@@ -1,5 +1,6 @@
 package shared.models;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import shared.models.exceptions.BadPlayerIndexException;
@@ -24,7 +25,6 @@ public class TradeModel {
 			sender = GameModel.whichPlayer(s);
 			receiver = GameModel.whichPlayer(r);
 		} catch (BadPlayerIndexException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Map<String, Object> offer = (Map<String, Object>)tradeOffer.get("offer");
@@ -33,9 +33,9 @@ public class TradeModel {
 		sheep = (Integer)offer.get("sheep");
 		wheat = (Integer)offer.get("wheat");
 		ore = (Integer)offer.get("ore");
-		
 	}
-
+	
+	
 
 	public Player getSender() {
 		return sender;
@@ -104,6 +104,18 @@ public class TradeModel {
 
 	public void setOre(int ore) {
 		this.ore = ore;
+	}
+
+
+
+	public Map<String, Object> getResources() {
+		Map<String, Object> resources = new HashMap<String, Object>();
+		resources.put("brick", this.getBrick());
+		resources.put("ore", this.getOre());
+		resources.put("sheep", this.getSheep());
+		resources.put("wheat", this.getWheat());
+		resources.put("wood", this.getWood());
+		return resources;
 	}
 	
 	

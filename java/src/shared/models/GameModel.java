@@ -403,48 +403,84 @@ public class GameModel {
 	
 	public Boolean canUseMonument()
 	{
-		//check status Playing
-		//check turn
-		//enough monuments to win game
-		return null;
+		boolean result = false;
+		if(this.status.equals("Playing")) {
+			//check turn
+			//enough monuments to win game
+		}
+		return result;
 	}
 	
 	public Boolean canBuildRoad(EdgeLocation edge)
 	{
-		//check status Playing
-		//check turn
+		boolean result = false;
+		if(this.status.equals("Playing")) {
+			//check turn
+			//check if can Build
+		}
 		this.getActivePlayer().hasRoadCost();
-		//check if can Build
+
 		return null;
 	}
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		//check status Playing
-		//check turn
+		boolean result = false;
+		if(this.status.equals("Playing")) {
+			//check turn
+			//check if can Build
+		}
 		this.getActivePlayer().hasSettlementCost();
-		//check if can Build
-		return null;
+		return result;
 	}
 	
+	/**
+	 * 
+	 * @param vertex
+	 * @return
+	 */
 	public Boolean canBuildCity(VertexLocation vertex)
 	{
-		//check status Playing
-		//check turn
-		this.getActivePlayer().hasCityCost();
-		//check if can Build
+		boolean result = false;
+		if(this.status.equals("Playing")) {
+			//TODO: Check turn
+			result = this.getActivePlayer().hasCityCost();
+			if(result) {
+				//TODO: check if can Build
+			}
+		}
 		return null;
 	}
 	
+	/**
+	 * checks that the person has been offered a trade and that they have the 
+	 * resources
+	 * @pre none
+	 * @post game will run
+	 * @return if a given trade can be made
+	 */
 	public Boolean canAcceptTrade()
 	{
-		
-		return null;
+		boolean result = false;
+		//TODO add current player
+		Player receiver = this.tradeModel.getReceiver();
+			try {
+				result = receiver.hasCards(this.tradeModel.getResources());
+			} catch (BadResourceTypeException e) {
+				
+			}
+		return result;
 	}
-	
+
+	/**
+	 * If a game is in state, this will always return true
+	 * @post game in state
+	 * @post true
+	 * @return true
+	 */
 	public Boolean canSendChat()
 	{	
-		return null;
+		return true;
 	}
 
 }
