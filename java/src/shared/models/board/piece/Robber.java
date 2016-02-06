@@ -1,5 +1,7 @@
 package shared.models.board.piece;
 
+import org.json.simple.JSONObject;
+
 import shared.models.board.hex.Hex;
 
 public class Robber {
@@ -27,7 +29,12 @@ public class Robber {
 	{
 		this.hex = hex;
 	}
-	
-	
-	
+    public boolean equals(JSONObject jsonHex) {
+    	JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
+    	if (hex.getHexLocation().getX() != (Long) jsonHexLoc.get("x"))
+    		return false;
+    	if (hex.getHexLocation().getY() != (Long) jsonHexLoc.get("y"))
+    		return false;
+    	return true;
+    }
 }
