@@ -354,14 +354,14 @@ public class GameModel {
 	public Boolean canRollNumber()
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Rolling");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		return b;
 	}
 	
 	public Boolean canOfferTrade(Map<String, Object> resourceList) throws BadJSONException
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && getActivePlayer().hasCards(resourceList);
 		return b;
 	}
@@ -401,7 +401,7 @@ public class GameModel {
 		}
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		try {
 			b = b && getActivePlayer().hasResource(type, ratio);
 		} catch (BadResourceTypeException e) {
@@ -415,7 +415,7 @@ public class GameModel {
 	public Boolean canRobPlayer(HexLocation location, int playerIndex)
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		//robber has different location
 		Player robbed = null;
 		try {
@@ -431,14 +431,14 @@ public class GameModel {
 	public Boolean canFinishTurn()
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
-				//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		return b;
 	}
 	
 	public Boolean canBuyDevCard()
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
-				//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && (this.getBank().getHand().getDevCards().size() > 0);
 		b = b && this.getActivePlayer().hasDevelopmentCost();
 		return b;
@@ -447,7 +447,7 @@ public class GameModel {
 	public Boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex)
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasKnightToUse();
 		b = b && canRobPlayer(newRobberLocation, playerIndex);
@@ -458,7 +458,7 @@ public class GameModel {
 	{
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
@@ -474,7 +474,7 @@ public class GameModel {
 	{
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
 		//canBuildRoad minus cost
@@ -486,7 +486,7 @@ public class GameModel {
 	{
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
-		//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasMonopolyToUse();
 		return b;
@@ -496,7 +496,7 @@ public class GameModel {
 	{
 		boolean b = true;
 		b = b && this.status.equals("Playing");
-			//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && (this.getActivePlayer().getVictoryPointsWithMonuments() >= 10);
 		return b;
 	}
@@ -505,7 +505,7 @@ public class GameModel {
 	{
 		boolean b = true;
 		b = b && this.status.equals("Playing");
-			//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 
 		b = b && this.getActivePlayer().hasRoadCost();
 		b = b && this.getActivePlayer().hasRoadPiece();
@@ -520,7 +520,7 @@ public class GameModel {
 	{
 		boolean b = true;
 		b = b && this.status.equals("Playing");
-			//check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getActivePlayer().hasSettlementPiece();
 		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
@@ -536,7 +536,7 @@ public class GameModel {
 	{
 		boolean b = true;
 		b = b && this.status.equals("Playing");
-			//TODO: Check turn
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().hasCityCost();
 		b = b && this.getActivePlayer().hasCityPiece();
 		b = b && this.getBoard().canBuildCity(this.getActivePlayer(), vertex);

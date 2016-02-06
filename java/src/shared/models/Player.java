@@ -60,7 +60,7 @@ public class Player {
 		hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null) throw new BadJSONException();		
 		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
-		if (playerID == null) throw new BadJSONException(); //TODO : JR- Why was this commented out?
+		if (playerID == null) throw new BadJSONException(); 
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -667,5 +667,15 @@ public class Player {
 	{
 		return hand.getHandSize();
 	}
+
+	public Integer getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(Integer playerID) {
+		this.playerID = playerID;
+	}
+	
+	
 
 }
