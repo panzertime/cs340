@@ -6,9 +6,9 @@ public class PhaseOneTests {
 				//"tests.poller.PollerTests",
 				//"tests.proxy.ProxyTests",
 				
-				"tests.model.ModelTests"/*,
-				"tests.model.CanSendChatTests",
-				"tests.model.CanRollNumberTests",
+				//"tests.model.ModelTests",
+				//"tests.model.CanSendChatTests",
+				"tests.model.CanRollNumberTests"/*,
 				"tests.model.CanPlaceRobberTests",
 				"tests.model.CanFinishTurnTests",
 				"tests.model.CanBuyDevCardTests",

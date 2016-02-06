@@ -647,7 +647,7 @@
     "ore": 22
   },
   "turnTracker": {
-    "status": "Playing",
+    "status": "Rolling",
     "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1

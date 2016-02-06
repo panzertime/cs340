@@ -41,7 +41,7 @@ public class CanBuyDevCardTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard1() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -63,7 +63,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard2() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,7 +74,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard3() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -86,7 +86,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard4() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -97,7 +97,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard5() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class CanBuyDevCardTests {
 	public void testCanBuyDevCard6() {
 		try {
 			modelFacade.canBuyDevCard();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

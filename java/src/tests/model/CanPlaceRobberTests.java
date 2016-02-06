@@ -42,7 +42,7 @@ public class CanPlaceRobberTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +55,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -68,7 +68,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -81,7 +81,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -95,7 +95,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -121,7 +121,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canPlaceRobber(hexLoc, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

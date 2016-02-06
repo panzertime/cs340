@@ -37,7 +37,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			
 			if (!correctModel1(modelFacade)) {
 				fail("Current model does not match Minimal JSON model");
@@ -68,7 +68,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			if (!correctModel2(modelFacade)) {
 				fail("Current model does not match full JSON model");
 			}
@@ -98,7 +98,7 @@ public class ModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException e) {
 			fail("Error with bad JSON input\n" +
 					e.getMessage());

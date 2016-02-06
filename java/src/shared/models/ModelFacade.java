@@ -13,13 +13,9 @@ import shared.models.board.hex.HexLocation;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.definitions.CatanColor;
 import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.BadPlayerIndexException;
-import shared.models.exceptions.BadStatusException;
-import shared.models.exceptions.BadTurnStatusException;
 import shared.models.exceptions.DevCardException;
 import shared.models.exceptions.JoinGameException;
 import shared.models.exceptions.MessageException;
-import shared.models.exceptions.ModelAccessException;
 import shared.models.exceptions.PlayingException;
 import shared.models.exceptions.PreGameException;
 import shared.models.exceptions.SignInException;
@@ -37,10 +33,12 @@ public class ModelFacade {
 	
 	/**
 	 * Instrcutor with GameModel input
+	 * @param playerID 
 	 * @throws BadJSONException 
 	 */
-	public ModelFacade(JSONObject gameModel) throws BadJSONException {
+	public ModelFacade(JSONObject gameModel, int playerID) throws BadJSONException {
 		this.gameModel = new GameModel(gameModel);
+		this.userID = playerID;
 	}
 	
 	public GameModel getGameModel() {
@@ -652,7 +650,7 @@ public class ModelFacade {
 	
 	//Controller to Game Model Interactions
 	
-	public boolean canSendChat() throws ModelAccessException {
+	public boolean canSendChat() throws NullPointerException {
 		 return this.gameModel.canSendChat();
 	 }
 
@@ -661,9 +659,9 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canRollNumber() throws ModelAccessException {
+	public boolean canRollNumber() throws NullPointerException {
 		 return this.gameModel.canRollNumber();
 	}
 
@@ -674,10 +672,10 @@ public class ModelFacade {
 	 * @param hexLoc Location of hex to place robber
 	 * @param playerIndex 
 	 * @return Whether or not a robber can move there
-	 * @throws ModelAccessException Pre-condition violation
+	 * @throws NullPointerException Pre-condition violation
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc, int playerIndex) 
-			throws ModelAccessException {
+			throws NullPointerException {
 		 return this.gameModel.canRobPlayer(hexLoc, playerIndex);
 	}
 
@@ -686,9 +684,9 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canFinishTurn() throws ModelAccessException {
+	public boolean canFinishTurn() throws NullPointerException {
 		 return this.gameModel.canFinishTurn();
 	}
 
@@ -697,9 +695,9 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canBuyDevCard() throws ModelAccessException {
+	public boolean canBuyDevCard() throws NullPointerException {
 		 return this.gameModel.canBuyDevCard();
 	}
 
@@ -710,9 +708,9 @@ public class ModelFacade {
 	 * @param one first resource
 	 * @param two second resource
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) throws ModelAccessException {
+	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) throws NullPointerException {
 		 return this.gameModel.canUseYearOfPlenty(one, two);
 	}
 
@@ -723,9 +721,9 @@ public class ModelFacade {
 	 * @param one Edge to build on
 	 * @param two Edge to build on
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canUseRoadBuilder(EdgeLocation one, EdgeLocation two) throws ModelAccessException {
+	public boolean canUseRoadBuilder(EdgeLocation one, EdgeLocation two) throws NullPointerException {
 		 return this.gameModel.canUseRoadBuilding(one, two);
 	}
 
@@ -736,9 +734,9 @@ public class ModelFacade {
 	 * @param newRobberLocation Change Robber Hex
 	 * @param playerIndex Player to Rob
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex) throws ModelAccessException {
+	public boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex) throws NullPointerException {
 		 return this.gameModel.canUseSoldier(newRobberLocation, playerIndex);
 	}
 
@@ -748,9 +746,9 @@ public class ModelFacade {
 	 * @post whether or not this operation is valid
 	 * @param type Resource to Monopolize
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canUseMonopoly(ResourceType type) throws ModelAccessException {
+	public boolean canUseMonopoly(ResourceType type) throws NullPointerException {
 		 return this.gameModel.canUseMonopoly(type);
 	}
 
@@ -759,9 +757,9 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canUseMonument() throws ModelAccessException {
+	public boolean canUseMonument() throws NullPointerException {
 		 return this.gameModel.canUseMonument();
 	}
 
@@ -771,10 +769,10 @@ public class ModelFacade {
 	 * @post Map reflects valid result
 	 * @param edgeLoc location of edge to place road
 	 * @return Whether or not a user may place a road
-	 * @throws ModelAccessException Pre condition violated
+	 * @throws NullPointerException Pre condition violated
 	 */
 	public boolean canBuildRoad(EdgeLocation edgeLoc) 
-			throws ModelAccessException {
+			throws NullPointerException {
 		 return this.gameModel.canBuildRoad(edgeLoc);
 	}
 
@@ -784,10 +782,10 @@ public class ModelFacade {
 	 * @post Screen will reflect result
 	 * @param vertLoc Location to put the user
 	 * @return Whether or not a user may build a settlement there
-	 * @throws ModelAccessException Pre-Conditions violated
+	 * @throws NullPointerException Pre-Conditions violated
 	 */
 	public boolean canBuildSettlement(VertexLocation vertLoc) 
-			throws ModelAccessException {
+			throws NullPointerException {
 		 return this.gameModel.canBuildSettlement(vertLoc);
 	}
 
@@ -798,10 +796,10 @@ public class ModelFacade {
 	 * @post Map shows if a city may be placed there
 	 * @param vertLoc City Location
 	 * @return True if user may place city there, false otherwise
-	 * @throws ModelAccessException Pre conditions violated
+	 * @throws NullPointerException Pre conditions violated
 	 */
 	public boolean canBuildCity(VertexLocation vertLoc) 
-			throws ModelAccessException {
+			throws NullPointerException {
 		 return this.gameModel.canBuildCity(vertLoc);
 	}
 	
@@ -812,10 +810,10 @@ public class ModelFacade {
 	 * @param resource Resource to trade
 	 * @param amount Amount of resource
 	 * @return Whether or not the user can trade
-	 * @throws ModelAccessException Pre condtion violation
+	 * @throws NullPointerException Pre condtion violation
 	 */
 	public boolean canOfferTrade(Map<String, Object> resource, int amount)
-		throws ModelAccessException {
+		throws NullPointerException {
 		Boolean b = false; 
 		try {
 			b = this.gameModel.canOfferTrade(resource);
@@ -831,9 +829,9 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canAcceptTrade() throws ModelAccessException {
+	public boolean canAcceptTrade() throws NullPointerException {
 		Boolean b = false;
 		try {
 			b = this.gameModel.canAcceptTrade();
@@ -851,9 +849,9 @@ public class ModelFacade {
 	 * @param ratio Port
 	 * @param type Resource
 	 * @return post
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 */
-	public boolean canMaritimeTrade(int ratio, ResourceType type) throws ModelAccessException {
+	public boolean canMaritimeTrade(int ratio, ResourceType type) throws NullPointerException {
 		 return this.gameModel.canMaritimeTrade(ratio, type);
 	}
 
@@ -863,10 +861,10 @@ public class ModelFacade {
 	 * @post whether or not this operation is valid
 	 * @param resourceList resources they have
 	 * @return whether or not this operation is valid
-	 * @throws ModelAccessException
+	 * @throws NullPointerException
 	 * @throws BadResourceTypeException
 	 */
-	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException, BadResourceTypeException {
+	public boolean canDiscardCards(Map<String, Object> resourceList) throws NullPointerException, BadResourceTypeException {
 		Boolean b = false; 
 		try {
 			b = this.gameModel.canDiscardCard(resourceList);

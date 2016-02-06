@@ -572,7 +572,11 @@ public class GameModel {
 	 */
 	public Boolean canSendChat()
 	{	
-		return true;
+		boolean result = true;
+		if(clientID == null) {
+			result = true;
+		}
+		return result;
 	}
 
 

@@ -41,7 +41,7 @@ public class CanAcceptTradeTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -63,7 +63,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade2() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,7 +74,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade3() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -86,7 +86,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade4() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -97,7 +97,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade5() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class CanAcceptTradeTests {
 	public void testCanAcceptTrade6() {
 		try {
 			modelFacade.canAcceptTrade();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -17,13 +17,12 @@ import org.junit.Test;
 
 import shared.models.ModelFacade;
 import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
+
 
 public class CanRollNumberTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
 	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");
@@ -41,77 +40,73 @@ public class CanRollNumberTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void initChatModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/rollingJson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
 	}
 
-	//Good tests
 	@Test
 	public void testCanRollNumber1() {
 		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(modelFacade.canRollNumber() == false) {
+				System.out.println("Passed canRoll test with uninit model");
+			} else {
+				fail("failed canRoll test with uninit model");
+			}
+		} catch (NullPointerException e) {
+			fail("Could not access model in canRoll test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanRollNumber2() {
 		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.initModel();
+			if(modelFacade.canRollNumber() == false) {
+				System.out.println("Passed canRoll test when not your turn");
+			} else {
+				fail("failed canRoll test when not your turn");
+			}
+		} catch (NullPointerException e) {
+			fail("Could not access model in canRoll test when it's not your turn");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanRollNumber3() {
 		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.initChatModel();
+			if(modelFacade.canRollNumber() == true) {
+				System.out.println("Passed canRoll test when your turn");
+			} else {
+				fail("failed canRoll test when your turn");
+			}
+		} catch (NullPointerException e) {
+			fail("Could not access model in canRoll test when it's your turn");
 		}
-		fail("Not yet implemented");
-	}
-	
-	//Bad tests
-	@Test
-	public void testCanRollNumber4() {
-		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanRollNumber5() {
-		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanRollNumber6() {
-		try {
-			modelFacade.canRollNumber();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
 	}
 }

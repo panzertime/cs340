@@ -35,14 +35,14 @@ public class MModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException e) {
 			fail("Error with bad JSON input\n" +
 					e.getMessage());
 		} catch (BadJSONException e) {
 			System.out.println("Model passed bad JSON init test");
 		}
-		System.err.println("Did not catch error with bad JSON input\n");
+		fail("Did not catch error with bad JSON input\n");
 	}
 }
 
