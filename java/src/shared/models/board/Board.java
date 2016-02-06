@@ -348,6 +348,24 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public boolean canBuildRoadSecondRound(Player player, EdgeLocation edgeLocation) {
+		Edge edge = getEdgeAt(edgeLocation);
+		if (edge.hasRoad())
+			return false;
+		if (!edge.isBuildable())
+			return false;
+		for (Vertex vertex : edge.getAllVertices())
+		{
+			
+			if (vertex.getBuilding().getOwner().equals(this) && !vertex.getLeftEdge(edge).hasRoad() && !vertex.getRightEdge(edge).hasRoad())
+			{	return true;
+			}
+		}
+		
+		return false;
+	}
+
 
 	public void placeRobber(HexLocation hexLoc) {
 		LandHex target = (LandHex) hexes.get(hexLoc);
@@ -451,4 +469,6 @@ public class Board {
 		if (hexRight != null)
 			connectHexVertex(hexRight);
 	}
+
+
 }
