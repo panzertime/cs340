@@ -250,7 +250,7 @@ public class Board {
 
 	public boolean equalsJSON(JSONObject jsonObject, GameModel gameModel) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 
