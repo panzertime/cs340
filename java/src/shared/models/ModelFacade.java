@@ -53,6 +53,10 @@ public class ModelFacade {
 		this.gameModel = gameModel;
 	}
 	
+	public boolean equalsJSON(JSONObject jsonMap) {
+		return this.gameModel.equalsJSON(jsonMap);
+	}
+	
 	//Controller to Server Interactions
 
 	//user

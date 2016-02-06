@@ -39,7 +39,7 @@ public class ModelTests {
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			
-			if (!correctModel1(modelFacade)) {
+			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match Minimal JSON model");
 			}
 			System.out.println("Model passed minimal JSON init test");
@@ -69,7 +69,7 @@ public class ModelTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-			if (!correctModel2(modelFacade)) {
+			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match full JSON model");
 			}
 			System.out.println("Model passed full JSON init test");
@@ -106,15 +106,5 @@ public class ModelTests {
 			System.out.println("Model passed bad JSON init test");
 		}
 		fail("Did not catch error with bad JSON input\n");
-	}
-	
-	private boolean correctModel1(ModelFacade modelFacade) {
-		//TODO: Individual element check
-		return true;
-	}
-
-	private boolean correctModel2(ModelFacade modelFacade) {
-		//TODO: Individual element check
-		return true;
 	}
 }
