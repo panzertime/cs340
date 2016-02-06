@@ -6,7 +6,7 @@ public class PhaseOneTests {
 				//"tests.poller.PollerTests",
 				//"tests.proxy.ProxyTests",
 				
-				//"tests.model.ModelTests",
+				"tests.model.ModelTests",
 				//"tests.model.CanSendChatTests",
 				//"tests.model.CanRollNumberTests",
 				//"tests.model.CanPlaceRobberTests",
@@ -14,7 +14,8 @@ public class PhaseOneTests {
 				//"tests.model.CanBuyDevCardTests",
 				//"tests.model.CanUseYearOfPlentyTests",
 				//"tests.model.CanUseRoadBuilderTests", //TODO
-				"tests.model.CanUseSoldierTests",/*,
+				//"tests.model.CanUseSoldierTests",
+				/*
 				"tests.model.CanUseMonopolyTests",
 				"tests.model.CanUseMonumentTests",
 				"tests.model.CanBuildRoadTests",
@@ -24,7 +25,6 @@ public class PhaseOneTests {
 				"tests.model.CanAcceptTradeTests",
 				"tests.model.CanMaritimeTradeTests",
 				"tests.model.CanDiscardCardsTests"*/
-				"tests.poller.PollerTests"
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);
