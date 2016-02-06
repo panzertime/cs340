@@ -1,7 +1,7 @@
 package client.servercommunicator;
 
 import shared.models.ModelFacade;
-import shared.models.exceptions.*;
+import shared.models.exceptions.BadJSONException;
 import org.json.simple.JSONObject;
 
 /**

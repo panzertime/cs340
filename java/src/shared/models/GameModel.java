@@ -706,7 +706,7 @@ public class GameModel {
 	{	
 		boolean result = true;
 		if(clientID == null) {
-			result = true;
+			result = false;
 		}
 		return result;
 	}

@@ -63,6 +63,7 @@ public class CanSendChatTests {
 	@Test
 	public void testCanSendChatNotLoggedIn() {
 		try {
+			modelFacade = new ModelFacade();
 			if(modelFacade.canSendChat() == false) {
 				System.out.println("Passed canSendChat while player is not in a game");
 			} else
