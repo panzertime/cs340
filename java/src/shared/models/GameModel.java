@@ -584,27 +584,37 @@ public class GameModel {
 		return b;
 	}
 	
-	public Boolean canBuildRoad(EdgeLocation edge)
+	public Boolean canBuildRoad(boolean free, EdgeLocation edge)
 	{
-		boolean b = true;
-		b = b && this.status.equals("Playing");
+		boolean b = false;
+		if ( this.status.equals("Playing"))
+		{
+		b = true;
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 
-		b = b && this.getActivePlayer().hasRoadCost();
+		if (!free) b = b && this.getActivePlayer().hasRoadCost();
 		b = b && this.getActivePlayer().hasRoadPiece();
 		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
-		
-		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
+		}
+		else if (this.status.equals("SecondRound"))
+		{		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
+
+			b = true;
+			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+			b = b && this.getActivePlayer().hasRoadPiece();
+			b = b && this.getBoard().canBuildRoadSecondRound(this.getActivePlayer(), edge);
+			
+		}
 
 		return b;
 	}
 	
-	public Boolean canBuildSettlement(VertexLocation vertex)
+	public Boolean canBuildSettlement(boolean free, VertexLocation vertex)
 	{
 		boolean b = true;
 		b = b && this.status.equals("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().hasSettlementCost();
+		if (!free) b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getActivePlayer().hasSettlementPiece();
 		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
 		return b;
