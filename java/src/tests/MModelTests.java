@@ -20,7 +20,7 @@ public class MModelTests {
 	
 	public static void main(String[] args) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/badjson.txt");
+		File jsonFile = new File("java/src/tests/model/fulljson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -36,13 +36,14 @@ public class MModelTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException e) {
-			fail("Error with bad JSON input\n" +
+			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
+				fail("Current model does not match full JSON model");
+			}
+			System.out.println("Model passed full JSON init test");
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			fail("Error with JSON input with all options\n" +
 					e.getMessage());
-		} catch (BadJSONException e) {
-			System.out.println("Model passed bad JSON init test");
 		}
-		fail("Did not catch error with bad JSON input\n");
 	}
 }
 

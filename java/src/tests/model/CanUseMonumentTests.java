@@ -23,10 +23,9 @@ public class CanUseMonumentTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/monumenttests/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -47,71 +46,105 @@ public class CanUseMonumentTests {
 		}
 	}
 
-	//Good tests
+	//game not created
 	@Test
 	public void testCanUseMonument1() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canUseMonument();
+			mf.canUseMonument();
+			fail("failed testCanUseMonument test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanUseMonument test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//not your turn
 	@Test
 	public void testCanUseMonument2() {
+		this.initModel("notTurn.txt");
 		try {
-			modelFacade.canUseMonument();
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when not your turn");
+			} else {
+				fail("failed testCanUseMonument test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonument test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//not playing state
 	@Test
 	public void testCanUseMonument3() {
+		this.initModel("notPlaying.txt");
 		try {
-			modelFacade.canUseMonument();
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when not playing state");
+			} else {
+				fail("failed testCanUseMonument test when not playing state");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonument test when not playing state - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//Dont have monument
 	@Test
 	public void testCanUseMonument4() {
+		this.initModel("noHave.txt");
 		try {
-			modelFacade.canUseMonument();
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when user does not have card");
+			} else {
+				fail("failed testCanUseMonument test when user does not have card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonument test when user does not have card - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//already played a dev card
 	@Test
 	public void testCanUseMonument5() {
+		this.initModel("alreadyDeved.txt");
 		try {
-			modelFacade.canUseMonument();
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when user already played dev card");
+			} else {
+				fail("failed testCanUseMonument test when user already played dev card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonument test when user already played dev card - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	// dont have enough points to win
 	@Test
 	public void testCanUseMonument6() {
+		this.initModel("notEnoughPoints.txt");
 		try {
-			modelFacade.canUseMonument();
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when user does not have enough points");
+			} else {
+				fail("failed testCanUseMonument test when user does not have enough points");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonument test when user does not have enough points - model not created");
 		}
-		fail("Not yet implemented");
+	}
+	
+	// good
+	@Test
+	public void testCanUseMonument7() {
+		this.initModel("goodMonument.txt");
+		try {
+			if(modelFacade.canUseMonument() == true) {
+				System.out.println("passed testCanUseMonument test when meets parameters");
+			} else {
+				fail("failed testCanUseMonument test when meets paramaters");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanUseMonument test when meets parameters - model not created");
+		}
 	}
 }

@@ -16,7 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.board.edge.EdgeDirection;
 import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.HexLocation;
 import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
 
@@ -24,10 +26,9 @@ public class CanBuildRoadTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/buildroad/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,77 +49,188 @@ public class CanBuildRoadTests {
 		}
 	}
 
-	//Good tests
+	//no game in facade
 	@Test
 	public void testCanBuildRoad1() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.SouthWest);
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			mf.canBuildRoad(edgeLoc);
+			fail("failed testCanBuildRoad test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanBuildRoad test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//it is not your turn
 	@Test
 	public void testCanBuildRoad2() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.SouthWest);
+		this.initModel("noTurn.txt");
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when not your turn");
+			} else {
+				fail("failed testCanBuildRoad test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildRoad test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//client status is not playing
 	@Test
 	public void testCanBuildRoad3() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.SouthWest);
+		this.initModel("noPlaying.txt");
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when not in playing mode");
+			} else {
+				fail("failed testCanBuildRoad test when not in playing mode");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildRoad test when not in playing mode - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//road location is not open
 	@Test
 	public void testCanBuildRoad4() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0),
+				EdgeDirection.South);
+		this.initModel("goodBuildRoad.txt");
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when road loc not open");
+			} else {
+				fail("failed testCanBuildRoad test when road loc not open");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildRoad test when road loc not open - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//road loaction is not connected to another
+	//road owned by the player - normal map init
 	@Test
 	public void testCanBuildRoad5() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0),
+				EdgeDirection.SouthEast);
+		this.initModel("goodBuildRoad.txt");
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when road loc not connected to player");
+			} else {
+				fail("failed testCanBuildRoad test when road loc not connected to player");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildRoad test when road loc not connected to player - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//road location is on water - normal init
 	@Test
 	public void testCanBuildRoad6() {
-		EdgeLocation edgeLoc = null;
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,3),
+				EdgeDirection.SouthEast);
+		this.initModel("goodBuildRoad.txt");
 		try {
-			modelFacade.canBuildRoad(edgeLoc);
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when road loc on water");
+			} else {
+				fail("failed testCanBuildRoad test when road loc on water");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildRoad test when road loc on water - model not created");
 		}
-		fail("Not yet implemented");
+	}
+	
+	//user doesn't have the resources
+	@Test
+	public void testCanBuildRoad7() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.SouthWest);
+		this.initModel("noRes.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when user doesn't have res.");
+			} else {
+				fail("failed testCanBuildRoad test when user doesn't have res.");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when user doesn't have res. - model not created");
+		}
+	}
+	
+	//setup round - placed right next to road
+	@Test
+	public void testCanBuildRoad8() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(1,0),
+				EdgeDirection.South);
+		this.initModel("goodBuildRoadSetup.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when user sets up right next to road");
+			} else {
+				fail("failed testCanBuildRoad test when user sets up right next to road");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when user sets up right next to road - model not created");
+		}
+	}
+	
+	//setup round - not placed near settlement
+	@Test
+	public void testCanBuildRoad8_5() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(1,1),
+				EdgeDirection.South);
+		this.initModel("goodBuildRoadSetup.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when user doesn't set up next to settlement");
+			} else {
+				fail("failed testCanBuildRoad test when user doesn't set up next to settlement");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when user doesn't set up next to settlement - model not created");
+		}
+	}
+	
+	//works normal
+	@Test
+	public void testCanBuildRoad9() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.SouthWest);
+		this.initModel("goodBuildRoad.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == true) {
+				System.out.println("passed testCanBuildRoad test when valid play");
+			} else {
+				fail("failed testCanBuildRoad test when valid play");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when valid play - model not created");
+		}
+	}
+	
+	//works setup mode
+	@Test
+	public void testCanBuildRoad10() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
+				EdgeDirection.South);
+		this.initModel("goodBuildRoadSetup.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == true) {
+				System.out.println("passed testCanBuildRoad test when valid setup");
+			} else {
+				fail("failed testCanBuildRoad test when valid setup");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when valid setup - model not created");
+		}
 	}
 }

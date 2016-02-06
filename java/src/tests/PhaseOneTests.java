@@ -6,7 +6,7 @@ public class PhaseOneTests {
 				//"tests.poller.PollerTests",
 				//"tests.proxy.ProxyTests",
 
-				"tests.model.ModelTests",
+				//"tests.model.ModelTests",
 				//"tests.model.CanSendChatTests",
 				//"tests.model.CanRollNumberTests",
 				//"tests.model.CanPlaceRobberTests",
@@ -15,10 +15,10 @@ public class PhaseOneTests {
 				//"tests.model.CanUseYearOfPlentyTests",
 				//"tests.model.CanUseRoadBuilderTests", //TODO
 				//"tests.model.CanUseSoldierTests",
-				/*
-				"tests.model.CanUseMonopolyTests",
-				"tests.model.CanUseMonumentTests",
-				"tests.model.CanBuildRoadTests",
+				
+				//"tests.model.CanUseMonopolyTests",
+				//"tests.model.CanUseMonumentTests",
+				"tests.model.CanBuildRoadTests"/*,
 				"tests.model.CanBuildSettlementTests",
 				"tests.model.CanBuildCityTests",
 				"tests.model.CanOfferTradeTests",

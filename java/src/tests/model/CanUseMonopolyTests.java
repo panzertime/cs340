@@ -24,10 +24,9 @@ public class CanUseMonopolyTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/monopolytests/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,78 +47,96 @@ public class CanUseMonopolyTests {
 		}
 	}
 	
-	//Good tests
+	//no model
 	@Test
 	public void testCanUseMonopoly1() {
-		ResourceType type = null;
+		ResourceType type = ResourceType.BRICK;
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canUseMonopoly(type);
+			mf.canUseMonopoly(type);
+			fail("failed testCanUseMonopoly test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanUseMonopoly test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//Not your turn
 	@Test
 	public void testCanUseMonopoly2() {
-		ResourceType type = null;
+		this.initModel("notTurn.txt");
+		ResourceType type = ResourceType.BRICK;
 		try {
-			modelFacade.canUseMonopoly(type);
+			if(modelFacade.canUseMonopoly(type) == false) {
+				System.out.println("passed testCanUseMonopoly test when not your turn");
+			} else {
+				fail("failed testCanUseMonopoly test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//Client model isn't playing
 	@Test
 	public void testCanUseMonopoly3() {
-		ResourceType type = null;
+		this.initModel("notPlaying.txt");
+		ResourceType type = ResourceType.BRICK;
 		try {
-			modelFacade.canUseMonopoly(type);
+			if(modelFacade.canUseMonopoly(type) == false) {
+				System.out.println("passed testCanUseMonopoly test when not in playing mode");
+			} else {
+				fail("failed testCanUseMonopoly test when not in playing mode");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when not in playing mode - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests	
+	//You don't have the specific card
 	@Test
 	public void testCanUseMonopoly4() {
-		ResourceType type = null;
+		this.initModel("noCard.txt");
+		ResourceType type = ResourceType.BRICK;
 		try {
-			modelFacade.canUseMonopoly(type);
+			if(modelFacade.canUseMonopoly(type) == false) {
+				System.out.println("passed testCanUseMonopoly test when you don't have the card");
+			} else {
+				fail("failed testCanUseMonopoly test when you don't have the card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when you don't have the card - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//you have already played a dev card
 	@Test
 	public void testCanUseMonopoly5() {
-		ResourceType type = null;
+		this.initModel("alreadyDeved.txt");
+		ResourceType type = ResourceType.BRICK;
 		try {
-			modelFacade.canUseMonopoly(type);
+			if(modelFacade.canUseMonopoly(type) == false) {
+				System.out.println("passed testCanUseMonopoly test when you already played dev card");
+			} else {
+				fail("failed testCanUseMonopoly test when you already played dev card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when you already played dev card - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//good output
 	@Test
 	public void testCanUseMonopoly6() {
-		ResourceType type = null;
+		this.initModel("goodMonopoly.txt");
+		ResourceType type = ResourceType.BRICK;
 		try {
-			modelFacade.canUseMonopoly(type);
+			if(modelFacade.canUseMonopoly(type) == true) {
+				System.out.println("passed testCanUseMonopoly test when you already played dev card");
+			} else {
+				fail("failed testCanUseMonopoly test when you already played dev card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when you already played dev card - model not created");
 		}
-		fail("Not yet implemented");
 	}
-
 }
