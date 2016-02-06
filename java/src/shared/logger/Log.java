@@ -55,5 +55,9 @@ public class Log {
 	public static void config(String message) {
 		getLogger().log(Level.CONFIG, message);
 	}
+	
+	public static void test(String message) {
+		getLogger().log(Level.INFO, message);
+	}
 
 }
