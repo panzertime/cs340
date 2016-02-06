@@ -47,7 +47,7 @@ public class Board {
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
 			throw new BadJSONException();
-		if (jsonHexes.size() != 17)
+		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
 		JSONArray jsonPorts = (JSONArray) jsonMap.get("ports");
