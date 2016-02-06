@@ -1,32 +1,48 @@
 package tests;
+
+import static org.junit.Assert.fail;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
+
 public class MModelTests {
 	
 	public static void main(String[] args) {
-		String[] tests = {
-				//"tests.poller.PollerTests",
-				//"tests.proxy.ProxyTests",
-				
-				"tests.model.ModelTests"/*,
-				"tests.model.CanSendChatTests",
-				"tests.model.CanRollNumberTests",
-				"tests.model.CanPlaceRobberTests",
-				"tests.model.CanFinishTurnTests",
-				"tests.model.CanBuyDevCardTests",
-				"tests.model.CanUseYearOfPlentyTests",
-				"tests.model.CanUseRoadBuilderTests",
-				"tests.model.CanUseSoldierTests",
-				"tests.model.CanUseMonopolyTests",
-				"tests.model.CanUseMonumentTests",
-				"tests.model.CanBuildRoadTests",
-				"tests.model.CanBuildSettlementTests",
-				"tests.model.CanBuildCityTests",
-				"tests.model.CanOfferTradeTests",
-				"tests.model.CanAcceptTradeTests",
-				"tests.model.CanMaritimeTradeTests",
-				"tests.model.CanDiscardCardsTests"*/
-		};
-		
-		org.junit.runner.JUnitCore.main(tests);
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/badjson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
+		} catch (FileNotFoundException | ParseException e) {
+			fail("Error with bad JSON input\n" +
+					e.getMessage());
+		} catch (BadJSONException e) {
+			System.out.println("Model passed bad JSON init test");
+		}
+		System.err.println("Did not catch error with bad JSON input\n");
 	}
 }
 

@@ -33,6 +33,7 @@ import shared.models.hand.exceptions.BadResourceTypeException;
 public class ModelFacade {
 	
 	private GameModel gameModel;
+	private Integer userID;
 	
 	/**
 	 * Instrcutor with GameModel input
@@ -64,7 +65,7 @@ public class ModelFacade {
 	public void signIn(String username, String password) 
 			throws SignInException {
 		try {
-			ServerFacade.get_instance().login(username, password);
+			this.userID = ServerFacade.get_instance().login(username, password);
 		} catch (ServerException e) {
 			throw new SignInException(e);
 		}
@@ -83,7 +84,7 @@ public class ModelFacade {
 	public void register(String username, String password) 
 			throws SignInException {
 		try {
-			ServerFacade.get_instance().register(username, password);
+			this.userID = ServerFacade.get_instance().register(username, password);
 		} catch (ServerException e) {
 			throw new SignInException(e);
 		}
@@ -196,6 +197,7 @@ public class ModelFacade {
 			modelFromServer = (JSONObject) ServerFacade.get_instance().sendChat(
 					playerIndex, message);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (ServerException e) {
 			throw new MessageException(e);
 
@@ -224,6 +226,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().robPlayer(
 					playerIndex, victimIndex, location);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
@@ -249,6 +252,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().finishTurn(
 							playerIndex);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
@@ -275,6 +279,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buyDevCard(
 				playerIndex);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
@@ -302,6 +307,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().yearOfPlenty(
 					playerIndex, resource1,	resource2);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -332,6 +338,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().roadBuilding(
 					playerIndex, spot1, spot2);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -362,6 +369,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().soldier(
 					playerIndex, victimIndex,location);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -387,6 +395,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monopoly(
 					resource, playerIndex);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -410,6 +419,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monument(
 					playerIndex);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -441,6 +451,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildRoad(
 					playerIndex, roadLocation, free);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -469,6 +480,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildSettlement(
 					playerIndex, vertLoc, setupMode);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -495,6 +507,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildCity(
 					playerIndex, vertLoc);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -520,6 +533,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().offerTrade(
 					playerIndex, offer, receiver);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -545,6 +559,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().acceptTrade(
 					playerIndex, willAccept);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -574,6 +589,7 @@ public class ModelFacade {
 					ServerFacade.get_instance().maritimeTrade(playerIndex, 
 							ratio, inputResource, outputResource);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -601,6 +617,7 @@ public class ModelFacade {
 					ServerFacade.get_instance().discard(playerIndex,
 							discardedCards);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -625,6 +642,7 @@ public class ModelFacade {
 					ServerFacade.get_instance().rollNumber(playerIndex, 
 							number);
 			gameModel = new GameModel(modelFromServer);
+			gameModel.setClientID(this.userID);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
