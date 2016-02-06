@@ -35,6 +35,7 @@ public class GameModel {
 	private Integer currentTurn;
 	private ChatModel chatModel;
 	private TradeModel tradeModel;
+	private Integer clientID;
 	
 	/**
 	 * @param board the board to  initialize
@@ -99,7 +100,7 @@ public class GameModel {
 			Log.exception(e);
 		}
 		if ((JSONObject)jsonMap.get("tradeOffer") == null)
-		{}
+		{ tradeModel = null; }
 		else
 			tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
@@ -341,7 +342,10 @@ public class GameModel {
 //	You have the cards you're choosing to discard
 	public Boolean canDiscardCard(Map<String, Object> resourceList) throws BadJSONException
 	{
-		return (this.getStatus().equalsIgnoreCase("Discarding") && this.getActivePlayer().canDiscardCard() && this.getActivePlayer().hasCards(resourceList));
+		Boolean b = this.getStatus().equalsIgnoreCase("Discarding");
+		b = b && this.getActivePlayer().canDiscardCard();
+		b = b && this.getActivePlayer().hasCards(resourceList);
+		return b;
 	}
 	
 //	Preconditions
@@ -349,23 +353,22 @@ public class GameModel {
 //	The client model�s status is �Rolling�
 	public Boolean canRollNumber()
 	{
-		this.getStatus().equalsIgnoreCase("Rolling");
+		Boolean b = this.getStatus().equalsIgnoreCase("Rolling");
 		//check turn
-		return null;
+		return b;
 	}
 	
 	public Boolean canOfferTrade(Map<String, Object> resourceList) throws BadJSONException
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		Boolean canOfferTrade = false;
-		canOfferTrade = getActivePlayer().hasCards(resourceList);
-		return canOfferTrade;
+		b = b && getActivePlayer().hasCards(resourceList);
+		return b;
 	}
 	
 	public Boolean canMaritimeTrade(int ratio, ResourceType type)
 	{
-		PortType portType;
+		PortType portType = null;
 		if (ratio == 3)
 		{
 			portType = PortType.THREE;
@@ -391,53 +394,64 @@ public class GameModel {
 				break;
 			}
 		}
+		else if (ratio != 4)
+		{
+			Exception BadPortType = new Exception();
+			Log.exception(BadPortType);
+		}
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		//check Player is on correct ratio port
-		Boolean canMaritimeTrade = false;
 		try {
-			canMaritimeTrade = getActivePlayer().hasResource(type, ratio);
+			b = b && getActivePlayer().hasResource(type, ratio);
 		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			Log.exception(e);
 		}		
-		return canMaritimeTrade;
+		if (portType != null) b = b && getActivePlayer().hasPort(portType);
+		return b;
 	}
 	
 	public Boolean canRobPlayer(HexLocation location, int playerIndex)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//robber has different location
-		//player being robbed has resource cards
-		return null;
+		Player robbed = null;
+		try {
+			robbed = GameModel.whichPlayer(playerIndex);
+		} catch (BadPlayerIndexException e) {
+			Log.exception(e);
+		}
+		b = b && (robbed.getHandSize() > 0);
+		
+		return b;
 	}
 	
 	public Boolean canFinishTurn()
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
-		return null;
+		return b;
 	}
 	
 	public Boolean canBuyDevCard()
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
-		//Bank.getDevCards.size > 0
-		this.getActivePlayer().hasDevelopmentCost();
-		return null;
+		b = b && (this.getBank().getHand().getDevCards().size() > 0);
+		b = b && this.getActivePlayer().hasDevelopmentCost();
+		return b;
 	}
 	
 	public Boolean canUseSoldier(HexLocation newRobberLocation, int playerIndex)
 	{
-		this.getStatus().equalsIgnoreCase("Playing");
+		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
-		this.getActivePlayer().canPlayDevelopmentCard();
-		this.getActivePlayer().hasKnightToUse();
-		canRobPlayer(newRobberLocation, playerIndex);
-		return null;
+		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && this.getActivePlayer().hasKnightToUse();
+		b = b && canRobPlayer(newRobberLocation, playerIndex);
+		return b;
 	}
 	
 	public Boolean canUseYearOfPlenty(ResourceType one, ResourceType two)
@@ -451,8 +465,7 @@ public class GameModel {
 			b = b && this.getBank().getHand().hasResource(one, 1);
 			b = b && this.getBank().getHand().hasResource(two, 1);
 		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.exception(e);
 		}
 		return b;
 	}
@@ -464,8 +477,8 @@ public class GameModel {
 		//check turn
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		//canBuildRoad
-		//canBuildRoad (also on first location)
+		//canBuildRoad minus cost
+		//canBuildRoad (also on first location) minus cost
 		return b;
 	}
 	
@@ -481,35 +494,37 @@ public class GameModel {
 	
 	public Boolean canUseMonument()
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
-			//enough monuments to win game
-		}
-		return result;
+		b = b && (this.getActivePlayer().getVictoryPointsWithMonuments() >= 10);
+		return b;
 	}
 	
 	public Boolean canBuildRoad(EdgeLocation edge)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
-			//check if can Build
-		}
-		this.getActivePlayer().hasRoadCost();
 
-		return null;
+		b = b && this.getActivePlayer().hasRoadCost();
+		b = b && this.getActivePlayer().hasRoadPiece();
+		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
+		
+		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
+
+		return b;
 	}
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
-			//check if can Build
-		}
-		this.getActivePlayer().hasSettlementCost();
-		return result;
+		b = b && this.getActivePlayer().hasSettlementCost();
+		b = b && this.getActivePlayer().hasSettlementPiece();
+		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
+		return b;
 	}
 	
 	/**
@@ -519,15 +534,14 @@ public class GameModel {
 	 */
 	public Boolean canBuildCity(VertexLocation vertex)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//TODO: Check turn
-			result = this.getActivePlayer().hasCityCost();
-			if(result) {
-				//TODO: check if can Build
-			}
-		}
-		return null;
+		b = b && this.getActivePlayer().hasCityCost();
+		b = b && this.getActivePlayer().hasCityPiece();
+		b = b && this.getBoard().canBuildCity(this.getActivePlayer(), vertex);
+		
+		return b;
 	}
 	
 	/**
@@ -540,11 +554,13 @@ public class GameModel {
 	 */
 	public Boolean canAcceptTrade() throws BadJSONException
 	{
-		boolean result = false;
-		//TODO add current player
+		boolean b = false;
+		if (this.tradeModel != null) //you have been offered a trade
+		{
 		Player receiver = this.tradeModel.getReceiver();
-			result = receiver.hasCards(this.tradeModel.getResources());
-		return result;
+			b = receiver.hasCards(this.tradeModel.getResources());
+		}	
+		return b;
 	}
 
 	/**
@@ -557,5 +573,17 @@ public class GameModel {
 	{	
 		return true;
 	}
+
+
+	public Integer getClientID() {
+		return clientID;
+	}
+
+
+	public void setClientID(Integer clientID) {
+		this.clientID = clientID;
+	}
+	
+	
 
 }

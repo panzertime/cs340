@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.piece.City;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
@@ -59,7 +60,7 @@ public class Player {
 		hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null) throw new BadJSONException();		
 		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
-		if (playerID == null) throw new BadJSONException();		
+		if (playerID == null) throw new BadJSONException(); //TODO : JR- Why was this commented out?
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -454,10 +455,10 @@ public class Player {
 	 */
 	public int getVictoryPoints() {
 		int points = 0;
-		for (DevCard card : hand.getDevCards()) {
+		/*for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
-		}
+		}*/
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -470,6 +471,17 @@ public class Player {
 			if (s.getVertex() != null)
 				points++;
 		}
+
+		return points;
+	}
+	
+	public int getVictoryPointsWithMonuments() {
+		int points = 0;
+		for (DevCard card : hand.getDevCards()) {
+			if (card.getType() == DevCardType.MONUMENT)
+				points++;
+		}
+		points += this.getVictoryPoints();
 
 		return points;
 	}
@@ -644,6 +656,16 @@ public class Player {
 
 	public boolean canDiscardCard() {
 		return hand.canDiscardCard();
+	}
+
+	public boolean hasPort(PortType portType) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public int getHandSize()
+	{
+		return hand.getHandSize();
 	}
 
 }
