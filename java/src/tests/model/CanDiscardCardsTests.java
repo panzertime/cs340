@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
 import shared.models.hand.exceptions.BadResourceTypeException;
 
@@ -42,7 +43,7 @@ public class CanDiscardCardsTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			modelFacade = new ModelFacade((JSONObject) jsonModel);
-		} catch (FileNotFoundException | ParseException e) {
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
 	}

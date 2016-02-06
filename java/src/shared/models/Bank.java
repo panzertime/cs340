@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.json.simple.JSONObject;
 
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
 import shared.models.hand.ResourceType;
@@ -30,9 +31,15 @@ public class Bank {
 	}
 	private Hand hand;
 	
-	public Bank(JSONObject resourceList, JSONObject deckList)
+	public Bank(JSONObject resourceList, JSONObject deckList) throws BadJSONException
 	{
+		if (resourceList == null || deckList == null) throw new BadJSONException(); 
 		hand = new Hand(resourceList, deckList);
+	}
+	
+	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
+		if (resourceList == null || deckList == null) return false; 
+		return hand.equalsJSON(resourceList, deckList);
 	}
 
 	/**
@@ -112,6 +119,8 @@ public class Bank {
 	public void sendResource(ResourceType type, Integer num) throws ResourceException {
 		this.getHand().sendResource(type, num);
 	}
+
+	
 	
 	
 }

@@ -1,5 +1,5 @@
 package tests;
-public class PhaseOneTests {
+public class MModelTests {
 	
 	public static void main(String[] args) {
 		String[] tests = {

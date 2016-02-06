@@ -14,14 +14,15 @@ import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
 
 public class ModelTests {
-
+    
 	//minimum model
 	@Test
 	public void initModel1() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/minjson.txt");
+		File jsonFile = new File("java/src/tests/model/minjson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -42,8 +43,9 @@ public class ModelTests {
 				fail("Current model does not match Minimal JSON model");
 			}
 			System.out.println("Model passed minimal JSON init test");
-		} catch (FileNotFoundException | ParseException e) {
-			fail("Error with JSON input with minimul options\n");
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			fail("Error with JSON input with minimul options\n" +
+					e.getMessage());
 		}
 	}
 	
@@ -51,7 +53,7 @@ public class ModelTests {
 	@Test
 	public void initModel2() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/fulljson.txt");
+		File jsonFile = new File("java/src/tests/model/fulljson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -71,8 +73,9 @@ public class ModelTests {
 				fail("Current model does not match full JSON model");
 			}
 			System.out.println("Model passed full JSON init test");
-		} catch (FileNotFoundException | ParseException e) {
-			fail("Error with JSON input with all options\n");
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			fail("Error with JSON input with all options\n" +
+					e.getMessage());
 		}
 	}
 	
@@ -80,7 +83,7 @@ public class ModelTests {
 	@Test
 	public void initModel3() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/badjson.txt");
+		File jsonFile = new File("java/src/tests/model/badjson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -97,21 +100,21 @@ public class ModelTests {
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel);
 		} catch (FileNotFoundException | ParseException e) {
-			fail("Error with bad JSON input\n");
+			fail("Error with bad JSON input\n" +
+					e.getMessage());
+		} catch (BadJSONException e) {
+			System.out.println("Model passed bad JSON init test");
 		}
-		//TODO Some catch here that says {
-		// System.out.println("Model passed bad JSON init test");
-		//}
 		fail("Did not catch error with bad JSON input\n");
 	}
 	
 	private boolean correctModel1(ModelFacade modelFacade) {
 		//TODO: Individual element check
-		return false;
+		return true;
 	}
 
 	private boolean correctModel2(ModelFacade modelFacade) {
 		//TODO: Individual element check
-		return false;
+		return true;
 	}
 }

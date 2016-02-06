@@ -36,17 +36,10 @@ public class ModelFacade {
 	
 	/**
 	 * Instrcutor with GameModel input
+	 * @throws BadJSONException 
 	 */
-	public ModelFacade(JSONObject gameModel) {
-		try {
-			this.gameModel = new GameModel(gameModel);
-		} catch (BadPlayerIndexException | BadTurnStatusException e) {
-			e.printStackTrace();
-		} catch (BadStatusException e) {
-			e.printStackTrace();
-		} catch (BadJSONException e) {
-			e.printStackTrace();
-		}
+	public ModelFacade(JSONObject gameModel) throws BadJSONException {
+		this.gameModel = new GameModel(gameModel);
 	}
 	
 	public GameModel getGameModel() {
@@ -205,12 +198,7 @@ public class ModelFacade {
 			gameModel = new GameModel(modelFromServer);
 		} catch (ServerException e) {
 			throw new MessageException(e);
-		} catch (BadPlayerIndexException e) {
-			throw new MessageException(e);
-		} catch (BadTurnStatusException e) {
-			throw new MessageException(e);
-		} catch (BadStatusException e) {
-			throw new MessageException(e);
+
 		} catch (BadJSONException e) {
 			throw new MessageException(e);
 		}
@@ -236,12 +224,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().robPlayer(
 					playerIndex, victimIndex, location);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
+
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -266,12 +249,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().finishTurn(
 							playerIndex);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
+
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -297,12 +275,7 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buyDevCard(
 				playerIndex);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
+
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -329,12 +302,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().yearOfPlenty(
 					playerIndex, resource1,	resource2);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new DevCardException(e);
-		} catch (BadTurnStatusException e) {
-			throw new DevCardException(e);
-		} catch (BadStatusException e) {
-			throw new DevCardException(e);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -365,12 +332,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().roadBuilding(
 					playerIndex, spot1, spot2);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new DevCardException(e);
-		} catch (BadTurnStatusException e) {
-			throw new DevCardException(e);
-		} catch (BadStatusException e) {
-			throw new DevCardException(e);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -401,12 +362,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().soldier(
 					playerIndex, victimIndex,location);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new DevCardException(e);
-		} catch (BadTurnStatusException e) {
-			throw new DevCardException(e);
-		} catch (BadStatusException e) {
-			throw new DevCardException(e);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -432,12 +387,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monopoly(
 					resource, playerIndex);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new DevCardException(e);
-		} catch (BadTurnStatusException e) {
-			throw new DevCardException(e);
-		} catch (BadStatusException e) {
-			throw new DevCardException(e);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -461,12 +410,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().monument(
 					playerIndex);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new DevCardException(e);
-		} catch (BadTurnStatusException e) {
-			throw new DevCardException(e);
-		} catch (BadStatusException e) {
-			throw new DevCardException(e);
 		} catch (BadJSONException e) {
 			throw new DevCardException(e);
 		} catch (ServerException e) {
@@ -498,12 +441,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildRoad(
 					playerIndex, roadLocation, free);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -532,12 +469,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildSettlement(
 					playerIndex, vertLoc, setupMode);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -564,12 +495,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().buildCity(
 					playerIndex, vertLoc);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -595,12 +520,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().offerTrade(
 					playerIndex, offer, receiver);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -626,12 +545,6 @@ public class ModelFacade {
 			JSONObject modelFromServer = (JSONObject) ServerFacade.get_instance().acceptTrade(
 					playerIndex, willAccept);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -661,12 +574,6 @@ public class ModelFacade {
 					ServerFacade.get_instance().maritimeTrade(playerIndex, 
 							ratio, inputResource, outputResource);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -694,12 +601,6 @@ public class ModelFacade {
 					ServerFacade.get_instance().discard(playerIndex,
 							discardedCards);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -724,12 +625,6 @@ public class ModelFacade {
 					ServerFacade.get_instance().rollNumber(playerIndex, 
 							number);
 			gameModel = new GameModel(modelFromServer);
-		} catch (BadPlayerIndexException e) {
-			throw new PlayingException(e);
-		} catch (BadTurnStatusException e) {
-			throw new PlayingException(e);
-		} catch (BadStatusException e) {
-			throw new PlayingException(e);
 		} catch (BadJSONException e) {
 			throw new PlayingException(e);
 		} catch (ServerException e) {
@@ -903,7 +798,14 @@ public class ModelFacade {
 	 */
 	public boolean canOfferTrade(Map<String, Object> resource, int amount)
 		throws ModelAccessException {
-		 return this.gameModel.canOfferTrade(resource);
+		Boolean b = false; 
+		try {
+			b = this.gameModel.canOfferTrade(resource);
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	}
 	
 	/**
@@ -914,7 +816,14 @@ public class ModelFacade {
 	 * @throws ModelAccessException
 	 */
 	public boolean canAcceptTrade() throws ModelAccessException {
-		 return this.gameModel.canAcceptTrade();
+		Boolean b = false;
+		try {
+			b = this.gameModel.canAcceptTrade();
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	 }
 
 	/**
@@ -940,7 +849,14 @@ public class ModelFacade {
 	 * @throws BadResourceTypeException
 	 */
 	public boolean canDiscardCards(Map<String, Object> resourceList) throws ModelAccessException, BadResourceTypeException {
-		 return this.gameModel.canDiscardCard(resourceList);
+		Boolean b = false; 
+		try {
+			b = this.gameModel.canDiscardCard(resourceList);
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
 	}
 	
 	//Model to Controller Interactions

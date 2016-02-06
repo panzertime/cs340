@@ -13,6 +13,7 @@ import shared.models.board.piece.Road;
 import shared.models.board.piece.Settlement;
 import shared.models.board.vertex.Vertex;
 import shared.models.definitions.CatanColor;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BuildException;
 import shared.models.exceptions.NoDevCardFoundException;
 import shared.models.hand.Hand;
@@ -27,29 +28,39 @@ public class Player {
 	private GameModel game;
 	private Hand hand;
 	private Settlement[] settlements;
-	private City[] cities;
 	private Road[] roads;
+	private City[] cities;
 	private String userName;
-	private int userIndex;
+	private Integer userIndex;
 	private CatanColor userColor;
-	private int armies;
-	private int monuments;
-	private int points;
+	private Integer armies;
+	private Integer monuments;
+	private Integer points;
 	private Boolean playedDevelopmentCard;
 	private Boolean hasDiscarded;
-	private int playerID;
+	private Integer playerID;
 
-	public Player(JSONObject player) {
-		userColor = getColor((String) player.get("color"));
+	public Player(JSONObject player) throws BadJSONException {
+		if (player == null) throw new BadJSONException();
+		String c = (String) player.get("color");
+		if (c == null) throw new BadJSONException();
+		userColor = getColor(c);
 		userName = (String) player.get("name");
-		userIndex = (Integer) player.get("playerIndex");
-		armies = (Integer) player.get("soldiers");
-		monuments = (Integer) player.get("monuments");
+		if (userName == null) throw new BadJSONException();
+		userIndex = (Integer) ((Long)  player.get("playerIndex")).intValue();
+		if (userIndex == null) throw new BadJSONException();		
+		armies = (Integer) ((Long)  player.get("soldiers")).intValue();
+		if (armies == null) throw new BadJSONException();		
+		monuments = (Integer) ((Long)  player.get("monuments")).intValue();
+		if (monuments == null) throw new BadJSONException();		
 		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null) throw new BadJSONException();		
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
 		hasDiscarded = (Boolean) player.get("discarded");
-		playerID = (Integer) player.get("playerID");
+		if (hasDiscarded == null) throw new BadJSONException();		
+		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
+		if (playerID == null) throw new BadJSONException(); 
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -444,10 +455,10 @@ public class Player {
 	 */
 	public int getVictoryPoints() {
 		int points = 0;
-		for (DevCard card : hand.getDevCards()) {
+		/*for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
-		}
+		}*/
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -460,6 +471,17 @@ public class Player {
 			if (s.getVertex() != null)
 				points++;
 		}
+
+		return points;
+	}
+	
+	public int getVictoryPointsWithMonuments() {
+		int points = 0;
+		for (DevCard card : hand.getDevCards()) {
+			if (card.getType() == DevCardType.MONUMENT)
+				points++;
+		}
+		points += this.getVictoryPoints();
 
 		return points;
 	}
@@ -640,12 +662,32 @@ public class Player {
 		return hand.hasResource(type, num);
 	}
 	
-	public Boolean hasCards(Map<String, Object> resourceList) throws BadResourceTypeException {
+	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
 		return hand.hasCards(resourceList);
 	}
 
 	public boolean canDiscardCard() {
 		return hand.canDiscardCard();
 	}
+
+	public boolean hasPort(PortType portType) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public int getHandSize()
+	{
+		return hand.getHandSize();
+	}
+
+	public Integer getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(Integer playerID) {
+		this.playerID = playerID;
+	}
+	
+	
 
 }
