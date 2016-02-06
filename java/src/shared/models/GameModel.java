@@ -124,7 +124,7 @@ public class GameModel {
 		if (version == null) return false;
 		if (this.version != version.intValue()) return false;
 		Long w = ((Long) jsonMap.get("winner"));
-		if (w == null) throw new BadJSONException();
+		if (w == null) return false;
 			if (w == -1) { if (winner != null) return false;}
 			else{
 				if (winner == null || winner.getUserIndex() != w.intValue()) return false;
@@ -134,7 +134,7 @@ public class GameModel {
 		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
 		if (turnTracker == null) return false;
 		Long currentTurn = ((Long) turnTracker.get("currentTurn"));
-		if (currentTurn == null) throw new BadJSONException();
+		if (currentTurn == null) return false;
 		if (this.currentTurn != currentTurn.intValue()) return false;
 		
 		
@@ -443,16 +443,21 @@ public class GameModel {
 		return b;
 	}
 	
-	public Boolean canMaritimeTrade(int ratio, ResourceType type)
+	public Boolean canMaritimeTrade(int ratio, ResourceType input, ResourceType output)
 	{
 		PortType portType = null;
+		try {
+			if (!this.getBank().getHand().hasResource(output, 1)) return false;
+		} catch (BadResourceTypeException e1) {
+			// TODO Auto-generated catch block
+			Log.exception(e1);		}
 		if (ratio == 3)
 		{
 			portType = PortType.THREE;
 		}
 		else if (ratio == 2)
 		{
-			switch (type)
+			switch (input)
 			{
 			case WOOD:
 				portType = PortType.WOOD;
@@ -480,7 +485,7 @@ public class GameModel {
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		try {
-			b = b && getActivePlayer().hasResource(type, ratio);
+			b = b && getActivePlayer().hasResource(input, ratio);
 		} catch (BadResourceTypeException e) {
 
 			Log.exception(e);
@@ -489,11 +494,17 @@ public class GameModel {
 		return b;
 	}
 	
-	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	public Boolean canPlaceRobber(HexLocation location)
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		//robber has different location
+		b = b && (this.getBoard().canPlaceRobber(location));
+		return b;
+	}
+	
+	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	{
+		Boolean b = canPlaceRobber(location);
 		Player robbed = null;
 		try {
 			robbed = GameModel.whichPlayer(playerIndex);
@@ -554,11 +565,13 @@ public class GameModel {
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		//canBuildRoad minus cost
-		//canBuildRoad (also on first location) minus cost
+		b = b && this.canBuildRoad(one);
+		b = b && this.canBuildTwoRoad(one, two);
 		return b;
 	}
 	
+
+
 	public Boolean canUseMonopoly(ResourceType type)
 	{
 		Boolean b = true;
@@ -578,27 +591,50 @@ public class GameModel {
 		return b;
 	}
 	
+	private boolean canBuildTwoRoad(EdgeLocation one, EdgeLocation two) {
+		//b = b && this.getActivePlayer().hasRoadPiece(2);
+		return false;
+	}
+	
 	public Boolean canBuildRoad(EdgeLocation edge)
 	{
-		boolean b = true;
-		b = b && this.status.equals("Playing");
+		Boolean free;
+		if (this.status.equalsIgnoreCase("FirstRound") || this.status.equalsIgnoreCase("SecondRound"))
+			free = true;
+		else free = false;
+		boolean b = false;
+		if ( this.status.equals("Playing"))
+		{
+		b = true;
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 
-		b = b && this.getActivePlayer().hasRoadCost();
+		if (!free) b = b && this.getActivePlayer().hasRoadCost();
 		b = b && this.getActivePlayer().hasRoadPiece();
 		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
-		
-		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
+		}
+		else if (this.status.equals("SecondRound"))
+		{		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
+
+			b = true;
+			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+			b = b && this.getActivePlayer().hasRoadPiece();
+			b = b && this.getBoard().canBuildRoadSecondRound(this.getActivePlayer(), edge);
+			
+		}
 
 		return b;
 	}
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
+		Boolean free;
+		if (this.status.equalsIgnoreCase("FirstRound") || this.status.equalsIgnoreCase("SecondRound"))
+			free = true;
+		else free = false;
 		boolean b = true;
-		b = b && this.status.equals("Playing");
+		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().hasSettlementCost();
+		if (!free) b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getActivePlayer().hasSettlementPiece();
 		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
 		return b;

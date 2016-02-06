@@ -202,6 +202,15 @@ public class Player {
 		return false;
 	}
 
+	public boolean hasRoadPiece(int i) {
+		for (Road road : roads) {
+			if (!road.isPlaced())
+				i--;
+		}
+		return (i <= 0);
+	}
+	
+
 	/**
 	 * @throws ResourceException
 	 * @pre hasSettlementCost
@@ -724,7 +733,8 @@ public class Player {
 	public void setUserIndex(Integer userIndex) {
 		this.userIndex = userIndex;
 	}
-	
+
+
 	
 	
 
