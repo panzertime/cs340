@@ -82,26 +82,26 @@ public class Board {
 			HexLocation hexLoc = new HexLocation(jsonHexLoc);
 
 			Long numberLong = (Long) jsonHex.get("number");
-			if (numberLong == null)
-				throw new BadJSONException();
-			Integer number = numberLong.intValue();
+			Integer number = null;
+			if (numberLong != null)
+				number = numberLong.intValue();
 			String resource = (String) jsonHex.get("resource");
 
 			if (number != null && resource != null) {
 				switch (resource) {
-				case "Wood":
+				case "wood":
 					hexes.put(hexLoc, new ForestHex(hexLoc, number));
 					break;
-				case "Brick":
+				case "brick":
 					hexes.put(hexLoc, new ClayHex(hexLoc, number));
 					break;
-				case "Sheep":
+				case "sheep":
 					hexes.put(hexLoc, new PastureHex(hexLoc, number));
 					break;
-				case "Wheat":
+				case "wheat":
 					hexes.put(hexLoc, new FieldHex(hexLoc, number));
 					break;
-				case "Ore":
+				case "ore":
 					hexes.put(hexLoc, new MountainHex(hexLoc, number));
 					break;
 				default:
@@ -126,20 +126,20 @@ public class Board {
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
-				switch (resource) {
-				case "Wood":
+				switch(resource) {
+				case "wood":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WOOD, edgeDir));
 					break;
-				case "Brick":
+				case "brick":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.BRICK, edgeDir));
 					break;
-				case "Sheep":
+				case "sheep":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.SHEEP, edgeDir));
 					break;
-				case "Wheat":
+				case "wheat":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WHEAT, edgeDir));
 					break;
-				case "Ore":
+				case "ore":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.ORE, edgeDir));
 					break;
 				default:

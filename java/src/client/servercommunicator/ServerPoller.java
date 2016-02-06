@@ -1,6 +1,8 @@
 package client.servercommunicator;
 
 import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
+
 import org.json.simple.JSONObject;
 
 /**
@@ -47,6 +49,9 @@ public class ServerPoller extends Thread {
 			hasFailed = true;
 			return null; 
 		}
+		
+		// TODO RT check this
+		return null;
 	}
 
 	@Override
@@ -59,7 +64,7 @@ public class ServerPoller extends Thread {
 					inbound = new ModelFacade(result, outbound.get_player_id());	
 				}
 			}
-			catch(InterruptedException e){
+			catch(InterruptedException | BadJSONException e){
 				// do nothing, we will simply skip this poll and wait for the next one
 			}
 		}

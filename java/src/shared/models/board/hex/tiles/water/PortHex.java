@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 
 import shared.models.board.edge.EdgeDirection;
 import shared.models.board.hex.HexLocation;
-import shared.models.board.hex.HexType;
 import shared.models.exceptions.BadJSONException;
 
 public class PortHex extends WaterHex {
