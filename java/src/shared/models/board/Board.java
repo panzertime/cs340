@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
+import shared.logger.Log;
 import shared.models.GameModel;
 import shared.models.Player;
 import shared.models.board.edge.Edge;
@@ -262,8 +263,7 @@ public class Board {
 			}
 		}
 		
-		HexLocation robberLoc = new HexLocation(jsonRobber);
-		placeRobber(robberLoc);
+		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 	
 

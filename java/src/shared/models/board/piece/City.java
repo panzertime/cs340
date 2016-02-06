@@ -6,7 +6,7 @@ import shared.models.hand.exceptions.ResourceException;
 
 public class City extends Building{
 
-	public City(Player owner) throws NullPlayerException {
+	public City(Player owner) throws IllegalArgumentException {
 		super(owner);
 	}
 

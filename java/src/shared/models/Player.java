@@ -41,67 +41,92 @@ public class Player {
 	private Integer playerID;
 
 	public Player(JSONObject player) throws BadJSONException {
-		if (player == null) throw new BadJSONException();
+		if (player == null)
+			throw new BadJSONException();
 		String c = (String) player.get("color");
-		if (c == null) throw new BadJSONException();
+		if (c == null)
+			throw new BadJSONException();
 		userColor = getColor(c);
 		String userName = (String) player.get("name");
-		if (userName == null) throw new BadJSONException();
+		if (userName == null)
+			throw new BadJSONException();
 		this.userName = userName;
-		Long userIndex = ((Long)  player.get("playerIndex"));
-		if (userIndex == null) throw new BadJSONException();
+		Long userIndex = ((Long) player.get("playerIndex"));
+		if (userIndex == null)
+			throw new BadJSONException();
 		this.userIndex = userIndex.intValue();
-		Long armies =  ((Long)  player.get("soldiers"));
-		if (armies == null) throw new BadJSONException();
+		Long armies = ((Long) player.get("soldiers"));
+		if (armies == null)
+			throw new BadJSONException();
 		this.armies = armies.intValue();
-		Long monuments = ((Long)  player.get("monuments"));
-		if (monuments == null) throw new BadJSONException();
+		Long monuments = ((Long) player.get("monuments"));
+		if (monuments == null)
+			throw new BadJSONException();
 		this.monuments = monuments.intValue();
 		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		if (playedDevelopmentCard == null) throw new BadJSONException();
+		if (playedDevelopmentCard == null)
+			throw new BadJSONException();
 		this.playedDevelopmentCard = playedDevelopmentCard;
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
 		Boolean hasDiscarded = (Boolean) player.get("discarded");
-		if (hasDiscarded == null) throw new BadJSONException();	
+		if (hasDiscarded == null)
+			throw new BadJSONException();
 		this.hasDiscarded = hasDiscarded;
-		Long playerID = ((Long)  player.get("playerID"));
-		if (playerID == null) throw new BadJSONException();
+		Long playerID = ((Long) player.get("playerID"));
+		if (playerID == null)
+			throw new BadJSONException();
 		this.playerID = playerID.intValue();
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
+		initPeices();
 	}
-	
 
 	public boolean equalsJSON(JSONObject player) {
-		if (player == null) return false;
+		if (player == null)
+			return false;
 		String c = (String) player.get("color");
-		if (c == null) return false;
-		if (!userColor.equals(getColor(c))) return false;
+		if (c == null)
+			return false;
+		if (!userColor.equals(getColor(c)))
+			return false;
 		String userName = (String) player.get("name");
-		if (userName == null) return false;
-		if (!this.userName.equals(userName)) return false;
-		Long userIndex = ((Long)  player.get("playerIndex"));
-		if (userIndex == null) return false;
-		if (this.userIndex != userIndex.intValue()) return false;
-		Long armies =  ((Long)  player.get("soldiers"));
-		if (armies == null) return false;
-		if (this.armies != armies.intValue()) return false;
-		Long monuments = ((Long)  player.get("monuments"));
-		if (monuments == null) return false;
-		if (this.monuments != monuments.intValue()) return false;
+		if (userName == null)
+			return false;
+		if (!this.userName.equals(userName))
+			return false;
+		Long userIndex = ((Long) player.get("playerIndex"));
+		if (userIndex == null)
+			return false;
+		if (this.userIndex != userIndex.intValue())
+			return false;
+		Long armies = ((Long) player.get("soldiers"));
+		if (armies == null)
+			return false;
+		if (this.armies != armies.intValue())
+			return false;
+		Long monuments = ((Long) player.get("monuments"));
+		if (monuments == null)
+			return false;
+		if (this.monuments != monuments.intValue())
+			return false;
 		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		if (playedDevelopmentCard == null || playedDevelopmentCard != this.playedDevelopmentCard) return false;		
-		if (!hand.equalsJSON((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"), (JSONObject) player.get("newDevCards"))) return false;
+		if (playedDevelopmentCard == null || playedDevelopmentCard != this.playedDevelopmentCard)
+			return false;
+		if (!hand.equalsJSON((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
+				(JSONObject) player.get("newDevCards")))
+			return false;
 		Boolean hasDiscarded = (Boolean) player.get("discarded");
-		if (hasDiscarded == null || hasDiscarded != this.hasDiscarded) return false;		
-		Long playerID = ((Long)  player.get("playerID"));
-		if (playerID == null) return false;
-		if (this.playerID != playerID.intValue()) return false;
+		if (hasDiscarded == null || hasDiscarded != this.hasDiscarded)
+			return false;
+		Long playerID = ((Long) player.get("playerID"));
+		if (playerID == null)
+			return false;
+		if (this.playerID != playerID.intValue())
+			return false;
 		return true;
 	}
-
 
 	public CatanColor getColor(String s) {
 		s = s.toUpperCase();
@@ -129,15 +154,14 @@ public class Player {
 		}
 	}
 
-	/*
-	 * public Player(String userName, int userIndex, GameModel game) { this.game
-	 * = game; try { for (int i = 0; i < 5; i++) settlements[i] = new
-	 * Settlement(this); for (int i = 0; i < 4; i++) cities[i] = new City(this);
-	 * for (int i = 0; i < 15; i++) roads[i] = new Road(this); } catch
-	 * (NullPlayerException e) { //TODO log
-	 * "no player passed to building or Road Constructors at" print stack trace
-	 * } setUserName(userName); }
-	 */
+	private void initPeices() {
+		for (int i = 0; i < 5; i++)
+			settlements[i] = new Settlement(this);
+		for (int i = 0; i < 4; i++)
+			cities[i] = new City(this);
+		for (int i = 0; i < 15; i++)
+			roads[i] = new Road(this);
+	}
 
 	/**
 	 * @param type
@@ -209,7 +233,6 @@ public class Player {
 		}
 		return (i <= 0);
 	}
-	
 
 	/**
 	 * @throws ResourceException
@@ -491,7 +514,7 @@ public class Player {
 		try {
 			this.receiveResource(p.drawRandomResourceCard(), 1);
 		} catch (ResourceException e) {
-			//TODO Log something about stealing failed because of no cards
+			// TODO Log something about stealing failed because of no cards
 			e.printStackTrace();
 		}
 	}
@@ -501,10 +524,10 @@ public class Player {
 	 */
 	public int getVictoryPoints() {
 		int points = 0;
-		/*for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.MONUMENT)
-				points++;
-		}*/
+		/*
+		 * for (DevCard card : hand.getDevCards()) { if (card.getType() ==
+		 * DevCardType.MONUMENT) points++; }
+		 */
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -520,7 +543,7 @@ public class Player {
 
 		return points;
 	}
-	
+
 	public int getVictoryPointsWithMonuments() {
 		int points = 0;
 		for (DevCard card : hand.getDevCards()) {
@@ -562,6 +585,7 @@ public class Player {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -574,6 +598,7 @@ public class Player {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -647,7 +672,7 @@ public class Player {
 		}
 		return roadsFree;
 	}
-	
+
 	public City getFreeCity() {
 		for (City city : cities) {
 			if (!city.isPlaced())
@@ -671,7 +696,7 @@ public class Player {
 		}
 		return null;
 	}
-	
+
 	public Boolean hasPort(PortType portType) {
 		for (City city : cities) {
 			if (city.hasPort(portType))
@@ -683,31 +708,31 @@ public class Player {
 		}
 		return false;
 	}
-	
+
 	public Boolean hasRoadCost() {
 		return hand.hasRoadCost();
 	}
-	
+
 	public Boolean hasCityCost() {
 		return hand.hasCityCost();
 	}
-	
+
 	public Boolean hasSettlementCost() {
 		return hand.hasSettlementCost();
 	}
-	
+
 	public Boolean hasDevelopmentCost() {
 		return hand.hasDevelopmentCost();
 	}
-	
+
 	public ResourceType drawRandomResourceCard() throws ResourceException {
 		return hand.drawRandomResourceCard();
 	}
-	
+
 	public Boolean hasResource(ResourceType type, Integer num) throws BadResourceTypeException {
 		return hand.hasResource(type, num);
 	}
-	
+
 	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
 		return hand.hasCards(resourceList);
 	}
@@ -715,9 +740,8 @@ public class Player {
 	public boolean canDiscardCard() {
 		return hand.canDiscardCard();
 	}
-	
-	public int getHandSize()
-	{
+
+	public int getHandSize() {
 		return hand.getHandSize();
 	}
 
@@ -729,13 +753,8 @@ public class Player {
 		this.playerID = playerID;
 	}
 
-
 	public void setUserIndex(Integer userIndex) {
 		this.userIndex = userIndex;
 	}
-
-
-	
-	
 
 }
