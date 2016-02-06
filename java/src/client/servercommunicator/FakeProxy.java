@@ -20,6 +20,19 @@ public class FakeProxy implements IServerProxy{
 	public void setURL(String URL){ // do nothing 
 		};
 	
+	private JSONObject makeJSON(String stringJSON)
+			throws ServerProxyException{
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(stringJSON);
+	
+			return json;
+		}
+		catch(Exception e){
+			throw new ServerProxyException("JSON probably invalid", e);
+		}
+	}
+
 		
 	/**
 	 * Checks the server to see if the given credentials are valid. If so
@@ -36,7 +49,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject loginUser(JSONObject credentials) 
 			throws ServerProxyException {
-			return null;
+		return makeJSON("{\"name\":\"Sam\",\"password\":\"sam\",\"playerID\":0}");
 	}
 	
 	/**
@@ -149,7 +162,8 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject getModel(int versionNumber)
 		throws ServerProxyException  {
-		return null;
+		String model = new FakeModel().toString();
+		return makeJSON(model);		
 	}
 	
 	/**
