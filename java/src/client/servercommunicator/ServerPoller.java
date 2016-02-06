@@ -1,6 +1,7 @@
 package client.servercommunicator;
 
 import shared.models.ModelFacade;
+import shared.models.exceptions.*;
 import org.json.simple.JSONObject;
 
 /**
@@ -42,6 +43,7 @@ public class ServerPoller extends Thread {
 		// Later we will probably propagate all the way to UI.
 		try { 
 			JSONObject model = new JSONObject(outbound.getModel(0));
+			return model;
 		}
 		catch(Exception e){ 
 			hasFailed = true;
@@ -61,6 +63,9 @@ public class ServerPoller extends Thread {
 			}
 			catch(InterruptedException e){
 				// do nothing, we will simply skip this poll and wait for the next one
+			}
+			catch(BadJSONException e){
+				// still do nothing, we should never get bad JSON from the server
 			}
 		}
 	}
