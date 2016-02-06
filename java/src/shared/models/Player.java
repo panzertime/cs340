@@ -89,14 +89,14 @@ public class Player {
 		Long monuments = ((Long)  player.get("monuments"));
 		if (monuments == null) return false;
 		if (this.monuments != monuments.intValue()) return false;
-		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		if (playedDevelopmentCard == null || playedDevelopmentCard == false) return false;		
+		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null || playedDevelopmentCard != this.playedDevelopmentCard) return false;		
 		if (!hand.equalsJSON((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"), (JSONObject) player.get("newDevCards"))) return false;
-		hasDiscarded = (Boolean) player.get("discarded");
-		if (hasDiscarded == null) return false;		
+		Boolean hasDiscarded = (Boolean) player.get("discarded");
+		if (hasDiscarded == null || hasDiscarded != this.hasDiscarded) return false;		
 		Long playerID = ((Long)  player.get("playerID"));
 		if (playerID == null) return false;
-		this.playerID = playerID.intValue();
+		if (this.playerID != playerID.intValue()) return false;
 		return true;
 	}
 
