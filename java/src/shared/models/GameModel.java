@@ -34,6 +34,7 @@ public class GameModel {
 	private Integer currentTurn;
 	private ChatModel chatModel;
 	private TradeModel tradeModel;
+	private Integer clientID;
 	
 	/**
 	 * @param board the board to  initialize
@@ -464,7 +465,6 @@ public class GameModel {
 			b = b && this.getBank().getHand().hasResource(one, 1);
 			b = b && this.getBank().getHand().hasResource(two, 1);
 		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
 		return b;
@@ -573,5 +573,17 @@ public class GameModel {
 	{	
 		return true;
 	}
+
+
+	public Integer getClientID() {
+		return clientID;
+	}
+
+
+	public void setClientID(Integer clientID) {
+		this.clientID = clientID;
+	}
+	
+	
 
 }
