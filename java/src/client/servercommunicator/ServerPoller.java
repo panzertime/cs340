@@ -11,7 +11,7 @@ public class ServerPoller extends Thread {
 	private ServerFacade outbound;
 	private ModelFacade inbound;
 
-	// for testing while we don't connect to ModelFacade
+	// for testing, no UI to propagate exceptions to yet 
 	private boolean hasFailed;
 
 	/**
@@ -40,8 +40,13 @@ public class ServerPoller extends Thread {
 		// anything other than "you have latest" or "here is latest"
 		// results in a HTTP 400, which becomes a ServerException.
 		// Later we will probably propagate all the way to UI.
-		try { return new JSONObject(outbound.getModel(0)); }
-		catch(Exception e){ return null; }
+		try { 
+			JSONObject model = new JSONObject(outbound.getModel(0));
+		}
+		catch(Exception e){ 
+			hasFailed = true;
+			return null; 
+		}
 	}
 
 	@Override
@@ -50,9 +55,8 @@ public class ServerPoller extends Thread {
 			try {
 				this.sleep(1500);
 				JSONObject result = poll();
-				// below here we will make a change to update local model
-				if(result == null){
-					hasFailed = true;
+				if(result != null){
+					inbound = new ModelFacade(result, outbound.get_player_id());	
 				}
 			}
 			catch(InterruptedException e){
