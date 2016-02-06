@@ -17,7 +17,9 @@ public class PollerTests {
 				// constructed with FakeProxy by default
 	
 			ServerPoller SP = new ServerPoller(sFacade, mFacade);
+			System.out.println("running poller...");
 			SP.run();
+			System.out.println("Going to sleep while poller runs...");
 			Thread.sleep(5000);
 			assertTrue(mFacade != null);
 		}

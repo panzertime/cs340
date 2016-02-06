@@ -55,7 +55,7 @@ public class ServerPoller extends Thread {
 	public void run(){
 		while(true){
 			try {
-				this.sleep(1500);
+				this.wait(1500);
 				JSONObject result = poll();
 				if(result != null){
 					inbound = new ModelFacade(result, outbound.get_player_id());	
