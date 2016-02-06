@@ -81,45 +81,45 @@ public class Hand {
 
 	public Hand(JSONObject resourceList, JSONObject deckList) throws BadJSONException {
 		if (resourceList == null || deckList == null) throw new BadJSONException(); 
-		Integer wood = (Integer)((Long)resourceList.get("wood")).intValue();
-		Integer brick = (Integer)((Long) resourceList.get("brick")).intValue();
-		Integer sheep = (Integer)((Long) resourceList.get("sheep")).intValue();
-		Integer wheat = (Integer)((Long) resourceList.get("wheat")).intValue();
-		Integer ore = (Integer)((Long) resourceList.get("ore")).intValue();
+		Long wood = ((Long)resourceList.get("wood"));
+		Long brick = ((Long) resourceList.get("brick"));
+		Long sheep = ((Long) resourceList.get("sheep"));
+		Long wheat = ((Long) resourceList.get("wheat"));
+		Long ore = ((Long) resourceList.get("ore"));
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) throw new BadJSONException(); 
-		this.wood = wood;
-		this.brick = brick;
-		this.sheep = sheep;
-		this.wheat = wheat;
-		this.ore = ore;
+		this.wood = wood.intValue();
+		this.brick = brick.intValue();
+		this.sheep = sheep.intValue();
+		this.wheat = wheat.intValue();
+		this.ore = ore.intValue();
 		devCards = new ArrayList<DevCard>();
-		Integer yOP = ((Long)deckList.get("yearOfPlenty")).intValue();
-		Integer mono = ((Long)deckList.get("monopoly")).intValue();
-		Integer sol = ((Long)deckList.get("soldier")).intValue();
-		Integer rB = ((Long)deckList.get("roadBuilding")).intValue();
-		Integer monu = ((Long)deckList.get("monument")).intValue();
+		Long yOP = ((Long)deckList.get("yearOfPlenty"));
+		Long mono = ((Long)deckList.get("monopoly"));
+		Long sol = ((Long)deckList.get("soldier"));
+		Long rB = ((Long)deckList.get("roadBuilding"));
+		Long monu = ((Long)deckList.get("monument"));
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null) throw new BadJSONException(); 
-		for (int i = 0; i < yOP; i++) {
+		for (int i = 0; i < yOP.intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < mono; i++) {
+		for (int i = 0; i < mono.intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < sol; i++) {
+		for (int i = 0; i < sol.intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < rB; i++) {
+		for (int i = 0; i < rB.intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
-		for (int i = 0; i < monu; i++) {
+		for (int i = 0; i < monu.intValue(); i++) {
 			DevCard card = new Monument();
 			card.setEnabled(false);
 			devCards.add(card);
@@ -129,23 +129,28 @@ public class Hand {
 	
 	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
 		if (resourceList == null || deckList == null) return false; 
-		Integer wood = (Integer)((Long)resourceList.get("wood")).intValue();
-		Integer brick = (Integer)((Long) resourceList.get("brick")).intValue();
-		Integer sheep = (Integer)((Long) resourceList.get("sheep")).intValue();
-		Integer wheat = (Integer)((Long) resourceList.get("wheat")).intValue();
-		Integer ore = (Integer)((Long) resourceList.get("ore")).intValue();
+		Long wood = ((Long)resourceList.get("wood"));
+		Long brick = ((Long) resourceList.get("brick"));
+		Long sheep = ((Long) resourceList.get("sheep"));
+		Long wheat = ((Long) resourceList.get("wheat"));
+		Long ore = ((Long) resourceList.get("ore"));
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) return false; 
-		if (this.wood != wood) return false;
-		if (this.brick != brick) return false;
-		if (this.sheep != sheep) return false;
-		if (this.wheat != wheat) return false;
-		if (this.ore != ore) return false;
-		Integer yOP = ((Long)deckList.get("yearOfPlenty")).intValue();
-		Integer mono = ((Long)deckList.get("monopoly")).intValue();
-		Integer sol = ((Long)deckList.get("soldier")).intValue();
-		Integer rB = ((Long)deckList.get("roadBuilding")).intValue();
-		Integer monu = ((Long)deckList.get("monument")).intValue();
-		if (yOP == null || mono == null || sol == null || rB == null || monu == null) return false; 
+		if (this.wood != wood.intValue()) return false;
+		if (this.brick != brick.intValue()) return false;
+		if (this.sheep != sheep.intValue()) return false;
+		if (this.wheat != wheat.intValue()) return false;
+		if (this.ore != ore.intValue()) return false;
+		Long yearOfPlenty = ((Long)deckList.get("yearOfPlenty"));
+		Long monopoly = ((Long)deckList.get("monopoly"));
+		Long soldier = ((Long)deckList.get("soldier"));
+		Long roadBuilder = ((Long)deckList.get("roadBuilding"));
+		Long monument = ((Long)deckList.get("monument"));
+		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null) return false; 
+		Integer yOP = yearOfPlenty.intValue();
+		Integer mono = monopoly.intValue();
+		Integer sol = soldier.intValue();
+		Integer rB = roadBuilder.intValue();
+		Integer monu = monument.intValue();
 		for (int j = 0; j < devCards.size(); j++)
 		{
 			switch (devCards.get(j).getType())
@@ -176,85 +181,85 @@ public class Hand {
 
 	public Hand(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) throws BadJSONException {
 		if (resourceList == null || oldDevList == null || newDevList == null) throw new BadJSONException(); 
-		Integer wood = ((Long) resourceList.get("wood")).intValue();
-		Integer brick = ((Long) resourceList.get("brick")).intValue();
-		Integer sheep = ((Long) resourceList.get("sheep")).intValue();
-		Integer wheat = ((Long) resourceList.get("wheat")).intValue();
-		Integer ore = ((Long) resourceList.get("ore")).intValue();
+		Long wood = ((Long)resourceList.get("wood"));
+		Long brick = ((Long) resourceList.get("brick"));
+		Long sheep = ((Long) resourceList.get("sheep"));
+		Long wheat = ((Long) resourceList.get("wheat"));
+		Long ore = ((Long) resourceList.get("ore"));
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) throw new BadJSONException(); 
-		this.wood = wood;
-		this.brick = brick;
-		this.sheep = sheep;
-		this.wheat = wheat;
-		this.ore = ore;
+		this.wood = wood.intValue();
+		this.brick = brick.intValue();
+		this.sheep = sheep.intValue();
+		this.wheat = wheat.intValue();
+		this.ore = ore.intValue();
 		devCards = new ArrayList<DevCard>();
 
-		Integer yOP = ((Long) oldDevList.get("yearOfPlenty")).intValue();
-		Integer mono = ((Long) oldDevList.get("monopoly")).intValue();
-		Integer sol = ((Long) oldDevList.get("soldier")).intValue();
-		Integer rB = ((Long) oldDevList.get("roadBuilding")).intValue();
-		Integer monu = ((Long) oldDevList.get("monument")).intValue();
+		Long yOP = ((Long)oldDevList.get("yearOfPlenty"));
+		Long mono = ((Long)oldDevList.get("monopoly"));
+		Long sol = ((Long)oldDevList.get("soldier"));
+		Long rB = ((Long)oldDevList.get("roadBuilding"));
+		Long monu = ((Long)oldDevList.get("monument"));
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null) throw new BadJSONException(); 
-		for (int i = 0; i < yOP; i++) {
+		for (int i = 0; i < yOP.intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
 		
-		for (int i = 0; i < mono; i++) {
+		for (int i = 0; i < mono.intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
 		
-		for (int i = 0; i < sol; i++) {
+		for (int i = 0; i < sol.intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
 		
-		for (int i = 0; i < rB; i++) {
+		for (int i = 0; i < rB.intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
 		
-		for (int i = 0; i < monu; i++) {
+		for (int i = 0; i < monu.intValue(); i++) {
 			DevCard card = new Monument();
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		yOP = ((Long) newDevList.get("yearOfPlenty")).intValue();
-		mono = ((Long) newDevList.get("monopoly")).intValue();
-		sol = ((Long) newDevList.get("soldier")).intValue();
-		rB = ((Long) newDevList.get("roadBuilding")).intValue();
-		monu = ((Long) newDevList.get("monument")).intValue();
+		 yOP = ((Long)newDevList.get("yearOfPlenty"));
+		 mono = ((Long)newDevList.get("monopoly"));
+		 sol = ((Long)newDevList.get("soldier"));
+		 rB = ((Long)newDevList.get("roadBuilding"));
+		 monu = ((Long)newDevList.get("monument"));
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null) throw new BadJSONException(); 
-		for (int i = 0; i < yOP; i++) {
+		for (int i = 0; i < yOP.intValue(); i++) {
 			DevCard card = new YearOfPlenty();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
 
-		for (int i = 0; i < mono; i++) {
+		for (int i = 0; i < mono.intValue(); i++) {
 			DevCard card = new Monopoly();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
 		
-		for (int i = 0; i < sol; i++) {
+		for (int i = 0; i < sol.intValue(); i++) {
 			DevCard card = new Knight();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
 
-		for (int i = 0; i < rB; i++) {
+		for (int i = 0; i < rB.intValue(); i++) {
 			DevCard card = new RoadBuilding();
 			card.setEnabled(false);
 			devCards.add(card);
 		}
 
-		for (int i = 0; i < monu; i++) {
+		for (int i = 0; i < monu.intValue(); i++) {
 
 			DevCard card = new Monument();
 			card.setEnabled(false);

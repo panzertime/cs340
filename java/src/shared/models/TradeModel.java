@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import shared.logger.Log;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.BadPlayerIndexException;
 
 public class TradeModel {
@@ -18,23 +20,31 @@ public class TradeModel {
 	private int ore;
 	
 	
-	public TradeModel(JSONObject tradeOffer)
+	public TradeModel(JSONObject tradeOffer) throws BadJSONException
 	{
 		if (tradeOffer == null) return;
-		int s = ((Long) tradeOffer.get("sender")).intValue();
-		int r = ((Long) tradeOffer.get("receiver")).intValue();
+		Long s = ((Long) tradeOffer.get("sender"));
+		Long r = ((Long) tradeOffer.get("receiver"));
+		if (s == null || r == null) throw new BadJSONException();
+		
 		try {
-			sender = GameModel.whichPlayer(s);
-			receiver = GameModel.whichPlayer(r);
+			sender = GameModel.whichPlayer(s.intValue());
+			receiver = GameModel.whichPlayer(r.intValue());
 		} catch (BadPlayerIndexException e) {
-			e.printStackTrace();
+			Log.exception(e);
 		}
 		JSONObject offer = (JSONObject)tradeOffer.get("offer");
-		wood = ((Long) offer.get("wood")).intValue();
-		brick = ((Long) offer.get("brick")).intValue();
-		sheep = ((Long) offer.get("sheep")).intValue();
-		wheat = ((Long) offer.get("wheat")).intValue();
-		ore = ((Long) offer.get("ore")).intValue();
+		Long wood = ((Long) offer.get("wood"));
+		Long brick = ((Long) offer.get("brick"));
+		Long sheep = ((Long) offer.get("sheep"));
+		Long wheat = ((Long) offer.get("wheat"));
+		Long ore = ((Long) offer.get("ore"));
+		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) throw new BadJSONException();
+		this.wood = wood.intValue();
+		this.brick = brick.intValue();
+		this.sheep = sheep.intValue();
+		this.wheat = wheat.intValue();
+		this.ore = ore.intValue();
 	}
 	
 	

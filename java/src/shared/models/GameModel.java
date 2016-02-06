@@ -62,12 +62,13 @@ public class GameModel {
 			players.add(new Player(player));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"), this);
-		version = ((Long) jsonMap.get("version")).intValue();
+		Long version = ((Long) jsonMap.get("version"));
 		if (version == null) throw new BadJSONException();
-		Integer w = ((Long) jsonMap.get("winner")).intValue();
+		this.version = version.intValue();
+		Long w = ((Long) jsonMap.get("winner"));
 		if (w == null) throw new BadJSONException();
 		try {
-			winner = GameModel.whichPlayer(w);
+			winner = GameModel.whichPlayer(w.intValue());
 		} catch (BadPlayerIndexException e) {
 			Log.exception(e);
 		}
@@ -75,7 +76,8 @@ public class GameModel {
 		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
 		if (turnTracker == null) throw new BadJSONException();
 
-		currentTurn = ((Long) turnTracker.get("currentTurn")).intValue();
+		Long currentTurn = ((Long) turnTracker.get("currentTurn"));
+		this.currentTurn = currentTurn.intValue();
 		if (currentTurn == null) throw new BadJSONException();
 
 		try {
@@ -91,11 +93,11 @@ public class GameModel {
 			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
-		Integer lR = ((Long) turnTracker.get("longestRoad")).intValue();
-		Integer lA = ((Long) turnTracker.get("largestArmy")).intValue();
+		Long lR = ((Long) turnTracker.get("longestRoad"));
+		Long lA = ((Long) turnTracker.get("largestArmy"));
 		if (lR == null || lA == null) throw new BadJSONException();
 		try {
-			achievements = new Achievements(GameModel.whichPlayer(lR),GameModel.whichPlayer(lA));
+			achievements = new Achievements(GameModel.whichPlayer(lR.intValue()),GameModel.whichPlayer(lA.intValue()));
 		} catch (BadPlayerIndexException e) {
 			// TODO Auto-generated catch block
 			Log.exception(e);
@@ -113,6 +115,13 @@ public class GameModel {
 		if (bank.equalsJSON((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck")) == false) return false;
 		if (chatModel.equalsJSON((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"))) return false;
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		if (playerList == null) return false;
+		for (int i = 0; i < playerList.size(); i++)
+		{
+			JSONObject player = (JSONObject) playerList.get(i);
+			if (!players.get(i).equalsJSON(player)) return false;
+		}
+		
 		return true;
 	}
 	

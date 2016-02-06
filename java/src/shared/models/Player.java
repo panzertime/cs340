@@ -47,20 +47,24 @@ public class Player {
 		userColor = getColor(c);
 		userName = (String) player.get("name");
 		if (userName == null) throw new BadJSONException();
-		userIndex = (Integer) ((Long)  player.get("playerIndex")).intValue();
-		if (userIndex == null) throw new BadJSONException();		
-		armies = (Integer) ((Long)  player.get("soldiers")).intValue();
-		if (armies == null) throw new BadJSONException();		
-		monuments = (Integer) ((Long)  player.get("monuments")).intValue();
-		if (monuments == null) throw new BadJSONException();		
+		Long userIndex = ((Long)  player.get("playerIndex"));
+		if (userIndex == null) throw new BadJSONException();
+		this.userIndex = userIndex.intValue();
+		Long armies =  ((Long)  player.get("soldiers"));
+		if (armies == null) throw new BadJSONException();
+		this.armies = armies.intValue();
+		Long monuments = ((Long)  player.get("monuments"));
+		if (monuments == null) throw new BadJSONException();
+		this.monuments = monuments.intValue();
 		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
 		if (playedDevelopmentCard == null) throw new BadJSONException();		
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
 		hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null) throw new BadJSONException();		
-		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
-		if (playerID == null) throw new BadJSONException(); 
+		Long playerID = ((Long)  player.get("playerID"));
+		if (playerID == null) throw new BadJSONException();
+		this.playerID = playerID.intValue();
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -681,6 +685,11 @@ public class Player {
 
 	public void setPlayerID(Integer playerID) {
 		this.playerID = playerID;
+	}
+
+	public boolean equalsJSON(JSONObject player) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	
