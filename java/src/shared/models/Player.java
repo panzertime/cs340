@@ -669,11 +669,6 @@ public class Player {
 	public boolean canDiscardCard() {
 		return hand.canDiscardCard();
 	}
-
-	public boolean hasPort(PortType portType) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	public int getHandSize()
 	{
