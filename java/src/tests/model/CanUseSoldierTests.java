@@ -42,7 +42,7 @@ public class CanUseSoldierTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +54,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -67,7 +67,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -80,7 +80,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -93,7 +93,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -106,7 +106,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -119,7 +119,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 0;
 		try {
 			modelFacade.canUseSoldier(newRobberLocation, playerIndex);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

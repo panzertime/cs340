@@ -22,8 +22,7 @@ import shared.models.exceptions.ModelAccessException;
 public class CanSendChatTests {
 	
 	ModelFacade modelFacade;
-
-	@Before
+	
 	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");
@@ -41,77 +40,40 @@ public class CanSendChatTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	//Good tests
+	//Test tests
 	@Test
-	public void testCanSendChat1() {
+	public void testCanSendChatNotLoggedIn() {
 		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(modelFacade.canSendChat() == false) {
+				System.out.println("Passed canSendChat while player is not in a game");
+			} else
+			{
+				fail("Failed canSendChat test while player was not in a game");
+			}
+		} catch (NullPointerException e) {
+			fail("Error when accessing model");
 		}
-		fail("Not yet implemented");
 	}
 
+	//Good test
 	@Test
-	public void testCanSendChat2() {
+	public void testCanSendChatLoggedIn() {
 		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			initModel();
+			if(modelFacade.canSendChat() == true) {
+				System.out.println("Passed canSendChat while player is in a game");
+			} else
+			{
+				fail("Failed canSendChat test while player was in a game");
+			}
+		} catch (NullPointerException e) {
+			fail("Error when accessing model");
 		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanSendChat3() {
-		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	//Bad tests
-	@Test
-	public void testCanSendChat4() {
-		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanSendChat5() {
-		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanSendChat6() {
-		try {
-			modelFacade.canSendChat();
-		} catch (ModelAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
 	}
 }

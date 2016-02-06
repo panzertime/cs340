@@ -1,15 +1,4 @@
 {
-  "tradeOffer" : {
-    "sender" : 1,
-    "receiver" : 0,
-    "offer" : {
-      "brick" : 1,
-      "ore" : 1,
-      "sheep" : 0,
-      "wheat" : -2,
-      "wood" : -3
-     }
-  },
   "deck": {
     "yearOfPlenty": 2,
     "monopoly": 2,
@@ -659,7 +648,7 @@
   },
   "turnTracker": {
     "status": "Rolling",
-    "currentTurn": 1,
+    "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },

@@ -42,7 +42,7 @@ public class CanBuildSettlementTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -53,7 +53,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -65,7 +65,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -77,7 +77,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -90,7 +90,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -103,7 +103,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -115,7 +115,7 @@ public class CanBuildSettlementTests {
 		VertexLocation vertLoc = null;
 		try {
 			modelFacade.canBuildSettlement(vertLoc);
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -41,7 +41,7 @@ public class CanFinishTurnTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel);
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +52,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn1() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -63,7 +63,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn2() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,7 +74,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn3() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -86,7 +86,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn4() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -97,7 +97,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn5() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class CanFinishTurnTests {
 	public void testCanFinishTurn6() {
 		try {
 			modelFacade.canFinishTurn();
-		} catch (ModelAccessException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

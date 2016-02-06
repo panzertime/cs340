@@ -21,8 +21,8 @@ public class TradeModel {
 	public TradeModel(JSONObject tradeOffer)
 	{
 		if (tradeOffer == null) return;
-		int s = (Integer)tradeOffer.get("sender");
-		int r = (Integer)tradeOffer.get("receiver");
+		int s = ((Long) tradeOffer.get("sender")).intValue();
+		int r = ((Long) tradeOffer.get("receiver")).intValue();
 		try {
 			sender = GameModel.whichPlayer(s);
 			receiver = GameModel.whichPlayer(r);
@@ -30,11 +30,11 @@ public class TradeModel {
 			e.printStackTrace();
 		}
 		JSONObject offer = (JSONObject)tradeOffer.get("offer");
-		wood = (Integer)offer.get("wood");
-		brick = (Integer)offer.get("brick");
-		sheep = (Integer)offer.get("sheep");
-		wheat = (Integer)offer.get("wheat");
-		ore = (Integer)offer.get("ore");
+		wood = ((Long) offer.get("wood")).intValue();
+		brick = ((Long) offer.get("brick")).intValue();
+		sheep = ((Long) offer.get("sheep")).intValue();
+		wheat = ((Long) offer.get("wheat")).intValue();
+		ore = ((Long) offer.get("ore")).intValue();
 	}
 	
 	

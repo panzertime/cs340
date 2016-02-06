@@ -54,6 +54,7 @@ public class GameModel {
 		bank = new Bank((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		if (playerList == null) throw new BadJSONException();
 		players = new ArrayList<Player>();
 		for (int i = 0; i < playerList.size(); i++)
 		{
@@ -580,7 +581,11 @@ public class GameModel {
 	 */
 	public Boolean canSendChat()
 	{	
-		return true;
+		boolean result = true;
+		if(clientID == null) {
+			result = true;
+		}
+		return result;
 	}
 
 
