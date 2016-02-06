@@ -60,7 +60,7 @@ public class Player {
 		hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null) throw new BadJSONException();		
 		playerID = (Integer) player.get("playerID");
-		if (playerID == null) throw new BadJSONException();		
+//		if (playerID == null) throw new BadJSONException();		
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
@@ -661,6 +661,11 @@ public class Player {
 	public boolean hasPort(PortType portType) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public int getHandSize()
+	{
+		return hand.getHandSize();
 	}
 
 }

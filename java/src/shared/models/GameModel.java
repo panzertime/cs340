@@ -404,7 +404,7 @@ public class GameModel {
 		try {
 			b = b && getActivePlayer().hasResource(type, ratio);
 		} catch (BadResourceTypeException e) {
-			// TODO Auto-generated catch block
+
 			Log.exception(e);
 		}		
 		if (portType != null) b = b && getActivePlayer().hasPort(portType);
@@ -416,7 +416,14 @@ public class GameModel {
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		//check turn
 		//robber has different location
-		//player being robbed has resource cards
+		Player robbed = null;
+		try {
+			robbed = GameModel.whichPlayer(playerIndex);
+		} catch (BadPlayerIndexException e) {
+			Log.exception(e);
+		}
+		b = b && (robbed.getHandSize() > 0);
+		
 		return b;
 	}
 	
@@ -431,7 +438,7 @@ public class GameModel {
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 				//check turn
-		//Bank.getDevCards.size > 0
+		b = b && (this.getBank().getHand().getDevCards().size() > 0);
 		b = b && this.getActivePlayer().hasDevelopmentCost();
 		return b;
 	}
@@ -458,7 +465,7 @@ public class GameModel {
 			b = b && this.getBank().getHand().hasResource(two, 1);
 		} catch (BadResourceTypeException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.exception(e);
 		}
 		return b;
 	}
@@ -470,8 +477,8 @@ public class GameModel {
 		//check turn
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		//canBuildRoad
-		//canBuildRoad (also on first location)
+		//canBuildRoad minus cost
+		//canBuildRoad (also on first location) minus cost
 		return b;
 	}
 	
@@ -499,8 +506,12 @@ public class GameModel {
 		boolean b = true;
 		b = b && this.status.equals("Playing");
 			//check turn
-			//check if can Build
+
 		b = b && this.getActivePlayer().hasRoadCost();
+		b = b && this.getActivePlayer().hasRoadPiece();
+		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
+		
+		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
 
 		return b;
 	}
@@ -510,8 +521,9 @@ public class GameModel {
 		boolean b = true;
 		b = b && this.status.equals("Playing");
 			//check turn
-			//check if can Build
 		b = b && this.getActivePlayer().hasSettlementCost();
+		b = b && this.getActivePlayer().hasSettlementPiece();
+		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
 		return b;
 	}
 	
@@ -526,9 +538,8 @@ public class GameModel {
 		b = b && this.status.equals("Playing");
 			//TODO: Check turn
 		b = b && this.getActivePlayer().hasCityCost();
-
-				//TODO: check if can Build
-
+		b = b && this.getActivePlayer().hasCityPiece();
+		b = b && this.getBoard().canBuildCity(this.getActivePlayer(), vertex);
 		
 		return b;
 	}
@@ -544,8 +555,7 @@ public class GameModel {
 	public Boolean canAcceptTrade() throws BadJSONException
 	{
 		boolean b = false;
-		//TODO add current player
-		if (this.tradeModel != null)
+		if (this.tradeModel != null) //you have been offered a trade
 		{
 		Player receiver = this.tradeModel.getReceiver();
 			b = receiver.hasCards(this.tradeModel.getResources());
