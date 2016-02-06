@@ -19,7 +19,7 @@ public class PollerTests {
 			ServerPoller SP = new ServerPoller(sFacade, mFacade);
 			SP.start();
 			Thread.sleep(5000);
-			assertTrue(modelFacade.getModel() != null);
+			assertFalse(mFacade.equalsJSON(null));
 		}
 		catch(Exception e){
 			fail("Poller had an exception: " + e.toString());
