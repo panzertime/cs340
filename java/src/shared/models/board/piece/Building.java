@@ -16,9 +16,9 @@ public abstract class Building {
 	protected Player owner;
 	protected Vertex vertex;
 	
-	public Building (Player owner) throws NullPlayerException {
+	public Building (Player owner) throws IllegalArgumentException {
 		if (owner == null)
-			throw new NullPlayerException();
+			throw new IllegalArgumentException();
 		this.owner = owner;
 	}
 	
