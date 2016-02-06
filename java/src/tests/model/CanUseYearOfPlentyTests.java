@@ -24,7 +24,6 @@ public class CanUseYearOfPlentyTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
 	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");

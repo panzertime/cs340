@@ -5,12 +5,12 @@ public class PhaseOneTests {
 		String[] tests = {
 				//"tests.poller.PollerTests",
 				//"tests.proxy.ProxyTests",
-				
+
 				"tests.model.ModelTests",
 				//"tests.model.CanSendChatTests",
 				//"tests.model.CanRollNumberTests",
 				//"tests.model.CanPlaceRobberTests",
-				//"tests.model.CanFinishTurnTests,
+				//"tests.model.CanFinishTurnTests",
 				//"tests.model.CanBuyDevCardTests",
 				//"tests.model.CanUseYearOfPlentyTests",
 				//"tests.model.CanUseRoadBuilderTests", //TODO
