@@ -8,17 +8,18 @@ public class PortHex extends WaterHex{
 	private EdgeDirection portDirection;
 	private PortType portType;
 	
-	public PortHex(HexLocation hexLocation, PortType portType) throws IllegalArgumentException {
+	public PortHex(HexLocation hexLocation, PortType portType, EdgeDirection portDirection) throws IllegalArgumentException {
 		super(hexLocation);
 		if (portType == null) 
 			throw new IllegalArgumentException();
-		this.setPortType(portType);
+		setPortType(portType);
+		setPortDirection(portDirection);
 	}
 
 	/**
 	 * @param portType the portType to set
 	 */
-	public void setPortType(PortType portType) {
+	private void setPortType(PortType portType) {
 		this.portType = portType;
 	}
 
@@ -32,7 +33,7 @@ public class PortHex extends WaterHex{
 	/**
 	 * @param portDirection the portDirection to set
 	 */
-	public void setPortDirection(EdgeDirection portDirection) {
+	private void setPortDirection(EdgeDirection portDirection) {
 		this.portDirection = portDirection;
 	}
 

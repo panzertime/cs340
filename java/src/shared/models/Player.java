@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.piece.City;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
@@ -601,6 +602,18 @@ public class Player {
 				return road;
 		}
 		return null;
+	}
+	
+	public Boolean hasPort(PortType portType) {
+		for (City city : cities) {
+			if (city.hasPort(portType))
+				return true;
+		}
+		for (Settlement settlement : settlements) {
+			if (settlement.hasPort(portType))
+				return true;
+		}
+		return false;
 	}
 	
 	public Boolean hasRoadCost() {

@@ -18,6 +18,9 @@ import shared.models.board.hex.tiles.land.ForestHex;
 import shared.models.board.hex.tiles.land.LandHex;
 import shared.models.board.hex.tiles.land.MountainHex;
 import shared.models.board.hex.tiles.land.PastureHex;
+import shared.models.board.hex.tiles.water.PortHex;
+import shared.models.board.hex.tiles.water.PortType;
+import shared.models.board.hex.tiles.water.WaterHex;
 import shared.models.board.piece.City;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
@@ -100,8 +103,76 @@ public class Board {
 			else
 				throw new BadJSONException();
 		}
-		// TODO Keep Building Shit!
+		for (Object portObject : ports) {
+			JSONObject jsonPort = (JSONObject) portObject;
+			
+			JSONObject jsonHexLoc = (JSONObject) jsonPort.get("location");
+			if (jsonHexLoc == null)
+				throw new BadJSONException();
+			HexLocation hexLoc = new HexLocation(jsonHexLoc);
+			
+			EdgeDirection edgeDir = null;
+			String direction = (String) jsonPort.get("direction");
+			switch (direction) {
+			case "NW" :	
+				edgeDir = EdgeDirection.NorthWest;
+				break;
+			case "N" : 
+				edgeDir = EdgeDirection.North;
+				break;
+			case "NE" :
+				edgeDir = EdgeDirection.NorthEast;
+				break;
+			case "SE" :
+				edgeDir = EdgeDirection.SouthEast;
+				break;
+			case "S" :
+				edgeDir = EdgeDirection.South;
+				break;
+			case "SW" :
+				edgeDir = EdgeDirection.SouthWest;
+				break;
+			default :
+				throw new BadJSONException();
+			}
 
+			String resource = (String) jsonPort.get("resource");
+			
+			if (resource != null) {
+				switch (resource) {
+				case "Wood":
+					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WOOD, edgeDir));
+					break;
+				case "Brick":
+					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.BRICK, edgeDir));
+					break;
+				case "Sheep":
+					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.SHEEP, edgeDir));
+					break;
+				case "Wheat":
+					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WHEAT, edgeDir));
+					break;
+				case "Ore":
+					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.ORE, edgeDir));
+					break;
+				default:
+					throw new BadJSONException();
+				}
+			} else {
+				this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.THREE, edgeDir));
+			}
+			
+			EdgeDirection sideHexDir = edgeDir.toRight();
+			while (this.hexes.get(hexLoc.getNeighborLoc(sideHexDir)) != null)
+				sideHexDir = sideHexDir.toRight();
+			HexLocation sideHexLoc = hexLoc.getNeighborLoc(sideHexDir);
+			
+			this.hexes.put(sideHexLoc, new WaterHex(sideHexLoc));
+		}
+		
+		// FINALY! the recursive call to connect the board
+	
+		// TODO Keep Building Shit!
 	}
 
 	public Hex getHexAt(HexLocation hexLocation) {
@@ -239,7 +310,7 @@ public class Board {
 
 	private void connectEdge(Hex hex, EdgeDirection edgeDir) {
 		Hex adjacent = getHexAt(hex.getHexlocation().getNeighborLoc(edgeDir));
-		EdgeLocation edgeLoc = new EdgeLocation(hex.getHexlocation(), edgeDir).getNormalizedLocation();
+		EdgeLocation edgeLoc = new EdgeLocation(hex.getHexlocation(), edgeDir);
 
 		Edge edge = new Edge(edgeLoc, hex, adjacent);
 
@@ -264,7 +335,7 @@ public class Board {
 		if (hexRight != null)
 			edgeFar = hexRight.getEdge(vertexDir.toRightEdge().toOpposite().toRight());
 
-		VertexLocation vertexLoc = new VertexLocation(hex.getHexlocation(), vertexDir).getNormalizedLocation();
+		VertexLocation vertexLoc = new VertexLocation(hex.getHexlocation(), vertexDir);
 
 		Vertex vertex = new Vertex(vertexLoc, hex, edgeLeft, hexLeft, edgeFar, hexRight, edgeRight);
 
