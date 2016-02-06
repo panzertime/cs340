@@ -851,12 +851,13 @@ public class ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @param ratio Port
-	 * @param type Resource
+	 * @param input Resource
+	 * @param output Resource
 	 * @return post
 	 * @throws NullPointerException
 	 */
-	public boolean canMaritimeTrade(int ratio, ResourceType type) throws NullPointerException {
-		 return this.gameModel.canMaritimeTrade(ratio, type);
+	public boolean canMaritimeTrade(int ratio, ResourceType input, ResourceType output) throws NullPointerException {
+		 return this.gameModel.canMaritimeTrade(ratio, input, output);
 	}
 
 	/**
