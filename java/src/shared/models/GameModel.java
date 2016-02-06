@@ -124,7 +124,7 @@ public class GameModel {
 		if (version == null) return false;
 		if (this.version != version.intValue()) return false;
 		Long w = ((Long) jsonMap.get("winner"));
-		if (w == null) throw new BadJSONException();
+		if (w == null) return false;
 			if (w == -1) { if (winner != null) return false;}
 			else{
 				if (winner == null || winner.getUserIndex() != w.intValue()) return false;
@@ -134,7 +134,7 @@ public class GameModel {
 		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
 		if (turnTracker == null) return false;
 		Long currentTurn = ((Long) turnTracker.get("currentTurn"));
-		if (currentTurn == null) throw new BadJSONException();
+		if (currentTurn == null) return false;
 		if (this.currentTurn != currentTurn.intValue()) return false;
 		
 		
@@ -443,16 +443,21 @@ public class GameModel {
 		return b;
 	}
 	
-	public Boolean canMaritimeTrade(int ratio, ResourceType type)
+	public Boolean canMaritimeTrade(int ratio, ResourceType input, ResourceType output)
 	{
 		PortType portType = null;
+		try {
+			if (!this.getBank().getHand().hasResource(output, 1)) return false;
+		} catch (BadResourceTypeException e1) {
+			// TODO Auto-generated catch block
+			Log.exception(e1);		}
 		if (ratio == 3)
 		{
 			portType = PortType.THREE;
 		}
 		else if (ratio == 2)
 		{
-			switch (type)
+			switch (input)
 			{
 			case WOOD:
 				portType = PortType.WOOD;
@@ -480,7 +485,7 @@ public class GameModel {
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		try {
-			b = b && getActivePlayer().hasResource(type, ratio);
+			b = b && getActivePlayer().hasResource(input, ratio);
 		} catch (BadResourceTypeException e) {
 
 			Log.exception(e);
