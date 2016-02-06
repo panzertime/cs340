@@ -24,10 +24,9 @@ public class CanPlaceRobberTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initRobModel() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/robjson.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,84 +47,98 @@ public class CanPlaceRobberTests {
 		}
 	}
 	
-	//Good tests
+	//BAD input
 	@Test
 	public void testCanPlaceRobber1() {
 		HexLocation hexLoc = null;
 		int playerIndex = 0;
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			mf.canPlaceRobber(hexLoc, playerIndex);
+			fail("failed canPlaceRobber test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Passed canPlaceRobber test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanPlaceRobber2() {
+		this.initRobModel();
 		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		int playerIndex = -1;
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test with uninit hex loc");
+			} else {
+				fail("failed canPlaceRobber test with uninit hex");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canPlaceRobber test with uninit hex - unit model");
 		}
-		fail("Not yet implemented");
+		
 	}
 	
 	@Test
 	public void testCanPlaceRobber3() {
-		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		this.initRobModel();
+		HexLocation hexLoc = new HexLocation(0,-2);
+		int playerIndex = -1;
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test with unmoved robber");
+			} else {
+				fail("failed canPlaceRobber test with unmoved robber");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canPlaceRobber test with unmoved robber - unit model");
 		}
-		fail("Not yet implemented");
 	}
-	
-	//Bad tests
+
 	@Test
 	public void testCanPlaceRobber4() {
-		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		this.initRobModel();
+		HexLocation hexLoc = new HexLocation(0,-3);
+		int playerIndex = -1;
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber on water test");
+			} else {
+				fail("failed canPlaceRobber on water test");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canPlaceRobber on water test - uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanPlaceRobber5() {
-		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		this.initRobModel();
+		HexLocation hexLoc = new HexLocation(56,-30);
+		int playerIndex = -1;
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test with bizzare location");
+			} else {
+				fail("failed canPlaceRobber test with bizzare location");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canPlaceRobber test with bizzare location - uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanPlaceRobber6() {
-		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		this.initRobModel();
+		HexLocation hexLoc = new HexLocation(0,-1);
+		int playerIndex = -1;
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
+				System.out.println("Passed canPlaceRobber test with good location");
+			} else {
+				fail("failed canPlaceRobber test with good location");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canPlaceRobber test with good location - uninit model");
 		}
-		fail("Not yet implemented");
 	}
-	
 }

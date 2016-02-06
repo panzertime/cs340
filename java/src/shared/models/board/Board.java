@@ -47,7 +47,7 @@ public class Board {
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
 			throw new BadJSONException();
-		if (jsonHexes.size() != 17)
+		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
 		JSONArray jsonPorts = (JSONArray) jsonMap.get("ports");
@@ -246,6 +246,13 @@ public class Board {
 		HexLocation robberLoc = new HexLocation(jsonRobber);
 
 	}
+	
+
+	public boolean equalsJSON(JSONObject jsonObject, GameModel gameModel) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 
 	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);

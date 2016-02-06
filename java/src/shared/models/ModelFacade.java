@@ -41,6 +41,10 @@ public class ModelFacade {
 		this.userID = playerID;
 	}
 	
+	public ModelFacade() {
+		this.gameModel = null;
+	}
+
 	public GameModel getGameModel() {
 		return gameModel;
 	}

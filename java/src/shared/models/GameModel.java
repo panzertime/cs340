@@ -62,12 +62,13 @@ public class GameModel {
 			players.add(new Player(player));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"), this);
-		version = ((Long) jsonMap.get("version")).intValue();
+		Long version = ((Long) jsonMap.get("version"));
 		if (version == null) throw new BadJSONException();
-		Integer w = ((Long) jsonMap.get("winner")).intValue();
+		this.version = version.intValue();
+		Long w = ((Long) jsonMap.get("winner"));
 		if (w == null) throw new BadJSONException();
 		try {
-			winner = GameModel.whichPlayer(w);
+			winner = GameModel.whichPlayer(w.intValue());
 		} catch (BadPlayerIndexException e) {
 			Log.exception(e);
 		}
@@ -75,8 +76,9 @@ public class GameModel {
 		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
 		if (turnTracker == null) throw new BadJSONException();
 
-		currentTurn = ((Long) turnTracker.get("currentTurn")).intValue();
+		Long currentTurn = ((Long) turnTracker.get("currentTurn"));
 		if (currentTurn == null) throw new BadJSONException();
+		this.currentTurn = currentTurn.intValue();
 
 		try {
 			turn = GameModel.whichPlayer(this.currentTurn);
@@ -88,16 +90,14 @@ public class GameModel {
 		try {
 			setStatus(s);
 		} catch (BadStatusException e) {
-			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
-		Integer lR = ((Long) turnTracker.get("longestRoad")).intValue();
-		Integer lA = ((Long) turnTracker.get("largestArmy")).intValue();
+		Long lR = ((Long) turnTracker.get("longestRoad"));
+		Long lA = ((Long) turnTracker.get("largestArmy"));
 		if (lR == null || lA == null) throw new BadJSONException();
 		try {
-			achievements = new Achievements(GameModel.whichPlayer(lR),GameModel.whichPlayer(lA));
+			achievements = new Achievements(GameModel.whichPlayer(lR.intValue()),GameModel.whichPlayer(lA.intValue()));
 		} catch (BadPlayerIndexException e) {
-			// TODO Auto-generated catch block
 			Log.exception(e);
 		}
 		if ((JSONObject)jsonMap.get("tradeOffer") == null)
@@ -113,9 +113,76 @@ public class GameModel {
 		if (bank.equalsJSON((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck")) == false) return false;
 		if (chatModel.equalsJSON((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"))) return false;
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		if (playerList == null) return false;
+		for (int i = 0; i < playerList.size(); i++)
+		{
+			JSONObject player = (JSONObject) playerList.get(i);
+			if (!players.get(i).equalsJSON(player)) return false;
+		}
+		if (!board.equalsJSON((JSONObject)jsonMap.get("map"), this)) return false;
+		Long version = ((Long) jsonMap.get("version"));
+		if (version == null) return false;
+		if (this.version != version.intValue()) return false;
+		Long w = ((Long) jsonMap.get("winner"));
+		if (w == null) throw new BadJSONException();
+			if (w == -1) { if (winner != null) return false;}
+			else{
+				if (winner == null || winner.getUserIndex() != w.intValue()) return false;
+			}		
+			
+			
+		JSONObject turnTracker = (JSONObject)jsonMap.get("turnTracker");
+		if (turnTracker == null) return false;
+		Long currentTurn = ((Long) turnTracker.get("currentTurn"));
+		if (currentTurn == null) throw new BadJSONException();
+		if (this.currentTurn != currentTurn.intValue()) return false;
+		
+		
+		String s = (String)turnTracker.get("status");
+		if (s == null) return false;
+		if (!isStatus(s)) return false;
+		
+		Long lR = ((Long) turnTracker.get("longestRoad"));
+		Long lA = ((Long) turnTracker.get("largestArmy"));
+		if (lR == null || lA == null) return false;
+		if (!achievements.equalsJSON(lR.intValue(),lA.intValue())) return false;
+		if ((JSONObject)jsonMap.get("tradeOffer") == null)
+		{ if (tradeModel != null) return false; }
+		else
+			if (!tradeModel.equalsJSON((JSONObject)jsonMap.get("tradeOffer"))) return false;
+		
 		return true;
 	}
 	
+	private boolean isStatus(String s) {
+		if (status.equalsIgnoreCase("Rolling")) 
+		{
+			return true;
+		}
+		else if (status.equalsIgnoreCase("Robbing")) 
+		{
+			return true;
+		}
+		else if (status.equalsIgnoreCase("Playing")) 
+		{
+			return true;
+		}
+		else if (status.equalsIgnoreCase("Discarding")) 
+		{
+			return true;
+		}
+		else if (status.equalsIgnoreCase("FirstRound")) 
+		{
+			return true;
+		}
+		else if (status.equalsIgnoreCase("SecondRound")) 
+		{
+			return true;
+		}
+		return false;
+		}
+
+
 	public void setStatus(String status) throws BadStatusException
 	{
 		if (status.equalsIgnoreCase("Rolling")) 

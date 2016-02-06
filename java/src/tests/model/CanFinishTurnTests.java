@@ -23,7 +23,6 @@ public class CanFinishTurnTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
 	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");
@@ -47,71 +46,102 @@ public class CanFinishTurnTests {
 		}
 	}
 	
-	//Good tests
-	@Test
-	public void testCanFinishTurn1() {
+	public void initNotTurnModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/notyourturn.txt");
+		FileInputStream fis;
 		try {
-			modelFacade.canFinishTurn();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
-		fail("Not yet implemented");
+	}
+	
+	public void initRobModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/robjson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testCanFinishTurn1() {
+		ModelFacade mf = new ModelFacade();
+		try {
+			mf.canFinishTurn();
+			fail("failed canFinishTurn test with uninit model");
+		} catch (NullPointerException e) {
+			System.out.println("Passed canRoll test with uninit model");
+		}
 	}
 	
 	@Test
 	public void testCanFinishTurn2() {
+		this.initNotTurnModel();
 		try {
-			modelFacade.canFinishTurn();
+			if(modelFacade.canFinishTurn() == false) {
+				System.out.println("Passed canFinishTurn test when not your turn");
+			} else {
+				fail("failed canFinishTurn test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canFinishTurn test when not your turn - unit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanFinishTurn3() {
+		this.initRobModel();
 		try {
-			modelFacade.canFinishTurn();
+			if(modelFacade.canFinishTurn() == false) {
+				System.out.println("Passed canFinishTurn test when robbing");
+			} else {
+				fail("failed canFinishTurn test when robbing");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canFinishTurn test when robbing - unit model");
 		}
-		fail("Not yet implemented");
 	}
-	
-	//Bad tests
+
 	@Test
 	public void testCanFinishTurn4() {
+		this.initModel();
 		try {
-			modelFacade.canFinishTurn();
+			if(modelFacade.canFinishTurn() == true) {
+				System.out.println("Passed canFinishTurn test when playing and your turn");
+			} else {
+				fail("failed canFinishTurn test when playing and your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed canFinishTurn test when playing and your turn - unit model");
 		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanFinishTurn5() {
-		try {
-			modelFacade.canFinishTurn();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanFinishTurn6() {
-		try {
-			modelFacade.canFinishTurn();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
 	}
 }
