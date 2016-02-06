@@ -126,6 +126,53 @@ public class Hand {
 		}
 
 	}
+	
+	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
+		if (resourceList == null || deckList == null) return false; 
+		Integer wood = (Integer)((Long)resourceList.get("wood")).intValue();
+		Integer brick = (Integer)((Long) resourceList.get("brick")).intValue();
+		Integer sheep = (Integer)((Long) resourceList.get("sheep")).intValue();
+		Integer wheat = (Integer)((Long) resourceList.get("wheat")).intValue();
+		Integer ore = (Integer)((Long) resourceList.get("ore")).intValue();
+		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) return false; 
+		if (this.wood != wood) return false;
+		if (this.brick != brick) return false;
+		if (this.sheep != sheep) return false;
+		if (this.wheat != wheat) return false;
+		if (this.ore != ore) return false;
+		Integer yOP = ((Long)deckList.get("yearOfPlenty")).intValue();
+		Integer mono = ((Long)deckList.get("monopoly")).intValue();
+		Integer sol = ((Long)deckList.get("soldier")).intValue();
+		Integer rB = ((Long)deckList.get("roadBuilding")).intValue();
+		Integer monu = ((Long)deckList.get("monument")).intValue();
+		if (yOP == null || mono == null || sol == null || rB == null || monu == null) return false; 
+		for (int j = 0; j < devCards.size(); j++)
+		{
+			switch (devCards.get(j).getType())
+			{
+			case YEAROFPLENTY:
+				yOP--;
+				break;
+			case MONOPOLY:
+				mono--;
+				break;
+			case KNIGHT:
+				sol--;
+				break;
+			case ROADBUILDING:
+				rB--;
+				break;
+			case MONUMENT:
+				monu--;
+				break;	
+			}
+		if (!devCards.get(j).isEnabled()) return false;	
+		}
+		if (yOP != 0 || mono != 0 || sol != 0 || rB != 0 || monu != 0) return false;
+
+		return true;
+	}
+
 
 	public Hand(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) throws BadJSONException {
 		if (resourceList == null || oldDevList == null || newDevList == null) throw new BadJSONException(); 
@@ -215,6 +262,9 @@ public class Hand {
 		}
 
 	}
+	
+	
+	
 
 	/**
 	 * @return Total: wood + brick + sheep + wheat + ore
@@ -511,5 +561,6 @@ public class Hand {
 			return false;
 		return true;
 	}
+
 
 }

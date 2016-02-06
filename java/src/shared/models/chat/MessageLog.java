@@ -25,6 +25,17 @@ public class MessageLog {
 		}
 	}
 	
+	public boolean equalsJSON(JSONArray messageLine) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
+	public int getSize()
+	{
+		return messageList.size();
+	}
+	
 	public ArrayList<Message> getMessageList() {
 		return messageList;
 	}
@@ -32,6 +43,5 @@ public class MessageLog {
 	public void setMessageList(ArrayList<Message> messageList) {
 		this.messageList = messageList;
 	}
-	
 	
 }

@@ -36,6 +36,11 @@ public class Bank {
 		if (resourceList == null || deckList == null) throw new BadJSONException(); 
 		hand = new Hand(resourceList, deckList);
 	}
+	
+	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
+		if (resourceList == null || deckList == null) return false; 
+		return hand.equalsJSON(resourceList, deckList);
+	}
 
 	/**
 	 * @pre New game
@@ -114,6 +119,8 @@ public class Bank {
 	public void sendResource(ResourceType type, Integer num) throws ResourceException {
 		this.getHand().sendResource(type, num);
 	}
+
+	
 	
 	
 }

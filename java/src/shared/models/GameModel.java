@@ -47,7 +47,7 @@ public class GameModel {
 	 * @throws BadStatusException 
 	 * @throws Exception
 	 */
-	
+
 	public GameModel(JSONObject jsonMap) throws BadJSONException
 	{
 		if (jsonMap == null) throw new BadJSONException();
@@ -105,6 +105,16 @@ public class GameModel {
 			tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
 	
+
+	public Boolean equalsJSON(JSONObject jsonMap)
+	{
+		if (jsonMap == null) return false;
+		if (bank.equalsJSON((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck")) == false) return false;
+		if (chatModel.equalsJSON((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"))) return false;
+		chatModel = new ChatModel((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"));
+		JSONArray playerList = (JSONArray)jsonMap.get("players");
+		return true;
+	}
 	
 	public void setStatus(String status) throws BadStatusException
 	{
@@ -350,7 +360,7 @@ public class GameModel {
 	
 //	Preconditions
 //	It is your turn
-//	The client model�s status is �Rolling�
+//	The client model�s status is 'Rolling'
 	public Boolean canRollNumber()
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Rolling");

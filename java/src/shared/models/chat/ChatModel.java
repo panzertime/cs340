@@ -21,6 +21,18 @@ public class ChatModel {
 		else
 			gameLog = new MessageLog((JSONArray)gameList.get("lines"));
 	}
+	
+	public boolean equalsJSON(JSONObject chatList, JSONObject gameList) {
+
+		if (chatList == null && chatLog.getSize() != 0) return false;
+		if (!chatLog.equalsJSON((JSONArray)chatList.get("lines"))) return false;
+		if (gameList == null && gameLog.getSize() != 0) return false;
+		if (!gameLog.equalsJSON((JSONArray)chatList.get("lines"))) return false;
+		
+		
+		return true;
+	}
+	
 	public MessageLog getChatLog() {
 		return chatLog;
 	}
@@ -33,6 +45,7 @@ public class ChatModel {
 	public void setGameLog(MessageLog gameLog) {
 		this.gameLog = gameLog;
 	}
+	
 	
 	
 }
