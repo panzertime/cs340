@@ -71,8 +71,9 @@ public class CanRollNumberTests {
 
 	@Test
 	public void testCanRollNumber1() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canRollNumber();
+			mf.canRollNumber();
 			fail("failed canRoll test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("Passed canRoll test with uninit model");

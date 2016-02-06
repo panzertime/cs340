@@ -94,8 +94,9 @@ public class CanFinishTurnTests {
 	
 	@Test
 	public void testCanFinishTurn1() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canFinishTurn();
+			mf.canFinishTurn();
 			fail("failed canFinishTurn test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("Passed canRoll test with uninit model");

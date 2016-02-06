@@ -23,7 +23,6 @@ public class CanBuyDevCardTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
 	public void initModel() {
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/jsonMap.txt");
@@ -47,20 +46,19 @@ public class CanBuyDevCardTests {
 		}
 	}
 
-	//Good tests
 	@Test
 	public void testCanBuyDevCard1() {
 		try {
 			modelFacade.canBuyDevCard();
+			fail("failed testCanBuyDevCard test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Passed canPlaceRobber test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test
 	public void testCanBuyDevCard2() {
+		this.initModel();
 		try {
 			modelFacade.canBuyDevCard();
 		} catch (NullPointerException e) {

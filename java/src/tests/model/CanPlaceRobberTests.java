@@ -52,8 +52,9 @@ public class CanPlaceRobberTests {
 	public void testCanPlaceRobber1() {
 		HexLocation hexLoc = null;
 		int playerIndex = 0;
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canPlaceRobber(hexLoc, playerIndex);
+			mf.canPlaceRobber(hexLoc, playerIndex);
 			fail("failed canPlaceRobber test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("Passed canPlaceRobber test with uninit model");

@@ -15,6 +15,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import shared.models.GameModel;
 import shared.models.ModelFacade;
 import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
@@ -47,6 +48,18 @@ public class CanSendChatTests {
 	}
 	
 	//Test tests
+	
+	@Test
+	public void testCanSendChatNoModel() {
+		ModelFacade mf = new ModelFacade();
+		try {
+			mf.canSendChat();
+			fail("Fail - canSendChat while no game is in facade");
+		} catch (NullPointerException e) {
+			System.out.println("Passed canSendChat while no game exists");
+		}
+	}
+	
 	@Test
 	public void testCanSendChatNotLoggedIn() {
 		try {
