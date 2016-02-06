@@ -9,31 +9,31 @@ import shared.models.board.vertex.Vertex;
 
 public class Edge {
 	
-	private Hex[] hexs = new Hex[2];
-	private Vertex[] verts = new Vertex[2];
+	private Hex hex0;
+	private Hex hex1;
+	private Vertex vertex0;
+	private Vertex vertex1;
 	private EdgeLocation edgeLocation;
 	private Road road;
 
 	
 	public Edge(EdgeLocation edgeLocation, Hex hex0, Hex hex1) {
 		this.edgeLocation = edgeLocation;
-		hexs = new Hex[2];
-		hexs[0] = hex0;
-		hexs[1] = hex1;
-		verts = new Vertex[2];
+		this.hex0 = hex0;
+		this.hex1 = hex1;
 		road = null;
 	}
 	/**
-	 * @pre hex is either hexs[0] or hexs[1];
+	 * @pre hex is either hex0 or hex1;
 	 * @param hex one of two possible hexes attached to this
 	 * @throws HexNotLinkedException 
 	 * @return hex the Other hex attached to this
 	 */
 	public Hex getOtherHex(Hex hex) {
-		if (hex == hexs[0]) {
-			return hexs[1];
-		} else if (hex == hexs[1]) {
-			return hexs[0];
+		if (hex == hex0) {
+			return hex1;
+		} else if (hex == hex1) {
+			return hex0;
 		}
 		Log.error("Board is Broken");
 		assert false;
@@ -41,10 +41,10 @@ public class Edge {
 	}
 	
 	public Vertex getOtherVertex(Vertex vertex) {
-		if (vertex == verts[0]) {
-			return verts[1];
-		} else if (vertex == verts[1]) {
-			return verts[0];
+		if (vertex == vertex0) {
+			return vertex1;
+		} else if (vertex == vertex1) {
+			return vertex0;
 		}
 		Log.error("Board is Broken");
 		assert false;
@@ -52,10 +52,10 @@ public class Edge {
 	}
 	
 	public Hex getLeftHex(Vertex vertex) {
-		if (vertex == verts[0]) {
-			return hexs[1];
-		} else if (vertex == verts[1]) {
-			return hexs[0];
+		if (vertex == vertex0) {
+			return hex1;
+		} else if (vertex == vertex1) {
+			return hex0;
 		}
 		Log.error("Board is Broken");
 		assert false;
@@ -63,10 +63,10 @@ public class Edge {
 	}
 	
 	public Hex getRightHex(Vertex vertex) {
-		if (vertex == verts[0]) {
-			return hexs[0];
-		} else if (vertex == verts[1]) {
-			return hexs[1];
+		if (vertex == vertex0) {
+			return hex0;
+		} else if (vertex == vertex1) {
+			return hex1;
 		}
 		Log.error("Board is Broken");
 		assert false;
@@ -74,20 +74,24 @@ public class Edge {
 	}
 	
 	public void setLeftVertex(Hex hex, Vertex vertex) {
-		if (hex == hexs[0]) {
-			verts[0] = vertex;
-		} else if (hex == hexs[1]) {
-			verts[1] = vertex;
+		if (hex == hex0) {
+			vertex0 = vertex;
+			return;
+		} else if (hex == hex1) {
+			vertex1 = vertex;
+			return;
 		}
 		Log.error("Board is Broken");
 		assert false;
 	}
 	
 	public void setRightVertex(Hex hex, Vertex vertex) {
-		if (hex == hexs[0]) {
-			verts[1] = vertex;
-		} else if (hex == hexs[1]) {
-			verts[0] = vertex;
+		if (hex == hex0) {
+			vertex1 = vertex;
+			return;
+		} else if (hex == hex1) {
+			vertex0 = vertex;
+			return;
 		}
 		Log.error("Board is Broken");
 		assert false;
@@ -124,14 +128,17 @@ public class Edge {
 	}
 
 	public boolean isBuildable() {
-		if (hexs[0].isBuildable())
+		if (hex0.isBuildable())
 			return true;
-		if (hexs[1].isBuildable())
+		if (hex1.isBuildable())
 			return true;
 		return false;
 	}
 
 	public Vertex[] getAllVertices() {
+		Vertex[] verts = new Vertex[2];
+		verts[0] = vertex0;
+		verts[1] = vertex1;
 		return verts;
 	}
 
