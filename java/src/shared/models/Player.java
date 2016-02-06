@@ -57,12 +57,14 @@ public class Player {
 		Long monuments = ((Long)  player.get("monuments"));
 		if (monuments == null) throw new BadJSONException();
 		this.monuments = monuments.intValue();
-		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		if (playedDevelopmentCard == null) throw new BadJSONException();		
+		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null) throw new BadJSONException();
+		this.playedDevelopmentCard = playedDevelopmentCard;
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
-		hasDiscarded = (Boolean) player.get("discarded");
-		if (hasDiscarded == null) throw new BadJSONException();		
+		Boolean hasDiscarded = (Boolean) player.get("discarded");
+		if (hasDiscarded == null) throw new BadJSONException();	
+		this.hasDiscarded = hasDiscarded;
 		Long playerID = ((Long)  player.get("playerID"));
 		if (playerID == null) throw new BadJSONException();
 		this.playerID = playerID.intValue();
@@ -717,6 +719,12 @@ public class Player {
 	public void setPlayerID(Integer playerID) {
 		this.playerID = playerID;
 	}
+
+
+	public void setUserIndex(Integer userIndex) {
+		this.userIndex = userIndex;
+	}
+	
 	
 	
 

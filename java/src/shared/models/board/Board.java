@@ -246,6 +246,13 @@ public class Board {
 		HexLocation robberLoc = new HexLocation(jsonRobber);
 
 	}
+	
+
+	public boolean equalsJSON(JSONObject jsonObject, GameModel gameModel) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);

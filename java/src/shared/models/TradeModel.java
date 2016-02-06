@@ -34,6 +34,7 @@ public class TradeModel {
 			Log.exception(e);
 		}
 		JSONObject offer = (JSONObject)tradeOffer.get("offer");
+		if (offer == null) throw new BadJSONException();
 		Long wood = ((Long) offer.get("wood"));
 		Long brick = ((Long) offer.get("brick"));
 		Long sheep = ((Long) offer.get("sheep"));
@@ -45,6 +46,29 @@ public class TradeModel {
 		this.sheep = sheep.intValue();
 		this.wheat = wheat.intValue();
 		this.ore = ore.intValue();
+	}
+	
+
+
+	public boolean equalsJSON(JSONObject tradeOffer) {
+		Long s = ((Long) tradeOffer.get("sender"));
+		Long r = ((Long) tradeOffer.get("receiver"));
+		if (s == null || r == null) return false;
+		if (sender.getUserIndex() != s.intValue() || receiver.getUserIndex() != r.intValue()) return false;
+		JSONObject offer = (JSONObject)tradeOffer.get("offer");
+		if (offer == null) return false;
+		Long wood = ((Long) offer.get("wood"));
+		Long brick = ((Long) offer.get("brick"));
+		Long sheep = ((Long) offer.get("sheep"));
+		Long wheat = ((Long) offer.get("wheat"));
+		Long ore = ((Long) offer.get("ore"));
+		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) return false;
+		if (this.wood != wood.intValue()) return false;
+		if (this.brick != brick.intValue()) return false;
+		if (this.sheep != sheep.intValue()) return false;
+		if (this.wheat != wheat.intValue()) return false;
+		if (this.ore != ore.intValue()) return false;
+		return true;
 	}
 	
 	
@@ -144,7 +168,9 @@ public class TradeModel {
 			resources.put("wood", 0);
 		return resources;
 	}
-	
+
+
+
 	
 
 }
