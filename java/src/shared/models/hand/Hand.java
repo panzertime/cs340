@@ -171,7 +171,7 @@ public class Hand {
 				monu--;
 				break;	
 			}
-		if (!devCards.get(j).isEnabled()) return false;	
+		if (devCards.get(j).isEnabled()) return false;	
 		}
 		if (yOP != 0 || mono != 0 || sol != 0 || rB != 0 || monu != 0) return false;
 
@@ -269,7 +269,93 @@ public class Hand {
 	}
 	
 	
-	
+	public boolean equalsJSON(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList)
+	{
+		if (resourceList == null || oldDevList == null || newDevList == null) return false; 
+		Long wood = ((Long)resourceList.get("wood"));
+		Long brick = ((Long) resourceList.get("brick"));
+		Long sheep = ((Long) resourceList.get("sheep"));
+		Long wheat = ((Long) resourceList.get("wheat"));
+		Long ore = ((Long) resourceList.get("ore"));
+		if (wood == null || brick == null || sheep == null || wheat == null || ore == null) return false; 
+		if (this.wood != wood.intValue()) return false;
+		if (this.brick != brick.intValue()) return false;
+		if (this.sheep != sheep.intValue()) return false;
+		if (this.wheat != wheat.intValue()) return false;
+		if (this.ore != ore.intValue()) return false;
+		Long yearOfPlenty = ((Long)oldDevList.get("yearOfPlenty"));
+		Long monopoly = ((Long)oldDevList.get("monopoly"));
+		Long soldier = ((Long)oldDevList.get("soldier"));
+		Long roadBuilder = ((Long)oldDevList.get("roadBuilding"));
+		Long monument = ((Long)oldDevList.get("monument"));
+		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null) return false; 
+		Integer yOP = yearOfPlenty.intValue();
+		Integer mono = monopoly.intValue();
+		Integer sol = soldier.intValue();
+		Integer rB = roadBuilder.intValue();
+		Integer monu = monument.intValue();
+		for (int j = 0; j < devCards.size(); j++)
+		{
+			switch (devCards.get(j).getType())
+			{
+			case YEAROFPLENTY:
+				if (devCards.get(j).isEnabled()) yOP--;
+				break;
+			case MONOPOLY:
+				if (devCards.get(j).isEnabled()) mono--;
+				break;
+			case KNIGHT:
+				if (devCards.get(j).isEnabled()) sol--;
+				break;
+			case ROADBUILDING:
+				if (devCards.get(j).isEnabled()) rB--;
+				break;
+			case MONUMENT:
+				if (devCards.get(j).isEnabled()) monu--;
+				break;	
+			}
+		}
+		if (yOP != 0 || mono != 0 || sol != 0 || rB != 0 || monu != 0) return false;
+
+		
+		
+		yearOfPlenty = ((Long)newDevList.get("yearOfPlenty"));
+		monopoly = ((Long)newDevList.get("monopoly"));
+		soldier = ((Long)newDevList.get("soldier"));
+		roadBuilder = ((Long)newDevList.get("roadBuilding"));
+		monument = ((Long)newDevList.get("monument"));
+		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null) return false; 
+		yOP = yearOfPlenty.intValue();
+		mono = monopoly.intValue();
+		sol = soldier.intValue();
+		rB = roadBuilder.intValue();
+		 monu = monument.intValue();
+		for (int j = 0; j < devCards.size(); j++)
+		{
+			switch (devCards.get(j).getType())
+			{
+			case YEAROFPLENTY:
+				if (!devCards.get(j).isEnabled()) yOP--;
+				break;
+			case MONOPOLY:
+				if (!devCards.get(j).isEnabled()) mono--;
+				break;
+			case KNIGHT:
+				if (!devCards.get(j).isEnabled()) sol--;
+				break;
+			case ROADBUILDING:
+				if (!devCards.get(j).isEnabled()) rB--;
+				break;
+			case MONUMENT:
+				if (!devCards.get(j).isEnabled()) monu--;
+				break;	
+			}
+		}
+		if (yOP != 0 || mono != 0 || sol != 0 || rB != 0 || monu != 0) return false;
+
+		
+		return true;
+	}
 
 	/**
 	 * @return Total: wood + brick + sheep + wheat + ore
