@@ -45,71 +45,183 @@ public class CanBuyDevCardTests {
 			e.printStackTrace();
 		}
 	}
+	
+	public void initNotTurnModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/notyourturn.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void initRobModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/robjson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void initNoDevCardsModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/jsondevless.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void initWorkingModel() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/src/tests/model/jsonresourceyess.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Map jsonModel = (Map) parser.parse(x);
+			
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			e.printStackTrace();
+		}
+	}
 
+	//no model
 	@Test
 	public void testCanBuyDevCard1() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canBuyDevCard();
+			mf.canBuyDevCard();
 			fail("failed testCanBuyDevCard test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("Passed canPlaceRobber test with uninit model");
 		}
 	}
 	
+	//not your turn
 	@Test
 	public void testCanBuyDevCard2() {
-		this.initModel();
+		this.initNotTurnModel();
 		try {
-			modelFacade.canBuyDevCard();
+			if(modelFacade.canBuyDevCard() == false) {
+				System.out.println("pass canBuydevCard test when not your turn");
+			} else {
+				fail("fail canBuydevCard test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("fail canBuydevCard test when not your turn - could not access model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//not playing
 	@Test
 	public void testCanBuyDevCard3() {
+		this.initRobModel();
 		try {
-			modelFacade.canBuyDevCard();
+			if(modelFacade.canBuyDevCard() == false) {
+				System.out.println("pass canBuydevCard test when not playing");
+			} else {
+				fail("fail canBuydevCard test when not playing");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("fail canBuydevCard test when not playing - could not access model");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//dont have resources
 	@Test
 	public void testCanBuyDevCard4() {
+		this.initModel();
 		try {
-			modelFacade.canBuyDevCard();
+			if(modelFacade.canBuyDevCard() == false) {
+				System.out.println("pass canBuydevCard test when not enough resources");
+			} else {
+				fail("fail canBuydevCard test when not enough resources");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("fail canBuydevCard test when not enough resources - could not access model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//no dev cards left
 	@Test
 	public void testCanBuyDevCard5() {
+		this.initNoDevCardsModel();
 		try {
-			modelFacade.canBuyDevCard();
+			if(modelFacade.canBuyDevCard() == false) {
+				System.out.println("pass canBuydevCard test when no more dev cards left");
+			} else {
+				fail("fail canBuydevCard test when no more dev cards left");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("fail canBuydevCard test when no more dev cards left - could not access model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//work!
 	@Test
 	public void testCanBuyDevCard6() {
+		this.initWorkingModel();
 		try {
-			modelFacade.canBuyDevCard();
+			if(modelFacade.canBuyDevCard() == true) {
+				System.out.println("pass canBuydevCard test when can buy dev card");
+			} else {
+				fail("fail canBuydevCard test when can buy dev card");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("fail canBuydevCard test when can buy dev card - could not access model");
 		}
-		fail("Not yet implemented");
 	}
 }
