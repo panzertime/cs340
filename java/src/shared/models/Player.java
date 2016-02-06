@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeLocation;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.piece.City;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.board.piece.Road;
@@ -655,6 +656,11 @@ public class Player {
 
 	public boolean canDiscardCard() {
 		return hand.canDiscardCard();
+	}
+
+	public boolean hasPort(PortType portType) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
