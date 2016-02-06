@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import shared.models.ModelFacade;
 import shared.models.board.vertex.VertexLocation;
+import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
 
 public class CanBuildCityTests {
@@ -42,7 +43,7 @@ public class CanBuildCityTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			modelFacade = new ModelFacade((JSONObject) jsonModel);
-		} catch (FileNotFoundException | ParseException e) {
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
 	}

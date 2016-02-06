@@ -36,14 +36,10 @@ public class ModelFacade {
 	
 	/**
 	 * Instrcutor with GameModel input
+	 * @throws BadJSONException 
 	 */
-	public ModelFacade(JSONObject gameModel) {
-		try {
-			this.gameModel = new GameModel(gameModel);
-
-		} catch (BadJSONException e) {
-			e.printStackTrace();
-		}
+	public ModelFacade(JSONObject gameModel) throws BadJSONException {
+		this.gameModel = new GameModel(gameModel);
 	}
 	
 	public GameModel getGameModel() {

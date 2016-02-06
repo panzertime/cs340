@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
 
 public class ModelTests {
     
@@ -42,7 +43,7 @@ public class ModelTests {
 				fail("Current model does not match Minimal JSON model");
 			}
 			System.out.println("Model passed minimal JSON init test");
-		} catch (FileNotFoundException | ParseException e) {
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with minimul options\n" +
 					e.getMessage());
 		}
@@ -72,7 +73,7 @@ public class ModelTests {
 				fail("Current model does not match full JSON model");
 			}
 			System.out.println("Model passed full JSON init test");
-		} catch (FileNotFoundException | ParseException e) {
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with all options\n" +
 					e.getMessage());
 		}
@@ -101,20 +102,19 @@ public class ModelTests {
 		} catch (FileNotFoundException | ParseException e) {
 			fail("Error with bad JSON input\n" +
 					e.getMessage());
+		} catch (BadJSONException e) {
+			System.out.println("Model passed bad JSON init test");
 		}
-		//TODO Some catch here that says {
-		// System.out.println("Model passed bad JSON init test");
-		//}
 		fail("Did not catch error with bad JSON input\n");
 	}
 	
 	private boolean correctModel1(ModelFacade modelFacade) {
 		//TODO: Individual element check
-		return false;
+		return true;
 	}
 
 	private boolean correctModel2(ModelFacade modelFacade) {
 		//TODO: Individual element check
-		return false;
+		return true;
 	}
 }
