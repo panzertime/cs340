@@ -14,6 +14,12 @@ public class Achievements {
 		this.longestRoad = longestRoad;
 	}
 	
+	
+	public boolean equalsJSON(Integer longestRoad, Integer largestArmy) {
+		if (this.longestRoad.getUserIndex() != longestRoad) return false;
+		if (this.largestArmy.getUserIndex() != largestArmy) return false;
+		return true;
+	}
 	/**
 	 * @pre A Road has been built on the board by every player
 	 * @post The Player with the Longest Road is set as longestRoad and their haslongestRoad is set to true
@@ -96,6 +102,8 @@ public class Achievements {
 	
 	public Boolean isLongestRoad(Player p) {
 		return null;}
+
+	
 
 	
 }

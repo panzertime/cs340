@@ -26,8 +26,12 @@ public class MessageLog {
 	}
 	
 	public boolean equalsJSON(JSONArray messageLine) {
-		// TODO Auto-generated method stub
-		return false;
+		if (messageLine.size() != messageList.size()) return false;
+		for (int i = 0; i < messageLine.size(); i++)
+		{
+			if (!messageList.get(i).equalsJSON((JSONObject)messageLine.get(i))) return false;
+		}
+		return true;
 	}
 	
 	

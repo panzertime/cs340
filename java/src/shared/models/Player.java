@@ -45,26 +45,63 @@ public class Player {
 		String c = (String) player.get("color");
 		if (c == null) throw new BadJSONException();
 		userColor = getColor(c);
-		userName = (String) player.get("name");
+		String userName = (String) player.get("name");
 		if (userName == null) throw new BadJSONException();
-		userIndex = (Integer) ((Long)  player.get("playerIndex")).intValue();
-		if (userIndex == null) throw new BadJSONException();		
-		armies = (Integer) ((Long)  player.get("soldiers")).intValue();
-		if (armies == null) throw new BadJSONException();		
-		monuments = (Integer) ((Long)  player.get("monuments")).intValue();
-		if (monuments == null) throw new BadJSONException();		
-		playedDevelopmentCard = (Boolean) player.get("playedDevCard");
-		if (playedDevelopmentCard == null) throw new BadJSONException();		
+		this.userName = userName;
+		Long userIndex = ((Long)  player.get("playerIndex"));
+		if (userIndex == null) throw new BadJSONException();
+		this.userIndex = userIndex.intValue();
+		Long armies =  ((Long)  player.get("soldiers"));
+		if (armies == null) throw new BadJSONException();
+		this.armies = armies.intValue();
+		Long monuments = ((Long)  player.get("monuments"));
+		if (monuments == null) throw new BadJSONException();
+		this.monuments = monuments.intValue();
+		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null) throw new BadJSONException();
+		this.playedDevelopmentCard = playedDevelopmentCard;
 		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
 				(JSONObject) player.get("newDevCards"));
-		hasDiscarded = (Boolean) player.get("discarded");
-		if (hasDiscarded == null) throw new BadJSONException();		
-		playerID = (Integer) ((Long)  player.get("playerID")).intValue();
-		if (playerID == null) throw new BadJSONException(); 
+		Boolean hasDiscarded = (Boolean) player.get("discarded");
+		if (hasDiscarded == null) throw new BadJSONException();	
+		this.hasDiscarded = hasDiscarded;
+		Long playerID = ((Long)  player.get("playerID"));
+		if (playerID == null) throw new BadJSONException();
+		this.playerID = playerID.intValue();
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
 	}
+	
+
+	public boolean equalsJSON(JSONObject player) {
+		if (player == null) return false;
+		String c = (String) player.get("color");
+		if (c == null) return false;
+		if (!userColor.equals(getColor(c))) return false;
+		String userName = (String) player.get("name");
+		if (userName == null) return false;
+		if (!this.userName.equals(userName)) return false;
+		Long userIndex = ((Long)  player.get("playerIndex"));
+		if (userIndex == null) return false;
+		if (this.userIndex != userIndex.intValue()) return false;
+		Long armies =  ((Long)  player.get("soldiers"));
+		if (armies == null) return false;
+		if (this.armies != armies.intValue()) return false;
+		Long monuments = ((Long)  player.get("monuments"));
+		if (monuments == null) return false;
+		if (this.monuments != monuments.intValue()) return false;
+		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
+		if (playedDevelopmentCard == null || playedDevelopmentCard != this.playedDevelopmentCard) return false;		
+		if (!hand.equalsJSON((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"), (JSONObject) player.get("newDevCards"))) return false;
+		Boolean hasDiscarded = (Boolean) player.get("discarded");
+		if (hasDiscarded == null || hasDiscarded != this.hasDiscarded) return false;		
+		Long playerID = ((Long)  player.get("playerID"));
+		if (playerID == null) return false;
+		if (this.playerID != playerID.intValue()) return false;
+		return true;
+	}
+
 
 	public CatanColor getColor(String s) {
 		s = s.toUpperCase();
@@ -682,6 +719,12 @@ public class Player {
 	public void setPlayerID(Integer playerID) {
 		this.playerID = playerID;
 	}
+
+
+	public void setUserIndex(Integer userIndex) {
+		this.userIndex = userIndex;
+	}
+	
 	
 	
 
