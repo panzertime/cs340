@@ -349,6 +349,30 @@ public class Board {
 		return false;
 	}
 	
+
+	public boolean canBuildRoadTwo(Player player, EdgeLocation one, EdgeLocation edgeLocation) {
+		Edge edge = getEdgeAt(edgeLocation);
+		if (edge.hasRoad())
+			return false;
+		if (!edge.isBuildable())
+			return false;
+
+		for (Vertex vertex : edge.getAllVertices()) {
+			if (vertex.getBuilding().getOwner().equals(this))
+				return true;
+			if (vertex.getBuilding() == null) {
+
+				if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player) || vertex.getLeftEdge(edge).getEdgeLocation().equals(one))
+					return true;
+				if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player) || vertex.getLeftEdge(edge).getEdgeLocation().equals(one)) 
+					return true;
+			}
+			
+		}
+		return false;
+	}
+
+	
 	public boolean canBuildRoadSecondRound(Player player, EdgeLocation edgeLocation) {
 		Edge edge = getEdgeAt(edgeLocation);
 		if (edge.hasRoad())
@@ -469,6 +493,7 @@ public class Board {
 		if (hexRight != null)
 			connectHexVertex(hexRight);
 	}
+
 
 
 }

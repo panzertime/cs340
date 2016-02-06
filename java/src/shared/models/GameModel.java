@@ -401,7 +401,7 @@ public class GameModel {
 
 	public boolean inSetupMode() {
 		boolean result = false;
-		if(status.equals("FirstRound") || status.equals("SecondRound")) {
+		if(status.equalsIgnoreCase("FirstRound") || status.equalsIgnoreCase("SecondRound")) {
 			result = true;
 		}
 		return result;
@@ -511,7 +511,7 @@ public class GameModel {
 		} catch (BadPlayerIndexException e) {
 			Log.exception(e);
 		}
-		b = b && (robbed.getHandSize() > 0);
+		if (robbed != null) b = b && (robbed.getHandSize() > 0);
 		
 		return b;
 	}
@@ -565,7 +565,9 @@ public class GameModel {
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		b = b && this.canBuildRoad(one);
+		b = b && this.canBuildRoad(one, true);
+		if (this.canBuildRoad(two, true)) ;
+			else
 		b = b && this.canBuildTwoRoad(one, two);
 		return b;
 	}
@@ -585,25 +587,30 @@ public class GameModel {
 	public Boolean canUseMonument()
 	{
 		boolean b = true;
-		b = b && this.status.equals("Playing");
+		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && (this.getActivePlayer().getVictoryPointsWithMonuments() >= 10);
 		return b;
 	}
 	
 	private boolean canBuildTwoRoad(EdgeLocation one, EdgeLocation two) {
-		//b = b && this.getActivePlayer().hasRoadPiece(2);
-		return false;
+		boolean b = false;
+		if ( this.status.equalsIgnoreCase("Playing"))
+		{
+		b = true;
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+
+		b = b && this.getActivePlayer().hasRoadPiece();
+		b = b && this.getBoard().canBuildRoadTwo(this.getActivePlayer(), one, two);
+		}
+		return b;
 	}
 	
-	public Boolean canBuildRoad(EdgeLocation edge)
+
+	public Boolean canBuildRoad(EdgeLocation edge, boolean free)
 	{
-		Boolean free;
-		if (this.status.equalsIgnoreCase("FirstRound") || this.status.equalsIgnoreCase("SecondRound"))
-			free = true;
-		else free = false;
 		boolean b = false;
-		if ( this.status.equals("Playing"))
+		if ( this.status.equalsIgnoreCase("Playing"))
 		{
 		b = true;
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
@@ -612,7 +619,23 @@ public class GameModel {
 		b = b && this.getActivePlayer().hasRoadPiece();
 		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
 		}
-		else if (this.status.equals("SecondRound"))
+		return b;
+	}
+
+	public Boolean canBuildRoad(EdgeLocation edge)
+	{
+		Boolean free = this.inSetupMode();
+		boolean b = false;
+		if ( this.status.equalsIgnoreCase("Playing"))
+		{
+		b = true;
+		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+
+		if (!free) b = b && this.getActivePlayer().hasRoadCost();
+		b = b && this.getActivePlayer().hasRoadPiece();
+		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
+		}
+		else if (this.status.equalsIgnoreCase("SecondRound"))
 		{		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
 
 			b = true;
@@ -627,10 +650,7 @@ public class GameModel {
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		Boolean free;
-		if (this.status.equalsIgnoreCase("FirstRound") || this.status.equalsIgnoreCase("SecondRound"))
-			free = true;
-		else free = false;
+		Boolean free = this.inSetupMode();
 		boolean b = true;
 		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
@@ -648,7 +668,7 @@ public class GameModel {
 	public Boolean canBuildCity(VertexLocation vertex)
 	{
 		boolean b = true;
-		b = b && this.status.equals("Playing");
+		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && this.getActivePlayer().hasCityCost();
 		b = b && this.getActivePlayer().hasCityPiece();
