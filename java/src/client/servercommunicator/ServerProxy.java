@@ -417,6 +417,10 @@ public class ServerProxy implements IServerProxy{
 			throws ServerProxyException  {
 		try {
 			String call = "/game/model?version=" + currentVersion;
+			String response = submitRequest("GET", call);
+			if(response.equals("true"){
+				return null;
+			}
 			return makeJSON(submitRequest("GET", call));
 		}
 		catch(Exception e) {

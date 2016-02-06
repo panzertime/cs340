@@ -15,9 +15,12 @@ import org.json.simple.parser.*;
 public class ServerFacade {
 	
 	private static ServerFacade _instance;
+
+	private int player_id;
 	
 	private ServerFacade(){
 		proxy = new FakeProxy();
+		player_id = -1;
 	}
 
 	private IServerProxy proxy;
@@ -46,6 +49,10 @@ public class ServerFacade {
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
 	}
+
+	public int get_player_id(){
+		return player_id;
+	}
 	
 
 	//USER
@@ -57,7 +64,8 @@ public class ServerFacade {
 						+ "\" }";
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.loginUser(args);
-			return (int) cookie.get("playerID");
+			player_id = (int) cookie.get("playerID");
+			return player_id;
 		}
 		catch(Exception e){
 			throw new ServerException("Problem logging in", e);
@@ -73,7 +81,9 @@ public class ServerFacade {
 						+ "\" }";
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.registerUser(args);
-			return (int) cookie.get("playerID");
+			player_id = (int) cookie.get("playerID");
+			return player_id;
+
 		}
 		catch(Exception e){
 			throw new ServerException("Problem registering user", e);
@@ -112,7 +122,7 @@ public class ServerFacade {
 				throws ServerException{
 		try {
 			String joinGame = "{ id : " + gameID
-					+ ", color : \"" + color.toString() + "\"}";
+					+ ", color : \"" + color.toString().toLowerCase() + "\"}";
 			JSONObject args = makeJSON(joinGame);
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");
@@ -361,7 +371,7 @@ public class ServerFacade {
 			throws ServerException {
 		try {
 			String content = "{type: \"Monopoly\", " +
-						"resource: \"" + resource.toString() + "\", " +
+						"resource: \"" + resource.toString().toLowerCase() + "\", " +
 						"playerIndex: " + playerIndex + "}";
 			JSONObject args = makeJSON(content);
 			return proxy.monopoly(args);
