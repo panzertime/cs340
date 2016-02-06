@@ -454,10 +454,10 @@ public class Player {
 	 */
 	public int getVictoryPoints() {
 		int points = 0;
-		for (DevCard card : hand.getDevCards()) {
+		/*for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
-		}
+		}*/
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -470,6 +470,17 @@ public class Player {
 			if (s.getVertex() != null)
 				points++;
 		}
+
+		return points;
+	}
+	
+	public int getVictoryPointsWithMonuments() {
+		int points = 0;
+		for (DevCard card : hand.getDevCards()) {
+			if (card.getType() == DevCardType.MONUMENT)
+				points++;
+		}
+		points += this.getVictoryPoints();
 
 		return points;
 	}

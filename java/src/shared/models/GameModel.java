@@ -99,7 +99,7 @@ public class GameModel {
 			Log.exception(e);
 		}
 		if ((JSONObject)jsonMap.get("tradeOffer") == null)
-		{}
+		{ tradeModel = null; }
 		else
 			tradeModel = new TradeModel((JSONObject)jsonMap.get("tradeOffer"));
 	}
@@ -481,35 +481,32 @@ public class GameModel {
 	
 	public Boolean canUseMonument()
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
-			//enough monuments to win game
-		}
-		return result;
+		b = b && (this.getActivePlayer().getVictoryPointsWithMonuments() >= 10);
+		return b;
 	}
 	
 	public Boolean canBuildRoad(EdgeLocation edge)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
 			//check if can Build
-		}
-		this.getActivePlayer().hasRoadCost();
+		b = b && this.getActivePlayer().hasRoadCost();
 
-		return null;
+		return b;
 	}
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//check turn
 			//check if can Build
-		}
-		this.getActivePlayer().hasSettlementCost();
-		return result;
+		b = b && this.getActivePlayer().hasSettlementCost();
+		return b;
 	}
 	
 	/**
@@ -519,15 +516,15 @@ public class GameModel {
 	 */
 	public Boolean canBuildCity(VertexLocation vertex)
 	{
-		boolean result = false;
-		if(this.status.equals("Playing")) {
+		boolean b = true;
+		b = b && this.status.equals("Playing");
 			//TODO: Check turn
-			result = this.getActivePlayer().hasCityCost();
-			if(result) {
+		b = b && this.getActivePlayer().hasCityCost();
+
 				//TODO: check if can Build
-			}
-		}
-		return null;
+
+		
+		return b;
 	}
 	
 	/**
@@ -540,11 +537,14 @@ public class GameModel {
 	 */
 	public Boolean canAcceptTrade() throws BadJSONException
 	{
-		boolean result = false;
+		boolean b = false;
 		//TODO add current player
+		if (this.tradeModel != null)
+		{
 		Player receiver = this.tradeModel.getReceiver();
-			result = receiver.hasCards(this.tradeModel.getResources());
-		return result;
+			b = receiver.hasCards(this.tradeModel.getResources());
+		}	
+		return b;
 	}
 
 	/**
