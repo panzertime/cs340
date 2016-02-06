@@ -1,6 +1,7 @@
 package shared.models.board.piece;
 
 import shared.models.Player;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.vertex.Vertex;
 import shared.models.hand.ResourceType;
 import shared.models.hand.exceptions.ResourceException;
@@ -48,4 +49,10 @@ public abstract class Building {
 	 * @throws ResourceException 
 	 */
 	public abstract void produce(ResourceType type) throws ResourceException;
+	
+	public Boolean hasPort(PortType portType) {
+		if (!isPlaced())
+			return false;
+		return vertex.hasPort(portType);
+	}
 }

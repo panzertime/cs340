@@ -1,5 +1,7 @@
 package shared.models.board.edge;
 
+import shared.models.exceptions.BadJSONException;
+
 public enum EdgeDirection
 {
 	
@@ -8,6 +10,25 @@ public enum EdgeDirection
 	private EdgeDirection opposite;
 	private EdgeDirection right;
 	private EdgeDirection left;
+	
+	public static EdgeDirection fromJSON(String fromJSON) throws BadJSONException {
+		switch (fromJSON) {
+		case "NW" :	
+			return EdgeDirection.NorthWest;
+		case "N" : 
+			return EdgeDirection.North;
+		case "NE" :
+			return EdgeDirection.NorthEast;
+		case "SE" :
+			return EdgeDirection.SouthEast;
+		case "S" :
+			return EdgeDirection.South;
+		case "SW" :
+			return EdgeDirection.SouthWest;
+		default :
+			throw new BadJSONException();
+		}
+	}
 	
 	static
 	{

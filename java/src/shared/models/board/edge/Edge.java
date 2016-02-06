@@ -51,6 +51,28 @@ public class Edge {
 		return null;
 	}
 	
+	public Hex getLeftHex(Vertex vertex) {
+		if (vertex == verts[0]) {
+			return hexs[1];
+		} else if (vertex == verts[1]) {
+			return hexs[0];
+		}
+		Log.error("Board is Broken");
+		assert false;
+		return null;
+	}
+	
+	public Hex getRightHex(Vertex vertex) {
+		if (vertex == verts[0]) {
+			return hexs[0];
+		} else if (vertex == verts[1]) {
+			return hexs[1];
+		}
+		Log.error("Board is Broken");
+		assert false;
+		return null;
+	}
+	
 	public void setLeftVertex(Hex hex, Vertex vertex) {
 		if (hex == hexs[0]) {
 			verts[0] = vertex;

@@ -4,6 +4,9 @@ import shared.logger.Log;
 import shared.models.board.edge.Edge;
 import shared.models.board.hex.Hex;
 import shared.models.board.hex.HexNotLinkedException;
+import shared.models.board.hex.HexType;
+import shared.models.board.hex.tiles.water.PortHex;
+import shared.models.board.hex.tiles.water.PortType;
 import shared.models.board.piece.Building;
 import shared.models.board.piece.PositionTakenException;
 import shared.models.hand.ResourceType;
@@ -148,6 +151,28 @@ public class Vertex {
 		Log.error("Board is Broken");
 		assert false;
 		return null;
+	}
+
+	public Boolean hasPort(PortType portType) {
+		for (Edge edge : edges) {
+			Hex hexLeft = edge.getLeftHex(this);
+			if (hexLeft != null) {
+				if (hexLeft instanceof PortHex) {
+					if (hexLeft.getEdge(((PortHex) hexLeft).getPortDirection()) == edge) {
+						return true;
+					}
+				}
+			}
+			Hex hexRight = edge.getLeftHex(this);
+			if (hexRight != null) {
+				if (hexRight instanceof PortHex) {
+					if (hexRight.getEdge(((PortHex) hexRight).getPortDirection()) == edge) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 }

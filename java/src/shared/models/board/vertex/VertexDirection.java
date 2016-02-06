@@ -1,6 +1,7 @@
 package shared.models.board.vertex;
 
 import shared.models.board.edge.EdgeDirection;
+import shared.models.exceptions.BadJSONException;
 
 public enum VertexDirection
 {
@@ -11,6 +12,25 @@ public enum VertexDirection
 	private VertexDirection left;
 	private EdgeDirection rightEdgeDirection;
 	private EdgeDirection leftEdgeDirection;
+	
+	public static VertexDirection fromJSON(String fromJSON) throws BadJSONException {
+		switch (fromJSON) {
+		case "NW" :	
+			return VertexDirection.NorthWest;
+		case "NE" :
+			return VertexDirection.NorthEast;
+		case "E" : 
+			return VertexDirection.East;
+		case "SE" :
+			return VertexDirection.SouthEast;
+		case "SW" :
+			return VertexDirection.SouthWest;
+		case "W" :
+			return VertexDirection.West;
+		default :
+			throw new BadJSONException();
+		}
+	}
 	
 	static
 	{

@@ -53,7 +53,7 @@ public class GameModel {
 		{
 			players.add(new Player(p));
 		}
-		board = new Board((JSONObject)jsonMap.get("map"));
+		board = new Board((JSONObject)jsonMap.get("map"), this);
 		version = (Integer)jsonMap.get("version");
 		winner = GameModel.whichPlayer((Integer)jsonMap.get("winner"));
 		
