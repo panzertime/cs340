@@ -11,8 +11,8 @@ public enum EdgeDirection
 	private EdgeDirection right;
 	private EdgeDirection left;
 	
-	public static EdgeDirection fromJSON(String fromJSON) throws BadJSONException {
-		switch (fromJSON) {
+	public static EdgeDirection fromJSON(String jsonEdgeDir) throws BadJSONException {
+		switch (jsonEdgeDir) {
 		case "NW" :	
 			return EdgeDirection.NorthWest;
 		case "N" : 

@@ -1,20 +1,23 @@
 package shared.models.board.hex;
 
+import org.json.simple.JSONObject;
+
 import shared.logger.Log;
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeDirection;
 import shared.models.board.vertex.Vertex;
 import shared.models.board.vertex.VertexDirection;
+import shared.models.exceptions.BadJSONException;
 
 public abstract class Hex {
 	
 	protected HexType hexType;
-	private HexLocation hexlocation;
+	private HexLocation hexLocation;
 	private Edge[] edges = new Edge[6];
 	protected Vertex[] verts = new Vertex[6];
 	
 	public Hex(HexLocation hexLocation) {
-		this.hexlocation = hexLocation;
+		this.hexLocation = hexLocation;
 	}
 	/**
 	 * @return Boolean the ability of the hex to hold pieces
@@ -149,14 +152,17 @@ public abstract class Hex {
 	/**
 	 * @return the hexlocation
 	 */
-	public HexLocation getHexlocation() {
-		return hexlocation;
+	public HexLocation getHexLocation() {
+		return hexLocation;
 	}
-
-	/**
-	 * @param hexlocation the hexlocation to set
-	 */
-	public void setHexlocation(HexLocation hexlocation) {
-		this.hexlocation = hexlocation;
-	}
+	
+	
+    public boolean equals(JSONObject jsonHex) {
+    	JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
+    	if (hexLocation.getX() != (Long) jsonHexLoc.get("x"))
+    		return false;
+    	if (hexLocation.getY() != (Long) jsonHexLoc.get("y"))
+    		return false;
+    	return true;
+    }
 }

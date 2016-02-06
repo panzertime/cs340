@@ -17,7 +17,6 @@ import org.junit.Test;
 
 import shared.models.ModelFacade;
 import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
 import shared.models.hand.ResourceType;
 
 public class CanMaritimeTradeTests {
@@ -52,9 +51,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade1() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,9 +65,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade2() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,9 +79,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade3() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,9 +94,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade4() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,9 +108,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade5() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,9 +122,10 @@ public class CanMaritimeTradeTests {
 	@Test
 	public void testCanMaritimeTrade6() {
 		int ratio = 0;
-		ResourceType type = null;
+		ResourceType inputType = null;
+		ResourceType outputType = null;
 		try {
-			modelFacade.canMaritimeTrade(ratio, type);
+			modelFacade.canMaritimeTrade(ratio, inputType, outputType);
 		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -12,9 +12,9 @@ public class PhaseOneTests {
 				//"tests.model.CanPlaceRobberTests",
 				//"tests.model.CanFinishTurnTests,
 				//"tests.model.CanBuyDevCardTests",
-				"tests.model.CanUseYearOfPlentyTests"/*,
-				"tests.model.CanUseRoadBuilderTests",
-				"tests.model.CanUseSoldierTests",
+				//"tests.model.CanUseYearOfPlentyTests",
+				//"tests.model.CanUseRoadBuilderTests", //TODO
+				"tests.model.CanUseSoldierTests"/*,
 				"tests.model.CanUseMonopolyTests",
 				"tests.model.CanUseMonumentTests",
 				"tests.model.CanBuildRoadTests",
