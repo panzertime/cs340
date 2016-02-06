@@ -489,11 +489,17 @@ public class GameModel {
 		return b;
 	}
 	
-	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	public Boolean canPlaceRobber(HexLocation location)
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		//robber has different location
+		b = b && (this.getBoard().canPlaceRobber(location));
+		return b;
+	}
+	
+	public Boolean canRobPlayer(HexLocation location, int playerIndex)
+	{
+		Boolean b = canPlaceRobber(location);
 		Player robbed = null;
 		try {
 			robbed = GameModel.whichPlayer(playerIndex);
