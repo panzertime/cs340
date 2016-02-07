@@ -131,12 +131,12 @@ public class CanUseMonopolyTests {
 		ResourceType type = ResourceType.BRICK;
 		try {
 			if(modelFacade.canUseMonopoly(type) == true) {
-				System.out.println("passed testCanUseMonopoly test when you already played dev card");
+				System.out.println("passed testCanUseMonopoly test when meets parameters");
 			} else {
-				fail("failed testCanUseMonopoly test when you already played dev card");
+				fail("failed testCanUseMonopoly test when when meets parameters");
 			}
 		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when you already played dev card - model not created");
+			fail("failed testCanUseMonopoly test when when meets parameters - model not created");
 		}
 	}
 }

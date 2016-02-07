@@ -18,9 +18,9 @@ public class PhaseOneTests {
 				
 				//"tests.model.CanUseMonopolyTests",
 				//"tests.model.CanUseMonumentTests",
-				"tests.model.CanBuildRoadTests"/*,
-				"tests.model.CanBuildSettlementTests",
-				"tests.model.CanBuildCityTests",
+				//"tests.model.CanBuildRoadTests",
+				//"tests.model.CanBuildSettlementTests",
+				"tests.model.CanBuildCityTests"/*,
 				"tests.model.CanOfferTradeTests",
 				"tests.model.CanAcceptTradeTests",
 				"tests.model.CanMaritimeTradeTests",
