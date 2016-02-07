@@ -6,6 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -23,10 +24,9 @@ public class CanOfferTradeTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/canOfferTrade/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -47,83 +47,115 @@ public class CanOfferTradeTests {
 		}
 	}
 	
+	/*
+	 * working: - changed fullJSON for good input file
+	1.	initModel()
+	2.	turnIndex = 0
+	3.	status = “Playing”
+	wood – 2
+	ore  - 2
+	brick : -2
+	wheat : -2
+	sheep : 0
+	 */
 	@Test
 	public void testCanOfferTrade1() {
-		Map<String, Object> resource = null;
-		int amount = 0;
+		Map<String, Object> resource = new HashMap<String, Object>();
+		resource.put("wood", 2);
+		resource.put("ore", 2);
+		resource.put("sheep", 0);
+		resource.put("brick", -2);
+		resource.put("wheat", -2);
+		initModel("good.txt");
 		try {
-			modelFacade.canOfferTrade(resource, amount);
+			if(modelFacade.canOfferTrade(resource) == true) {
+				System.out.println("passed testCanOfferTrade test when meets parameters");
+			} else {
+				fail("failed testCanOfferTrade test when when meets parameters");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanOfferTrade test when when meets parameters - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//1 – no model
 	@Test
 	public void testCanOfferTrade2() {
-		Map<String, Object> resource = null;
-		int amount = 0;
+		Map<String, Object> resource = new HashMap<String, Object>();
+		resource.put("wood", 2);
+		resource.put("ore", 2);
+		resource.put("sheep", 0);
+		resource.put("brick", -2);
+		resource.put("wheat", -2);
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canOfferTrade(resource, amount);
+			modelFacade.canOfferTrade(resource);
+			fail("failed testCanOfferTrade test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanOfferTrade test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//2 – not your turn
 	@Test
 	public void testCanOfferTrade3() {
-		Map<String, Object> resource = null;
-		int amount = 0;
+		Map<String, Object> resource = new HashMap<String, Object>();
+		resource.put("wood", 2);
+		resource.put("ore", 2);
+		resource.put("sheep", 0);
+		resource.put("brick", -2);
+		resource.put("wheat", -2);
+		initModel("noTurn.txt");
 		try {
-			modelFacade.canOfferTrade(resource, amount);
+			if(modelFacade.canOfferTrade(resource) == false) {
+				System.out.println("passed testCanOfferTrade test when not your turn");
+			} else {
+				fail("failed testCanOfferTrade test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanOfferTrade test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//3 – client model is not playing
 	@Test
 	public void testCanOfferTrade4() {
-		Map<String, Object> resource = null;
-		int amount = 0;
+		Map<String, Object> resource = new HashMap<String, Object>();
+		resource.put("wood", 2);
+		resource.put("ore", 2);
+		resource.put("sheep", 0);
+		resource.put("brick", -2);
+		resource.put("wheat", -2);
+		initModel("noPlay.txt");
 		try {
-			modelFacade.canOfferTrade(resource, amount);
+			if(modelFacade.canOfferTrade(resource) == false) {
+				System.out.println("passed testCanOfferTrade test when not in playing state");
+			} else {
+				fail("failed testCanOfferTrade test when in playing state");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanOfferTrade test when not in playing state - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//4 – you don’t have resources you are offering
 	@Test
 	public void testCanOfferTrade5() {
-		Map<String, Object> resource = null;
-		int amount = 0;
+		Map<String, Object> resource = new HashMap<String, Object>();
+		resource.put("wood", 2);
+		resource.put("ore", 2);
+		resource.put("sheep", 0);
+		resource.put("brick", -2);
+		resource.put("wheat", -2);
+		initModel("noRes.txt");
 		try {
-			modelFacade.canOfferTrade(resource, amount);
+			if(modelFacade.canOfferTrade(resource) == false) {
+				System.out.println("passed testCanOfferTrade test when you don't have said resources");
+			} else {
+				fail("failed testCanOfferTrade test when you don't have said resources");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanOfferTrade test when you don't have said resources - model not created");
 		}
-		fail("Not yet implemented");
 	}
-	
-	@Test
-	public void testCanOfferTrade6() {
-		Map<String, Object> resource = null;
-		int amount = 0;
-		try {
-			modelFacade.canOfferTrade(resource, amount);
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-
 }

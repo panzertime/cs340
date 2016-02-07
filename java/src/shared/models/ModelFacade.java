@@ -820,7 +820,7 @@ public class ModelFacade {
 	 * @return Whether or not the user can trade
 	 * @throws NullPointerException Pre condtion violation
 	 */
-	public boolean canOfferTrade(Map<String, Object> resource, int amount)
+	public boolean canOfferTrade(Map<String, Object> resource)
 		throws NullPointerException {
 		Boolean b = false; 
 		try {
