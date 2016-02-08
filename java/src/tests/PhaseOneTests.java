@@ -3,7 +3,7 @@ public class PhaseOneTests {
 	
 	public static void main(String[] args) {
 		String[] tests = {
-				//"tests.poller.PollerTests",
+				"tests.poller.PollerTests",
 				//"tests.proxy.ProxyTests",
 
 				//"tests.model.ModelTests",
@@ -14,8 +14,7 @@ public class PhaseOneTests {
 				//"tests.model.CanBuyDevCardTests",
 				//"tests.model.CanUseYearOfPlentyTests",
 				//"tests.model.CanUseRoadBuilderTests", //TODO
-				//"tests.model.CanUseSoldierTests",
-				
+				//"tests.model.CanUseSoldierTests",	
 				//"tests.model.CanUseMonopolyTests",
 				//"tests.model.CanUseMonumentTests",
 				//"tests.model.CanBuildRoadTests",

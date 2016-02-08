@@ -12,16 +12,19 @@ public class PollerTests {
 	@Test
 	public void test() {
 		try {
-			ModelFacade mFacade = null;
+			ModelFacade mFacade = new ModelFacade();
 			ServerFacade sFacade = ServerFacade.get_instance();
-				// constructed with FakeProxy by default
-	
+			FakeProxy fp = new FakeProxy();
+			fp.setURL("java/src/tests/poller/");
+			sFacade.setProxy(fp);
+			
 			ServerPoller SP = new ServerPoller(sFacade, mFacade);
-			System.out.println("running poller...");
-			SP.run();
-			System.out.println("Going to sleep while poller runs...");
+			SP.start();
 			Thread.sleep(5000);
-			assertTrue(mFacade != null);
+			if(mFacade.getGameModel() == null){
+				fail("Poller failed poll test");
+			}
+			System.out.println("Poller passed poll test");
 		}
 		catch(Exception e){
 			fail("Poller had an exception: " + e.toString());
