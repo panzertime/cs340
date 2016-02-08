@@ -9,7 +9,7 @@ public class PhaseOneTests {
 				"tests.model.ModelTests",
 				"tests.model.CanSendChatTests",
 				"tests.model.CanRollNumberTests",
-				"tests.model.CanPlaceRobberTests",		//Jacob
+				"tests.model.CanPlaceRobberTests",
 				"tests.model.CanFinishTurnTests",
 				"tests.model.CanBuyDevCardTests",
 				"tests.model.CanUseYearOfPlentyTests",

@@ -406,7 +406,7 @@
       "soldiers": 0,
       "victoryPoints": 2,
       "monuments": 0,
-      "playedDevCard": false,
+      "playedDevCard": true,
       "discarded": false,
       "playerID": 0,
       "playerIndex": 0,
