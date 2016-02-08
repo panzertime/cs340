@@ -43,6 +43,7 @@ public class Board {
 
 	public Board(JSONObject jsonMap, GameModel game) throws BadJSONException {
 		this.game = game;
+		this.robber = new Robber();
 		
 		hexes = new HashMap<HexLocation, Hex>();
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
