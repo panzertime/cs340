@@ -24,7 +24,7 @@ public class MModelTests {
 
 	public static void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/monumenttests/" + file);
+		File jsonFile = new File("java/src/tests/model/canaccepttrade/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,15 +48,15 @@ public class MModelTests {
 	
 	//maximum model
 	public static void main(String[] args) {
-		initModel("noHave.txt");
+		initModel("good.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
-				System.out.println("passed testCanUseMonument test when user does not have card");
+			if(modelFacade.canAcceptTrade() == true) {
+				System.out.println("passed testCanAcceptTrade test when meets parameters");
 			} else {
-				fail("failed testCanUseMonument test when user does not have card");
+				fail("failed testCanAcceptTrade test when when meets parameters");
 			}
 		} catch (NullPointerException e) {
-			fail("failed testCanUseMonument test when user does not have card - model not created");
+			fail("failed testCanAcceptTrade test when when meets parameters - model not created");
 		}
 	}
 }

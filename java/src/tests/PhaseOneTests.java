@@ -20,8 +20,8 @@ public class PhaseOneTests {
 				"tests.model.CanBuildRoadTests",		//Jacob
 				"tests.model.CanBuildSettlementTests",	//Jacob
 				"tests.model.CanBuildCityTests",		//Jacob
-				"tests.model.CanOfferTradeTests",		//JR
-				"tests.model.CanAcceptTradeTests",		//JR
+				"tests.model.CanOfferTradeTests",
+				"tests.model.CanAcceptTradeTests",
 				"tests.model.CanMaritimeTradeTests",	//Jacob
 				"tests.model.CanDiscardCardsTests"
 		};

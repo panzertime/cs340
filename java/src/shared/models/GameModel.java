@@ -697,7 +697,8 @@ public class GameModel {
 		if (this.tradeModel != null) //you have been offered a trade
 		{
 		Player receiver = this.tradeModel.getReceiver();
-			b = receiver.hasCards(this.tradeModel.getResources());
+		if (receiver.getPlayerID() == this.getClientID())
+			b = receiver.hasCards(this.tradeModel.getResourcesToGive());
 		}	
 		return b;
 	}

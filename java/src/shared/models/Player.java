@@ -138,6 +138,11 @@ public class Player {
 			return false;
 		if (this.monuments != monuments.intValue())
 			return false;
+		Long points = ((Long) player.get("victoryPoints"));
+		if (points == null)
+			return false;
+		if (this.points != points.intValue())
+			return false;
 		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
 		if (playedDevelopmentCard == null || playedDevelopmentCard != this.playedDevelopmentCard)
 			return false;

@@ -1,7 +1,7 @@
 {
   "tradeOffer" : {
     "sender" : 1,
-    "receiver" : 2,
+    "receiver" : 0,
     "offer" : {
       "brick" : 1,
       "ore" : 1,
@@ -659,7 +659,7 @@
   },
   "turnTracker": {
     "status": "Playing",
-    "currentTurn": 0,
+    "currentTurn": 3,
     "longestRoad": -1,
     "largestArmy": -1
   },

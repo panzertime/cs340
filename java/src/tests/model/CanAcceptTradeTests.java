@@ -67,6 +67,36 @@ public class CanAcceptTradeTests {
 		}
 	}
 	
+	// not your turn - still works
+	@Test
+	public void testCanAcceptTrade5() {
+		initModel("noTurn.txt");
+		try {
+			if(modelFacade.canAcceptTrade() == true) {
+				System.out.println("passed testCanAcceptTrade test when it is not your turn");
+			} else {
+				fail("failed testCanAcceptTrade test when it is not your turn");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanAcceptTrade test when it is not your turn - model not created");
+		}
+	}
+	
+	//not playing - still works
+	@Test
+	public void testCanAcceptTrade6() {
+		initModel("noPlay.txt");
+		try {
+			if(modelFacade.canAcceptTrade() == true) {
+				System.out.println("passed testCanAcceptTrade test when the model is not playing");
+			} else {
+				fail("failed testCanAcceptTrade test when the model is not playing");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanAcceptTrade test when the model is not playing - model not created");
+		}
+	}
+	
 	//1 – no model
 	@Test
 	public void testCanAcceptTrade2() {
