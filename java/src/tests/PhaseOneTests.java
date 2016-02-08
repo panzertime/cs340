@@ -23,7 +23,7 @@ public class PhaseOneTests {
 				"tests.model.CanOfferTradeTests",		//JR
 				"tests.model.CanAcceptTradeTests",		//JR
 				"tests.model.CanMaritimeTradeTests",	//Jacob
-				"tests.model.CanDiscardCardsTests"		//JR
+				"tests.model.CanDiscardCardsTests"
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);

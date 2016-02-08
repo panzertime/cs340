@@ -19,13 +19,12 @@ import shared.models.exceptions.BadJSONException;
 
 public class MModelTests {
 	
+	private static ModelFacade modelFacade;
 
 
-	
-	//maximum model
-	public static void main(String[] args) {
+	public static void initModel() {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/fulljson.txt");
+		File jsonFile = new File("java/src/tests/jsonMap.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -40,15 +39,25 @@ public class MModelTests {
 			
 			Map jsonModel = (Map) parser.parse(x);
 			
-			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
-				fail("Current model does not match full JSON model");
-			} else {
-				System.out.println("Model passed full JSON init test");
-			}
+			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			fail("Error with JSON input with all options\n" +
-					e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	
+	//maximum model
+	public static void main(String[] args) {
+		try {
+			initModel();
+			if(modelFacade.canSendChat() == true) {
+				System.out.println("Passed canSendChat while player is in a game");
+			} else
+			{
+				fail("Failed canSendChat test while player was in a game");
+			}
+		} catch (NullPointerException e) {
+			fail("can send chat - Error when accessing model");
 		}
 	}
 }

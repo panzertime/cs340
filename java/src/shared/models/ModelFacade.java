@@ -39,6 +39,7 @@ public class ModelFacade {
 	public ModelFacade(JSONObject gameModel, int playerID) throws BadJSONException {
 		this.gameModel = new GameModel(gameModel);
 		this.userID = playerID;
+		this.gameModel.setClientID(userID);
 	}
 	
 	public ModelFacade() {
