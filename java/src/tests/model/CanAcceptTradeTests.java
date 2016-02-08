@@ -47,16 +47,17 @@ public class CanAcceptTradeTests {
 	}
 	/*
 	 * "tests.model.CanAcceptTradeTests"
-1 – no model
+
 2 – you have not been offered a domestic trade
 3 – you don’t have the required resources
-4 – working:
+
+
+
 1.	initModel()
 2.	tradeOffer – to player 0 
 3.	wheat = 2
 4.  wood = 2
 	 */
-
 	//Good tests
 	@Test
 	public void testCanAcceptTrade() {
@@ -72,15 +73,16 @@ public class CanAcceptTradeTests {
 		}
 	}
 	
+	//1 – no model
 	@Test
 	public void testCanAcceptTrade2() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canAcceptTrade();
+			mf.canAcceptTrade();
+			fail("failed testCanAcceptTrade test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanAcceptTrade test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test

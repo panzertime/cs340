@@ -29,6 +29,13 @@ public class Robber {
 	{
 		this.hex = hex;
 	}
+
+	
+	public Robber()
+        {
+        	hex = null;
+    	}
+
     public boolean equals(JSONObject jsonHex) {
     	JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
     	if (hex.getHexLocation().getX() != (Long) jsonHexLoc.get("x"))

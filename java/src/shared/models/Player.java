@@ -22,6 +22,7 @@ import shared.models.hand.development.DevCard;
 import shared.models.hand.development.DevCardType;
 import shared.models.hand.exceptions.BadResourceTypeException;
 import shared.models.hand.exceptions.ResourceException;
+import shared.models.board.piece.NullPlayerException;
 
 public class Player {
 
@@ -80,7 +81,27 @@ public class Player {
 		settlements = new Settlement[5];
 		cities = new City[4];
 		roads = new Road[15];
-		initPeices();
+
+		for (int i = 0; i < 5; i++)
+		        {
+		            try {
+                		settlements[i] = new Settlement(this);
+ 		           } catch (IllegalArgumentException e) {
+                		e.printStackTrace();
+		            }
+		        }
+		        for (int i = 0; i < 4; i++)
+		        {
+		            try {
+        		        cities[i] = new City(this);
+	            } catch (IllegalArgumentException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		        for (int i = 0; i < 15; i++)
+    		    {
+   		         roads[i] = new Road(this);
+   		     }
 	}
 
 	public boolean equalsJSON(JSONObject player) {
