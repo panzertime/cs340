@@ -383,13 +383,13 @@
         "brick": 0,
         "wood": 1,
         "sheep": 1,
-        "wheat": 1,
-        "ore": 1
+        "wheat": 2,
+        "ore": 0
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
         "monopoly": 0,
-        "soldier": 0,
+        "soldier": 1,
         "roadBuilding": 0,
         "monument": 0
       },

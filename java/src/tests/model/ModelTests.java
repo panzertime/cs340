@@ -39,10 +39,11 @@ public class ModelTests {
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			
-			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match Minimal JSON model");
+			} else {
+				System.out.println("Model passed minimal JSON init test");
 			}
-			System.out.println("Model passed minimal JSON init test");
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with minimul options\n" +
 					e.getMessage());
@@ -69,10 +70,11 @@ public class ModelTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match full JSON model");
+			} else {
+				System.out.println("Model passed full JSON init test");
 			}
-			System.out.println("Model passed full JSON init test");
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with all options\n" +
 					e.getMessage());

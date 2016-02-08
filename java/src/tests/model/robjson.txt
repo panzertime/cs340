@@ -384,7 +384,7 @@
         "wood": 1,
         "sheep": 1,
         "wheat": 2,
-        "ore": 0
+        "ore": 1
       },
       "oldDevCards": {
         "yearOfPlenty": 0,

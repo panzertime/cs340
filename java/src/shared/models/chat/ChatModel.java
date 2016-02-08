@@ -27,7 +27,7 @@ public class ChatModel {
 		if (chatList == null && chatLog.getSize() != 0) return false;
 		if (!chatLog.equalsJSON((JSONArray)chatList.get("lines"))) return false;
 		if (gameList == null && gameLog.getSize() != 0) return false;
-		if (!gameLog.equalsJSON((JSONArray)chatList.get("lines"))) return false;
+		if (!gameLog.equalsJSON((JSONArray)gameList.get("lines"))) return false;
 		
 		
 		return true;

@@ -24,9 +24,9 @@ public class CanPlaceRobberTests {
 	
 	ModelFacade modelFacade;
 
-	public void initRobModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/robjson.txt");
+		File jsonFile = new File("java/src/tests/model/placerobber/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -47,11 +47,28 @@ public class CanPlaceRobberTests {
 		}
 	}
 	
-	//BAD input
+	//Good
+	@Test
+	public void testCanPlaceRobber6() {
+		this.initModel("good.txt");
+		HexLocation hexLoc = new HexLocation(0,-1);
+		int playerIndex = -1;
+		try {
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
+				System.out.println("Passed canPlaceRobber test with good location and no one to rob");
+			} else {
+				fail("failed canPlaceRobber test with good location and no one to rob");
+			}
+		} catch (NullPointerException e) {
+			fail("failed canPlaceRobber test with good location and no one to rob - uninit model");
+		}
+	}
+	
+	//uninit model
 	@Test
 	public void testCanPlaceRobber1() {
-		HexLocation hexLoc = null;
-		int playerIndex = 0;
+		HexLocation hexLoc = new HexLocation(0,-1);
+		int playerIndex = -1;
 		ModelFacade mf = new ModelFacade();
 		try {
 			mf.canPlaceRobber(hexLoc, playerIndex);
@@ -61,9 +78,10 @@ public class CanPlaceRobberTests {
 		}
 	}
 	
+	//uninit hex loc
 	@Test
 	public void testCanPlaceRobber2() {
-		this.initRobModel();
+		this.initModel("good.txt");
 		HexLocation hexLoc = null;
 		int playerIndex = -1;
 		try {
@@ -78,9 +96,10 @@ public class CanPlaceRobberTests {
 		
 	}
 	
+	//unmoved robber
 	@Test
 	public void testCanPlaceRobber3() {
-		this.initRobModel();
+		this.initModel("good.txt");
 		HexLocation hexLoc = new HexLocation(0,-2);
 		int playerIndex = -1;
 		try {
@@ -94,9 +113,10 @@ public class CanPlaceRobberTests {
 		}
 	}
 
+	//Robber placed on water
 	@Test
 	public void testCanPlaceRobber4() {
-		this.initRobModel();
+		this.initModel("good.txt");
 		HexLocation hexLoc = new HexLocation(0,-3);
 		int playerIndex = -1;
 		try {
@@ -110,9 +130,10 @@ public class CanPlaceRobberTests {
 		}
 	}
 	
+	//robber way out in left field
 	@Test
 	public void testCanPlaceRobber5() {
-		this.initRobModel();
+		this.initModel("good.txt");
 		HexLocation hexLoc = new HexLocation(56,-30);
 		int playerIndex = -1;
 		try {
@@ -126,19 +147,71 @@ public class CanPlaceRobberTests {
 		}
 	}
 	
+	//not your turn
 	@Test
-	public void testCanPlaceRobber6() {
-		this.initRobModel();
+	public void testCanPlaceRobber7() {
+		this.initModel("noTurn.txt");
 		HexLocation hexLoc = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
-				System.out.println("Passed canPlaceRobber test with good location");
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test when it is not your turn");
 			} else {
-				fail("failed canPlaceRobber test with good location");
+				fail("failed canPlaceRobber test when it is not your turn");
 			}
 		} catch (NullPointerException e) {
-			fail("failed canPlaceRobber test with good location - uninit model");
+			fail("failed canPlaceRobber test when it is not your turn - uninit model");
+		}
+	}
+	
+	//not robbing?
+	@Test
+	public void testCanPlaceRobber8() {
+		this.initModel("noRobbing.txt");
+		HexLocation hexLoc = new HexLocation(0,-1);
+		int playerIndex = -1;
+		try {
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test when status is not robbing");
+			} else {
+				fail("failed canPlaceRobber test when status is not robbing");
+			}
+		} catch (NullPointerException e) {
+			fail("failed canPlaceRobber test when status is not robbing - uninit model");
+		}
+	}
+	
+	//player being robbed has not resources
+	@Test
+	public void testCanPlaceRobber9() {
+		this.initModel("noRes.txt");
+		HexLocation hexLoc = new HexLocation(0,0);
+		int playerIndex = 2;
+		try {
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
+				System.out.println("Passed canPlaceRobber test with good location but person to rob has no resources");
+			} else {
+				fail("failed canPlaceRobber test with good location but person to rob has no resources");
+			}
+		} catch (NullPointerException e) {
+			fail("failed canPlaceRobber test with good location but person to rob has no resources - uninit model");
+		}
+	}
+		
+	//player being robbed has resources
+	@Test
+	public void testCanPlaceRobber10() {
+		this.initModel("good.txt");
+		HexLocation hexLoc = new HexLocation(0,-1);
+		int playerIndex = 1;
+		try {
+			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
+				System.out.println("Passed canPlaceRobber test with good location and person to rob has resources");
+			} else {
+				fail("failed canPlaceRobber test with good location and person to rob has resources");
+			}
+		} catch (NullPointerException e) {
+			fail("failed canPlaceRobber test with good location and person to rob has resources - uninit model");
 		}
 	}
 }

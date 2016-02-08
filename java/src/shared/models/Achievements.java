@@ -16,8 +16,14 @@ public class Achievements {
 	
 	
 	public boolean equalsJSON(Integer longestRoad, Integer largestArmy) {
-		if (this.longestRoad.getUserIndex() != longestRoad) return false;
-		if (this.largestArmy.getUserIndex() != largestArmy) return false;
+		if(!(this.longestRoad == null &&
+				longestRoad == -1)) {
+				if (this.longestRoad.getUserIndex() != longestRoad) return false;
+			}
+		if(!(this.largestArmy == null &&
+				largestArmy == -1)) {
+				if (this.largestArmy.getUserIndex() != largestArmy) return false;
+			}
 		return true;
 	}
 	/**

@@ -383,11 +383,11 @@
         "brick": 0,
         "wood": 1,
         "sheep": 1,
-        "wheat": 1,
-        "ore": 1
+        "wheat": 2,
+        "ore": 0
       },
       "oldDevCards": {
-        "yearOfPlenty": 0,
+        "yearOfPlenty": 1,
         "monopoly": 0,
         "soldier": 0,
         "roadBuilding": 0,
@@ -640,11 +640,11 @@
     ]
   },
   "bank": {
-    "brick": 22,
+    "brick": 1,
     "wood": 21,
     "sheep": 20,
     "wheat": 21,
-    "ore": 22
+    "ore": 1
   },
   "turnTracker": {
     "status": "Playing",

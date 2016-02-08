@@ -24,10 +24,9 @@ public class CanUseSoldierTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/soldier/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,126 +47,84 @@ public class CanUseSoldierTests {
 		}
 	}
 	
-	public void initNotTurnModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/notyourturn.txt");
-		FileInputStream fis;
+	//work
+	/*
+	 * your turn
+	 * playing
+	 * have card in old dev hand
+	 * not played non monument
+	 * robber moves
+	 * player robbed has cards
+	 */
+	@Test
+	public void testCanUseSoldier7() {
+		initModel("good.txt");
+		HexLocation newRobberLocation = new HexLocation(0,-1);
+		int playerIndex = -1;
 		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
+			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
+				System.out.println("pass testCanUseSoldier test when robber moved, no one to rob");
+			} else {
+				fail("fail testCanUseSoldier test when  robber moved, no one to rob");
 			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			fail("fail testCanUseSoldier test when  robber moved, no one to rob");
 		}
 	}
 	
-	public void initRobModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/robjson.txt");
-		FileInputStream fis;
+	//robber moves, player can rob
+	@Test
+	public void testCanUseSoldier8() {
+		initModel("good.txt");
+		HexLocation newRobberLocation = new HexLocation(1,-1);
+		int playerIndex = 2;
 		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
+			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
+				System.out.println("pass testCanUseSoldier test when robber moved, someone to rob");
+			} else {
+				fail("fail testCanUseSoldier test when  robber moved, someone to rob");
 			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			fail("fail testCanUseSoldier test when  robber moved, someone to rob");
 		}
 	}
 	
-	public void initHasSoldierAlreadyPlayedModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/hassoldieralreadyplayed.txt");
-		FileInputStream fis;
+	//robber moved, player cannot be robbed
+	@Test
+	public void testCanUseSoldier6() {
+		initModel("noRobPete.txt");
+		HexLocation newRobberLocation = new HexLocation(0,0);
+		int playerIndex = 2;
 		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
+			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+				System.out.println("pass testCanUseSoldier test when robber moved, person has no resource");
+			} else {
+				fail("fail testCanUseSoldier test when  robber moved, person has no resource");
 			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void initHasSoldierGoodToGoModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/goodsoldier.txt");
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
-			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void initGoodSoldierNoResourcesModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/goodsoldiernoresources.txt");
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
-			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			fail("fail testCanUseSoldier test when  robber moved, person has no resource");
 		}
 	}
 
+	//null model
+	@Test
+	public void testCanUseSoldier9() {
+		HexLocation newRobberLocation = new HexLocation(0,-1);
+		int playerIndex = -1;
+		ModelFacade mf = new ModelFacade();
+		try {
+			mf.canUseSoldier(newRobberLocation, playerIndex);
+			fail("fail testCanUseSoldier test when no model present");
+		} catch (NullPointerException e) {
+			System.out.println("pass testCanUseSoldier test when no model present");
+		}
+	}
+	
 	//not your turn
 	@Test
 	public void testCanUseSoldier1() {
-		this.initNotTurnModel();
-		HexLocation newRobberLocation = new HexLocation(0,1);
+		initModel("noTurn.txt");
+		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
@@ -183,8 +140,8 @@ public class CanUseSoldierTests {
 	//not playing
 	@Test
 	public void testCanUseSoldier2() {
-		this.initRobModel();
-		HexLocation newRobberLocation = new HexLocation(0,1);
+		initModel("noPlay.txt");
+		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
@@ -197,28 +154,28 @@ public class CanUseSoldierTests {
 		}
 	}
 	
-	//don't have soldier card
+	//don't have soldier card, in new hand
 	@Test
 	public void testCanUseSoldier3() {
-		this.initModel();
-		HexLocation newRobberLocation = new HexLocation(0,1);
+		initModel("noOld.txt");
+		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when user has no soldier card");
+				System.out.println("pass testCanUseSoldier test when soldier card is new hand");
 			} else {
-				fail("fail testCanUseYearOfPlenty test when user has no soldier card");
+				fail("fail testCanUseYearOfPlenty test when soldier card is new hand");
 			}
 		} catch (NullPointerException e) {
-			fail("fail testCanUseYearOfPlenty test when user has no soldier card - could not access model");
+			fail("fail testCanUseYearOfPlenty test when soldier card is new hand - could not access model");
 		}
 	}
 	
 	//already played a card
 	@Test
 	public void testCanUseSoldier4() {
-		this.initHasSoldierAlreadyPlayedModel();
-		HexLocation newRobberLocation = new HexLocation(0,1);
+		initModel("alreadyPlayed.txt");
+		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
@@ -234,7 +191,7 @@ public class CanUseSoldierTests {
 	//robber doesn't move
 	@Test
 	public void testCanUseSoldier5() {
-		this.initHasSoldierGoodToGoModel();
+		initModel("good.txt");
 		HexLocation newRobberLocation = new HexLocation(0,-2);
 		int playerIndex = -1;
 		try {
@@ -245,40 +202,6 @@ public class CanUseSoldierTests {
 			}
 		} catch (NullPointerException e) {
 			fail("fail testCanUseYearOfPlenty test when user already played card - could not access model");
-		}
-	}
-	
-	//player doens't have resources
-	@Test
-	public void testCanUseSoldier6() {
-		this.initGoodSoldierNoResourcesModel();
-		HexLocation newRobberLocation = new HexLocation(-2,1);
-		int playerIndex = 1;
-		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when player to rob doesn't have resources");
-			} else {
-				fail("fail testCanUseYearOfPlenty test when player to rob doesn't have resources");
-			}
-		} catch (NullPointerException e) {
-			fail("fail testCanUseYearOfPlenty test when player to rob doesn't have resources - could not access model");
-		}
-	}
-	
-	//work - and rob
-	@Test
-	public void testCanUseSoldier7() {
-		this.initHasSoldierGoodToGoModel();
-		HexLocation newRobberLocation = new HexLocation(1,-1);
-		int playerIndex = -1;
-		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
-				System.out.println("pass testCanUseSoldier test when works");
-			} else {
-				fail("fail testCanUseSoldier test when works");
-			}
-		} catch (NullPointerException e) {
-			fail("fail testCanUseSoldier test when works");
 		}
 	}
 }

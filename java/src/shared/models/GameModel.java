@@ -111,7 +111,7 @@ public class GameModel {
 	{
 		if (jsonMap == null) return false;
 		if (bank.equalsJSON((JSONObject)jsonMap.get("bank"), (JSONObject)jsonMap.get("deck")) == false) return false;
-		if (chatModel.equalsJSON((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log"))) return false;
+		if (chatModel.equalsJSON((JSONObject)jsonMap.get("chat"), (JSONObject)jsonMap.get("log")) == false) return false;
 		JSONArray playerList = (JSONArray)jsonMap.get("players");
 		if (playerList == null) return false;
 		for (int i = 0; i < playerList.size(); i++)
