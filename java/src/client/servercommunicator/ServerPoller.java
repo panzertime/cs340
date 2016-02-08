@@ -1,6 +1,7 @@
 package client.servercommunicator;
 
 import shared.models.ModelFacade;
+import shared.models.GameModel;
 import shared.models.exceptions.BadJSONException;
 import org.json.simple.JSONObject;
 
@@ -45,7 +46,10 @@ public class ServerPoller extends Thread {
 			JSONObject model = new JSONObject(outbound.getModel(0));
 			return model;
 		}
-		catch(Exception e){ 
+		catch(Exception e){ 	
+			System.out.println("Poller exception: " + e.toString());
+			e.printStackTrace();
+
 			hasFailed = true;
 			return null; 
 		}
@@ -57,16 +61,24 @@ public class ServerPoller extends Thread {
 			try {
 				this.sleep(1500);
 				JSONObject result = poll();
-				if(result != null){
-					inbound = new ModelFacade(result, outbound.get_player_id());	
+				if(result == null){
+					System.out.println("POLLER says: received null input");
+				}
+				else {
+					System.out.println("POLLER says: setting game model");
+					GameModel gModel = new GameModel(result);
+					inbound.setGameModel(gModel);
 				}
 			}
 			catch(InterruptedException e){
+				System.out.println("Poller wait interrupted");
 				// do nothing, we will simply skip this poll and wait for the next one
 			}
 			catch(BadJSONException e){
-				// still do nothing, we should never get bad JSON from the server
+				System.out.println("Poller exception: " + e.toString());
+				e.printStackTrace();
 			}
+
 		}
 	}
 				

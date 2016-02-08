@@ -4,7 +4,7 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import java.net.*;
 import java.io.*;
-
+import java.util.*;
 
 
 /**
@@ -17,8 +17,11 @@ public class FakeProxy implements IServerProxy{
 	public FakeProxy(){
 		};
 
-	public void setURL(String URL){ // do nothing 
-		};
+	private String filesPath;
+
+	public void setURL(String URL){ 
+		filesPath = URL;
+	};
 	
 	private JSONObject makeJSON(String stringJSON)
 			throws ServerProxyException{
@@ -31,6 +34,30 @@ public class FakeProxy implements IServerProxy{
 		catch(Exception e){
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
+	}
+
+	private JSONObject jsonFromFile(String name) {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File(filesPath + name);
+		FileInputStream fis;
+		StringBuilder input = new StringBuilder();
+		JSONObject result = null;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			while(scanner.hasNextLine()) {
+				input.append(scanner.nextLine());
+				input.append("\n");
+			}
+			scanner.close();
+			result = makeJSON(input.toString());	
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;		
+		
 	}
 
 		
@@ -162,8 +189,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject getModel(int versionNumber)
 		throws ServerProxyException  {
-		String model = new FakeModel().toString();
-		return makeJSON(model);		
+		return jsonFromFile("model.json");
 	}
 	
 	/**
