@@ -67,10 +67,10 @@ public class CanMaritimeTradeTests {
 			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
 				System.out.println("passed testCanMaritimeTrade test when meets parameters");
 			} else {
-				fail("failed testCanMaritimeTrade test when when meets parameters");
+				fail("failed testCanMaritimeTrade test when meets parameters");
 			}
 		} catch (NullPointerException e) {
-			fail("failed testCanMaritimeTrade test when when meets parameters - model not created");
+			fail("failed testCanMaritimeTrade test when meets parameters - model not created");
 		}
 	}
 

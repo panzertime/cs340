@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.vertex.VertexDirection;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
@@ -24,10 +26,9 @@ public class CanBuildSettlementTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/buildsettlement/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,78 +49,158 @@ public class CanBuildSettlementTests {
 		}
 	}
 	
+	/*
+	 * initModel()
+	 * turnIndex = 0
+	 * turn status = Playing
+	 * Road added to (2,0,NW) in JSON
+	 * User has 1 wood, 1 brick, 1 wheat, 1 sheep and 1 settlement
+	 * Try to add (2,0, NW) here
+	 */
 	@Test
 	public void testCanBuildSettlement1() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
+		initModel("good.txt");
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			if(modelFacade.canBuildSettlement(vertLoc) == true) {
+				System.out.println("passed testCanBuildSettlement test when in playing mode and test meets parameters");
+			} else {
+				fail("failed testCanBuildSettlement test when in playing mode and test meets parameters");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildSettlement test when in playing mode and test meets parameters - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	/*
+	 * initModel()
+	 * turnIndex = 0
+	 * turn status = SecondRound
+	 * Road taken away from (0,1,SE) in JSON
+	 * User has 0 res,but 4 settlements
+	 * Try to add (0,1,SE) here
+	 */
 	@Test
 	public void testCanBuildSettlement2() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		initModel("goodSetup.txt");
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			if(modelFacade.canBuildSettlement(vertLoc) == true) {
+				System.out.println("passed testCanBuildSettlement test when in setup mode and test meets parameters");
+			} else {
+				fail("failed testCanBuildSettlement test when in setup mode and test meets parameters");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildSettlement test when in setup mode and test meets parameters - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//No model
 	@Test
 	public void testCanBuildSettlement3() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			mf.canBuildSettlement(vertLoc);
+			fail("failed testCanBuildSettlement test when no model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanBuildSettlement test when no model");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//Not your turn
 	@Test
 	public void testCanBuildSettlement4() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
+		initModel("noTurn.txt");
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				System.out.println("passed testCanBuildSettlement test when not your turn");
+			} else {
+				fail("failed testCanBuildSettlement test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildSettlement test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	
+	//not playing
 	@Test
 	public void testCanBuildSettlement5() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
+		initModel("noPlaying.txt");
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				System.out.println("passed testCanBuildSettlement test when not in playing mode");
+			} else {
+				fail("failed testCanBuildSettlement test when not in playing mode");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildSettlement test when not in playing mode - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//not open
 	@Test
 	public void testCanBuildSettlement6() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,0), VertexDirection.SouthWest);
+		initModel("good.txt");
 		try {
-			modelFacade.canBuildSettlement(vertLoc);
+			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				System.out.println("passed testCanBuildSettlement test when not an open location");
+			} else {
+				fail("failed testCanBuildSettlement test when not an open location");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanBuildSettlement test when not an open location - model not created");
 		}
-		fail("Not yet implemented");
 	}
 
+	//on water
+	@Test
+	public void testCanBuildSettlement7() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,3), VertexDirection.SouthWest);
+		initModel("good.txt");
+		try {
+			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				System.out.println("passed testCanBuildSettlement test when placing on water");
+			} else {
+				fail("failed testCanBuildSettlement test when placing on water");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildSettlement test when placing on water - model not created");
+		}
+	}
+	
+	//adjacent hex
+		@Test
+		public void testCanBuildSettlement8() {
+			VertexLocation vertLoc = new VertexLocation(new HexLocation(1,1), VertexDirection.NorthWest);
+			initModel("good.txt");
+			try {
+				if(modelFacade.canBuildSettlement(vertLoc) == false) {
+					System.out.println("passed testCanBuildSettlement test when placing on an adjacent vertex");
+				} else {
+					fail("failed testCanBuildSettlement test when placing on an adjacent vertex");
+				}
+			} catch (NullPointerException e) {
+				fail("failed testCanBuildSettlement test when placing on an adjacent vertex - model not created");
+			}
+		}
+	
+	//not enough resources
+	@Test
+	public void testCanBuildSettlement9() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
+		initModel("noRes.txt");
+		try {
+			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				System.out.println("passed testCanBuildSettlement test when not enough resources");
+			} else {
+				fail("failed testCanBuildSettlement test when not enough resources");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildSettlement test when not enough resources - model not created");
+		}
+	}
 }

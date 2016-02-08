@@ -160,6 +160,14 @@
       }
     ],
     "roads": [
+   	  {
+        "owner": 0,
+        "location": {
+          "direction": "NW",
+          "x": 2,
+          "y": 0
+        }
+      },
       {
         "owner": 1,
         "location": {
@@ -380,10 +388,10 @@
   "players": [
     {
       "resources": {
-        "brick": 0,
+        "brick": 1,
         "wood": 1,
         "sheep": 1,
-        "wheat": 2,
+        "wheat": 1,
         "ore": 0
       },
       "oldDevCards": {
@@ -647,7 +655,7 @@
     "ore": 22
   },
   "turnTracker": {
-    "status": "Playing",
+    "status": "Robbing",
     "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
