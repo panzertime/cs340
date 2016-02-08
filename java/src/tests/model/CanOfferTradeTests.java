@@ -26,7 +26,7 @@ public class CanOfferTradeTests {
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/canOfferTrade/" + file);
+		File jsonFile = new File("java/src/tests/model/canoffertrade/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);

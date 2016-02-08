@@ -23,10 +23,9 @@ public class CanAcceptTradeTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/canaccepttrade/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -46,17 +45,31 @@ public class CanAcceptTradeTests {
 			e.printStackTrace();
 		}
 	}
+	/*
+	 * "tests.model.CanAcceptTradeTests"
+1 – no model
+2 – you have not been offered a domestic trade
+3 – you don’t have the required resources
+4 – working:
+1.	initModel()
+2.	tradeOffer – to player 0 
+3.	wheat = 2
+4.  wood = 2
+	 */
 
 	//Good tests
 	@Test
 	public void testCanAcceptTrade() {
+		initModel("good.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == true) {
+				System.out.println("passed testCanAcceptTrade test when meets parameters");
+			} else {
+				fail("failed testCanAcceptTrade test when when meets parameters");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when when meets parameters - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
 	@Test

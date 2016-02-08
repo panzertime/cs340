@@ -18,10 +18,10 @@ public class PhaseOneTests {
 				//"tests.model.CanUseMonopolyTests",
 				//"tests.model.CanUseMonumentTests",
 				//"tests.model.CanBuildRoadTests",
-				//"tests.model.CanBuildSettlementTests",
+				//"tests.model.CanBuildSettlementTests",//TODO
 				//"tests.model.CanBuildCityTests",
-				"tests.model.CanOfferTradeTests"/*,
-				"tests.model.CanAcceptTradeTests",
+				//"tests.model.CanOfferTradeTests",
+				"tests.model.CanAcceptTradeTests"/*,
 				"tests.model.CanMaritimeTradeTests",
 				"tests.model.CanDiscardCardsTests"*/
 		};
@@ -34,14 +34,7 @@ public class PhaseOneTests {
 Rest of test cases:
 
 
-"tests.model.CanAcceptTradeTests"
-1 – no model
-2 – you have not been offered a domestic trade
-3 – you don’t have the required resources
-4 – working:
-1.	initModel()
-2.	tradeOffer – to player 0 
-3.	wheat = 1
+
 
 
 "tests.model.CanMaritimeTradeTests"
