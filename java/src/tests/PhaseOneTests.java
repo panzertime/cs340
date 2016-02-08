@@ -3,26 +3,27 @@ public class PhaseOneTests {
 	
 	public static void main(String[] args) {
 		String[] tests = {
-				"tests.poller.PollerTests",
-				"tests.proxy.ProxyTests",
-				"tests.model.ModelTests",
-				"tests.model.CanSendChatTests",
-				"tests.model.CanRollNumberTests",
-				"tests.model.CanPlaceRobberTests",
-				"tests.model.CanFinishTurnTests",
-				"tests.model.CanBuyDevCardTests",
-				"tests.model.CanUseYearOfPlentyTests",
-				"tests.model.CanUseRoadBuilderTests",
-				"tests.model.CanUseSoldierTests",
-				"tests.model.CanUseMonopolyTests",
-				"tests.model.CanUseMonumentTests",
-				"tests.model.CanBuildRoadTests",
-				"tests.model.CanBuildSettlementTests",
-				"tests.model.CanBuildCityTests",
-				"tests.model.CanOfferTradeTests",
-				"tests.model.CanAcceptTradeTests",
-				"tests.model.CanMaritimeTradeTests",
-				"tests.model.CanDiscardCardsTests"
+				"tests.poller.PollerTests",				//RT
+				"tests.proxy.ProxyTests",				//RT
+
+				"tests.model.ModelTests",				//Jacob
+				"tests.model.CanSendChatTests",			//Josh
+				"tests.model.CanRollNumberTests",		//Josh
+				"tests.model.CanPlaceRobberTests",		//Jacob
+				"tests.model.CanFinishTurnTests",		//Josh
+				"tests.model.CanBuyDevCardTests",		//JR
+				"tests.model.CanUseYearOfPlentyTests",	//JR
+				"tests.model.CanUseRoadBuilderTests",	//Jacob
+				"tests.model.CanUseSoldierTests",		//Jacob
+				"tests.model.CanUseMonopolyTests",		//JR
+				"tests.model.CanUseMonumentTests",		//JR
+				"tests.model.CanBuildRoadTests",		//Jacob
+				"tests.model.CanBuildSettlementTests",	//Jacob
+				"tests.model.CanBuildCityTests",		//Jacob
+				"tests.model.CanOfferTradeTests",		//JR
+				"tests.model.CanAcceptTradeTests",		//JR
+				"tests.model.CanMaritimeTradeTests",	//Jacob
+				"tests.model.CanDiscardCardsTests"		//JR
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);
