@@ -14,12 +14,12 @@ public class PhaseOneTests {
 				"tests.model.CanBuyDevCardTests",
 				"tests.model.CanUseYearOfPlentyTests",
 				"tests.model.CanUseRoadBuilderTests",	//Jacob
-				"tests.model.CanUseSoldierTests",		//Jacob
+				"tests.model.CanUseSoldierTests",
 				"tests.model.CanUseMonopolyTests",
 				"tests.model.CanUseMonumentTests",
 				"tests.model.CanBuildRoadTests",		//Jacob
 				"tests.model.CanBuildSettlementTests",	//Jacob
-				"tests.model.CanBuildCityTests",		//Jacob
+				"tests.model.CanBuildCityTests",
 				"tests.model.CanOfferTradeTests",
 				"tests.model.CanAcceptTradeTests",
 				"tests.model.CanMaritimeTradeTests",
