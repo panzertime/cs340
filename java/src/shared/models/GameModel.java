@@ -59,7 +59,7 @@ public class GameModel {
 		for (int i = 0; i < playerList.size(); i++)
 		{
 			JSONObject player = (JSONObject) playerList.get(i);
-			players.add(new Player(player));
+			players.add(new Player(player, this));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"), this);
 		Long version = ((Long) jsonMap.get("version"));
@@ -536,7 +536,7 @@ public class GameModel {
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasKnightToUse();
 		b = b && canRobPlayer(newRobberLocation, playerIndex);
 		return b;
@@ -563,7 +563,7 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
 		b = b && this.canBuildRoad(one, true);
 		if (this.canBuildRoad(two, true)) ;
@@ -579,7 +579,7 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasMonopolyToUse();
 		return b;
 	}

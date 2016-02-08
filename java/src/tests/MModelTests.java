@@ -22,9 +22,9 @@ public class MModelTests {
 	private static ModelFacade modelFacade;
 
 
-	public static void initModel() {
+	public static void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/monumenttests/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,16 +48,15 @@ public class MModelTests {
 	
 	//maximum model
 	public static void main(String[] args) {
+		initModel("noHave.txt");
 		try {
-			initModel();
-			if(modelFacade.canSendChat() == true) {
-				System.out.println("Passed canSendChat while player is in a game");
-			} else
-			{
-				fail("Failed canSendChat test while player was in a game");
+			if(modelFacade.canUseMonument() == false) {
+				System.out.println("passed testCanUseMonument test when user does not have card");
+			} else {
+				fail("failed testCanUseMonument test when user does not have card");
 			}
 		} catch (NullPointerException e) {
-			fail("can send chat - Error when accessing model");
+			fail("failed testCanUseMonument test when user does not have card - model not created");
 		}
 	}
 }

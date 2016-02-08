@@ -103,11 +103,21 @@ public class Achievements {
 
 	
 	public Boolean isLargestArmy(Player p) {
-		return null;}
+		if (largestArmy == null)
+		return false;
+		if (p.getUserIndex() == largestArmy.getUserIndex())
+		return true;
+		return false;
+		}
 	
 	
 	public Boolean isLongestRoad(Player p) {
-		return null;}
+		if (longestRoad == null)
+		return false;
+		if (p.getUserIndex() == longestRoad.getUserIndex())
+		return true;
+		return false;
+		}
 
 	
 

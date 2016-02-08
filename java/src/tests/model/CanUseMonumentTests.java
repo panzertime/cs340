@@ -108,7 +108,7 @@ public class CanUseMonumentTests {
 	public void testCanUseMonument5() {
 		this.initModel("alreadyDeved.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
+			if(modelFacade.canUseMonument() == true) {
 				System.out.println("passed testCanUseMonument test when user already played dev card");
 			} else {
 				fail("failed testCanUseMonument test when user already played dev card");

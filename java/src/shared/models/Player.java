@@ -41,7 +41,8 @@ public class Player {
 	private Boolean hasDiscarded;
 	private Integer playerID;
 
-	public Player(JSONObject player) throws BadJSONException {
+	public Player(JSONObject player, GameModel game) throws BadJSONException {
+		this.game = game;
 		if (player == null)
 			throw new BadJSONException();
 		String c = (String) player.get("color");
@@ -64,6 +65,10 @@ public class Player {
 		if (monuments == null)
 			throw new BadJSONException();
 		this.monuments = monuments.intValue();
+		Long points = ((Long) player.get("victoryPoints"));
+		if (points == null)
+			throw new BadJSONException();
+		this.points = points.intValue();
 		Boolean playedDevelopmentCard = (Boolean) player.get("playedDevCard");
 		if (playedDevelopmentCard == null)
 			throw new BadJSONException();
@@ -102,6 +107,7 @@ public class Player {
     		    {
    		         roads[i] = new Road(this);
    		     }
+		        
 	}
 
 	public boolean equalsJSON(JSONObject player) {
@@ -543,7 +549,7 @@ public class Player {
 	/**
 	 * @return The number of Victory Points a player has.
 	 */
-	public int getVictoryPoints() {
+	public void calculateVictoryPoints() {
 		int points = 0;
 		/*
 		 * for (DevCard card : hand.getDevCards()) { if (card.getType() ==
@@ -562,16 +568,15 @@ public class Player {
 				points++;
 		}
 
-		return points;
+		this.points = points;
 	}
 
 	public int getVictoryPointsWithMonuments() {
-		int points = 0;
+		int points = this.getPoints();
 		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
 		}
-		points += this.getVictoryPoints();
 
 		return points;
 	}
