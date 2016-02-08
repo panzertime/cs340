@@ -21,8 +21,8 @@ public class PhaseOneTests {
 				//"tests.model.CanBuildSettlementTests",//TODO
 				//"tests.model.CanBuildCityTests",
 				//"tests.model.CanOfferTradeTests",
-				"tests.model.CanAcceptTradeTests"/*,
-				"tests.model.CanMaritimeTradeTests",
+				//"tests.model.CanAcceptTradeTests",
+				"tests.model.CanMaritimeTradeTests"/*,
 				"tests.model.CanDiscardCardsTests"*/
 		};
 		
@@ -32,23 +32,6 @@ public class PhaseOneTests {
 
 /*
 Rest of test cases:
-
-
-
-
-
-"tests.model.CanMaritimeTradeTests"
-1 – no model
-2 – it is not your turn
-3 – model is not playing
-4 – you don’t have the resources you are giving
-5 – you don’t have port for a ratio < 4
-6 – Working: ratio – 3 (You have the port)
-1.	initModel()
-2.	turn = 0
-3.	Status = playing
-4.	Brick = 1
-5.	Settlement (0,2,NE)->(0,2,SE)
 
 "tests.model.CanDiscardCardsTests"
 1 – no model
