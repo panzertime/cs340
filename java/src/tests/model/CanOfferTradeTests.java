@@ -51,9 +51,9 @@ public class CanOfferTradeTests {
 	 * working: - changed fullJSON for good input file
 	1.	initModel()
 	2.	turnIndex = 0
-	3.	status = “Playing”
-	wood – 2
-	ore  - 2
+	3.	status = Playing
+	wood : 2
+	ore  : -2
 	brick : -2
 	wheat : -2
 	sheep : 0
