@@ -547,7 +547,7 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
 			b = b && this.getBank().getHand().hasResource(one, 1);

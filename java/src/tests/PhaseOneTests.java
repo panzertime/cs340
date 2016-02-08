@@ -7,12 +7,12 @@ public class PhaseOneTests {
 				"tests.proxy.ProxyTests",				//RT
 
 				"tests.model.ModelTests",				//Jacob
-				"tests.model.CanSendChatTests",			//Josh
-				"tests.model.CanRollNumberTests",		//Josh
+				"tests.model.CanSendChatTests",
+				"tests.model.CanRollNumberTests",
 				"tests.model.CanPlaceRobberTests",		//Jacob
-				"tests.model.CanFinishTurnTests",		//Josh
-				"tests.model.CanBuyDevCardTests",		//JR
-				"tests.model.CanUseYearOfPlentyTests",	//JR
+				"tests.model.CanFinishTurnTests",
+				"tests.model.CanBuyDevCardTests",
+				"tests.model.CanUseYearOfPlentyTests",
 				"tests.model.CanUseRoadBuilderTests",	//Jacob
 				"tests.model.CanUseSoldierTests",		//Jacob
 				"tests.model.CanUseMonopolyTests",		//JR
