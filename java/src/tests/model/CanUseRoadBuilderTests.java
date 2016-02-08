@@ -52,8 +52,8 @@ public class CanUseRoadBuilderTests {
 	
 	/*
 	 * initModel()
-	 * firstLocation = (2,0,N)
-	 * secondLocation = (0,1,SW)
+	 * firstLocation = (2,0,NW)
+	 * secondLocation = (0,1,SE)
 	 * unused roads >= 2
 	 * turnIndex = 0
 	 * status = playing
@@ -62,7 +62,7 @@ public class CanUseRoadBuilderTests {
 	 */
 	@Test
 	public void testCanUseRoadBuilder1() {
-		EdgeLocation one = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
+		EdgeLocation one = new EdgeLocation(new HexLocation(2,0), EdgeDirection.NorthWest);
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("good.txt");
 		try {
@@ -84,8 +84,8 @@ public class CanUseRoadBuilderTests {
 	 */
 	@Test
 	public void testCanUseRoadBuilder2() {
-		EdgeLocation one = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
-		EdgeLocation two = new EdgeLocation(new HexLocation(2,0), EdgeDirection.NorthWest);
+		EdgeLocation one = new EdgeLocation(new HexLocation(2,0), EdgeDirection.NorthWest);
+		EdgeLocation two = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
 		initModel("good.txt");
 		try {
 			if(modelFacade.canUseRoadBuilder(one, two) == true) {

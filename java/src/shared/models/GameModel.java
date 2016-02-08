@@ -565,10 +565,11 @@ public class GameModel {
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		b = b && this.canBuildRoadWithCard(one, true);
-		if (this.canBuildRoadWithCard(two, true)) ;
+		b = b && this.canBuildRoadWithCard(one);
+		if (this.canBuildRoadWithCard(two)  ||
+				(this.canBuildTwoRoad(one, two))) ;
 			else
-		b = b && this.canBuildTwoRoad(one, two);
+				b = false; 
 		return b;
 	}
 	
@@ -607,7 +608,7 @@ public class GameModel {
 	}
 	
 
-	private Boolean canBuildRoadWithCard(EdgeLocation edge, boolean free)
+	private Boolean canBuildRoadWithCard(EdgeLocation edge)
 	{
 		boolean b = false;
 		if ( this.status.equalsIgnoreCase("Playing"))
@@ -615,8 +616,7 @@ public class GameModel {
 			b = true;
 			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 	
-			if (!free) b = b && this.getActivePlayer().hasRoadCost();
-				b = b && this.getActivePlayer().hasRoadPiece();
+			b = b && this.getActivePlayer().hasRoadPiece();
 			b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
 		}
 		return b;
