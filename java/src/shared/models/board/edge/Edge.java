@@ -128,9 +128,9 @@ public class Edge {
 	}
 
 	public boolean isBuildable() {
-		if (hex0.isBuildable())
+		if (hex0 != null && hex0.isBuildable())
 			return true;
-		if (hex1.isBuildable())
+		if (hex1 != null && hex1.isBuildable())
 			return true;
 		return false;
 	}

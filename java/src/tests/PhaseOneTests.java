@@ -17,8 +17,8 @@ public class PhaseOneTests {
 				"tests.model.CanUseSoldierTests",
 				"tests.model.CanUseMonopolyTests",
 				"tests.model.CanUseMonumentTests",
-				"tests.model.CanBuildRoadTests",		//Jacob
-				"tests.model.CanBuildSettlementTests",	//Jacob
+				"tests.model.CanBuildRoadTests",
+				"tests.model.CanBuildSettlementTests",
 				"tests.model.CanBuildCityTests",
 				"tests.model.CanOfferTradeTests",
 				"tests.model.CanAcceptTradeTests",

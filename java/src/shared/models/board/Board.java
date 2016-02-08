@@ -314,7 +314,7 @@ public class Board {
 
 		Edge[] edges = vertex.getAllEdges();
 		for (Edge edge : edges) {
-			if (edge.getOtherVertex(vertex).getBuilding() != null)
+			if (edge.getOtherVertex(vertex).hasBuilding())
 				return false;
 		}
 		for (Edge edge : edges) {
@@ -354,15 +354,21 @@ public class Board {
 			return false;
 
 		for (Vertex vertex : edge.getAllVertices()) {
-			if (vertex.getBuilding().getOwner().equals(this))
+			if (vertex.getBuilding() != null && vertex.getBuilding().getOwner().equals(this))
 				return true;
 			if (vertex.getBuilding() == null) {
 
-				if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player))
+				if (vertex.getLeftEdge(edge) != null && 
+						vertex.getLeftEdge(edge).getRoad() != null &&
+						//vertex.getLeftEdge(edge).getRoad().ge != null &&
+						vertex.getLeftEdge(edge).getRoad().getOwner().equals(player))
 					return true;
-				if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player))
+				if (vertex.getRightEdge(edge) != null && 
+						vertex.getRightEdge(edge).getRoad() != null && 
+						vertex.getRightEdge(edge).getRoad().getOwner().equals(player))
 					return true;
 			}
+
 		}
 		return false;
 	}
@@ -399,7 +405,7 @@ public class Board {
 			return false;
 		for (Vertex vertex : edge.getAllVertices()) {
 
-			if (vertex.getBuilding().getOwner().equals(this) && !vertex.getLeftEdge(edge).hasRoad()
+			if (vertex.getBuilding() != null && vertex.getBuilding().getOwner().equals(player) && !vertex.getLeftEdge(edge).hasRoad()
 					&& !vertex.getRightEdge(edge).hasRoad()) {
 				return true;
 			}
@@ -416,7 +422,7 @@ public class Board {
 			return false;
 		Edge[] edges = vertex.getAllEdges();
 		for (Edge edge : edges) {
-			if (edge.getOtherVertex(vertex).getBuilding() != null)
+			if (edge.getOtherVertex(vertex).hasBuilding())
 			return false;
 		}
 		return true;
