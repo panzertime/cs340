@@ -275,10 +275,10 @@ public class CanUseSoldierTests {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
 				System.out.println("pass testCanUseSoldier test when works");
 			} else {
-				fail("fail testCanUseYearOfPlenty test when works");
+				fail("fail testCanUseSoldier test when works");
 			}
 		} catch (NullPointerException e) {
-			fail("fail testCanUseYearOfPlenty test when works");
+			fail("fail testCanUseSoldier test when works");
 		}
 	}
 }

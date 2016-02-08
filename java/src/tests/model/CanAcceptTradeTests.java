@@ -45,18 +45,12 @@ public class CanAcceptTradeTests {
 			e.printStackTrace();
 		}
 	}
+
 	/*
-	 * "tests.model.CanAcceptTradeTests"
-
-2 – you have not been offered a domestic trade
-3 – you don’t have the required resources
-
-
-
-1.	initModel()
-2.	tradeOffer – to player 0 
-3.	wheat = 2
-4.  wood = 2
+	1.	initModel()
+	2.	tradeOffer – to player 0 
+	3.	wheat = 2
+	4.  wood = 2
 	 */
 	//Good tests
 	@Test
@@ -85,48 +79,33 @@ public class CanAcceptTradeTests {
 		}
 	}
 	
+	//2 – you have not been offered a domestic trade
 	@Test
 	public void testCanAcceptTrade3() {
+		initModel("noTrade.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == false) {
+				System.out.println("passed testCanAcceptTrade test when not offered a trade");
+			} else {
+				fail("failed testCanAcceptTrade test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when not offered a trade - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//3 – you don’t have the required resources (only one wood)
 	@Test
 	public void testCanAcceptTrade4() {
+		initModel("noTrade.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == false) {
+				System.out.println("passed testCanAcceptTrade test when you don't have the resources");
+			} else {
+				fail("failed testCanAcceptTrade test when you don't have the resources");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when you don't have the resources - model not created");
 		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanAcceptTrade5() {
-		try {
-			modelFacade.canAcceptTrade();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanAcceptTrade6() {
-		try {
-			modelFacade.canAcceptTrade();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
 	}
 }
