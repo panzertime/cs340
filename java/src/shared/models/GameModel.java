@@ -641,7 +641,7 @@ public class GameModel {
 			b = true;
 			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 			b = b && this.getActivePlayer().hasRoadPiece();
-			b = b && this.getBoard().canBuildRoadSecondRound(this.getActivePlayer(), edge);
+			b = b && this.getBoard().canBuildSetupRoad(this.getActivePlayer(), edge);
 			
 		}
 
@@ -650,13 +650,19 @@ public class GameModel {
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		Boolean free = this.inSetupMode();
 		boolean b = true;
 		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		if (!free) b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getActivePlayer().hasSettlementPiece();
+		if (this.inSetupMode())
+		{
+		b = b && this.getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex);
+		}
+		else
+		{
+		b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
+		}
 		return b;
 	}
 	

@@ -44,8 +44,7 @@ public class Board {
 
 	public Board(JSONObject jsonMap, GameModel game) throws BadJSONException {
 		this.game = game;
-		this.robber = new Robber();
-		
+
 		hexes = new HashMap<HexLocation, Hex>();
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
@@ -128,7 +127,7 @@ public class Board {
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
-				switch(resource) {
+				switch (resource) {
 				case "wood":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WOOD, edgeDir));
 					break;
@@ -170,10 +169,10 @@ public class Board {
 			JSONObject jsonRoad = (JSONObject) roadObject;
 
 			Long ownerIndexLong = (Long) jsonRoad.get("owner");
-			if (ownerIndexLong == null) 
+			if (ownerIndexLong == null)
 				throw new BadJSONException();
 			Integer ownerIndex = ownerIndexLong.intValue();
-			
+
 			Road road = null;
 			try {
 				road = game.whichPlayer(ownerIndex).getFreeRoad();
@@ -203,10 +202,10 @@ public class Board {
 			JSONObject jsonCity = (JSONObject) cityObject;
 
 			Long ownerIndexLong = (Long) jsonCity.get("owner");
-			if (ownerIndexLong == null) 
+			if (ownerIndexLong == null)
 				throw new BadJSONException();
 			Integer ownerIndex = ownerIndexLong.intValue();
-			
+
 			City city = null;
 			try {
 				city = game.whichPlayer(ownerIndex).getFreeCity();
@@ -236,10 +235,10 @@ public class Board {
 			JSONObject jsonSettlement = (JSONObject) settlementObject;
 
 			Long ownerIndexLong = (Long) jsonSettlement.get("owner");
-			if (ownerIndexLong == null) 
+			if (ownerIndexLong == null)
 				throw new BadJSONException();
 			Integer ownerIndex = ownerIndexLong.intValue();
-			
+
 			Settlement settlement = null;
 			try {
 				settlement = game.whichPlayer(ownerIndex).getFreeSettlement();
@@ -263,16 +262,14 @@ public class Board {
 				throw new BadJSONException();
 			}
 		}
-		
+
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
-	
 
 	public boolean equalsJSON(JSONObject jsonObject, GameModel gameModel) {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 
 	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
@@ -304,7 +301,8 @@ public class Board {
 	}
 
 	/**
-	 * @param vertexLoc a vertexLocation to be checked
+	 * @param vertexLoc
+	 *            a vertexLocation to be checked
 	 * @return True if a settlement can be build
 	 */
 	public Boolean canBuildSettlement(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
@@ -368,7 +366,6 @@ public class Board {
 		}
 		return false;
 	}
-	
 
 	public boolean canBuildRoadTwo(Player player, EdgeLocation one, EdgeLocation edgeLocation) {
 		Edge edge = getEdgeAt(edgeLocation);
@@ -382,34 +379,48 @@ public class Board {
 				return true;
 			if (vertex.getBuilding() == null) {
 
-				if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player) || vertex.getLeftEdge(edge).getEdgeLocation().equals(one))
+				if (vertex.getLeftEdge(edge).getRoad().getOwner().equals(player)
+						|| vertex.getLeftEdge(edge).getEdgeLocation().equals(one))
 					return true;
-				if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player) || vertex.getLeftEdge(edge).getEdgeLocation().equals(one)) 
+				if (vertex.getRightEdge(edge).getRoad().getOwner().equals(player)
+						|| vertex.getLeftEdge(edge).getEdgeLocation().equals(one))
 					return true;
 			}
-			
+
 		}
 		return false;
 	}
 
-	
-	public boolean canBuildRoadSecondRound(Player player, EdgeLocation edgeLocation) {
+	public boolean canBuildSetupRoad(Player player, EdgeLocation edgeLocation) {
 		Edge edge = getEdgeAt(edgeLocation);
 		if (edge.hasRoad())
 			return false;
 		if (!edge.isBuildable())
 			return false;
-		for (Vertex vertex : edge.getAllVertices())
-		{
-			
-			if (vertex.getBuilding().getOwner().equals(this) && !vertex.getLeftEdge(edge).hasRoad() && !vertex.getRightEdge(edge).hasRoad())
-			{	return true;
+		for (Vertex vertex : edge.getAllVertices()) {
+
+			if (vertex.getBuilding().getOwner().equals(this) && !vertex.getLeftEdge(edge).hasRoad()
+					&& !vertex.getRightEdge(edge).hasRoad()) {
+				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
+	public Boolean canBuildSetupSettlement(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
+		Vertex vertex = getVertexAt(vertexLoc);
+		if (vertex.hasBuilding())
+			return false;
+		if (!vertex.isBuildable())
+			return false;
+		Edge[] edges = vertex.getAllEdges();
+		for (Edge edge : edges) {
+			if (edge.getOtherVertex(vertex).getBuilding() != null)
+			return false;
+		}
+		return true;
+	}
 
 	public void placeRobber(HexLocation hexLoc) {
 		LandHex target = (LandHex) hexes.get(hexLoc);
@@ -513,9 +524,9 @@ public class Board {
 		if (hexRight != null)
 			connectHexVertex(hexRight);
 	}
-	
+
 	public Boolean equals(JSONObject jsonMap) {
-		
+
 		hexes = new HashMap<HexLocation, Hex>();
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 
@@ -524,7 +535,7 @@ public class Board {
 		JSONArray jsonRoads = (JSONArray) jsonMap.get("roads");
 
 		JSONArray jsonSettlements = (JSONArray) jsonMap.get("settlements");
-		
+
 		JSONArray jsonCities = (JSONArray) jsonMap.get("cities");
 
 		JSONObject jsonRobber = (JSONObject) jsonMap.get("robber");
@@ -533,17 +544,19 @@ public class Board {
 			JSONObject jsonHex = (JSONObject) hexObject;
 
 			JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
-			HexLocation hexLoc = new HexLocation(((Long)jsonHexLoc.get("x")).intValue(), ((Long) jsonHexLoc.get("y")).intValue());
-			
+			HexLocation hexLoc = new HexLocation(((Long) jsonHexLoc.get("x")).intValue(),
+					((Long) jsonHexLoc.get("y")).intValue());
+
 			if (!getHexAt(hexLoc).equals(jsonHex))
 				return false;
 		}
-		
+
 		for (Object portObject : jsonPorts) {
 			JSONObject jsonPort = (JSONObject) portObject;
 
 			JSONObject jsonHexLoc = (JSONObject) jsonPort.get("location");
-			HexLocation hexLoc = new HexLocation(((Long)jsonHexLoc.get("x")).intValue(), ((Long) jsonHexLoc.get("y")).intValue());
+			HexLocation hexLoc = new HexLocation(((Long) jsonHexLoc.get("x")).intValue(),
+					((Long) jsonHexLoc.get("y")).intValue());
 
 			if (!getHexAt(hexLoc).equals(jsonPort))
 				return false;
@@ -557,7 +570,8 @@ public class Board {
 			try {
 				hexLoc = new HexLocation(jsonEdgeLoc);
 			} catch (BadJSONException e2) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			String direction = (String) jsonEdgeLoc.get("direction");
@@ -565,13 +579,14 @@ public class Board {
 			try {
 				edgeDir = EdgeDirection.fromJSON(direction);
 			} catch (BadJSONException e1) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			EdgeLocation edgeLoc = new EdgeLocation(hexLoc, edgeDir);
-			
+
 			Road road = getEdgeAt(edgeLoc).getRoad();
-			
+
 			if (!road.equals(jsonRoad))
 				return false;
 		}
@@ -584,7 +599,8 @@ public class Board {
 			try {
 				hexLoc = new HexLocation(jsonVertexLoc);
 			} catch (BadJSONException e2) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			String direction = (String) jsonVertexLoc.get("direction");
@@ -592,13 +608,14 @@ public class Board {
 			try {
 				vertexDir = VertexDirection.fromJSON(direction);
 			} catch (BadJSONException e1) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
-			
+
 			Building building = getVertexAt(vertexLoc).getBuilding();
-			
+
 			if (!building.equals(jsonCity))
 				return false;
 		}
@@ -611,7 +628,8 @@ public class Board {
 			try {
 				hexLoc = new HexLocation(jsonVertexLoc);
 			} catch (BadJSONException e2) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			String direction = (String) jsonVertexLoc.get("direction");
@@ -619,13 +637,14 @@ public class Board {
 			try {
 				vertexDir = VertexDirection.fromJSON(direction);
 			} catch (BadJSONException e1) {
-				// this will never happen, because the json will always be good during testing
+				// this will never happen, because the json will always be good
+				// during testing
 			}
 
 			VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
-			
+
 			Building building = getVertexAt(vertexLoc).getBuilding();
-			
+
 			if (!building.equals(jsonSettlement))
 				return false;
 		}
