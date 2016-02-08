@@ -22,25 +22,10 @@ public class PhaseOneTests {
 				//"tests.model.CanBuildCityTests",
 				//"tests.model.CanOfferTradeTests",
 				//"tests.model.CanAcceptTradeTests",
-				"tests.model.CanMaritimeTradeTests"/*,
-				"tests.model.CanDiscardCardsTests"*/
+				//"tests.model.CanMaritimeTradeTests",
+				"tests.model.CanDiscardCardsTests"
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);
 	}
 }
-
-/*
-Rest of test cases:
-
-"tests.model.CanDiscardCardsTests"
-1 – no model
-2 – status is not Discarding
-3 – you have less than 7 cards
-4 – You don’t have the cards you choosing to discard
-5 – working:
-1.	initModel
-2.	status = discarding
-3.	cards = 7
-4.	discard 1 - brick
-*/

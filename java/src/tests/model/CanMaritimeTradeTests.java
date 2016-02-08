@@ -97,7 +97,7 @@ public class CanMaritimeTradeTests {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
+			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when it's not your turn");
 			} else {
 				fail("failed testCanMaritimeTrade test when it's not your turn");
@@ -115,7 +115,7 @@ public class CanMaritimeTradeTests {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
+			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when model is not playing");
 			} else {
 				fail("failed testCanMaritimeTrade test when model is not playing");
@@ -133,7 +133,7 @@ public class CanMaritimeTradeTests {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noRes.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
+			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when user doesn't have resources");
 			} else {
 				fail("failed testCanMaritimeTrade test when user doesn't have resources");
@@ -152,7 +152,7 @@ public class CanMaritimeTradeTests {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noPort.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
+			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when user doesn't have port");
 			} else {
 				fail("failed testCanMaritimeTrade test when user doesn't have port");
