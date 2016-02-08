@@ -759,7 +759,7 @@ public class Player {
 	}
 
 	public boolean canDiscardCard() {
-		return hand.canDiscardCard();
+		return (hand.canDiscardCard() && !hasDiscarded);
 	}
 
 	public int getHandSize() {
