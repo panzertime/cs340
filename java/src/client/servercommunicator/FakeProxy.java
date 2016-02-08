@@ -203,7 +203,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject reset() throws ServerProxyException  {
-		return null;
+		return jsonFromFile("model.json");
 	}	
 	
 	/**
@@ -218,7 +218,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject getCommands() throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -233,7 +233,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject executeCommands(JSONObject listOfCommands) 
 			throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -275,7 +275,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject sendChat(JSONObject sendChat) 
 			throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	/**
 	 * Tells the server what number was rolled.
@@ -289,7 +289,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject rollNumber(JSONObject rollNumber) 
 			throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -307,7 +307,7 @@ public class FakeProxy implements IServerProxy{
 	 @Override
 	public JSONObject robPlayer(JSONObject robPlayer) 
 			throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -316,8 +316,8 @@ public class FakeProxy implements IServerProxy{
 	 * @return An updated game model
 	 * @throws ServerProxyException
 	 */
-	 public JSONObject finishTurn() throws ServerProxyException {
-		return null;
+	 public JSONObject finishTurn(JSONObject finish) throws ServerProxyException {
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -326,8 +326,8 @@ public class FakeProxy implements IServerProxy{
 	 * @return an updated game model 
 	 * @throws ServerProxyException
 	 */
-	 public JSONObject buyDevCard() throws ServerProxyException {
-		return null;
+	 public JSONObject buyDevCard(JSONObject buyCard) throws ServerProxyException {
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -342,7 +342,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject yearOfPlenty(JSONObject resources) throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 
 	/**
@@ -360,7 +360,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject roadBuilding(JSONObject edgeLocations) throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -378,7 +378,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject soldier(JSONObject soldierArgs) throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -391,7 +391,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject monopoly(JSONObject resource) throws ServerProxyException {
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -405,7 +405,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject monument(JSONObject monumentArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -422,7 +422,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildRoad(JSONObject buildRoadArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -439,7 +439,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildSettlement(JSONObject buildSettlementArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -454,7 +454,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject buildCity(JSONObject buildCityArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -468,7 +468,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject offerTrade(JSONObject offerTradeArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -483,7 +483,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject acceptTrade(JSONObject acceptTradeArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -498,7 +498,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject maritimeTrade(JSONObject maritimeTradeArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -512,7 +512,7 @@ public class FakeProxy implements IServerProxy{
 	 */
 	 @Override
 	public JSONObject discardCards(JSONObject discardArgs) throws ServerProxyException{
-		return null;
+		return jsonFromFile("model.json");
 	}
 	
 	/**
@@ -529,17 +529,6 @@ public class FakeProxy implements IServerProxy{
 		return false;
 	}
 
-	@Override
-	public JSONObject finishTurn(JSONObject JSONObject) throws ServerProxyException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public JSONObject buyDevCard(JSONObject buyDevCard) throws ServerProxyException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
 
 

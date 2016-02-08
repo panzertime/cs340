@@ -479,8 +479,8 @@ public class ServerFacade {
 			String content = "{type: \"maritimeTrade\", " +
 						"playerIndex: " + playerIndex + ", " +
 						"ratio: " + ratio + ", " +
-						"inputResource: " + inputResource + ", " +
-						"outputResource: " + outputResource + "}";
+						"inputResource: " + inputResource.toString().toLowerCase() + ", " +
+						"outputResource: " + outputResource.toString().toLowerCase() + "}";
 			JSONObject args = makeJSON(content);
 			return proxy.maritimeTrade(args);
 		}
