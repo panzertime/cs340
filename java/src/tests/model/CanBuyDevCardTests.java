@@ -137,6 +137,27 @@ public class CanBuyDevCardTests {
 			e.printStackTrace();
 		}
 	}
+	
+	//work!, 
+	/*
+	 * your turn, 
+	 * client model is playing
+	 * you have the resources
+	 * there are dev cards left in the deck
+	 */
+	@Test
+	public void testCanBuyDevCard6() {
+		this.initWorkingModel();
+		try {
+			if(modelFacade.canBuyDevCard() == true) {
+				System.out.println("pass canBuydevCard test when can buy dev card");
+			} else {
+				fail("fail canBuydevCard test when can buy dev card");
+			}
+		} catch (NullPointerException e) {
+			fail("fail canBuydevCard test when can buy dev card - could not access model");
+		}
+	}
 
 	//no model
 	@Test
@@ -207,21 +228,6 @@ public class CanBuyDevCardTests {
 			}
 		} catch (NullPointerException e) {
 			fail("fail canBuydevCard test when no more dev cards left - could not access model");
-		}
-	}
-	
-	//work!
-	@Test
-	public void testCanBuyDevCard6() {
-		this.initWorkingModel();
-		try {
-			if(modelFacade.canBuyDevCard() == true) {
-				System.out.println("pass canBuydevCard test when can buy dev card");
-			} else {
-				fail("fail canBuydevCard test when can buy dev card");
-			}
-		} catch (NullPointerException e) {
-			fail("fail canBuydevCard test when can buy dev card - could not access model");
 		}
 	}
 }

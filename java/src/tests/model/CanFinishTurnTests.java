@@ -92,6 +92,22 @@ public class CanFinishTurnTests {
 		}
 	}
 	
+	//Your turn, playing
+	@Test
+	public void testCanFinishTurn4() {
+		this.initModel();
+		try {
+			if(modelFacade.canFinishTurn() == true) {
+				System.out.println("Passed canFinishTurn test when playing and your turn");
+			} else {
+				fail("failed canFinishTurn test when playing and your turn");
+			}
+		} catch (NullPointerException e) {
+			fail("failed canFinishTurn test when playing and your turn - unit model");
+		}
+	}
+	
+	//uninit model
 	@Test
 	public void testCanFinishTurn1() {
 		ModelFacade mf = new ModelFacade();
@@ -103,6 +119,7 @@ public class CanFinishTurnTests {
 		}
 	}
 	
+	//not your turn
 	@Test
 	public void testCanFinishTurn2() {
 		this.initNotTurnModel();
@@ -117,6 +134,7 @@ public class CanFinishTurnTests {
 		}
 	}
 	
+	//not in playing state
 	@Test
 	public void testCanFinishTurn3() {
 		this.initRobModel();
@@ -128,20 +146,6 @@ public class CanFinishTurnTests {
 			}
 		} catch (NullPointerException e) {
 			fail("failed canFinishTurn test when robbing - unit model");
-		}
-	}
-
-	@Test
-	public void testCanFinishTurn4() {
-		this.initModel();
-		try {
-			if(modelFacade.canFinishTurn() == true) {
-				System.out.println("Passed canFinishTurn test when playing and your turn");
-			} else {
-				fail("failed canFinishTurn test when playing and your turn");
-			}
-		} catch (NullPointerException e) {
-			fail("failed canFinishTurn test when playing and your turn - unit model");
 		}
 	}
 }

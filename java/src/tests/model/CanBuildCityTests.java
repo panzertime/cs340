@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import shared.models.ModelFacade;
+import shared.models.board.hex.HexLocation;
+import shared.models.board.vertex.VertexDirection;
 import shared.models.board.vertex.VertexLocation;
 import shared.models.exceptions.BadJSONException;
 import shared.models.exceptions.ModelAccessException;
@@ -23,11 +25,10 @@ import shared.models.exceptions.ModelAccessException;
 public class CanBuildCityTests {
 	
 	ModelFacade modelFacade;
-
-	@Before
-	public void initModel() {
+	
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/buildcity/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,77 +49,103 @@ public class CanBuildCityTests {
 		}
 	}
 	
-	//Good tests
+	/*
+	 * Working: 
+		1.	initModel()
+		2.	turnIndex = 0
+		3.	status = “Playing”
+		4.	new Loc(0,1,SE);
+		5.	2 wheat 3 ore 1 city
+	 */
 	@Test
 	public void testCanBuildCity1() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		initModel("buildCity.txt");
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			if(modelFacade.canBuildCity(vertLoc) == true) {
+				System.out.println("passed testCanBuildCity test when given good input and should return true");
+			} else {
+				fail("failed testCanUseMonopoly test when given good input and should return true");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when given good input and should return true - model not created");
 		}
-		fail("Not yet implemented");
 	}
 
+	//1 – no model
 	@Test
 	public void testCanBuildCity2() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			mf.canBuildCity(vertLoc);
+			fail("failed testCanUseMonopoly test when no model is present");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanBuildCity test when no model is present");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//2 – not your turn - 3
 	@Test
 	public void testCanBuildCity3() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		initModel("noTurn.txt");
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			if(modelFacade.canBuildCity(vertLoc) == false) {
+				System.out.println("passed testCanBuildCity test when not your turn");
+			} else {
+				fail("failed testCanUseMonopoly test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when not your turn - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//3 – client model is not playing - SecondRound
 	@Test
 	public void testCanBuildCity4() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		initModel("noPlay.txt");
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			if(modelFacade.canBuildCity(vertLoc) == false) {
+				System.out.println("passed testCanBuildCity test when not playing");
+			} else {
+				fail("failed testCanUseMonopoly test when not playing");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when not playing - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//4 – location is not currently a settlement – loc (0,0,SW)(Worse – petes settlement)
 	@Test
 	public void testCanBuildCity5() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,0), VertexDirection.SouthWest);
+		initModel("buildCity.txt");
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			if(modelFacade.canBuildCity(vertLoc) == false) {
+				System.out.println("passed testCanBuildCity test when building on anothers settlement");
+			} else {
+				fail("failed testCanUseMonopoly test when building on anothers settlement");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when building on anothers settlement - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//5 – Doesn’t have 2 wheat, 3 ore and 1 city (missing city)
 	@Test
 	public void testCanBuildCity6() {
-		VertexLocation vertLoc = null;
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
+		initModel("resources.txt");
 		try {
-			modelFacade.canBuildCity(vertLoc);
+			if(modelFacade.canBuildCity(vertLoc) == false) {
+				System.out.println("passed testCanBuildCity test when user doesn't have resources");
+			} else {
+				fail("failed testCanUseMonopoly test when user doesn't have resources");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanUseMonopoly test when user doesn't have resources - model not created");
 		}
-		fail("Not yet implemented");
 	}
 }

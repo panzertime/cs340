@@ -6,7 +6,7 @@ import shared.models.hand.exceptions.ResourceException;
 
 public class Settlement extends Building{
 
-	public Settlement(Player owner) throws NullPlayerException {
+	public Settlement(Player owner) throws IllegalArgumentException {
 		super(owner);
 	}
 

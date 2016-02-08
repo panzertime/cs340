@@ -23,10 +23,9 @@ public class CanAcceptTradeTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/canaccepttrade/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -47,71 +46,66 @@ public class CanAcceptTradeTests {
 		}
 	}
 
+	/*
+	1.	initModel()
+	2.	tradeOffer – to player 0 
+	3.	wheat = 2
+	4.  wood = 2
+	 */
 	//Good tests
 	@Test
 	public void testCanAcceptTrade() {
+		initModel("good.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == true) {
+				System.out.println("passed testCanAcceptTrade test when meets parameters");
+			} else {
+				fail("failed testCanAcceptTrade test when when meets parameters");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when when meets parameters - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//1 – no model
 	@Test
 	public void testCanAcceptTrade2() {
+		ModelFacade mf = new ModelFacade();
 		try {
-			modelFacade.canAcceptTrade();
+			mf.canAcceptTrade();
+			fail("failed testCanAcceptTrade test with uninit model");
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("passed testCanAcceptTrade test with uninit model");
 		}
-		fail("Not yet implemented");
 	}
 	
+	//2 – you have not been offered a domestic trade
 	@Test
 	public void testCanAcceptTrade3() {
+		initModel("noTrade.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == false) {
+				System.out.println("passed testCanAcceptTrade test when not offered a trade");
+			} else {
+				fail("failed testCanAcceptTrade test when not your turn");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when not offered a trade - model not created");
 		}
-		fail("Not yet implemented");
 	}
 	
-	//Bad tests
+	//3 – you don’t have the required resources (only one wood)
 	@Test
 	public void testCanAcceptTrade4() {
+		initModel("noTrade.txt");
 		try {
-			modelFacade.canAcceptTrade();
+			if(modelFacade.canAcceptTrade() == false) {
+				System.out.println("passed testCanAcceptTrade test when you don't have the resources");
+			} else {
+				fail("failed testCanAcceptTrade test when you don't have the resources");
+			}
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("failed testCanAcceptTrade test when you don't have the resources - model not created");
 		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanAcceptTrade5() {
-		try {
-			modelFacade.canAcceptTrade();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	public void testCanAcceptTrade6() {
-		try {
-			modelFacade.canAcceptTrade();
-		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		fail("Not yet implemented");
 	}
 }

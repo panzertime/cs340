@@ -54,24 +54,9 @@ public class CanSendChatTests {
 		ModelFacade mf = new ModelFacade();
 		try {
 			mf.canSendChat();
-			fail("Fail - canSendChat while no game is in facade");
+			fail("Fail - canSendChat while not logged in");
 		} catch (NullPointerException e) {
 			System.out.println("Passed canSendChat while no game exists");
-		}
-	}
-	
-	@Test
-	public void testCanSendChatNotLoggedIn() {
-		try {
-			modelFacade = new ModelFacade();
-			if(modelFacade.canSendChat() == false) {
-				System.out.println("Passed canSendChat while player is not in a game");
-			} else
-			{
-				fail("Failed canSendChat test while player was not in a game");
-			}
-		} catch (NullPointerException e) {
-			fail("Error when accessing model");
 		}
 	}
 
@@ -87,7 +72,7 @@ public class CanSendChatTests {
 				fail("Failed canSendChat test while player was in a game");
 			}
 		} catch (NullPointerException e) {
-			fail("Error when accessing model");
+			fail("can send chat - Error when accessing model");
 		}
 	}
 }

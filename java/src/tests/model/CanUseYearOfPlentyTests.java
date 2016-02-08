@@ -24,10 +24,9 @@ public class CanUseYearOfPlentyTests {
 	
 	ModelFacade modelFacade;
 
-	@Before
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/yearofplenty/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,95 +47,27 @@ public class CanUseYearOfPlentyTests {
 		}
 	}
 	
-	public void initRobModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/robjson.txt");
-		FileInputStream fis;
+	//works!
+	/*
+	 * your turn
+	 * client is playing
+	 * have the card in old dev hand
+	 * have not yet played
+	 * two resources are in the bank
+	 */
+	@Test
+	public void testCanUseYearOfPlenty7() {
+		ResourceType one = ResourceType.BRICK;
+		ResourceType two = ResourceType.ORE;
+		initModel("good.txt");
 		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
+			if(modelFacade.canUseYearOfPlenty(one, two) == true) {
+				System.out.println("pass testCanUseYearOfPlenty test when user already played card");
+			} else {
+				fail("fail testCanUseYearOfPlenty test when user already played card");
 			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void initNotTurnModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/notyourturn.txt");
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
-			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void initAlreadyPlayedModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/alreadyplayeddevcard.txt");
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
-			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void initNoBricksInBankModel() {
-		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/model/nobricksinbank.txt");
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(jsonFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			Scanner scanner = new Scanner(bis);
-			String x = "";
-			while(scanner.hasNextLine()) {
-				x += scanner.nextLine();
-				x += "\n";
-			}
-			scanner.close();
-			
-			Map jsonModel = (Map) parser.parse(x);
-			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			fail("fail testCanUseYearOfPlenty test when user already played card - could not access model");
 		}
 	}
 	
@@ -157,7 +88,7 @@ public class CanUseYearOfPlentyTests {
 	//not your turn
 	@Test
 	public void testCanBuyDevCard2() {
-		this.initNotTurnModel();
+		initModel("noTurn.txt");
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
 		try {
@@ -176,7 +107,7 @@ public class CanUseYearOfPlentyTests {
 	public void testCanUseYearOfPlenty3() {
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
-		this.initRobModel();
+		initModel("noPlay.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
 				System.out.println("pass testCanUseYearOfPlenty test when not playing");
@@ -188,12 +119,12 @@ public class CanUseYearOfPlentyTests {
 		}
 	}
 	
-	//dont have specific card in old dev hand
+	//just got the card
 	@Test
 	public void testCanUseYearOfPlenty4() {
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
-		this.initModel();
+		initModel("newCard.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
 				System.out.println("pass testCanUseYearOfPlenty test when user doesn't have card");
@@ -210,7 +141,7 @@ public class CanUseYearOfPlentyTests {
 	public void testCanUseYearOfPlenty5() {
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
-		this.initAlreadyPlayedModel();
+		initModel("alreadyPlayed.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
 				System.out.println("pass testCanUseYearOfPlenty test when user already played card");
@@ -219,6 +150,26 @@ public class CanUseYearOfPlentyTests {
 			}
 		} catch (NullPointerException e) {
 			fail("fail testCanUseYearOfPlenty test when user already played card - could not access model");
+		}
+	}
+	
+	//1st resource not in bank
+	@Test
+	public void testCanUseYearOfPlenty8() {
+		ResourceType one = ResourceType.ORE;
+		ResourceType two = ResourceType.BRICK;
+		initModel("noRes1.txt");
+		try {
+			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+				System.out.println("pass testCanUseYearOfPlenty test when user "
+						+ "asks for ore(1st resource) and there aren't any");
+			} else {
+				fail("fail testCanUseYearOfPlenty test when user "
+						+ "asks for ore(1st resource) and there aren't any");
+			}
+		} catch (NullPointerException e) {
+			fail("fail testCanUseYearOfPlenty test when user "
+						+ "asks for ore(1st resource) and there aren't any - could not access model");
 		}
 	}
 	
@@ -227,36 +178,18 @@ public class CanUseYearOfPlentyTests {
 	public void testCanUseYearOfPlenty6() {
 		ResourceType one = ResourceType.ORE;
 		ResourceType two = ResourceType.BRICK;
-		this.initNoBricksInBankModel();
+		initModel("noRes2.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
 				System.out.println("pass testCanUseYearOfPlenty test when user "
-						+ "asks for bricks and there aren't any");
+						+ "asks for bricks(2nd resource) and there aren't any");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user "
-						+ "asks for bricks and there aren't any");
+						+ "asks for bricks(2nd resource) and there aren't any");
 			}
 		} catch (NullPointerException e) {
 			fail("fail testCanUseYearOfPlenty test when user "
-						+ "asks for bricks and there aren't any - could not access model");
+						+ "asks for bricks(2nd resource) and there aren't any - could not access model");
 		}
 	}
-	
-	//works!
-	@Test
-	public void testCanUseYearOfPlenty7() {
-		ResourceType one = ResourceType.BRICK;
-		ResourceType two = ResourceType.ORE;
-		this.initModel();
-		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == true) {
-				System.out.println("pass testCanUseYearOfPlenty test when user already played card");
-			} else {
-				fail("fail testCanUseYearOfPlenty test when user already played card");
-			}
-		} catch (NullPointerException e) {
-			fail("fail testCanUseYearOfPlenty test when user already played card - could not access model");
-		}
-	}
-
 }

@@ -39,10 +39,11 @@ public class ModelTests {
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			
-			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match Minimal JSON model");
+			} else {
+				System.out.println("Model passed minimal JSON init test");
 			}
-			System.out.println("Model passed minimal JSON init test");
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with minimul options\n" +
 					e.getMessage());
@@ -69,10 +70,11 @@ public class ModelTests {
 			Map jsonModel = (Map) parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
-			if (modelFacade.equalsJSON((JSONObject)jsonModel)) {
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
 				fail("Current model does not match full JSON model");
+			} else {
+				System.out.println("Model passed full JSON init test");
 			}
-			System.out.println("Model passed full JSON init test");
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			fail("Error with JSON input with all options\n" +
 					e.getMessage());
@@ -82,6 +84,7 @@ public class ModelTests {
 	//error model
 	@Test
 	public void initModel3() {
+		boolean pass = false;
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/src/tests/model/badjson.txt");
 		FileInputStream fis;
@@ -103,8 +106,12 @@ public class ModelTests {
 			fail("Error with bad JSON input\n" +
 					e.getMessage());
 		} catch (BadJSONException e) {
-			System.out.println("Model passed bad JSON init test");
+			pass = true;
 		}
-		fail("Did not catch error with bad JSON input\n");
+		if(pass) {
+			System.out.println("Model passed bad JSON init test");
+		} else {
+			fail("Did not catch error with bad JSON input\n");
+		}
 	}
 }
