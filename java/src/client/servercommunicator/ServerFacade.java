@@ -59,15 +59,18 @@ public class ServerFacade {
 	public int login(String username, String password) 
 			throws ServerException {
 		try {
-			String credentials = "{ username : \"" + username 
-						+ "\", password : \"" + password
+			String credentials = "{ \"username\" : \"" + username 
+						+ "\", \"password\" : \"" + password
 						+ "\" }";
+			System.out.println("Credentials: " + credentials);
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.loginUser(args);
 			player_id = (int) cookie.get("playerID");
 			return player_id;
 		}
 		catch(Exception e){
+			e.printStackTrace();
+		
 			throw new ServerException("Problem logging in", e);
 		}
 
@@ -76,8 +79,8 @@ public class ServerFacade {
 	public int register(String username, String password) 
 			throws ServerException {
 		try {
-			String credentials = "{ username : \"" + username 
-						+ "\", password : \"" + password
+			String credentials = "{ \"username\" : \"" + username 
+						+ "\", \"password\" : \"" + password
 						+ "\" }";
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.registerUser(args);

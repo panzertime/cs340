@@ -153,17 +153,24 @@ public class ServerProxy implements IServerProxy{
 	public JSONObject loginUser(JSONObject credentials) 
 			throws ServerProxyException {
 		try {
-			URLConnection connectionSeed = new URL(serverURL + "/user/loginUser").openConnection();
+			URLConnection connectionSeed = new URL(serverURL + "/user/login").openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
 
 			DataOutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
-			requestBody.writeChars(credentials.toJSONString());
+			requestBody.writeChars(credentials.toJSONString() + "\n");
+			requestBody.close();
+
 	
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
+				System.out.println(problemMessage);
+			//	System.out.println("    JSON BUILDER GOT BACK: " + JSONBuilder.toString());
+				System.out.println(credentials.get("username") + " AND PASSWORD " + credentials.get("password"));
+				System.out.println(credentials.toJSONString());
 				throw new ServerProxyException(problemMessage);
 			}
 			
@@ -181,17 +188,23 @@ public class ServerProxy implements IServerProxy{
 			}
 			JSONReader.close();
 
+
+
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
 				userCookie = userCookie.substring(11);
 				userCookie = userCookie.substring(0, userCookie.length() - 9);
 				
+				System.out.println("User's cookie is: " + userCookie);
+
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
 			return null;
 		}
 
 		catch(Exception e){
+			System.out.println("Login exception: " );
+			e.printStackTrace();
 			throw new ServerProxyException("Exception during HTTP request submission", e);
 		}
 
