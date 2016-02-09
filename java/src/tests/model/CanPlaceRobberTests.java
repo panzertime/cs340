@@ -55,7 +55,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
-				System.out.println("Passed canPlaceRobber test with good location and no one to rob");
+				System.out.println("passed canPlaceRobber test with good location and no one to rob");
 			} else {
 				fail("failed canPlaceRobber test with good location and no one to rob");
 			}
@@ -72,7 +72,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == true) {
-				System.out.println("Passed canPlaceRobber test with good location and person to rob has resources");
+				System.out.println("passed canPlaceRobber test with good location and person to rob has resources");
 			} else {
 				fail("failed canPlaceRobber test with good location and person to rob has resources");
 			}
@@ -91,7 +91,7 @@ public class CanPlaceRobberTests {
 			mf.canPlaceRobber(hexLoc, playerIndex);
 			fail("failed canPlaceRobber test with uninit model");
 		} catch (NullPointerException e) {
-			System.out.println("Passed canPlaceRobber test with uninit model");
+			System.out.println("passed canPlaceRobber test with uninit model");
 		}
 	}
 	
@@ -103,7 +103,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test with uninit hex loc");
+				System.out.println("passed canPlaceRobber test with uninit hex loc");
 			} else {
 				fail("failed canPlaceRobber test with uninit hex");
 			}
@@ -121,7 +121,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test with unmoved robber");
+				System.out.println("passed canPlaceRobber test with unmoved robber");
 			} else {
 				fail("failed canPlaceRobber test with unmoved robber");
 			}
@@ -138,7 +138,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber on water test");
+				System.out.println("passed canPlaceRobber on water test");
 			} else {
 				fail("failed canPlaceRobber on water test");
 			}
@@ -155,7 +155,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test with bizzare location");
+				System.out.println("passed canPlaceRobber test with bizzare location");
 			} else {
 				fail("failed canPlaceRobber test with bizzare location");
 			}
@@ -172,7 +172,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test when it is not your turn");
+				System.out.println("passed canPlaceRobber test when it is not your turn");
 			} else {
 				fail("failed canPlaceRobber test when it is not your turn");
 			}
@@ -189,7 +189,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test when status is not playing");
+				System.out.println("passed canPlaceRobber test when status is not playing");
 			} else {
 				fail("failed canPlaceRobber test when status is not playing");
 			}
@@ -206,7 +206,7 @@ public class CanPlaceRobberTests {
 		int playerIndex = 2;
 		try {
 			if(modelFacade.canPlaceRobber(hexLoc, playerIndex) == false) {
-				System.out.println("Passed canPlaceRobber test with good location but person to rob has no resources");
+				System.out.println("passed canPlaceRobber test with good location but person to rob has no resources");
 			} else {
 				fail("failed canPlaceRobber test with good location but person to rob has no resources");
 			}

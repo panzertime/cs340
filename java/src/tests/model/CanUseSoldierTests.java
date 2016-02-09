@@ -63,7 +63,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
-				System.out.println("pass testCanUseSoldier test when robber moved, no one to rob");
+				System.out.println("passed testCanUseSoldier test when robber moved, no one to rob");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, no one to rob");
 			}
@@ -80,7 +80,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 2;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
-				System.out.println("pass testCanUseSoldier test when robber moved, someone to rob");
+				System.out.println("passed testCanUseSoldier test when robber moved, someone to rob");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, someone to rob");
 			}
@@ -97,7 +97,7 @@ public class CanUseSoldierTests {
 		int playerIndex = 2;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when robber moved, person has no resource");
+				System.out.println("passed testCanUseSoldier test when robber moved, person has no resource");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, person has no resource");
 			}
@@ -116,7 +116,7 @@ public class CanUseSoldierTests {
 			mf.canUseSoldier(newRobberLocation, playerIndex);
 			fail("fail testCanUseSoldier test when no model present");
 		} catch (NullPointerException e) {
-			System.out.println("pass testCanUseSoldier test when no model present");
+			System.out.println("passed testCanUseSoldier test when no model present");
 		}
 	}
 	
@@ -128,7 +128,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when not your turn");
+				System.out.println("passed testCanUseSoldier test when not your turn");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not your turn");
 			}
@@ -145,7 +145,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when not playing mode");
+				System.out.println("passed testCanUseSoldier test when not playing mode");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing mode");
 			}
@@ -162,7 +162,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when soldier card is new hand");
+				System.out.println("passed testCanUseSoldier test when soldier card is new hand");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when soldier card is new hand");
 			}
@@ -179,7 +179,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when user already played card");
+				System.out.println("passed testCanUseSoldier test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
 			}
@@ -196,7 +196,7 @@ public class CanUseSoldierTests {
 		int playerIndex = -1;
 		try {
 			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
-				System.out.println("pass testCanUseSoldier test when user already played card");
+				System.out.println("passed testCanUseSoldier test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
 			}
