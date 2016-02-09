@@ -107,7 +107,7 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection
 	 */
 	 @Override
-	public JSONObject listGames() throws ServerProxyException{
+	public JSONArray listGames() throws ServerProxyException{
 		return null;
 	}
 	

@@ -38,9 +38,27 @@ public class ServerProxy implements IServerProxy{
 			return json;
 		}
 		catch(Exception e){
+			System.out.println("Problem parsing JSON: " + stringJSON);
+			e.printStackTrace();
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
 	}
+
+	private JSONArray makeArray(String stringJSON)
+			throws ServerProxyException{
+		try {
+			JSONParser parser = new JSONParser();
+			JSONArray json = (JSONArray) parser.parse(stringJSON);
+	
+			return json;
+		}
+		catch(Exception e){
+			System.out.println("Problem parsing JSON: " + stringJSON);
+			e.printStackTrace();
+			throw new ServerProxyException("JSON probably invalid", e);
+		}
+	}
+
 
 	/**
 	*	Returns a String which represents the body of the HTTP Response
@@ -57,16 +75,28 @@ public class ServerProxy implements IServerProxy{
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
 			connection.setRequestMethod(method);
+			connection.setDoOutput(true);
+			
+			connection.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
+			connection.setRequestProperty( "Content-Length", String.valueOf(arguments.toJSONString().length()));
 
-			DataOutputStream requestBody = 
+			OutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
-			requestBody.writeChars(arguments.toJSONString());
+			requestBody.write(arguments.toJSONString().getBytes());
+			requestBody.flush();
+			requestBody.close();
 	
 			if (connection.getResponseCode() != 200) {
-				String problemMessage = "Request returned 400, " + endpoint + " says: "
+				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
+				System.out.println(problemMessage);
 				throw new ServerProxyException(problemMessage);
 			}
+
+			
+			connection.getContent();
+			connection.getContentType();
+
 			
 			DataInputStream responseBody = 
 				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
@@ -109,10 +139,13 @@ public class ServerProxy implements IServerProxy{
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, " + endpoint + " says: "
 					+ connection.getResponseMessage();
+				
 				throw new ServerProxyException(problemMessage);
 			}
 
-				
+			connection.getContent();
+			connection.getContentType();
+			
 			DataInputStream responseBody = 
 				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
@@ -126,11 +159,11 @@ public class ServerProxy implements IServerProxy{
 				}
 			}
 			JSONReader.close();
-	
 			return JSONBuilder.toString();
 		}
 
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerProxyException("Exception during HTTP request submission", e);
 
 		}
@@ -157,20 +190,22 @@ public class ServerProxy implements IServerProxy{
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
+			
+			connection.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
+			connection.setRequestProperty( "Content-Length", String.valueOf(credentials.toJSONString().length()));
 
-			DataOutputStream requestBody = 
+			OutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
-			requestBody.writeChars(credentials.toJSONString() + "\n");
+			requestBody.write(credentials.toJSONString().getBytes());
+			requestBody.flush();
 			requestBody.close();
+
 
 	
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
 				System.out.println(problemMessage);
-			//	System.out.println("    JSON BUILDER GOT BACK: " + JSONBuilder.toString());
-				System.out.println(credentials.get("username") + " AND PASSWORD " + credentials.get("password"));
-				System.out.println(credentials.toJSONString());
 				throw new ServerProxyException(problemMessage);
 			}
 			
@@ -193,9 +228,8 @@ public class ServerProxy implements IServerProxy{
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
 				userCookie = userCookie.substring(11);
-				userCookie = userCookie.substring(0, userCookie.length() - 9);
+				userCookie = userCookie.substring(0, userCookie.length() - 8);
 				
-				System.out.println("User's cookie is: " + userCookie);
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
@@ -227,17 +261,26 @@ public class ServerProxy implements IServerProxy{
 	public JSONObject registerUser(JSONObject credentials)
 			throws ServerProxyException {
 		try {
-			URLConnection connectionSeed = new URL(serverURL + "/user/registerUser").openConnection();
+			URLConnection connectionSeed = new URL(serverURL + "/user/register").openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
+			
+			connection.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
+			connection.setRequestProperty( "Content-Length", String.valueOf(credentials.toJSONString().length()));
 
-			DataOutputStream requestBody = 
+			OutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
-			requestBody.writeChars(credentials.toJSONString());
+			requestBody.write(credentials.toJSONString().getBytes());
+			requestBody.flush();
+			requestBody.close();
+
+
 	
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, server says: "
 					+ connection.getResponseMessage();
+				System.out.println(problemMessage);
 				throw new ServerProxyException(problemMessage);
 			}
 			
@@ -255,10 +298,13 @@ public class ServerProxy implements IServerProxy{
 			}
 			JSONReader.close();
 
+
+
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
 				userCookie = userCookie.substring(11);
-				userCookie = userCookie.substring(0, userCookie.length() - 9);
+				userCookie = userCookie.substring(0, userCookie.length() - 8);
+				
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
@@ -266,6 +312,8 @@ public class ServerProxy implements IServerProxy{
 		}
 
 		catch(Exception e){
+			System.out.println("Registration exception: " );
+			e.printStackTrace();
 			throw new ServerProxyException("Exception during HTTP request submission", e);
 		}
 
@@ -280,9 +328,9 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection
 	 */
 	 @Override
-	public JSONObject listGames() throws ServerProxyException{
+	public JSONArray listGames() throws ServerProxyException{
 		try {
-			return makeJSON(submitRequest("GET", "/games/list"));
+			return makeArray(submitRequest("GET", "/games/list"));
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);

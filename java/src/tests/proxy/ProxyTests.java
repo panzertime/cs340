@@ -25,61 +25,78 @@ public class ProxyTests {
 		sp.setURL("http://localhost:8081");
 		serverFacade.setProxy(sp);
 	}
-	
+
+	private int getSeed(){
+		return (int) (Math.random()*10000000); 
+	}
+
+
 	//Good tests
-	 @Test
+	@Test
 	public void testlogin200() {
 		String username = "Sam";
 		String password = "sam";
 		try {
-			serverFacade.login(username, password);
+			if(serverFacade.login(username, password) > -1){
+				System.out.println("Passed login test.");
+			}
+			
 		} catch (ServerException e) {
 			System.out.println("Failed login Proxy test: " + e.toString());
 			e.printStackTrace();
+			fail("Login failure.");
 		}
 		
 	}
 
-//	// @Test
+	@Test
 	public void testregister200() {
-		String username = null;
-		String password = null;
+		String username = "Newguy" + getSeed();
+		System.out.println("Generated random test username: " + username);
+		String password = "Newguypass";
 		try {
-			serverFacade.register(username, password);
+			if(serverFacade.register(username, password) > -1){
+				System.out.println("Passed register test.");
+			}
 		} catch (ServerException e) {
-			fail("Failed register Proxy test");
+			System.out.println("Failed register Proxy test");
+			e.printStackTrace();
+			fail("Registration failure.  Note: this test may only work once per server startup.");
+
 		}
 		
 	}
 
-	// @Test
+	@Test
 	public void testgetGames200() {
 		try {
 			serverFacade.getGames();
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed getGames Proxy test");
 		}
 		
 	}
 
-	// @Test
+	@Test
 	public void testcreateNewGame200() {
 		boolean randomTiles = false;
 		boolean randomNumbers = false;
 		boolean randomPorts = false;
-		String name = null;
+		String name = "Newgame " + getSeed();
 		try {
 			serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed createNewGame Proxy test");
 		}
 		
 	}
 
-	// @Test
+	 @Test
 	public void testjoinGame200() {
-		CatanColor color = null;
-		int gameID = 0;
+		CatanColor color = CatanColor.PUCE;
+		int gameID = 1;
 		try {
 			serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
