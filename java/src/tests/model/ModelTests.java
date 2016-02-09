@@ -35,7 +35,7 @@ public class ModelTests {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			Object jsonModel = parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			
@@ -67,7 +67,7 @@ public class ModelTests {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			Object jsonModel = parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
@@ -99,7 +99,7 @@ public class ModelTests {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			Object jsonModel =  parser.parse(x);
 			
 			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException e) {
