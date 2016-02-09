@@ -64,7 +64,7 @@ public abstract class Building {
 	public boolean equals(JSONObject jsonHex) {
 		if (!isPlaced())
 			return false;
-		JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
+		JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
 		HexLocation hexLoc = vertex.getVertexLocation().getHexLoc();
 		VertexDirection vertexDir = vertex.getVertexLocation().getDir();
 		if (hexLoc.getX() != (Long) jsonHexLoc.get("x") 
@@ -75,7 +75,7 @@ public abstract class Building {
 				&& hexLoc.getNeighborLoc(vertexDir.toRightEdge()).getY() != (Long) jsonHexLoc.get("y")
 				&& hexLoc.getNeighborLoc(vertexDir.toLeftEdge()).getY() != (Long) jsonHexLoc.get("y"))
 			return false;
-		String direction = (String) jsonHex.get("direction");
+		String direction = (String) jsonHexLoc.get("direction");
 		try {
 			if (vertexDir != VertexDirection.fromJSON(direction) 
 					&& vertexDir.toRight().toRight() != VertexDirection.fromJSON(direction)

@@ -39,9 +39,13 @@ public class Board {
 
 	private GameModel game;
 	private Robber robber;
-
 	private Map<HexLocation, Hex> hexes;
 
+	/**
+	 * @param jsonMap new version of the map as passed by the model
+	 * @param game reference to the model
+	 * @throws BadJSONException any time jsonMap is missing elements
+	 */
 	public Board(JSONObject jsonMap, GameModel game) throws BadJSONException {
 		this.game = game;
 
@@ -74,6 +78,7 @@ public class Board {
 		if (jsonRobber == null)
 			throw new BadJSONException();
 
+		// add land hexes to the map
 		for (Object hexObject : jsonHexes) {
 			JSONObject jsonHex = (JSONObject) hexObject;
 
@@ -113,6 +118,8 @@ public class Board {
 			else
 				throw new BadJSONException();
 		}
+		
+		//add ports and water hexes to the map
 		for (Object portObject : jsonPorts) {
 			JSONObject jsonPort = (JSONObject) portObject;
 
@@ -158,7 +165,7 @@ public class Board {
 			this.hexes.put(sideHexLoc, new WaterHex(sideHexLoc));
 		}
 
-		// FINALY! the recursive call to connect the board
+		// Recursively link the hexes with edges and vertices
 		Hex centerHex = this.hexes.get(new HexLocation(0, 0));
 
 		connectHexEdge(centerHex);
@@ -264,11 +271,6 @@ public class Board {
 		}
 
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
-	}
-
-	public boolean equalsJSON(JSONObject jsonObject, GameModel gameModel) {
-		// TODO Auto-generated method stub
-		return true;
 	}
 
 	public Hex getHexAt(HexLocation hexLocation) {
@@ -550,9 +552,13 @@ public class Board {
 			connectHexVertex(hexRight);
 	}
 
-	public Boolean equals(JSONObject jsonMap) {
+	/**
+	 * @param jsonMap
+	 * @param game
+	 * @return Boolean if jsonMap matches the boards state.
+	 */
+	public Boolean equalsJSON(JSONObject jsonMap, GameModel game) {
 
-		hexes = new HashMap<HexLocation, Hex>();
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 
 		JSONArray jsonPorts = (JSONArray) jsonMap.get("ports");
@@ -571,7 +577,6 @@ public class Board {
 			JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
 			HexLocation hexLoc = new HexLocation(((Long) jsonHexLoc.get("x")).intValue(),
 					((Long) jsonHexLoc.get("y")).intValue());
-
 			if (!getHexAt(hexLoc).equals(jsonHex))
 				return false;
 		}
