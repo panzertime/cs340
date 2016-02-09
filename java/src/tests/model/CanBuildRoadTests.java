@@ -200,6 +200,23 @@ public class CanBuildRoadTests {
 		}
 	}
 	
+	//setup mode - bad near first settlement
+	@Test
+	public void testCanBuildRoad11() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(2,0),
+				EdgeDirection.South);
+		this.initModel("goodBuildRoadSetup.txt");
+		try {
+			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+				System.out.println("passed testCanBuildRoad test when places 2nd road near 1st settlement");
+			} else {
+				fail("failed testCanBuildRoad test when places 2nd road near 1st settlement");
+			}
+		} catch (NullPointerException e) {
+			fail("failed testCanBuildRoad test when places 2nd road near 1st settlement - model not created");
+		}
+	}
+	
 	//works normal
 	@Test
 	public void testCanBuildRoad9() {

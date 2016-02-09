@@ -24,9 +24,9 @@ public class CanSendChatTests {
 	
 	ModelFacade modelFacade;
 	
-	public void initModel() {
+	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/src/tests/jsonMap.txt");
+		File jsonFile = new File("java/src/tests/model/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -56,7 +56,7 @@ public class CanSendChatTests {
 			mf.canSendChat();
 			fail("Fail - canSendChat while not logged in");
 		} catch (NullPointerException e) {
-			System.out.println("Passed canSendChat while no game exists");
+			System.out.println("passed canSendChat while no game exists");
 		}
 	}
 
@@ -64,12 +64,44 @@ public class CanSendChatTests {
 	@Test
 	public void testCanSendChatLoggedIn() {
 		try {
-			initModel();
+			initModel("jsonMap.txt");
 			if(modelFacade.canSendChat() == true) {
-				System.out.println("Passed canSendChat while player is in a game");
+				System.out.println("passed canSendChat while player is in a normal game");
 			} else
 			{
-				fail("Failed canSendChat test while player was in a game");
+				fail("Failed canSendChat test while player was in a normal game");
+			}
+		} catch (NullPointerException e) {
+			fail("can send chat - Error when accessing model");
+		}
+	}
+	
+	//not turn
+	@Test
+	public void testCanSendChatLoggedIn1() {
+		try {
+			initModel("notyourturn.txt");
+			if(modelFacade.canSendChat() == true) {
+				System.out.println("passed canSendChat while player is in a normal game and it's not their turn");
+			} else
+			{
+				fail("Failed canSendChat test while player was in a normal game and it's not their turn");
+			}
+		} catch (NullPointerException e) {
+			fail("can send chat - Error when accessing model");
+		}
+	}
+	
+	//not playing
+	@Test
+	public void testCanSendChatLoggedIn2() {
+		try {
+			initModel("robjson.txt");
+			if(modelFacade.canSendChat() == true) {
+				System.out.println("passed canSendChat while player is in a normal game and not in playing mode");
+			} else
+			{
+				fail("Failed canSendChat test while player was in a normal game and not in playing mode");
 			}
 		} catch (NullPointerException e) {
 			fail("can send chat - Error when accessing model");

@@ -632,26 +632,26 @@ public class Hand {
 
 	public Boolean hasCards(Map<String, Object> resourceList) throws BadJSONException {
 		
-		if (resourceList == null || resourceList == null) throw new BadJSONException(); 
+		if (resourceList == null) throw new BadJSONException(); 
 		Integer w = ((Integer) resourceList.get("wood"));
 		Integer b = ((Integer) resourceList.get("brick"));
 		Integer s = ((Integer) resourceList.get("sheep"));
 		Integer wh = ((Integer) resourceList.get("wheat"));
 		Integer o = ((Integer) resourceList.get("ore"));
 		if (w == null || b == null || s == null || wh == null || o == null) throw new BadJSONException(); 
-		
-		if (getWood() != w)
+				
+		if (getWood() < w)
 			return false;
-		if (getBrick() != b)
+		if (getBrick() < b)
 			return false;
-		if (getSheep() != s)
+		if (getSheep() < s)
 			return false;
-		if (getWheat() != wh)
+		if (getWheat() < wh)
 			return false;
-		if (getOre() != o)
+		if (getOre() < o)
 			return false;
 		return true;
-	}
+		}
 
 
 }

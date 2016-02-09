@@ -54,7 +54,7 @@ public class CanRollNumberTests {
 			mf.canRollNumber();
 			fail("failed canRoll test with uninit model");
 		} catch (NullPointerException e) {
-			System.out.println("Passed canRoll test with uninit model");
+			System.out.println("passed canRoll test with uninit model");
 		}
 	}
 	
@@ -64,7 +64,7 @@ public class CanRollNumberTests {
 		try {
 			this.initModel("noTurn.txt");
 			if(modelFacade.canRollNumber() == false) {
-				System.out.println("Passed canRoll test when not your turn");
+				System.out.println("passed canRoll test when not your turn");
 			} else {
 				fail("failed canRoll test when not your turn");
 			}
@@ -79,7 +79,7 @@ public class CanRollNumberTests {
 		try {
 			this.initModel("good.txt");
 			if(modelFacade.canRollNumber() == true) {
-				System.out.println("Passed canRoll test when your turn");
+				System.out.println("passed canRoll test when your turn");
 			} else {
 				fail("failed canRoll test when your turn");
 			}
@@ -94,7 +94,7 @@ public class CanRollNumberTests {
 		try {
 			this.initModel("noRolling.txt");
 			if(modelFacade.canRollNumber() == false) {
-				System.out.println("Passed canRoll test when not rolling");
+				System.out.println("passed canRoll test when not rolling");
 			} else {
 				fail("failed canRoll test when not rolling");
 			}

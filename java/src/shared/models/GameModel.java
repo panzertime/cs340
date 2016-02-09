@@ -59,7 +59,7 @@ public class GameModel {
 		for (int i = 0; i < playerList.size(); i++)
 		{
 			JSONObject player = (JSONObject) playerList.get(i);
-			players.add(new Player(player));
+			players.add(new Player(player, this));
 		}
 		board = new Board((JSONObject)jsonMap.get("map"), this);
 		Long version = ((Long) jsonMap.get("version"));
@@ -536,7 +536,7 @@ public class GameModel {
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasKnightToUse();
 		b = b && canRobPlayer(newRobberLocation, playerIndex);
 		return b;
@@ -547,7 +547,7 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasYearOfPlentyToUse();
 		try {
 			b = b && this.getBank().getHand().hasResource(one, 1);
@@ -563,12 +563,13 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasRoadBuildingToUse();
-		b = b && this.canBuildRoad(one, true);
-		if (this.canBuildRoad(two, true)) ;
+		b = b && this.canBuildRoadWithCard(one);
+		if (this.canBuildRoadWithCard(two)  ||
+				(this.canBuildTwoRoad(one, two))) ;
 			else
-		b = b && this.canBuildTwoRoad(one, two);
+				b = false; 
 		return b;
 	}
 	
@@ -579,7 +580,7 @@ public class GameModel {
 		Boolean b = true;
 		b = b && this.getStatus().equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		b = b && this.getActivePlayer().canPlayDevelopmentCard();
+		b = b && !this.getActivePlayer().canPlayDevelopmentCard();
 		b = b && this.getActivePlayer().hasMonopolyToUse();
 		return b;
 	}
@@ -607,33 +608,38 @@ public class GameModel {
 	}
 	
 
-	public Boolean canBuildRoad(EdgeLocation edge, boolean free)
+	private Boolean canBuildRoadWithCard(EdgeLocation edge)
 	{
 		boolean b = false;
 		if ( this.status.equalsIgnoreCase("Playing"))
 		{
-		b = true;
-		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-
-		if (!free) b = b && this.getActivePlayer().hasRoadCost();
-		b = b && this.getActivePlayer().hasRoadPiece();
-		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
+			b = true;
+			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+	
+			b = b && this.getActivePlayer().hasRoadPiece();
+			b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
 		}
 		return b;
 	}
 
 	public Boolean canBuildRoad(EdgeLocation edge)
 	{
-		Boolean free = this.inSetupMode();
 		boolean b = false;
 		if ( this.status.equalsIgnoreCase("Playing"))
 		{
 		b = true;
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 
-		if (!free) b = b && this.getActivePlayer().hasRoadCost();
+		b = b && this.getActivePlayer().hasRoadCost();
 		b = b && this.getActivePlayer().hasRoadPiece();
 		b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
+		}
+		else if (this.status.equalsIgnoreCase("FirstRound"))
+		{
+			b = true;
+			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
+			b = b && this.getActivePlayer().hasRoadPiece();
+			b = b && this.getBoard().canBuildRoad(this.getActivePlayer(), edge);
 		}
 		else if (this.status.equalsIgnoreCase("SecondRound"))
 		{		/////IF SECONDROUND....CANNOT BUILD OFF OF SETTLEMENT WITH ROAD
@@ -641,7 +647,7 @@ public class GameModel {
 			b = true;
 			b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
 			b = b && this.getActivePlayer().hasRoadPiece();
-			b = b && this.getBoard().canBuildRoadSecondRound(this.getActivePlayer(), edge);
+			b = b && this.getBoard().canBuildSetupRoad(this.getActivePlayer(), edge);
 			
 		}
 
@@ -650,13 +656,19 @@ public class GameModel {
 	
 	public Boolean canBuildSettlement(VertexLocation vertex)
 	{
-		Boolean free = this.inSetupMode();
 		boolean b = true;
-		b = b && this.status.equalsIgnoreCase("Playing");
 		b = b && (this.getClientID() == this.getActivePlayer().getPlayerID());
-		if (!free) b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getActivePlayer().hasSettlementPiece();
+		if (this.inSetupMode())
+		{
+		b = b && this.getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex);
+		}
+		else
+		{
+			b = b && this.status.equalsIgnoreCase("Playing");
+		b = b && this.getActivePlayer().hasSettlementCost();
 		b = b && this.getBoard().canBuildSettlement(this.getActivePlayer(), vertex);
+		}
 		return b;
 	}
 	
@@ -691,7 +703,8 @@ public class GameModel {
 		if (this.tradeModel != null) //you have been offered a trade
 		{
 		Player receiver = this.tradeModel.getReceiver();
-			b = receiver.hasCards(this.tradeModel.getResources());
+		if (receiver.getPlayerID() == this.getClientID())
+			b = receiver.hasCards(this.tradeModel.getResourcesToGive());
 		}	
 		return b;
 	}

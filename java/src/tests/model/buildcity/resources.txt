@@ -225,8 +225,8 @@
         }
       }
     ],
-    "cities": [],
-    "settlements": [
+    "settlements": [],
+    "cities": [
       {
         "owner": 3,
         "location": {
@@ -236,7 +236,7 @@
         }
       },
       {
-        "owner": 3,
+        "owner": 0,
         "location": {
           "direction": "SE",
           "x": 1,
@@ -244,7 +244,7 @@
         }
       },
       {
-        "owner": 2,
+        "owner": 0,
         "location": {
           "direction": "SW",
           "x": 0,

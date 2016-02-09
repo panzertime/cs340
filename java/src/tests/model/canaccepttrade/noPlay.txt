@@ -1,4 +1,15 @@
 {
+  "tradeOffer" : {
+    "sender" : 1,
+    "receiver" : 0,
+    "offer" : {
+      "brick" : 1,
+      "ore" : 1,
+      "sheep" : 0,
+      "wheat" : -2,
+      "wood" : -2
+     }
+  },
   "deck": {
     "yearOfPlenty": 2,
     "monopoly": 2,
@@ -381,7 +392,7 @@
     {
       "resources": {
         "brick": 0,
-        "wood": 1,
+        "wood": 2,
         "sheep": 1,
         "wheat": 2,
         "ore": 0
@@ -391,7 +402,7 @@
         "monopoly": 0,
         "soldier": 0,
         "roadBuilding": 0,
-        "monument": 1
+        "monument": 0
       },
       "newDevCards": {
         "yearOfPlenty": 0,
@@ -404,8 +415,8 @@
       "cities": 4,
       "settlements": 3,
       "soldiers": 0,
-      "victoryPoints": 9,
-      "monuments": 1,
+      "victoryPoints": 2,
+      "monuments": 0,
       "playedDevCard": false,
       "discarded": false,
       "playerID": 0,
@@ -647,8 +658,8 @@
     "ore": 22
   },
   "turnTracker": {
-    "status": "Playing",
-    "currentTurn": 2,
+    "status": "Robbing",
+    "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },

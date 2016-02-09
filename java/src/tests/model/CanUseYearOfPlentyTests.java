@@ -62,7 +62,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("good.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == true) {
-				System.out.println("pass testCanUseYearOfPlenty test when user already played card");
+				System.out.println("passed testCanUseYearOfPlenty test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
 			}
@@ -81,7 +81,7 @@ public class CanUseYearOfPlentyTests {
 			mf.canUseYearOfPlenty(one, two);
 			fail("failed testCanUseYearOfPlenty test with uninit model");
 		} catch (NullPointerException e) {
-			System.out.println("Passed testCanUseYearOfPlenty test with uninit model");
+			System.out.println("passed testCanUseYearOfPlenty test with uninit model");
 		}
 	}
 	
@@ -93,7 +93,7 @@ public class CanUseYearOfPlentyTests {
 		ResourceType two = ResourceType.ORE;
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when not playing");
+				System.out.println("passed testCanUseYearOfPlenty test when not playing");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing");
 			}
@@ -110,7 +110,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("noPlay.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when not playing");
+				System.out.println("passed testCanUseYearOfPlenty test when not playing");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing");
 			}
@@ -127,7 +127,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("newCard.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when user doesn't have card");
+				System.out.println("passed testCanUseYearOfPlenty test when user doesn't have card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user doesn't have card");
 			}
@@ -144,7 +144,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("alreadyPlayed.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when user already played card");
+				System.out.println("passed testCanUseYearOfPlenty test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
 			}
@@ -161,7 +161,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("noRes1.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when user "
+				System.out.println("passed testCanUseYearOfPlenty test when user "
 						+ "asks for ore(1st resource) and there aren't any");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user "
@@ -181,7 +181,7 @@ public class CanUseYearOfPlentyTests {
 		initModel("noRes2.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
-				System.out.println("pass testCanUseYearOfPlenty test when user "
+				System.out.println("passed testCanUseYearOfPlenty test when user "
 						+ "asks for bricks(2nd resource) and there aren't any");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user "

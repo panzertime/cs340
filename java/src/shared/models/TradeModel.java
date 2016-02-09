@@ -144,25 +144,25 @@ public class TradeModel {
 
 
 
-	public Map<String, Object> getResources() {
+	public Map<String, Object> getResourcesToGive() {
 		Map<String, Object> resources = new HashMap<String, Object>();
-		if (this.getBrick() > 0)
+		if (this.getBrick() < 0)
 			resources.put("brick", this.getBrick() * (-1));
 		else
 			resources.put("brick", 0);
-		if (this.getOre() > 0)
-		resources.put("ore", this.getOre() * (-1));
+		if (this.getOre() < 0)
+			resources.put("ore", this.getOre() * (-1));
 		else
 			resources.put("ore", 0);
-		if (this.getSheep() > 0)
+		if (this.getSheep() < 0)
 		resources.put("sheep", this.getSheep() * (-1));
 		else
 			resources.put("sheep", 0);
-		if (this.getWheat() > 0)
+		if (this.getWheat() < 0)
 		resources.put("wheat", this.getWheat() * (-1));
 		else
 			resources.put("wheat", 0);
-		if (this.getWood() > 0)
+		if (this.getWood() < 0)
 		resources.put("wood", this.getWood() * (-1));
 		else
 			resources.put("wood", 0);

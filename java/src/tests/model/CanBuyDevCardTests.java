@@ -150,7 +150,7 @@ public class CanBuyDevCardTests {
 		this.initWorkingModel();
 		try {
 			if(modelFacade.canBuyDevCard() == true) {
-				System.out.println("pass canBuydevCard test when can buy dev card");
+				System.out.println("passed canBuydevCard test when can buy dev card");
 			} else {
 				fail("fail canBuydevCard test when can buy dev card");
 			}
@@ -167,7 +167,7 @@ public class CanBuyDevCardTests {
 			mf.canBuyDevCard();
 			fail("failed testCanBuyDevCard test with uninit model");
 		} catch (NullPointerException e) {
-			System.out.println("Passed canPlaceRobber test with uninit model");
+			System.out.println("passed testCanBuyDevCard test with uninit model");
 		}
 	}
 	
@@ -177,7 +177,7 @@ public class CanBuyDevCardTests {
 		this.initNotTurnModel();
 		try {
 			if(modelFacade.canBuyDevCard() == false) {
-				System.out.println("pass canBuydevCard test when not your turn");
+				System.out.println("passed canBuydevCard test when not your turn");
 			} else {
 				fail("fail canBuydevCard test when not your turn");
 			}
@@ -192,7 +192,7 @@ public class CanBuyDevCardTests {
 		this.initRobModel();
 		try {
 			if(modelFacade.canBuyDevCard() == false) {
-				System.out.println("pass canBuydevCard test when not playing");
+				System.out.println("passed canBuydevCard test when not playing");
 			} else {
 				fail("fail canBuydevCard test when not playing");
 			}
@@ -207,7 +207,7 @@ public class CanBuyDevCardTests {
 		this.initModel();
 		try {
 			if(modelFacade.canBuyDevCard() == false) {
-				System.out.println("pass canBuydevCard test when not enough resources");
+				System.out.println("passed canBuydevCard test when not enough resources");
 			} else {
 				fail("fail canBuydevCard test when not enough resources");
 			}
@@ -222,7 +222,7 @@ public class CanBuyDevCardTests {
 		this.initNoDevCardsModel();
 		try {
 			if(modelFacade.canBuyDevCard() == false) {
-				System.out.println("pass canBuydevCard test when no more dev cards left");
+				System.out.println("passed canBuydevCard test when no more dev cards left");
 			} else {
 				fail("fail canBuydevCard test when no more dev cards left");
 			}

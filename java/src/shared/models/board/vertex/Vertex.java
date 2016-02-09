@@ -108,11 +108,11 @@ public class Vertex {
 	}
 
 	public boolean isBuildable() {
-		if (hexes[0].isBuildable())
+		if (hexes[0] != null && hexes[0].isBuildable())
 			return true;
-		if (hexes[1].isBuildable())
+		if (hexes[1] != null && hexes[1].isBuildable())
 			return true;
-		if (hexes[2].isBuildable())
+		if (hexes[2] != null && hexes[2].isBuildable())
 			return true;
 		return false;
 	}

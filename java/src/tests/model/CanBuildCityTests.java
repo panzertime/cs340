@@ -53,7 +53,7 @@ public class CanBuildCityTests {
 	 * Working: 
 		1.	initModel()
 		2.	turnIndex = 0
-		3.	status = “Playing”
+		3.	status = Playing
 		4.	new Loc(0,1,SE);
 		5.	2 wheat 3 ore 1 city
 	 */
