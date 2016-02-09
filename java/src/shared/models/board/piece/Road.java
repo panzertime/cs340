@@ -2,6 +2,7 @@ package shared.models.board.piece;
 
 import org.json.simple.JSONObject;
 
+import shared.logger.Log;
 import shared.models.Player;
 import shared.models.board.edge.Edge;
 import shared.models.board.edge.EdgeDirection;
@@ -50,14 +51,14 @@ public class Road {
 	public boolean equals(JSONObject jsonHex) {
 		if (!isPlaced())
 			return false;
-		JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
+		JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
 		HexLocation hexLoc = edge.getEdgeLocation().getHexLoc();
 		EdgeDirection edgeDir = edge.getEdgeLocation().getDir();
 		if (hexLoc.getX() != (Long) jsonHexLoc.get("x") && hexLoc.getNeighborLoc(edgeDir).getX() != (Long) jsonHexLoc.get("x"))
 			return false;
 		if (hexLoc.getY() != (Long) jsonHexLoc.get("y") && hexLoc.getNeighborLoc(edgeDir).getY() != (Long) jsonHexLoc.get("y"))
 			return false;
-		String direction = (String) jsonHex.get("direction");
+		String direction = (String) jsonHexLoc.get("direction");
 		try {
 			if (edgeDir != EdgeDirection.fromJSON(direction) && edgeDir.toOpposite() != EdgeDirection.fromJSON(direction))
 				return false;

@@ -158,7 +158,9 @@ public abstract class Hex {
 	
 	
     public boolean equals(JSONObject jsonHex) {
-    	JSONObject jsonHexLoc = (JSONObject) jsonHex.get("Location");
+    	JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
+    	if (jsonHexLoc == null)
+    		return false;
     	if (hexLocation.getX() != (Long) jsonHexLoc.get("x"))
     		return false;
     	if (hexLocation.getY() != (Long) jsonHexLoc.get("y"))
