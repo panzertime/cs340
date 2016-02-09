@@ -425,9 +425,9 @@ public class GameModel {
 		return b;
 	}
 	
-//	Preconditions
-//	It is your turn
-//	The client model�s status is 'Rolling'
+	//	Preconditions
+	//	It is your turn
+	//	The client model's status is 'Rolling'
 	public Boolean canRollNumber()
 	{
 		Boolean b = this.getStatus().equalsIgnoreCase("Rolling");

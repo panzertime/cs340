@@ -95,7 +95,7 @@ public class ServerFacade {
 
 	//GAMES(PRE-GAME)
 		//USED BY MODEL
-	public Map getGames() 
+	public JSONArray getGames() 
 			throws ServerException {
 		try {
 			return proxy.listGames();

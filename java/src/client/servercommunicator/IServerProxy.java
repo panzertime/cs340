@@ -61,7 +61,7 @@ public interface IServerProxy {
 	 * @return A list of all games in progress if successful. Otherwise null
 	 * @throws ServerProxyException problems with connection
 	 */
-	public JSONObject listGames() throws ServerProxyException;
+	public JSONArray listGames() throws ServerProxyException;
 	
 	/**
 	 * Creates a new game on the server with the given parameters.

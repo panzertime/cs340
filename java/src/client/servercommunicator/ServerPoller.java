@@ -59,7 +59,7 @@ public class ServerPoller extends Thread {
 	public void run(){
 		while(true){
 			try {
-				this.sleep(1500);
+				Thread.sleep(1500);
 				JSONObject result = poll();
 				if(result == null){
 					System.out.println("POLLER says: received null input");
