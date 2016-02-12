@@ -363,13 +363,4 @@ public class ProxyTests {
 
 	}
 
-	// @Test
-	public void testchangeLogLevel200() {
-		String logLevel = null;
-		try {
-			serverFacade.changeLogLevel(logLevel);
-		} catch (ServerException e) {
-			fail("Failed change log level Proxy test");
-		}
-	}
 }
