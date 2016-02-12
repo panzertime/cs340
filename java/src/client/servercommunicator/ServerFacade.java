@@ -128,7 +128,8 @@ public class ServerFacade {
 				throws ServerException{
 		try {
 			String joinGame = "{ \"id\" : " + gameID
-					+ ", \"color\" : \"" + color.toString().toLowerCase() + "\"}";
+					+ ", \"color\" : \"" + color.toString().toLowerCase() + "\" }";
+			System.out.println("Attempting to join with: " + joinGame);
 			JSONObject args = makeJSON(joinGame);
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");

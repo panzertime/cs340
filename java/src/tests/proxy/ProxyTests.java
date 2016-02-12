@@ -14,9 +14,15 @@ import shared.models.board.vertex.VertexLocation;
 import shared.models.definitions.CatanColor;
 import shared.models.hand.ResourceType;
 
+import org.json.simple.JSONObject;
+
 public class ProxyTests {
 	
-	ServerFacade serverFacade;
+	private ServerFacade serverFacade;
+	private int gameID;
+	private void setID(int id){
+		gameID = id;
+	}
 	
 	@Before
 	public void setup(){
@@ -71,12 +77,14 @@ public class ProxyTests {
 	public void testgetGames200() {
 		try {
 			serverFacade.getGames();
+			System.out.println("Passed get game list test");
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed getGames Proxy test");
 		}
 		
 	}
+
 
 	@Test
 	public void testcreateNewGame200() {
@@ -85,7 +93,11 @@ public class ProxyTests {
 		boolean randomPorts = false;
 		String name = "Newgame " + getSeed();
 		try {
-			serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
+			JSONObject newGame = (JSONObject) serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
+			System.out.println("Passed create new game test");
+			gameID = ((Long) newGame.get("id")).intValue();
+			setID(gameID);
+			System.out.println("New game has ID: " + gameID);
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed createNewGame Proxy test");
@@ -95,11 +107,14 @@ public class ProxyTests {
 
 	 @Test
 	public void testjoinGame200() {
-		CatanColor color = CatanColor.PUCE;
-		int gameID = 1;
 		try {
-			serverFacade.joinGame(gameID, color);
+		gameID = serverFacade.getGames().size();
+		gameID -= 2;
+		CatanColor color = CatanColor.PUCE;
+		System.out.println("Using 'new' game has ID: " + gameID);
+		serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed joinGame Proxy test");
 		}
 		

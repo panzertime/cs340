@@ -29,6 +29,20 @@ public class ServerProxy implements IServerProxy{
 		serverURL = URL;
 	}
 
+	private String matchBrackets(String matchable){
+		char bracket = matchable.charAt(matchable.length() - 1);
+		String closer;
+		if(bracket == ']'){
+			System.out.println("Matching a [");		
+			closer = "[";
+		}
+		else {
+			System.out.println("Matching a {");
+			closer = "{";
+		}
+		return closer + matchable;
+	}
+	
 	private JSONObject makeJSON(String stringJSON)
 			throws ServerProxyException{
 		try {
@@ -74,17 +88,22 @@ public class ServerProxy implements IServerProxy{
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
+			System.out.println("Cookie for POST is: " + cookie);
+			System.out.println("User cookie: " + userCookie);
+			System.out.println("Game cookie: " + gameCookie);
 			connection.setRequestMethod(method);
 			connection.setDoOutput(true);
 			
-			connection.setRequestProperty( "Content-Type", "application/json; charset=UTF-8");
-			connection.setRequestProperty( "Content-Length", String.valueOf(arguments.toJSONString().length()));
+			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			connection.setRequestProperty("Content-Length", String.valueOf(arguments.toJSONString().length()));
 
 			OutputStream requestBody = 
 				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
 			requestBody.write(arguments.toJSONString().getBytes());
 			requestBody.flush();
 			requestBody.close();
+
+			System.out.println("POST arguments are: " + arguments.toJSONString());
 	
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, server says: "
@@ -103,17 +122,24 @@ public class ServerProxy implements IServerProxy{
 
 			StringBuilder JSONBuilder = new StringBuilder();
 			InputStreamReader JSONReader = new InputStreamReader(responseBody);
-			if(JSONReader.ready()){
+//			if(JSONReader.ready()){
+//				System.out.println("Reading in body of request					))<>((");
 				int letter = JSONReader.read();
-				while(letter != -1){
+//				System.out.println((char) letter);
+				
+				letter = JSONReader.read();
+			//	letter = (int) '[';
+//				System.out.println("First (second) character in JSON: " + (char) letter);
+				while(letter >= 0){
+//					System.out.println("Adding to JSON string: " + (char) letter);
 					JSONBuilder.append((char) letter);
 					letter = JSONReader.read();
 				}
-			}
+//			}
 			JSONReader.close();
+//			System.out.println("Matching brackets for string: " + JSONBuilder.toString());
+			return matchBrackets(JSONBuilder.toString());
 
-			return JSONBuilder.toString();
-	
 		}
 
 		catch(Exception e){
@@ -151,15 +177,22 @@ public class ServerProxy implements IServerProxy{
 
 			StringBuilder JSONBuilder = new StringBuilder();
 			InputStreamReader JSONReader = new InputStreamReader(responseBody);
-			if(JSONReader.ready()){
+//			if(JSONReader.ready()){
+		//		System.out.println("Reading in body of request					))<>((");
 				int letter = JSONReader.read();
-				while(letter != -1){
+//				System.out.println((char) letter);
+				
+				letter = JSONReader.read();
+			//	letter = (int) '[';
+			//	System.out.println((char) letter);
+				while(letter >= 0){
+			//		System.out.println((char) letter);
 					JSONBuilder.append((char) letter);
 					letter = JSONReader.read();
 				}
-			}
+//			}
 			JSONReader.close();
-			return JSONBuilder.toString();
+			return matchBrackets(JSONBuilder.toString());
 		}
 
 		catch(Exception e){
@@ -229,7 +262,7 @@ public class ServerProxy implements IServerProxy{
 				userCookie = connection.getHeaderField("Set-cookie");
 				userCookie = userCookie.substring(11);
 				userCookie = userCookie.substring(0, userCookie.length() - 8);
-				
+				System.out.println("Setting cookie: " + userCookie);
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
@@ -372,44 +405,14 @@ public class ServerProxy implements IServerProxy{
 	public boolean joinGame(JSONObject joinGameRequest) 
 			throws ServerProxyException {
 		try {
-			URLConnection connectionSeed = new URL(serverURL + "/games/join").openConnection();
-			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
-			connection.setRequestMethod("POST");
-
-			DataOutputStream requestBody = 
-				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
-			requestBody.writeChars(joinGameRequest.toJSONString());
-	
-			if (connection.getResponseCode() != 200) {
-				String problemMessage = "Request returned 400, server says: "
-					+ connection.getResponseMessage();
-				throw new ServerProxyException(problemMessage);
-			}
-			
-			DataInputStream responseBody = 
-				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
-
-			StringBuilder JSONBuilder = new StringBuilder();
-			InputStreamReader JSONReader = new InputStreamReader(responseBody);
-			if(JSONReader.ready()){
-				int letter = JSONReader.read();
-				while(letter != -1){
-					JSONBuilder.append((char) letter);
-					letter = JSONReader.read();
-				}
-			}
-			JSONReader.close();
-
-			if (JSONBuilder.toString().equals("Success")){
-				gameCookie = connection.getHeaderField("Set-cookie");
-				gameCookie = gameCookie.substring(0, gameCookie.length() - 9);
-				
+			if(submitRequest("POST", "/games/join", joinGameRequest).equals("Success")){
 				return true;
 			}
 			return false;
 		}
 
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerProxyException("Exception joining game", e);
 		}
 	}
