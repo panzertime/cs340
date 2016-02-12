@@ -112,33 +112,11 @@ public class ProxyTests {
 		gameID -= 2;
 		CatanColor color = CatanColor.PUCE;
 		System.out.println("Using 'new' game has ID: " + gameID);
+		serverFacade.login("Sam","sam");
 		serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed joinGame Proxy test");
-		}
-		
-	}
-
-	// @Test
-	public void testsaveGame200() {
-		String fileName = null;
-		int gameID = 0;
-		try {
-			serverFacade.saveGame(gameID, fileName);
-		} catch (ServerException e) {
-			fail("Failed saveGame Proxy test");
-		}
-		
-	}
-
-	// @Test
-	public void testloadGame200() {
-		String fileName = null;
-		try {
-			serverFacade.loadGame(fileName);
-		} catch (ServerException e) {
-			fail("Failed loadGame Proxy test");
 		}
 		
 	}
@@ -150,37 +128,6 @@ public class ProxyTests {
 			serverFacade.getModel(version);
 		} catch (ServerException e) {
 			fail("Failed getModel Proxy test");
-		}
-		
-	}
-
-	// @Test
-	public void testreset200() {
-		try {
-			serverFacade.reset();
-		} catch (ServerException e) {
-			fail("Failed reset Proxy test");
-		}
-		
-	}
-
-	// @Test
-	public void testpostCommands200() {
-		Map commands = null;
-		try {
-			serverFacade.postCommands(commands);
-		} catch (ServerException e) {
-			fail("Failed postCommandss Proxy test");
-		}
-		
-	}
-
-	// @Test
-	public void testgetCommands200() {
-		try {
-			serverFacade.getCommands();
-		} catch (ServerException e) {
-			fail("Failed getCommands Proxy test");
 		}
 		
 	}
