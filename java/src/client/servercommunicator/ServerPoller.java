@@ -21,7 +21,6 @@ public class ServerPoller extends Thread {
 	 */
 	public ServerPoller(ServerFacade outbound, ModelFacade inbound){
 		super();
-
 		this.inbound = inbound;
 		this.outbound = outbound;
 
