@@ -1,0 +1,117 @@
+package model;
+import static org.junit.Assert.*;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.Scanner;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.Test;
+
+import shared.models.ModelFacade;
+import shared.models.exceptions.BadJSONException;
+
+public class ModelTest {
+    
+	//minimum model
+	@Test
+	public void initModel1() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/test/model/minjson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Object jsonModel = parser.parse(x);
+			
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+			
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
+				fail("Current model does not match Minimal JSON model");
+			} else {
+				System.out.println("passed minimal JSON init test");
+			}
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			fail("Error with JSON input with minimul options\n" +
+					e.getMessage());
+		}
+	}
+	
+	//maximum model
+	@Test
+	public void initModel2() {
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/test/model/fulljson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Object jsonModel = parser.parse(x);
+			
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+			if (!modelFacade.equalsJSON((JSONObject)jsonModel)) {
+				fail("Current model does not match full JSON model");
+			} else {
+				System.out.println("passed full JSON init test");
+			}
+		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+			fail("Error with JSON input with all options\n" +
+					e.getMessage());
+		}
+	}
+	
+	//error model
+	@Test
+	public void initModel3() {
+		boolean pass = false;
+		JSONParser parser = new JSONParser();
+		File jsonFile = new File("java/test/model/badjson.txt");
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			Object jsonModel =  parser.parse(x);
+			
+			ModelFacade modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
+		} catch (FileNotFoundException | ParseException e) {
+			fail("Error with bad JSON input\n" +
+					e.getMessage());
+		} catch (BadJSONException e) {
+			pass = true;
+		}
+		if(pass) {
+			System.out.println("passed bad JSON init test");
+		} else {
+			fail("Did not catch error with bad JSON input\n");
+		}
+	}
+}
