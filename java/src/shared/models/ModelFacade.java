@@ -30,6 +30,20 @@ public class ModelFacade {
 	
 	private GameModel gameModel;
 	private Integer userID;
+	private static ModelFacade _instance;
+	
+	/**
+	 * Used to get the only instance of the game model. Additionally it may
+	 * create it if it has not yet been initialized.
+	 * @return Instance of the Game Model
+	 */
+	public static ModelFacade get_instance() {
+		if(_instance == null) {
+			_instance = new ModelFacade();
+		}
+		
+		return _instance;
+	}
 	
 	/**
 	 * Instrcutor with GameModel input
@@ -44,6 +58,7 @@ public class ModelFacade {
 	
 	public ModelFacade() {
 		this.gameModel = null;
+		this.userID = null;
 	}
 
 	public GameModel getGameModel() {
@@ -67,6 +82,7 @@ public class ModelFacade {
 	 * @post User is logged in if credentials are valid. If not, rejected.
 	 * @param username Username
 	 * @param password Password
+	 * @return Whether or not it was successfull
 	 * @throws SignInException  Pre condition violated
 	 */
 	public void signIn(String username, String password) 

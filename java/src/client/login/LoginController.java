@@ -2,6 +2,10 @@ package client.login;
 
 import client.base.*;
 import client.misc.*;
+import client.servercommunicator.ServerException;
+import client.servercommunicator.ServerFacade;
+import shared.models.ModelFacade;
+import shared.models.exceptions.SignInException;
 
 import java.net.*;
 import java.io.*;
@@ -72,21 +76,42 @@ public class LoginController extends Controller implements ILoginController {
 	public void signIn() {
 		
 		// TODO: log in user
-		
-
-		// If log in succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+		String username = getLoginView().getLoginUsername();
+		String password = getLoginView().getLoginPassword();
+		if(username != null && password != null) {
+			try {
+				ModelFacade.get_instance().signIn(username, password);
+				
+				// If log in succeeded
+				getLoginView().closeModal();
+				loginAction.execute();
+			} catch (SignInException e) {
+				//TODO : login failed
+			}
+		}
 	}
 
 	@Override
 	public void register() {
 		
 		// TODO: register new user (which, if successful, also logs them in)
-		
-		// If register succeeded
-		getLoginView().closeModal();
-		loginAction.execute();
+		String username = getLoginView().getRegisterUsername();
+		String password1 = getLoginView().getRegisterPassword();
+		String password2 = getLoginView().getRegisterPasswordRepeat();
+		if(username != null && password1 != null)
+		{
+			if(password1.equals(password2)) {
+				try {
+					ModelFacade.get_instance().register(username, password1);
+					
+					// If register succeeded
+					getLoginView().closeModal();
+					loginAction.execute();
+				} catch (SignInException e) {
+					//TODO : register failed
+				}
+			}
+		}
 	}
 
 }
