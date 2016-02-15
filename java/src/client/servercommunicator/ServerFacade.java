@@ -59,15 +59,18 @@ public class ServerFacade {
 	public int login(String username, String password) 
 			throws ServerException {
 		try {
-			String credentials = "{ username : \"" + username 
-						+ "\", password : \"" + password
+			String credentials = "{ \"username\" : \"" + username 
+						+ "\", \"password\" : \"" + password
 						+ "\" }";
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.loginUser(args);
-			player_id = (int) cookie.get("playerID");
+
+			player_id = ((Long) cookie.get("playerID")).intValue();
 			return player_id;
 		}
 		catch(Exception e){
+			e.printStackTrace();
+		
 			throw new ServerException("Problem logging in", e);
 		}
 
@@ -76,12 +79,13 @@ public class ServerFacade {
 	public int register(String username, String password) 
 			throws ServerException {
 		try {
-			String credentials = "{ username : \"" + username 
-						+ "\", password : \"" + password
+			String credentials = "{ \"username\" : \"" + username 
+						+ "\", \"password\" : \"" + password
 						+ "\" }";
 			JSONObject args = makeJSON(credentials);
 			JSONObject cookie = proxy.registerUser(args);
-			player_id = (int) cookie.get("playerID");
+		//	System.out.println("Cookie is: " + cookie.toJSONString());
+			player_id = ((Long) cookie.get("playerID")).intValue();
 			return player_id;
 
 		}
@@ -92,12 +96,13 @@ public class ServerFacade {
 
 	//GAMES(PRE-GAME)
 		//USED BY MODEL
-	public Map getGames() 
+	public List getGames() 
 			throws ServerException {
 		try {
 			return proxy.listGames();
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
@@ -106,14 +111,15 @@ public class ServerFacade {
 				boolean randomPorts, String name) 
 				throws ServerException{
 		try {
-			String newGame = "{ randomTiles : " + randomTiles
-					+ ", randomNumbers : " + randomNumbers
-					+ ", randomPorts : " + randomPorts
-					+ ", name : \"" + name + "\"}";
+			String newGame = "{ \"randomTiles\" : " + randomTiles
+					+ ", \"randomNumbers\" : " + randomNumbers
+					+ ", \"randomPorts\" : " + randomPorts
+					+ ", \"name\" : \"" + name + "\"}";
 			JSONObject args = makeJSON(newGame);
 			return proxy.createGame(args);
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
@@ -121,8 +127,8 @@ public class ServerFacade {
 	public void joinGame(int gameID, CatanColor color) 
 				throws ServerException{
 		try {
-			String joinGame = "{ id : " + gameID
-					+ ", color : \"" + color.toString().toLowerCase() + "\"}";
+			String joinGame = "{ \"id\" : " + gameID
+					+ ", \"color\" : \"" + color.toString().toLowerCase() + "\"}";
 			JSONObject args = makeJSON(joinGame);
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");
@@ -479,8 +485,8 @@ public class ServerFacade {
 			String content = "{type: \"maritimeTrade\", " +
 						"playerIndex: " + playerIndex + ", " +
 						"ratio: " + ratio + ", " +
-						"inputResource: " + inputResource + ", " +
-						"outputResource: " + outputResource + "}";
+						"inputResource: " + inputResource.toString().toLowerCase() + ", " +
+						"outputResource: " + outputResource.toString().toLowerCase() + "}";
 			JSONObject args = makeJSON(content);
 			return proxy.maritimeTrade(args);
 		}
