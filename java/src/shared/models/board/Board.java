@@ -362,7 +362,6 @@ public class Board {
 
 				if (vertex.getLeftEdge(edge) != null && 
 						vertex.getLeftEdge(edge).getRoad() != null &&
-						//vertex.getLeftEdge(edge).getRoad().ge != null &&
 						vertex.getLeftEdge(edge).getRoad().getOwner().equals(player))
 					return true;
 				if (vertex.getRightEdge(edge) != null && 
