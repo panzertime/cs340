@@ -84,7 +84,10 @@ public class ServerProxy implements IServerProxy{
 			throws ServerProxyException {
 
 		try {
-			String cookie = userCookie + "; " + gameCookie;
+			String cookie = "catan.user=" + userCookie;
+			if(!gameCookie.equals("")){
+				cookie = cookie + "; " + gameCookie;
+			}
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
@@ -143,6 +146,7 @@ public class ServerProxy implements IServerProxy{
 		}
 
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerProxyException("Exception during HTTP request submission", e);
 		}
 	}
@@ -255,7 +259,6 @@ public class ServerProxy implements IServerProxy{
 				}
 			}
 			JSONReader.close();
-
 
 
 			if (JSONBuilder.toString().equals("Success")){

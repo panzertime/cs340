@@ -136,6 +136,7 @@ public class ServerFacade {
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
