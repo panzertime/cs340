@@ -4,7 +4,10 @@ public class PhaseOneTests {
 	public static void main(String[] args) {
 		String[] tests = {
 		//		"tests.poller.PollerTests",
-				"tests.proxy.ProxyTests"
+		//		"tests.proxy.ProxyTests"
+				"tests.proxy.LoginTests",
+				"tests.proxy.GamesTests",
+				"tests.proxy.GameTests"
 		//		"tests.model.ModelTests",
 		//		"tests.model.CanSendChatTests",
 		//		"tests.model.CanRollNumberTests",

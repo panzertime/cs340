@@ -408,9 +408,11 @@ public class ServerProxy implements IServerProxy{
 	public boolean joinGame(JSONObject joinGameRequest) 
 			throws ServerProxyException {
 		try {
-			if(submitRequest("POST", "/games/join", joinGameRequest).equals("Success")){
+			String response = submitRequest("POST", "/games/join", joinGameRequest);
+			if(response.equals("{uccess")){
 				return true;
 			}
+			System.out.println("    Server's response to join request: " + response);
 			return false;
 		}
 
