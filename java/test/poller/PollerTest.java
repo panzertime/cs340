@@ -15,7 +15,7 @@ public class PollerTest {
 			ModelFacade mFacade = new ModelFacade();
 			ServerFacade sFacade = ServerFacade.get_instance();
 			FakeProxy fp = new FakeProxy();
-			fp.setURL("java/src/tests/poller/");
+			fp.setURL("java/test/poller/");
 			sFacade.setProxy(fp);
 			
 			ServerPoller SP = new ServerPoller(sFacade, mFacade);
