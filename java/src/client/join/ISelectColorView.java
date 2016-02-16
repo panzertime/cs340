@@ -1,7 +1,7 @@
 package client.join;
 
 import client.base.*;
-import shared.models.definitions.CatanColor;
+import shared.model.definitions.CatanColor;
 
 /**
  * Interface for the select color view, which lets the user select the desired

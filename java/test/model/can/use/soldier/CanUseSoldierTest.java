@@ -1,6 +1,6 @@
 package model.can.use.soldier;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,13 +12,11 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.board.hex.HexLocation;
-import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
+import client.modelfacade.ModelFacade;
+import shared.model.board.hex.HexLocation;
+import shared.model.exceptions.BadJSONException;
 
 public class CanUseSoldierTest {
 	
@@ -56,7 +54,7 @@ public class CanUseSoldierTest {
 	 * robber moves
 	 * player robbed has cards
 	 */
-	@Test
+	/*@Test
 	public void testCanUseSoldier7() {
 		initModel("good.txt");
 		HexLocation newRobberLocation = new HexLocation(0,-1);
@@ -70,7 +68,7 @@ public class CanUseSoldierTest {
 		} catch (NullPointerException e) {
 			fail("fail testCanUseSoldier test when  robber moved, no one to rob");
 		}
-	}
+	}*/
 	
 	//robber moves, player can rob
 	@Test

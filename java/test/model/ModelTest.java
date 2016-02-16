@@ -13,8 +13,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.exceptions.BadJSONException;
+import client.modelfacade.ModelFacade;
+import shared.model.exceptions.BadJSONException;
 
 public class ModelTest {
     

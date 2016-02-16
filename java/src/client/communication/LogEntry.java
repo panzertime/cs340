@@ -1,6 +1,6 @@
 package client.communication;
 
-import shared.models.definitions.CatanColor;
+import shared.model.definitions.CatanColor;
 
 /**
  * Message (or entry) displayed in the LogComponent

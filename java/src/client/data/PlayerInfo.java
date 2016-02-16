@@ -1,6 +1,6 @@
 package client.data;
 
-import shared.models.definitions.CatanColor;
+import shared.model.definitions.CatanColor;
 
 /**
  * Used to pass player information into views<br>

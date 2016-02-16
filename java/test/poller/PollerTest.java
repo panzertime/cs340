@@ -1,11 +1,12 @@
 package poller;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-
-import client.servercommunicator.*;
-import shared.models.ModelFacade;
+import client.modelfacade.ModelFacade;
+import client.serverfacade.FakeProxy;
+import client.serverfacade.ServerFacade;
+import client.serverfacade.ServerPoller;
 
 public class PollerTest {
 
@@ -21,7 +22,7 @@ public class PollerTest {
 			ServerPoller SP = new ServerPoller(sFacade, mFacade);
 			SP.start();
 			Thread.sleep(5000);
-			if(mFacade.getGameModel() == null){
+			if(!mFacade.hasModel()){
 				fail("Poller failed poll test");
 			}
 			System.out.println("Poller passed poll test");

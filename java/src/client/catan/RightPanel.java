@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import client.points.*;
 import client.resources.*;
-import shared.models.board.piece.PieceType;
+import shared.model.board.piece.PieceType;
 import client.base.*;
 import client.map.*;
 import client.devcards.*;

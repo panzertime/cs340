@@ -3,7 +3,7 @@ package client.join;
 import client.base.*;
 import client.data.*;
 import client.misc.*;
-import shared.models.definitions.CatanColor;
+import shared.model.definitions.CatanColor;
 
 
 /**

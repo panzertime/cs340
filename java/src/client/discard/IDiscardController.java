@@ -1,7 +1,7 @@
 package client.discard;
 
 import client.base.*;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 /**
  * Discard controller interface
