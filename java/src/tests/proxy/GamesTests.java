@@ -25,10 +25,16 @@ public class GamesTests {
 	
 	@Before
 	public void setup(){
-		serverFacade = ServerFacade.get_instance();
-		ServerProxy sp = new ServerProxy();
-		sp.setURL("http://localhost:8081");
-		serverFacade.setProxy(sp);
+		try {
+			serverFacade = ServerFacade.get_instance();
+			ServerProxy sp = new ServerProxy();
+			sp.setURL("http://localhost:8081");
+			serverFacade.setProxy(sp);
+			serverFacade.login("Sam","sam");
+		}
+		catch (Exception e) {
+			fail("Initialization failure: GamesTests");
+		}
 	}
 
 	private int getSeed(){
@@ -77,7 +83,6 @@ public class GamesTests {
 		gameID -= 2;
 		CatanColor color = CatanColor.PUCE;
 		System.out.println("Using 'new' game has ID: " + gameID);
-		serverFacade.login("Sam","sam");
 		serverFacade.joinGame(gameID, color);
 		System.out.println("Passed join game test");
 		} catch (ServerException e) {

@@ -251,13 +251,13 @@ public class ServerProxy implements IServerProxy{
 
 			StringBuilder JSONBuilder = new StringBuilder();
 			InputStreamReader JSONReader = new InputStreamReader(responseBody);
-			if(JSONReader.ready()){
-				int letter = JSONReader.read();
-				while(letter != -1){
-					JSONBuilder.append((char) letter);
-					letter = JSONReader.read();
-				}
+			
+			int letter = JSONReader.read();
+			while(letter != -1){
+				JSONBuilder.append((char) letter);
+				letter = JSONReader.read();
 			}
+			
 			JSONReader.close();
 
 
@@ -269,7 +269,9 @@ public class ServerProxy implements IServerProxy{
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
-			return null;
+			else {
+				throw new ServerProxyException("Login failed, server says: " + JSONBuilder.toString());
+			}
 		}
 
 		catch(Exception e){
@@ -325,13 +327,13 @@ public class ServerProxy implements IServerProxy{
 
 			StringBuilder JSONBuilder = new StringBuilder();
 			InputStreamReader JSONReader = new InputStreamReader(responseBody);
-			if(JSONReader.ready()){
-				int letter = JSONReader.read();
-				while(letter != -1){
-					JSONBuilder.append((char) letter);
-					letter = JSONReader.read();
-				}
+			
+			int letter = JSONReader.read();
+			while(letter != -1){
+				JSONBuilder.append((char) letter);
+				letter = JSONReader.read();
 			}
+			
 			JSONReader.close();
 
 
@@ -344,7 +346,9 @@ public class ServerProxy implements IServerProxy{
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
-			return null;
+			else {
+				throw new ServerProxyException("Login failed, server says: " + JSONBuilder.toString());
+			}
 		}
 
 		catch(Exception e){
@@ -408,19 +412,69 @@ public class ServerProxy implements IServerProxy{
 	public boolean joinGame(JSONObject joinGameRequest) 
 			throws ServerProxyException {
 		try {
-			String response = submitRequest("POST", "/games/join", joinGameRequest);
-			if(response.equals("{uccess")){
+			String cookie = "catan.user=" + userCookie;		
+			URLConnection connectionSeed = new URL(serverURL + "/games/join").openConnection();
+			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Cookie", cookie);			
+			connection.setDoOutput(true);
+			
+			connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			connection.setRequestProperty("Content-Length", String.valueOf(joinGameRequest.toJSONString().length()));
+
+			OutputStream requestBody = 
+				new DataOutputStream(new BufferedOutputStream(connection.getOutputStream()));
+			requestBody.write(joinGameRequest.toJSONString().getBytes());
+			requestBody.flush();
+			requestBody.close();
+
+
+	
+			if (connection.getResponseCode() != 200) {
+				String problemMessage = "Request returned 400, server says: "
+					+ connection.getResponseMessage();
+				System.out.println(problemMessage);
+				throw new ServerProxyException(problemMessage);
+			}
+			
+			DataInputStream responseBody = 
+				new DataInputStream(new BufferedInputStream(connection.getInputStream()));
+
+			StringBuilder JSONBuilder = new StringBuilder();
+			InputStreamReader JSONReader = new InputStreamReader(responseBody);
+			
+			int letter = JSONReader.read();
+			while(letter != -1){
+				JSONBuilder.append((char) letter);
+				letter = JSONReader.read();
+			}
+			
+			JSONReader.close();
+
+
+
+			if (JSONBuilder.toString().equals("Success")){
+				gameCookie = connection.getHeaderField("Set-cookie");
+				String[] cookieParts = gameCookie.split(";");
+				gameCookie = cookieParts[0];
+				
+
 				return true;
 			}
-			System.out.println("    Server's response to join request: " + response);
-			return false;
+			else {
+				throw new ServerProxyException("Join game failed, server says: " + JSONBuilder.toString());
+			}
 		}
 
 		catch(Exception e){
+			System.out.println("Registration exception: " );
 			e.printStackTrace();
-			throw new ServerProxyException("Exception joining game", e);
+			throw new ServerProxyException("Exception during HTTP request submission", e);
 		}
+
 	}
+
+	
 	
 	/**
 	 * Saves the current state of the game. Should only be used for debugging
@@ -589,9 +643,9 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject listAI() throws ServerProxyException {
+	public JSONArray listAI() throws ServerProxyException {
 		try {
-			return makeJSON(submitRequest("GET", "/game/listAI"));
+			return makeArray(submitRequest("GET", "/game/listAI"));
 		}
 		catch(Exception e) {
 			throw new ServerProxyException(e);

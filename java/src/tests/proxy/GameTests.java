@@ -19,9 +19,6 @@ public class GameTests {
 
 	private ServerFacade serverFacade;
 	private int gameID;
-	private void setID(int id){
-		gameID = id;
-	}
 	
 	@Before
 	public void setup(){
@@ -30,12 +27,12 @@ public class GameTests {
 		sp.setURL("http://localhost:8081");
 		serverFacade.setProxy(sp);
 		try {
-		gameID = serverFacade.getGames().size();
-		gameID -= 2;
-		CatanColor color = CatanColor.PUCE;
-		System.out.println("Using 'new' game has ID: " + gameID);
-		serverFacade.login("Sam","sam");
-		serverFacade.joinGame(gameID, color);
+			gameID = serverFacade.getGames().size();
+			gameID -= 1;
+			CatanColor color = CatanColor.BLUE;
+			System.out.println("Using 'new' game has ID: " + gameID);
+			serverFacade.login("Sam","sam");
+			serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
 			System.out.println("Failed initializing GameTests");
 			e.printStackTrace();
@@ -52,6 +49,7 @@ public class GameTests {
 		try {
 			serverFacade.getModel(version);
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed getModel Proxy test");
 		}
 		
@@ -63,6 +61,7 @@ public class GameTests {
 		try {
 			serverFacade.addAI(aiType);
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed addAI Proxy test");
 		}
 		
@@ -73,6 +72,7 @@ public class GameTests {
 		try {
 			serverFacade.listAI();
 		} catch (ServerException e) {
+			e.printStackTrace();
 			fail("Failed listAI Proxy test");
 		}
 		

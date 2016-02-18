@@ -236,12 +236,13 @@ public class ServerFacade {
 	public void addAI(String aiType)
 			throws ServerException {
 		try {
-			JSONObject args = makeJSON("{ AIType : \"" + aiType + "\"}");
+			JSONObject args = makeJSON("{ \"AIType\" : \"" + aiType + "\"}");
 			if(!proxy.addAI(args)){
 				throw new ServerException("Problem adding AI player");
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
@@ -250,7 +251,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of AI Types
 	 */
-	public Map listAI() 
+	public List listAI() 
 		throws ServerException {
 		try {
 			return proxy.listAI();
