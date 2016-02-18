@@ -260,7 +260,7 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException
 	 */
 	 @Override
-	public JSONObject listAI() throws ServerProxyException {
+	public JSONArray listAI() throws ServerProxyException {
 		return null;
 	}
 	

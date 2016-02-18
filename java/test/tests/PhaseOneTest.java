@@ -6,7 +6,10 @@ public class PhaseOneTest {
 		
 		String[] tests = {
 				"poller.PollerTest",
-				//"proxy.ProxyTest",
+				
+				"proxy.GamesTest",
+				"proxy.GameTest",
+				"proxy.LoginTest",
 
 				"model.ModelTest",
 				

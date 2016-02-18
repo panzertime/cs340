@@ -183,7 +183,7 @@ public interface IServerProxy {
 	 * @return A string array of different type of AI players 
 	 * @throws ServerProxyException
 	 */
-	public JSONObject listAI() throws ServerProxyException;
+	public JSONArray listAI() throws ServerProxyException;
 	
 	/**
 	 * Sends a message to chat part of the model
