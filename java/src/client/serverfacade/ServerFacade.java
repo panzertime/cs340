@@ -46,6 +46,8 @@ public class ServerFacade {
 			return json;
 		}
 		catch(Exception e){
+			System.out.println("The offending JSON: ");
+			System.out.println(stringJSON);
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
 	}
@@ -128,13 +130,15 @@ public class ServerFacade {
 				throws ServerException{
 		try {
 			String joinGame = "{ \"id\" : " + gameID
-					+ ", \"color\" : \"" + color.toString().toLowerCase() + "\"}";
+					+ ", \"color\" : \"" + color.toString().toLowerCase() + "\" }";
+			System.out.println("Attempting to join with: " + joinGame);
 			JSONObject args = makeJSON(joinGame);
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
@@ -234,12 +238,13 @@ public class ServerFacade {
 	public void addAI(String aiType)
 			throws ServerException {
 		try {
-			JSONObject args = makeJSON("{ AIType : \"" + aiType + "\"}");
+			JSONObject args = makeJSON("{ \"AIType\" : \"" + aiType + "\"}");
 			if(!proxy.addAI(args)){
 				throw new ServerException("Problem adding AI player");
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ServerException(e);
 		}
 	}
@@ -248,7 +253,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of AI Types
 	 */
-	public Map listAI() 
+	public List listAI() 
 		throws ServerException {
 		try {
 			return proxy.listAI();
@@ -495,40 +500,15 @@ public class ServerFacade {
 		}
 	}
 
-	public Map discard(int playerIndex, List<ResourceType> discardedCards)
+	public Map discard(int playerIndex, Map<ResourceType, Integer> resources)
 			throws ServerException {
 		try {
-			StringBuilder resList = new StringBuilder();
-			if(discardedCards.contains(ResourceType.BRICK)){
-				resList.append("{brick : 1,");
-			}
-			else {
-				resList.append("{brick : 0,");
-			}
-			if(discardedCards.contains(ResourceType.ORE)){
-				resList.append("ore : 1,");
-			}
-			else {
-				resList.append("ore : 0,");
-			}
-			if(discardedCards.contains(ResourceType.SHEEP)){
-				resList.append("sheep : 1,");
-			}
-			else {
-				resList.append("sheep : 0,");
-			}
-			if(discardedCards.contains(ResourceType.WHEAT)){
-				resList.append("wheat : 1,");
-			}
-			else {
-				resList.append("wheat : 0,");
-			}
-			if(discardedCards.contains(ResourceType.WOOD)){
-				resList.append("wood : 1}");
-			}
-			else {
-				resList.append("wood : 0}");
-			}
+			String resList = 
+			"{wood : " + resources.get(ResourceType.WOOD) + '\n' +
+			"{brick : " + resources.get(ResourceType.BRICK) + '\n' +
+			"{sheep : " + resources.get(ResourceType.SHEEP) + '\n' +
+			"{wheat : " + resources.get(ResourceType.WHEAT) + '\n' +
+			"{ore : " + resources.get(ResourceType.ORE) + '}';
 
 
 			String content = "{type: \"discardCards\", " +

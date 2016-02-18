@@ -1,12 +1,11 @@
 package model.can.use.roadbuilding;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,17 +14,23 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
-import shared.model.hand.ResourceType;
 
 public class CanUseRoadBuildingTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -42,9 +47,9 @@ public class CanUseRoadBuildingTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +71,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == true) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == true) {
 				System.out.println("passed testCanUseRoadBuilder test when two roads are separate and valid");
 			} else {
 				fail("failed testCanUseRoadBuilder test when two roads are separate and valid");
@@ -88,7 +93,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == true) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == true) {
 				System.out.println("passed testCanUseRoadBuilder test when two roads are connected valid");
 			} else {
 				fail("failed testCanUseRoadBuilder test when two roads are connected and valid");
@@ -105,7 +110,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(2,0), EdgeDirection.NorthWest);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when placing a road valid only for another player (Pete)");
 			} else {
 				fail("failed testCanUseRoadBuilder test when placing a road valid only for another player (Pete)");
@@ -122,7 +127,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when two roads are in the same spot");
 			} else {
 				fail("failed testCanUseRoadBuilder test when two roads are in the same spot");
@@ -139,7 +144,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when first road is on another's road");
 			} else {
 				fail("failed testCanUseRoadBuilder test when first road is on another's road");
@@ -156,7 +161,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when first road is on water");
 			} else {
 				fail("failed testCanUseRoadBuilder test when first road is on water");
@@ -173,7 +178,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(3,0), EdgeDirection.South);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when second road is on water");
 			} else {
 				fail("failed testCanUseRoadBuilder test when second road is on water");
@@ -190,7 +195,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("noRoads.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when user doesn't have enough roads");
 			} else {
 				fail("failed testCanUseRoadBuilder test when user doesn't have enough roads");
@@ -205,9 +210,8 @@ public class CanUseRoadBuildingTest {
 	public void testCanUseRoadBuilder9() {
 		EdgeLocation one = new EdgeLocation(new HexLocation(2,0), EdgeDirection.North);
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canUseRoadBuilder(one, two);
+			CanModelFacade.sole().canUseRoadBuilding(one, two);
 			fail("failed testCanUseRoadBuilder test when there is currently no game");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanUseRoadBuilder test when there is currently no game");
@@ -221,7 +225,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when not your turn");
 			} else {
 				fail("failed testCanUseRoadBuilder test when not your turn");
@@ -238,7 +242,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when status is not playing");
 			} else {
 				fail("failed testCanUseRoadBuilder test when status is not playing");
@@ -255,7 +259,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("noCard.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when user does not have this card");
 			} else {
 				fail("failed testCanUseRoadBuilder test when user does not have this card");
@@ -272,7 +276,7 @@ public class CanUseRoadBuildingTest {
 		EdgeLocation two = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
 		initModel("alreadyPlayed.txt");
 		try {
-			if(modelFacade.canUseRoadBuilder(one, two) == false) {
+			if(CanModelFacade.sole().canUseRoadBuilding(one, two) == false) {
 				System.out.println("passed testCanUseRoadBuilder test when already played a dev card");
 			} else {
 				fail("failed testCanUseRoadBuilder test when already played a dev card");

@@ -13,14 +13,23 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
+import shared.model.hand.ResourceType;
 
 public class CanDiscardCardsTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -37,9 +46,9 @@ public class CanDiscardCardsTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -54,15 +63,15 @@ public class CanDiscardCardsTest {
 	*/
 	@Test
 	public void testCanDiscardCards1() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
-		resourceList.put("wood", 0);
-		resourceList.put("ore", 0);
-		resourceList.put("sheep", 0);
-		resourceList.put("brick", 1);
-		resourceList.put("wheat", 0);
+		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
+		resourceList.put(ResourceType.WOOD, 0);
+		resourceList.put(ResourceType.ORE, 0);
+		resourceList.put(ResourceType.SHEEP, 0);
+		resourceList.put(ResourceType.BRICK, 1);
+		resourceList.put(ResourceType.WHEAT, 0);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canDiscardCards(resourceList) == true) {
+			if(CanModelFacade.sole().canDiscardCards(resourceList) == true) {
 				System.out.println("passed testCanDiscardCards test when meets parameters");
 			} else {
 				fail("failed testCanDiscardCards test when meets parameters");
@@ -75,15 +84,14 @@ public class CanDiscardCardsTest {
 	//1 – no model
 	@Test
 	public void testCanDiscardCards2() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
-		resourceList.put("wood", 0);
-		resourceList.put("ore", 0);
-		resourceList.put("sheep", 0);
-		resourceList.put("brick", 1);
-		resourceList.put("wheat", 0);
-		ModelFacade mf = new ModelFacade();
+		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
+		resourceList.put(ResourceType.WOOD, 0);
+		resourceList.put(ResourceType.ORE, 0);
+		resourceList.put(ResourceType.SHEEP, 0);
+		resourceList.put(ResourceType.BRICK, 1);
+		resourceList.put(ResourceType.WHEAT, 0);
 		try {
-			mf.canDiscardCards(resourceList);
+			CanModelFacade.sole().canDiscardCards(resourceList);
 			fail("failed testCanDiscardCards test when there is no model init");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanDiscardCards test when there is no model init");
@@ -93,15 +101,15 @@ public class CanDiscardCardsTest {
 	//2 – status is not Discarding
 	@Test
 	public void testCanDiscardCards3() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
-		resourceList.put("wood", 0);
-		resourceList.put("ore", 0);
-		resourceList.put("sheep", 0);
-		resourceList.put("brick", 1);
-		resourceList.put("wheat", 0);
+		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
+		resourceList.put(ResourceType.WOOD, 0);
+		resourceList.put(ResourceType.ORE, 0);
+		resourceList.put(ResourceType.SHEEP, 0);
+		resourceList.put(ResourceType.BRICK, 1);
+		resourceList.put(ResourceType.WHEAT, 0);
 		initModel("noDiscard.txt");
 		try {
-			if(modelFacade.canDiscardCards(resourceList) == false) {
+			if(CanModelFacade.sole().canDiscardCards(resourceList) == false) {
 				System.out.println("passed testCanDiscardCards test when not discarding");
 			} else {
 				fail("failed testCanDiscardCards test when not discarding");
@@ -114,15 +122,15 @@ public class CanDiscardCardsTest {
 	//3 – you have less than 8 cards
 	@Test
 	public void testCanDiscardCards4() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
-		resourceList.put("wood", 0);
-		resourceList.put("ore", 0);
-		resourceList.put("sheep", 0);
-		resourceList.put("brick", 1);
-		resourceList.put("wheat", 0);
+		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
+		resourceList.put(ResourceType.WOOD, 0);
+		resourceList.put(ResourceType.ORE, 0);
+		resourceList.put(ResourceType.SHEEP, 0);
+		resourceList.put(ResourceType.BRICK, 1);
+		resourceList.put(ResourceType.WHEAT, 0);
 		initModel("noEnoughCards.txt");
 		try {
-			if(modelFacade.canDiscardCards(resourceList) == false) {
+			if(CanModelFacade.sole().canDiscardCards(resourceList) == false) {
 				System.out.println("passed testCanDiscardCards test when you have less than 8 cards");
 			} else {
 				fail("failed testCanDiscardCards test when you have less than 8 cards");
@@ -135,15 +143,15 @@ public class CanDiscardCardsTest {
 	//4 – You don’t have the cards you choosing to discard
 	@Test
 	public void testCanDiscardCards5() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
-		resourceList.put("wood", 1);
-		resourceList.put("ore", 1);
-		resourceList.put("sheep", 1);
-		resourceList.put("brick", 1);
-		resourceList.put("wheat", 1);
+		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
+		resourceList.put(ResourceType.WOOD, 1);
+		resourceList.put(ResourceType.ORE, 1);
+		resourceList.put(ResourceType.SHEEP, 1);
+		resourceList.put(ResourceType.BRICK, 1);
+		resourceList.put(ResourceType.WHEAT, 1);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canDiscardCards(resourceList) == false) {
+			if(CanModelFacade.sole().canDiscardCards(resourceList) == false) {
 				System.out.println("passed testCanDiscardCards test when you don't have the cards to discard that you think you do");
 			} else {
 				fail("failed testCanDiscardCards test when you don't have the cards to discard that you think you do");

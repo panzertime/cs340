@@ -1,12 +1,11 @@
 package model.can.trade.maritime;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,15 +14,20 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
-import shared.model.board.edge.EdgeLocation;
-import shared.model.board.vertex.Vertex;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.ResourceType;
 
 public class CanMaritimeTradeTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -40,9 +44,9 @@ public class CanMaritimeTradeTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +68,7 @@ public class CanMaritimeTradeTest {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("good.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == true) {
+			if(CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType) == true) {
 				System.out.println("passed testCanMaritimeTrade test when meets parameters");
 			} else {
 				fail("failed testCanMaritimeTrade test when meets parameters");
@@ -80,9 +84,8 @@ public class CanMaritimeTradeTest {
 		int ratio = 3;
 		ResourceType inputType = ResourceType.WHEAT;
 		ResourceType outputType = ResourceType.BRICK;
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canMaritimeTrade(ratio, inputType, outputType);
+			CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType);
 			fail("failed testCanMaritimeTrade test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanMaritimeTrade test with uninit model");
@@ -97,7 +100,7 @@ public class CanMaritimeTradeTest {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
+			if(CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when it's not your turn");
 			} else {
 				fail("failed testCanMaritimeTrade test when it's not your turn");
@@ -115,7 +118,7 @@ public class CanMaritimeTradeTest {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
+			if(CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when model is not playing");
 			} else {
 				fail("failed testCanMaritimeTrade test when model is not playing");
@@ -133,7 +136,7 @@ public class CanMaritimeTradeTest {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noRes.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
+			if(CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when user doesn't have resources");
 			} else {
 				fail("failed testCanMaritimeTrade test when user doesn't have resources");
@@ -152,7 +155,7 @@ public class CanMaritimeTradeTest {
 		ResourceType outputType = ResourceType.BRICK;
 		initModel("noPort.txt");
 		try {
-			if(modelFacade.canMaritimeTrade(ratio, inputType, outputType) == false) {
+			if(CanModelFacade.sole().canMaritimeTrade(ratio, inputType, outputType) == false) {
 				System.out.println("passed testCanMaritimeTrade test when user doesn't have port");
 			} else {
 				fail("failed testCanMaritimeTrade test when user doesn't have port");

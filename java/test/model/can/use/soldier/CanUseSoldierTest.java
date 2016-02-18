@@ -6,21 +6,29 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.BadJSONException;
 
 public class CanUseSoldierTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -37,9 +45,9 @@ public class CanUseSoldierTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -60,7 +68,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == true){
 				System.out.println("passed testCanUseSoldier test when robber moved, no one to rob");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, no one to rob");
@@ -77,7 +85,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(1,-1);
 		int playerIndex = 2;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == true){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == true){
 				System.out.println("passed testCanUseSoldier test when robber moved, someone to rob");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, someone to rob");
@@ -94,7 +102,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,0);
 		int playerIndex = 2;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when robber moved, person has no resource");
 			} else {
 				fail("fail testCanUseSoldier test when  robber moved, person has no resource");
@@ -109,9 +117,8 @@ public class CanUseSoldierTest {
 	public void testCanUseSoldier9() {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canUseSoldier(newRobberLocation, playerIndex);
+			CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex);
 			fail("fail testCanUseSoldier test when no model present");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanUseSoldier test when no model present");
@@ -125,7 +132,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when not your turn");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not your turn");
@@ -142,7 +149,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when not playing mode");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing mode");
@@ -159,7 +166,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when soldier card is new hand");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when soldier card is new hand");
@@ -176,7 +183,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-1);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
@@ -193,7 +200,7 @@ public class CanUseSoldierTest {
 		HexLocation newRobberLocation = new HexLocation(0,-2);
 		int playerIndex = -1;
 		try {
-			if(modelFacade.canUseSoldier(newRobberLocation, playerIndex) == false){
+			if(CanModelFacade.sole().canUseSoldier(newRobberLocation, playerIndex) == false){
 				System.out.println("passed testCanUseSoldier test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");

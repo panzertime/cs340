@@ -1,12 +1,11 @@
 package model.can.trade.accept;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,13 +14,19 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanAcceptTradeTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -38,9 +43,9 @@ public class CanAcceptTradeTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +62,7 @@ public class CanAcceptTradeTest {
 	public void testCanAcceptTrade() {
 		initModel("good.txt");
 		try {
-			if(modelFacade.canAcceptTrade() == true) {
+			if(CanModelFacade.sole().canAcceptTrade() == true) {
 				System.out.println("passed testCanAcceptTrade test when meets parameters");
 			} else {
 				fail("failed testCanAcceptTrade test when when meets parameters");
@@ -72,7 +77,7 @@ public class CanAcceptTradeTest {
 	public void testCanAcceptTrade5() {
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canAcceptTrade() == true) {
+			if(CanModelFacade.sole().canAcceptTrade() == true) {
 				System.out.println("passed testCanAcceptTrade test when it is not your turn");
 			} else {
 				fail("failed testCanAcceptTrade test when it is not your turn");
@@ -87,7 +92,7 @@ public class CanAcceptTradeTest {
 	public void testCanAcceptTrade6() {
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canAcceptTrade() == true) {
+			if(CanModelFacade.sole().canAcceptTrade() == true) {
 				System.out.println("passed testCanAcceptTrade test when the model is not playing");
 			} else {
 				fail("failed testCanAcceptTrade test when the model is not playing");
@@ -100,9 +105,8 @@ public class CanAcceptTradeTest {
 	//1 – no model
 	@Test
 	public void testCanAcceptTrade2() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canAcceptTrade();
+			CanModelFacade.sole().canAcceptTrade();
 			fail("failed testCanAcceptTrade test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanAcceptTrade test with uninit model");
@@ -114,7 +118,7 @@ public class CanAcceptTradeTest {
 	public void testCanAcceptTrade3() {
 		initModel("noTrade.txt");
 		try {
-			if(modelFacade.canAcceptTrade() == false) {
+			if(CanModelFacade.sole().canAcceptTrade() == false) {
 				System.out.println("passed testCanAcceptTrade test when not offered a trade");
 			} else {
 				fail("failed testCanAcceptTrade test when not your turn");
@@ -129,7 +133,7 @@ public class CanAcceptTradeTest {
 	public void testCanAcceptTrade4() {
 		initModel("noTrade.txt");
 		try {
-			if(modelFacade.canAcceptTrade() == false) {
+			if(CanModelFacade.sole().canAcceptTrade() == false) {
 				System.out.println("passed testCanAcceptTrade test when you don't have the resources");
 			} else {
 				fail("failed testCanAcceptTrade test when you don't have the resources");

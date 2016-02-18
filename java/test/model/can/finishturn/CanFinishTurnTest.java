@@ -1,12 +1,11 @@
 package model.can.finishturn;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,13 +14,19 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanFinishTurnTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel() {
 		JSONParser parser = new JSONParser();
@@ -38,9 +43,9 @@ public class CanFinishTurnTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -61,9 +66,9 @@ public class CanFinishTurnTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -84,9 +89,9 @@ public class CanFinishTurnTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +102,7 @@ public class CanFinishTurnTest {
 	public void testCanFinishTurn4() {
 		this.initModel();
 		try {
-			if(modelFacade.canFinishTurn() == true) {
+			if(CanModelFacade.sole().canEndTurn() == true) {
 				System.out.println("passed canFinishTurn test when playing and your turn");
 			} else {
 				fail("failed canFinishTurn test when playing and your turn");
@@ -110,9 +115,8 @@ public class CanFinishTurnTest {
 	//uninit model
 	@Test
 	public void testCanFinishTurn1() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canFinishTurn();
+			CanModelFacade.sole().canEndTurn();
 			fail("failed canFinishTurn test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed canFinishTurn test with uninit model");
@@ -124,7 +128,7 @@ public class CanFinishTurnTest {
 	public void testCanFinishTurn2() {
 		this.initNotTurnModel();
 		try {
-			if(modelFacade.canFinishTurn() == false) {
+			if(CanModelFacade.sole().canEndTurn() == false) {
 				System.out.println("passed canFinishTurn test when not your turn");
 			} else {
 				fail("failed canFinishTurn test when not your turn");
@@ -139,7 +143,7 @@ public class CanFinishTurnTest {
 	public void testCanFinishTurn3() {
 		this.initRobModel();
 		try {
-			if(modelFacade.canFinishTurn() == false) {
+			if(CanModelFacade.sole().canEndTurn() == false) {
 				System.out.println("passed canFinishTurn test when robbing");
 			} else {
 				fail("failed canFinishTurn test when robbing");

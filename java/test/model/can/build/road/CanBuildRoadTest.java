@@ -1,12 +1,11 @@
 package model.can.build.road;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,16 +14,23 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanBuildRoadTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -41,9 +47,9 @@ public class CanBuildRoadTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -54,9 +60,8 @@ public class CanBuildRoadTest {
 	public void testCanBuildRoad1() {
 		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
 				EdgeDirection.SouthWest);
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canBuildRoad(edgeLoc);
+			CanModelFacade.sole().canBuildRoad(edgeLoc);
 			fail("failed testCanBuildRoad test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanBuildRoad test with uninit model");
@@ -70,7 +75,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthWest);
 		this.initModel("noTurn.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when not your turn");
 			} else {
 				fail("failed testCanBuildRoad test when not your turn");
@@ -87,7 +92,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthWest);
 		this.initModel("noPlaying.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when not in playing mode");
 			} else {
 				fail("failed testCanBuildRoad test when not in playing mode");
@@ -104,7 +109,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.South);
 		this.initModel("goodBuildRoad.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when road loc not open");
 			} else {
 				fail("failed testCanBuildRoad test when road loc not open");
@@ -122,7 +127,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthEast);
 		this.initModel("goodBuildRoad.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when road loc not connected to player");
 			} else {
 				fail("failed testCanBuildRoad test when road loc not connected to player");
@@ -139,7 +144,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthEast);
 		this.initModel("goodBuildRoad.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when road loc on water");
 			} else {
 				fail("failed testCanBuildRoad test when road loc on water");
@@ -156,7 +161,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthWest);
 		this.initModel("noRes.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when user doesn't have res.");
 			} else {
 				fail("failed testCanBuildRoad test when user doesn't have res.");
@@ -173,7 +178,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.South);
 		this.initModel("goodBuildRoadSetup.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when user sets up right next to road");
 			} else {
 				fail("failed testCanBuildRoad test when user sets up right next to road");
@@ -190,7 +195,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.South);
 		this.initModel("goodBuildRoadSetup.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when user doesn't set up next to settlement");
 			} else {
 				fail("failed testCanBuildRoad test when user doesn't set up next to settlement");
@@ -207,7 +212,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.South);
 		this.initModel("goodBuildRoadSetup.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == false) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
 				System.out.println("passed testCanBuildRoad test when places 2nd road near 1st settlement");
 			} else {
 				fail("failed testCanBuildRoad test when places 2nd road near 1st settlement");
@@ -224,7 +229,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.SouthWest);
 		this.initModel("goodBuildRoad.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == true) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == true) {
 				System.out.println("passed testCanBuildRoad test when valid play");
 			} else {
 				fail("failed testCanBuildRoad test when valid play");
@@ -241,7 +246,7 @@ public class CanBuildRoadTest {
 				EdgeDirection.South);
 		this.initModel("goodBuildRoadSetup.txt");
 		try {
-			if(modelFacade.canBuildRoad(edgeLoc) == true) {
+			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == true) {
 				System.out.println("passed testCanBuildRoad test when valid setup");
 			} else {
 				fail("failed testCanBuildRoad test when valid setup");

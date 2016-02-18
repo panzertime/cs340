@@ -1,12 +1,11 @@
 package model.can;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,13 +14,19 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanBuyDevCardTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel() {
 		JSONParser parser = new JSONParser();
@@ -38,9 +43,9 @@ public class CanBuyDevCardTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -61,9 +66,9 @@ public class CanBuyDevCardTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -84,9 +89,9 @@ public class CanBuyDevCardTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -107,9 +112,9 @@ public class CanBuyDevCardTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -130,9 +135,9 @@ public class CanBuyDevCardTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -149,7 +154,7 @@ public class CanBuyDevCardTest {
 	public void testCanBuyDevCard6() {
 		this.initWorkingModel();
 		try {
-			if(modelFacade.canBuyDevCard() == true) {
+			if(CanModelFacade.sole().canBuyDevCard() == true) {
 				System.out.println("passed canBuydevCard test when can buy dev card");
 			} else {
 				fail("fail canBuydevCard test when can buy dev card");
@@ -162,9 +167,8 @@ public class CanBuyDevCardTest {
 	//no model
 	@Test
 	public void testCanBuyDevCard1() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canBuyDevCard();
+			CanModelFacade.sole().canBuyDevCard();
 			fail("failed testCanBuyDevCard test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanBuyDevCard test with uninit model");
@@ -176,7 +180,7 @@ public class CanBuyDevCardTest {
 	public void testCanBuyDevCard2() {
 		this.initNotTurnModel();
 		try {
-			if(modelFacade.canBuyDevCard() == false) {
+			if(CanModelFacade.sole().canBuyDevCard() == false) {
 				System.out.println("passed canBuydevCard test when not your turn");
 			} else {
 				fail("fail canBuydevCard test when not your turn");
@@ -191,7 +195,7 @@ public class CanBuyDevCardTest {
 	public void testCanBuyDevCard3() {
 		this.initRobModel();
 		try {
-			if(modelFacade.canBuyDevCard() == false) {
+			if(CanModelFacade.sole().canBuyDevCard() == false) {
 				System.out.println("passed canBuydevCard test when not playing");
 			} else {
 				fail("fail canBuydevCard test when not playing");
@@ -206,7 +210,7 @@ public class CanBuyDevCardTest {
 	public void testCanBuyDevCard4() {
 		this.initModel();
 		try {
-			if(modelFacade.canBuyDevCard() == false) {
+			if(CanModelFacade.sole().canBuyDevCard() == false) {
 				System.out.println("passed canBuydevCard test when not enough resources");
 			} else {
 				fail("fail canBuydevCard test when not enough resources");
@@ -221,7 +225,7 @@ public class CanBuyDevCardTest {
 	public void testCanBuyDevCard5() {
 		this.initNoDevCardsModel();
 		try {
-			if(modelFacade.canBuyDevCard() == false) {
+			if(CanModelFacade.sole().canBuyDevCard() == false) {
 				System.out.println("passed canBuydevCard test when no more dev cards left");
 			} else {
 				fail("fail canBuydevCard test when no more dev cards left");

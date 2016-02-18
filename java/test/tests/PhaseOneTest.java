@@ -2,9 +2,14 @@ package tests;
 public class PhaseOneTest {
 	
 	public static void main(String[] args) {
+		
+		
 		String[] tests = {
 				"poller.PollerTest",
-				//"proxy.ProxyTest",
+				
+				"proxy.GamesTest",
+				"proxy.GameTest",
+				"proxy.LoginTest",
 
 				"model.ModelTest",
 				
