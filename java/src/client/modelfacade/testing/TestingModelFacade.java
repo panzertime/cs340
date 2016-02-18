@@ -1,7 +1,8 @@
-package client.modelfacade;
+package client.modelfacade.testing;
 
 import org.json.simple.JSONObject;
 
+import client.modelfacade.ModelFacade;
 import shared.model.Model;
 
 public class TestingModelFacade extends ModelFacade {

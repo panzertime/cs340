@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import client.modelfacade.CanModelFacade;
-import client.modelfacade.TestingModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import client.serverfacade.FakeProxy;
 import client.serverfacade.ServerFacade;
 import client.serverfacade.ServerPoller;

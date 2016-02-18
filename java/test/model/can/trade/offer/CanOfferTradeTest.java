@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
-import client.modelfacade.TestingModelFacade;
+import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.ResourceType;
 
