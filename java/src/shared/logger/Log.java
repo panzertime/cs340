@@ -40,7 +40,7 @@ public class Log {
 		return logger;
 	}
 	
-	public static void exception(Exception e) {
+	public static void error(Exception e) {
 		getLogger().log(Level.SEVERE, e.getMessage(), e);
 	}
 	

@@ -19,7 +19,7 @@ import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public class Player {
 
-	private GameModel game;
+	private Model game;
 	private Hand hand;
 	private Settlement[] settlements;
 	private Road[] roads;
@@ -34,7 +34,7 @@ public class Player {
 	private Boolean hasDiscarded;
 	private Integer playerID;
 
-	public Player(JSONObject player, GameModel game) throws BadJSONException {
+	public Player(JSONObject player, Model game) throws BadJSONException {
 		this.game = game;
 		if (player == null)
 			throw new BadJSONException();
@@ -734,8 +734,8 @@ public class Player {
 		return hand.hasResource(type, num);
 	}
 
-	public Boolean hasCards(Map<String, Object> resourceList){
-		return hand.hasCards(resourceList);
+	public Boolean hasCards(Map<ResourceType, Integer> resources){
+		return hand.hasCards(resources);
 	}
 
 	public boolean canDiscardCard() {

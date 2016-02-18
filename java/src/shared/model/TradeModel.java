@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 import shared.model.exceptions.BadJSONException;
+import shared.model.hand.ResourceType;
 
 public class TradeModel {
 	
@@ -25,11 +26,11 @@ public class TradeModel {
 	}
 
 	private Integer receiverID;
-	private int wood;
-	private int brick;
-	private int sheep;
-	private int wheat;
-	private int ore;
+	private Integer wood;
+	private Integer brick;
+	private Integer sheep;
+	private Integer wheat;
+	private Integer ore;
 	
 	
 	public TradeModel(JSONObject tradeOffer) throws BadJSONException
@@ -91,79 +92,79 @@ public class TradeModel {
 		return true;
 	}
 
-	public int getWood() {
+	public Integer getWood() {
 		return wood;
 	}
 
 
-	public void setWood(int wood) {
+	public void setWood(Integer wood) {
 		this.wood = wood;
 	}
 
 
-	public int getBrick() {
+	public Integer getBrick() {
 		return brick;
 	}
 
 
-	public void setBrick(int brick) {
+	public void setBrick(Integer brick) {
 		this.brick = brick;
 	}
 
 
-	public int getSheep() {
+	public Integer getSheep() {
 		return sheep;
 	}
 
 
-	public void setSheep(int sheep) {
+	public void setSheep(Integer sheep) {
 		this.sheep = sheep;
 	}
 
 
-	public int getWheat() {
+	public Integer getWheat() {
 		return wheat;
 	}
 
 
-	public void setWheat(int wheat) {
+	public void setWheat(Integer wheat) {
 		this.wheat = wheat;
 	}
 
 
-	public int getOre() {
+	public Integer getOre() {
 		return ore;
 	}
 
 
-	public void setOre(int ore) {
+	public void setOre(Integer ore) {
 		this.ore = ore;
 	}
 
 
 
-	public Map<String, Object> getResourcesToGive() {
-		Map<String, Object> resources = new HashMap<String, Object>();
-		if (this.getBrick() < 0)
-			resources.put("brick", this.getBrick() * (-1));
-		else
-			resources.put("brick", 0);
-		if (this.getOre() < 0)
-			resources.put("ore", this.getOre() * (-1));
-		else
-			resources.put("ore", 0);
-		if (this.getSheep() < 0)
-		resources.put("sheep", this.getSheep() * (-1));
-		else
-			resources.put("sheep", 0);
-		if (this.getWheat() < 0)
-		resources.put("wheat", this.getWheat() * (-1));
-		else
-			resources.put("wheat", 0);
-		if (this.getWood() < 0)
-		resources.put("wood", this.getWood() * (-1));
-		else
-			resources.put("wood", 0);
+	public Map<ResourceType, Integer> getResourcesToGive() {
+		Map<ResourceType, Integer> resources = new HashMap<ResourceType, Integer>();
+	        if (this.getBrick() < 0)
+	            resources.put(ResourceType.BRICK, this.getBrick() * (-1));
+	        else
+	            resources.put(ResourceType.BRICK, 0);
+	        if (this.getOre() < 0)
+	            resources.put(ResourceType.ORE, this.getOre() * (-1));
+	        else
+	            resources.put(ResourceType.ORE, 0);
+	        if (this.getSheep() < 0)
+	        resources.put(ResourceType.SHEEP, this.getSheep() * (-1));
+	        else
+	            resources.put(ResourceType.SHEEP, 0);
+	        if (this.getWheat() < 0)
+	        resources.put(ResourceType.WHEAT, this.getWheat() * (-1));
+	        else
+	            resources.put(ResourceType.WHEAT, 0);
+	        if (this.getWood() < 0)
+	        resources.put(ResourceType.WOOD, this.getWood() * (-1));
+	        else
+	            resources.put(ResourceType.WOOD, 0);
 		return resources;
 	}
 

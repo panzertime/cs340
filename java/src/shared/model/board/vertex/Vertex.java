@@ -7,7 +7,6 @@ import shared.model.board.hex.HexNotLinkedException;
 import shared.model.board.hex.tiles.water.PortHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
-import shared.model.board.piece.PositionTakenException;
 import shared.model.hand.ResourceType;
 
 public class Vertex {
@@ -99,9 +98,9 @@ public class Vertex {
 	 * @param building the building to set
 	 * @throws PositionTakenException 
 	 */
-	public void setBuilding(Building building) throws PositionTakenException {
+	public void setBuilding(Building building) {
 		if (this.building != null)
-			throw new PositionTakenException();
+			assert false;
 		this.building = building;
 	}
 

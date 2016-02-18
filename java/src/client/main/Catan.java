@@ -6,6 +6,8 @@ import client.catan.*;
 import client.login.*;
 import client.join.*;
 import client.misc.*;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.base.*;
 
 /**
@@ -43,6 +45,9 @@ public class Catan extends JFrame
 	
 	public static void main(final String[] args)
 	{
+		CanModelFacade.sole();
+		DoModelFacade.sole();
+		
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -1,12 +1,11 @@
 package model.can;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,14 +14,19 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
-import shared.model.GameModel;
+import client.modelfacade.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanSendChatTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 	
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -39,9 +43,9 @@ public class CanSendChatTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -51,9 +55,8 @@ public class CanSendChatTest {
 	
 	@Test
 	public void testCanSendChatNoModel() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canSendChat();
+			CanModelFacade.sole().canSendChat();
 			fail("Fail - canSendChat while not logged in");
 		} catch (NullPointerException e) {
 			System.out.println("passed canSendChat while no game exists");
@@ -65,7 +68,7 @@ public class CanSendChatTest {
 	public void testCanSendChatLoggedIn() {
 		try {
 			initModel("jsonMap.txt");
-			if(modelFacade.canSendChat() == true) {
+			if(CanModelFacade.sole().canSendChat() == true) {
 				System.out.println("passed canSendChat while player is in a normal game");
 			} else
 			{
@@ -76,12 +79,13 @@ public class CanSendChatTest {
 		}
 	}
 	
+	
 	//not turn
 	@Test
 	public void testCanSendChatLoggedIn1() {
 		try {
 			initModel("notyourturn.txt");
-			if(modelFacade.canSendChat() == true) {
+			if(CanModelFacade.sole().canSendChat() == true) {
 				System.out.println("passed canSendChat while player is in a normal game and it's not their turn");
 			} else
 			{
@@ -97,7 +101,7 @@ public class CanSendChatTest {
 	public void testCanSendChatLoggedIn2() {
 		try {
 			initModel("robjson.txt");
-			if(modelFacade.canSendChat() == true) {
+			if(CanModelFacade.sole().canSendChat() == true) {
 				System.out.println("passed canSendChat while player is in a normal game and not in playing mode");
 			} else
 			{

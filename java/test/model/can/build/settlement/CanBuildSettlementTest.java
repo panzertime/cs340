@@ -1,12 +1,11 @@
 package model.can.build.settlement;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,16 +14,23 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanBuildSettlementTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -41,9 +47,9 @@ public class CanBuildSettlementTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -62,7 +68,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == true) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == true) {
 				System.out.println("passed testCanBuildSettlement test when in playing mode and test meets parameters");
 			} else {
 				fail("failed testCanBuildSettlement test when in playing mode and test meets parameters");
@@ -85,7 +91,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
 		initModel("goodSetup.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == true) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == true) {
 				System.out.println("passed testCanBuildSettlement test when in setup mode and test meets parameters");
 			} else {
 				fail("failed testCanBuildSettlement test when in setup mode and test meets parameters");
@@ -99,9 +105,8 @@ public class CanBuildSettlementTest {
 	@Test
 	public void testCanBuildSettlement3() {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canBuildSettlement(vertLoc);
+			CanModelFacade.sole().canBuildSettlement(vertLoc);
 			fail("failed testCanBuildSettlement test when no model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanBuildSettlement test when no model");
@@ -114,7 +119,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 				System.out.println("passed testCanBuildSettlement test when not your turn");
 			} else {
 				fail("failed testCanBuildSettlement test when not your turn");
@@ -130,7 +135,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
 		initModel("noPlaying.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 				System.out.println("passed testCanBuildSettlement test when not in playing mode");
 			} else {
 				fail("failed testCanBuildSettlement test when not in playing mode");
@@ -146,7 +151,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,0), VertexDirection.SouthWest);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 				System.out.println("passed testCanBuildSettlement test when not an open location");
 			} else {
 				fail("failed testCanBuildSettlement test when not an open location");
@@ -162,7 +167,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,3), VertexDirection.SouthWest);
 		initModel("good.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 				System.out.println("passed testCanBuildSettlement test when placing on water");
 			} else {
 				fail("failed testCanBuildSettlement test when placing on water");
@@ -178,7 +183,7 @@ public class CanBuildSettlementTest {
 			VertexLocation vertLoc = new VertexLocation(new HexLocation(1,1), VertexDirection.NorthWest);
 			initModel("good.txt");
 			try {
-				if(modelFacade.canBuildSettlement(vertLoc) == false) {
+				if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 					System.out.println("passed testCanBuildSettlement test when placing on an adjacent vertex");
 				} else {
 					fail("failed testCanBuildSettlement test when placing on an adjacent vertex");
@@ -194,7 +199,7 @@ public class CanBuildSettlementTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(2,0), VertexDirection.NorthWest);
 		initModel("noRes.txt");
 		try {
-			if(modelFacade.canBuildSettlement(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildSettlement(vertLoc) == false) {
 				System.out.println("passed testCanBuildSettlement test when not enough resources");
 			} else {
 				fail("failed testCanBuildSettlement test when not enough resources");

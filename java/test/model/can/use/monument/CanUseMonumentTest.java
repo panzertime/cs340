@@ -1,12 +1,11 @@
 package model.can.use.monument;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,13 +14,20 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanUseMonumentTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -38,9 +44,9 @@ public class CanUseMonumentTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -49,9 +55,8 @@ public class CanUseMonumentTest {
 	//game not created
 	@Test
 	public void testCanUseMonument1() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canUseMonument();
+			CanModelFacade.sole().canUseMonument();
 			fail("failed testCanUseMonument test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanUseMonument test with uninit model");
@@ -63,7 +68,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument2() {
 		this.initModel("notTurn.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
+			if(CanModelFacade.sole().canUseMonument() == false) {
 				System.out.println("passed testCanUseMonument test when not your turn");
 			} else {
 				fail("failed testCanUseMonument test when not your turn");
@@ -78,7 +83,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument3() {
 		this.initModel("notPlaying.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
+			if(CanModelFacade.sole().canUseMonument() == false) {
 				System.out.println("passed testCanUseMonument test when not playing state");
 			} else {
 				fail("failed testCanUseMonument test when not playing state");
@@ -93,7 +98,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument4() {
 		this.initModel("noHave.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
+			if(CanModelFacade.sole().canUseMonument() == false) {
 				System.out.println("passed testCanUseMonument test when user does not have card");
 			} else {
 				fail("failed testCanUseMonument test when user does not have card");
@@ -108,7 +113,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument5() {
 		this.initModel("alreadyDeved.txt");
 		try {
-			if(modelFacade.canUseMonument() == true) {
+			if(CanModelFacade.sole().canUseMonument() == true) {
 				System.out.println("passed testCanUseMonument test when user already played dev card");
 			} else {
 				fail("failed testCanUseMonument test when user already played dev card");
@@ -123,7 +128,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument6() {
 		this.initModel("notEnoughPoints.txt");
 		try {
-			if(modelFacade.canUseMonument() == false) {
+			if(CanModelFacade.sole().canUseMonument() == false) {
 				System.out.println("passed testCanUseMonument test when user does not have enough points");
 			} else {
 				fail("failed testCanUseMonument test when user does not have enough points");
@@ -138,7 +143,7 @@ public class CanUseMonumentTest {
 	public void testCanUseMonument7() {
 		this.initModel("goodMonument.txt");
 		try {
-			if(modelFacade.canUseMonument() == true) {
+			if(CanModelFacade.sole().canUseMonument() == true) {
 				System.out.println("passed testCanUseMonument test when meets parameters");
 			} else {
 				fail("failed testCanUseMonument test when meets paramaters");

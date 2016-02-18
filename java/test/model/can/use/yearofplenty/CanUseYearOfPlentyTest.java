@@ -6,21 +6,29 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.ResourceType;
 
 public class CanUseYearOfPlentyTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -37,9 +45,9 @@ public class CanUseYearOfPlentyTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -59,7 +67,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.ORE;
 		initModel("good.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == true) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == true) {
 				System.out.println("passed testCanUseYearOfPlenty test when user can play card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user can play card");
@@ -74,9 +82,8 @@ public class CanUseYearOfPlentyTest {
 	public void testCanUseYearOfPlenty1() {
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canUseYearOfPlenty(one, two);
+			CanModelFacade.sole().canUseYearOfPlenty(one, two);
 			fail("failed testCanUseYearOfPlenty test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanUseYearOfPlenty test with uninit model");
@@ -90,7 +97,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType one = ResourceType.BRICK;
 		ResourceType two = ResourceType.ORE;
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when not playing");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing");
@@ -107,7 +114,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.ORE;
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when not playing");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when not playing");
@@ -124,7 +131,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.ORE;
 		initModel("newCard.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when user doesn't have card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user doesn't have card");
@@ -141,7 +148,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.ORE;
 		initModel("alreadyPlayed.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when user already played card");
 			} else {
 				fail("fail testCanUseYearOfPlenty test when user already played card");
@@ -158,7 +165,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.BRICK;
 		initModel("noRes1.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when user "
 						+ "asks for ore(1st resource) and there aren't any");
 			} else {
@@ -178,7 +185,7 @@ public class CanUseYearOfPlentyTest {
 		ResourceType two = ResourceType.BRICK;
 		initModel("noRes2.txt");
 		try {
-			if(modelFacade.canUseYearOfPlenty(one, two) == false) {
+			if(CanModelFacade.sole().canUseYearOfPlenty(one, two) == false) {
 				System.out.println("passed testCanUseYearOfPlenty test when user "
 						+ "asks for bricks(2nd resource) and there aren't any");
 			} else {

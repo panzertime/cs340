@@ -1,12 +1,11 @@
 package model.can.build.city;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,16 +14,23 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 
 public class CanBuildCityTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 	
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -41,9 +47,9 @@ public class CanBuildCityTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -62,7 +68,7 @@ public class CanBuildCityTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
 		initModel("buildCity.txt");
 		try {
-			if(modelFacade.canBuildCity(vertLoc) == true) {
+			if(CanModelFacade.sole().canBuildCity(vertLoc) == true) {
 				System.out.println("passed testCanBuildCity test when given good input and should return true");
 			} else {
 				fail("failed testCanUseMonopoly test when given good input and should return true");
@@ -76,9 +82,8 @@ public class CanBuildCityTest {
 	@Test
 	public void testCanBuildCity2() {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canBuildCity(vertLoc);
+			CanModelFacade.sole().canBuildCity(vertLoc);
 			fail("failed testCanUseMonopoly test when no model is present");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanBuildCity test when no model is present");
@@ -91,7 +96,7 @@ public class CanBuildCityTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
 		initModel("noTurn.txt");
 		try {
-			if(modelFacade.canBuildCity(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
 				System.out.println("passed testCanBuildCity test when not your turn");
 			} else {
 				fail("failed testCanUseMonopoly test when not your turn");
@@ -107,7 +112,7 @@ public class CanBuildCityTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
 		initModel("noPlay.txt");
 		try {
-			if(modelFacade.canBuildCity(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
 				System.out.println("passed testCanBuildCity test when not playing");
 			} else {
 				fail("failed testCanUseMonopoly test when not playing");
@@ -123,7 +128,7 @@ public class CanBuildCityTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,0), VertexDirection.SouthWest);
 		initModel("buildCity.txt");
 		try {
-			if(modelFacade.canBuildCity(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
 				System.out.println("passed testCanBuildCity test when building on anothers settlement");
 			} else {
 				fail("failed testCanUseMonopoly test when building on anothers settlement");
@@ -139,7 +144,7 @@ public class CanBuildCityTest {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
 		initModel("resources.txt");
 		try {
-			if(modelFacade.canBuildCity(vertLoc) == false) {
+			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
 				System.out.println("passed testCanBuildCity test when user doesn't have resources");
 			} else {
 				fail("failed testCanUseMonopoly test when user doesn't have resources");

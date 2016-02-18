@@ -1,12 +1,11 @@
 package model.can.use.monopoly;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,14 +14,21 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.ModelAccessException;
 import shared.model.hand.ResourceType;
 
 public class CanUseMonopolyTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
+
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -39,9 +45,9 @@ public class CanUseMonopolyTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -51,9 +57,8 @@ public class CanUseMonopolyTest {
 	@Test
 	public void testCanUseMonopoly1() {
 		ResourceType type = ResourceType.BRICK;
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canUseMonopoly(type);
+			CanModelFacade.sole().canUseMonopoly(type);
 			fail("failed testCanUseMonopoly test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanUseMonopoly test with uninit model");
@@ -66,7 +71,7 @@ public class CanUseMonopolyTest {
 		this.initModel("notTurn.txt");
 		ResourceType type = ResourceType.BRICK;
 		try {
-			if(modelFacade.canUseMonopoly(type) == false) {
+			if(CanModelFacade.sole().canUseMonopoly(type) == false) {
 				System.out.println("passed testCanUseMonopoly test when not your turn");
 			} else {
 				fail("failed testCanUseMonopoly test when not your turn");
@@ -82,7 +87,7 @@ public class CanUseMonopolyTest {
 		this.initModel("notPlaying.txt");
 		ResourceType type = ResourceType.BRICK;
 		try {
-			if(modelFacade.canUseMonopoly(type) == false) {
+			if(CanModelFacade.sole().canUseMonopoly(type) == false) {
 				System.out.println("passed testCanUseMonopoly test when not in playing mode");
 			} else {
 				fail("failed testCanUseMonopoly test when not in playing mode");
@@ -98,7 +103,7 @@ public class CanUseMonopolyTest {
 		this.initModel("noCard.txt");
 		ResourceType type = ResourceType.BRICK;
 		try {
-			if(modelFacade.canUseMonopoly(type) == false) {
+			if(CanModelFacade.sole().canUseMonopoly(type) == false) {
 				System.out.println("passed testCanUseMonopoly test when you don't have the card");
 			} else {
 				fail("failed testCanUseMonopoly test when you don't have the card");
@@ -114,7 +119,7 @@ public class CanUseMonopolyTest {
 		this.initModel("alreadyDeved.txt");
 		ResourceType type = ResourceType.BRICK;
 		try {
-			if(modelFacade.canUseMonopoly(type) == false) {
+			if(CanModelFacade.sole().canUseMonopoly(type) == false) {
 				System.out.println("passed testCanUseMonopoly test when you already played dev card");
 			} else {
 				fail("failed testCanUseMonopoly test when you already played dev card");
@@ -130,7 +135,7 @@ public class CanUseMonopolyTest {
 		this.initModel("goodMonopoly.txt");
 		ResourceType type = ResourceType.BRICK;
 		try {
-			if(modelFacade.canUseMonopoly(type) == true) {
+			if(CanModelFacade.sole().canUseMonopoly(type) == true) {
 				System.out.println("passed testCanUseMonopoly test when meets parameters");
 			} else {
 				fail("failed testCanUseMonopoly test when when meets parameters");

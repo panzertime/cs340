@@ -1,12 +1,11 @@
 package model.can.roll;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 import java.util.Scanner;
 
 import org.json.simple.JSONObject;
@@ -15,13 +14,20 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
+import client.modelfacade.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
 
 
 public class CanRollNumberTest {
 	
-	ModelFacade modelFacade;
+	@Before
+	public void initFacades() {
+		CanModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().setUserID(0);
+		TestingModelFacade.sole().emptyModel();
+	}
 
 	public void initModel(String file) {
 		JSONParser parser = new JSONParser();
@@ -38,9 +44,9 @@ public class CanRollNumberTest {
 			}
 			scanner.close();
 			
-			Map jsonModel = (Map) parser.parse(x);
+			JSONObject jsonModel = (JSONObject) parser.parse(x);
+			ModelFacade.setModel(jsonModel);
 			
-			modelFacade = new ModelFacade((JSONObject) jsonModel, 0);
 		} catch (FileNotFoundException | ParseException | BadJSONException e) {
 			e.printStackTrace();
 		}
@@ -49,9 +55,8 @@ public class CanRollNumberTest {
 	//unit model
 	@Test
 	public void testCanRollNumber1() {
-		ModelFacade mf = new ModelFacade();
 		try {
-			mf.canRollNumber();
+			CanModelFacade.sole().canRollDice();
 			fail("failed canRoll test with uninit model");
 		} catch (NullPointerException e) {
 			System.out.println("passed canRoll test with uninit model");
@@ -63,7 +68,7 @@ public class CanRollNumberTest {
 	public void testCanRollNumber2() {
 		try {
 			this.initModel("noTurn.txt");
-			if(modelFacade.canRollNumber() == false) {
+			if(CanModelFacade.sole().canRollDice() == false) {
 				System.out.println("passed canRoll test when not your turn");
 			} else {
 				fail("failed canRoll test when not your turn");
@@ -78,7 +83,7 @@ public class CanRollNumberTest {
 	public void testCanRollNumber3() {
 		try {
 			this.initModel("good.txt");
-			if(modelFacade.canRollNumber() == true) {
+			if(CanModelFacade.sole().canRollDice() == true) {
 				System.out.println("passed canRoll test when your turn");
 			} else {
 				fail("failed canRoll test when your turn");
@@ -93,7 +98,7 @@ public class CanRollNumberTest {
 	public void testCanRollNumber4() {
 		try {
 			this.initModel("noRolling.txt");
-			if(modelFacade.canRollNumber() == false) {
+			if(CanModelFacade.sole().canRollDice() == false) {
 				System.out.println("passed canRoll test when not rolling");
 			} else {
 				fail("failed canRoll test when not rolling");

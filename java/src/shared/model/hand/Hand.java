@@ -663,15 +663,15 @@ public class Hand {
 		return (getHandSize() > 7);
 	}
 
-	public Boolean hasCards(Map<String, Object> resourceList) {
+	public Boolean hasCards(Map<ResourceType, Integer> resourceList) {
 
 		if (resourceList == null)
 			return false;
-		Integer w = ((Integer) resourceList.get("wood"));
-		Integer b = ((Integer) resourceList.get("brick"));
-		Integer s = ((Integer) resourceList.get("sheep"));
-		Integer wh = ((Integer) resourceList.get("wheat"));
-		Integer o = ((Integer) resourceList.get("ore"));
+		Integer w = resourceList.get(ResourceType.WOOD);
+		Integer b = resourceList.get(ResourceType.BRICK);
+		Integer s = resourceList.get(ResourceType.SHEEP);
+		Integer wh = resourceList.get(ResourceType.WHEAT);
+		Integer o = resourceList.get(ResourceType.ORE);
 		if (w == null || b == null || s == null || wh == null || o == null)
 			return false;
 

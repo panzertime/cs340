@@ -2,11 +2,13 @@ package shared.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.modelfacade.ModelFacade;
 import shared.logger.Log;
 import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
@@ -20,15 +22,25 @@ import shared.model.exceptions.BadStatusException;
 import shared.model.exceptions.BadTurnStatusException;
 import shared.model.hand.ResourceType;
 
-public class GameModel {
-
+public class Model {
+	
+	private static List<ModelFacade> listeners = new ArrayList<ModelFacade>();
+	
+	public static void registerListener(ModelFacade newListener) {
+		listeners.add(newListener);
+	}
+	
+	public static void shareNewModel(Model model) {
+		for (ModelFacade listener : listeners)
+			listener.updateModel(model);
+	}
+ 
 	private Board board;
 	private Map<Integer, Player> players;
 	private Bank bank;
 	private Achievements achievements;
-	private Boolean setup;
 	private Integer activePlayerIndex;
-	private Integer winnerID;
+	private Integer winnerIndex;
 	private Integer version;
 	private String status;
 	private ChatModel chatModel;
@@ -49,7 +61,7 @@ public class GameModel {
 	 * @throws Exception
 	 */
 
-	public GameModel(JSONObject jsonMap) throws BadJSONException {
+	public Model(JSONObject jsonMap) throws BadJSONException {
 		if (jsonMap == null)
 			throw new BadJSONException();
 		bank = new Bank((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck"));
@@ -75,7 +87,7 @@ public class GameModel {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			throw new BadJSONException();
-		this.winnerID = winnerID.intValue();
+		this.winnerIndex = winnerID.intValue();
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
 		if (turnTracker == null)
@@ -92,7 +104,8 @@ public class GameModel {
 		try {
 			setStatus(s);
 		} catch (BadStatusException e) {
-			Log.exception(e);
+			Log.error(e);
+			throw new BadJSONException();
 		}
 		Long longestRoadOwnerID = ((Long) turnTracker.get("longestRoad"));
 		Long largestArmyOwnerID = ((Long) turnTracker.get("largestArmy"));
@@ -134,7 +147,7 @@ public class GameModel {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			return false;
-		if (winnerID.intValue() != this.winnerID)
+		if (winnerID.intValue() != this.winnerIndex)
 			return false;
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
@@ -269,21 +282,6 @@ public class GameModel {
 
 	}
 
-	/**
-	 * @return True if setup
-	 */
-	public Boolean getSetup() {
-		return setup;
-	}
-
-	/**
-	 * @param setup
-	 *            - True if setup phase
-	 */
-	public void setSetup(Boolean setup) {
-		this.setup = setup;
-	}
-
 	public Player getPlayer(Integer playerID) {
 		return players.get(playerID);
 	}
@@ -318,11 +316,11 @@ public class GameModel {
 	}
 
 	public Player getWinner() {
-		return players.get(winnerID);
+		return players.get(winnerIndex);
 	}
 
 	public void setWinner(Integer playerID) {
-		this.winnerID = playerID;
+		this.winnerIndex = playerID;
 	}
 
 	public void setVersion(int version) {
@@ -352,7 +350,7 @@ public class GameModel {
 	// The status of the client model is 'Discarding'
 	// You have over 7 cards
 	// You have the cards you're choosing to discard
-	public Boolean canDiscardCard(Integer playerID, Map<String, Object> resourceList) {
+	public Boolean canDiscardCard(Integer playerID, Map<ResourceType, Integer> resources) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
 		if (!isActivePlayer(playerID))
@@ -361,7 +359,7 @@ public class GameModel {
 			return false;
 		if (!getActivePlayer().canDiscardCard())
 			return false;
-		if (!getActivePlayer().hasCards(resourceList))
+		if (!getActivePlayer().hasCards(resources))
 			return false;
 		return true;
 	}
@@ -377,12 +375,14 @@ public class GameModel {
 		return true;
 	}
 
-	public Boolean canOfferTrade(Integer playerID, Map<String, Object> resourceList) {
+	public Boolean canOfferTrade(Integer playerID, Map<ResourceType, Integer> resourceList, Integer receiverIndex) {
 		if (!isActivePlayer(playerID))
 			return false;
 		if (!getStatus().equalsIgnoreCase("Playing"))
 			return false;
 		if (!getActivePlayer().hasCards(resourceList))
+			return false;
+		if (players.get(receiverIndex) == null)
 			return false;
 		return true;
 	}
@@ -493,11 +493,11 @@ public class GameModel {
 			return false;
 		if (!getActivePlayer().hasRoadBuildingToUse())
 			return false;
-		if (!canBuildRoadWithCard(playerID, one))
+		if (!getBoard().canBuildRoad(getActivePlayer(), one))
 			return false;
-		if (!canBuildRoadWithCard(playerID, two))
+		if (!getBoard().canBuildRoadTwo(getActivePlayer(), one, two))
 			return false;
-		if (!canBuildTwoRoad(playerID, one, two))
+		if (!getActivePlayer().hasRoadPiece())
 			return false;
 		return true;
 	}
@@ -520,30 +520,6 @@ public class GameModel {
 		if (!getStatus().equalsIgnoreCase("Playing"))
 			return false;
 		if (getActivePlayer().getVictoryPointsWithMonuments() < 10)
-			return false;
-		return true;
-	}
-
-	private boolean canBuildTwoRoad(Integer playerID, EdgeLocation one, EdgeLocation two) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getStatus().equalsIgnoreCase("Playing"))
-			return false;
-		if (!getActivePlayer().hasRoadPiece())
-			return false;
-		if (!getBoard().canBuildRoadTwo(getActivePlayer(), one, two))
-			return false;
-		return true;
-	}
-
-	private Boolean canBuildRoadWithCard(Integer playerID, EdgeLocation edge) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getStatus().equalsIgnoreCase("Playing"))
-			return false;
-		if (!getActivePlayer().hasRoadPiece())
-			return false;
-		if (!getBoard().canBuildRoad(getActivePlayer(), edge))
 			return false;
 		return true;
 	}

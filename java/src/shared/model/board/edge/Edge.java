@@ -3,7 +3,6 @@ package shared.model.board.edge;
 import shared.logger.Log;
 import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexNotLinkedException;
-import shared.model.board.piece.PositionTakenException;
 import shared.model.board.piece.Road;
 import shared.model.board.vertex.Vertex;
 
@@ -115,9 +114,9 @@ public class Edge {
 	 * @param road the road to set
 	 * @throws PositionTakenException 
 	 */
-	public void setRoad(Road road) throws PositionTakenException {
+	public void setRoad(Road road) {
 		if (this.road != null)
-			throw new PositionTakenException();
+			assert false;
 		this.road = road;
 	}
 

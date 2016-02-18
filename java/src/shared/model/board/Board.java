@@ -6,7 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import shared.model.GameModel;
+import shared.model.Model;
 import shared.model.Player;
 import shared.model.board.edge.Edge;
 import shared.model.board.edge.EdgeDirection;
@@ -24,7 +24,6 @@ import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.hex.tiles.water.WaterHex;
 import shared.model.board.piece.Building;
 import shared.model.board.piece.City;
-import shared.model.board.piece.PositionTakenException;
 import shared.model.board.piece.Road;
 import shared.model.board.piece.Robber;
 import shared.model.board.piece.Settlement;
@@ -35,7 +34,7 @@ import shared.model.exceptions.BadJSONException;
 
 public class Board {
 
-	private GameModel game;
+	private Model game;
 	private Robber robber;
 	private Map<HexLocation, Hex> hexes;
 
@@ -44,7 +43,7 @@ public class Board {
 	 * @param game reference to the model
 	 * @throws BadJSONException any time jsonMap is missing elements
 	 */
-	public Board(JSONObject jsonMap, GameModel game) throws BadJSONException {
+	public Board(JSONObject jsonMap, Model game) throws BadJSONException {
 		this.game = game;
 
 		hexes = new HashMap<HexLocation, Hex>();
@@ -196,11 +195,7 @@ public class Board {
 
 			EdgeLocation edgeLoc = new EdgeLocation(hexLoc, edgeDir);
 
-			try {
-				buildRoad(road, edgeLoc);
-			} catch (PositionTakenException e) {
-				throw new BadJSONException();
-			}
+			buildRoad(road, edgeLoc);
 		}
 
 		// place cities
@@ -230,11 +225,7 @@ public class Board {
 
 			VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
 
-			try {
-				buildCity(city, vertexLoc);
-			} catch (PositionTakenException e) {
-				throw new BadJSONException();
-			}
+			buildCity(city, vertexLoc);
 		}
 
 		// place settlements
@@ -264,11 +255,7 @@ public class Board {
 
 			VertexLocation vertexLoc = new VertexLocation(hexLoc, vertexDir);
 
-			try {
-				buildSettlement(settlement, vertexLoc);
-			} catch (PositionTakenException e) {
-				throw new BadJSONException();
-			}
+			buildSettlement(settlement, vertexLoc);
 		}
 
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
@@ -455,19 +442,19 @@ public class Board {
 		robber.setHex(target);
 	}
 
-	public void buildSettlement(Settlement settlement, VertexLocation vertexLoc) throws PositionTakenException {
+	public void buildSettlement(Settlement settlement, VertexLocation vertexLoc) {
 		Vertex vertex = getVertexAt(vertexLoc);
 		settlement.setVertex(vertex);
 		vertex.setBuilding(settlement);
 	}
 
-	public void buildCity(City city, VertexLocation vertexLoc) throws PositionTakenException {
+	public void buildCity(City city, VertexLocation vertexLoc) {
 		Vertex vertex = getVertexAt(vertexLoc);
 		city.setVertex(vertex);
 		vertex.setBuilding(city);
 	}
 
-	public void buildRoad(Road road, EdgeLocation edgeLoc) throws PositionTakenException {
+	public void buildRoad(Road road, EdgeLocation edgeLoc) {
 		Edge edge = getEdgeAt(edgeLoc);
 		road.setEdge(edge);
 		edge.setRoad(road);
@@ -557,7 +544,7 @@ public class Board {
 	 * @param game
 	 * @return Boolean if jsonMap matches the boards state.
 	 */
-	public Boolean equalsJSON(JSONObject jsonMap, GameModel game) {
+	public Boolean equalsJSON(JSONObject jsonMap, Model game) {
 
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 

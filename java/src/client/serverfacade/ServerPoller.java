@@ -11,7 +11,6 @@ import shared.model.exceptions.BadJSONException;
 public class ServerPoller extends Thread {
 	
 	private ServerFacade outbound;
-	private ModelFacade inbound;
 
 	// for testing, no UI to propagate exceptions to yet 
 	private boolean hasFailed;
@@ -19,12 +18,9 @@ public class ServerPoller extends Thread {
 	/**
 	 * constructs new serverpoller
 	 */
-	public ServerPoller(ServerFacade outbound, ModelFacade inbound){
+	public ServerPoller(ServerFacade outbound){
 		super();
-
-		this.inbound = inbound;
 		this.outbound = outbound;
-
 		hasFailed = false;
 	}
 
@@ -59,14 +55,14 @@ public class ServerPoller extends Thread {
 	public void run(){
 		while(true){
 			try {
-				this.sleep(1500);
+				Thread.sleep(1500);
 				JSONObject result = poll();
 				if(result == null){
 					System.out.println("POLLER says: received null input");
 				}
 				else {
 					System.out.println("POLLER says: setting game model");
-					inbound.setModel(result);
+					ModelFacade.setModel(result);
 				}
 			}
 			catch(InterruptedException e){

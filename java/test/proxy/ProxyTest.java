@@ -1,19 +1,19 @@
 package proxy;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import client.serverfacade.*;
+import client.serverfacade.ServerException;
+import client.serverfacade.ServerFacade;
+import client.serverfacade.ServerProxy;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
-
-import org.junit.Before;
 
 public class ProxyTest {
 	
@@ -393,7 +393,7 @@ public class ProxyTest {
 	// @Test
 	public void testdiscard200() {
 		int playerIndex = 0;
-		List<ResourceType> discardedCards = null;
+		Map<ResourceType, Integer> discardedCards = null;
 		try {
 			serverFacade.discard(playerIndex, discardedCards);
 		} catch (ServerException e) {
