@@ -91,7 +91,7 @@ public class ServerProxy implements IServerProxy{
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
-			System.out.println("Cookie for POST is: " + cookie);
+			System.out.println("Cookie for POST " + endpoint + " is: " + cookie);
 			System.out.println("User cookie: " + userCookie);
 			System.out.println("Game cookie: " + gameCookie);
 			connection.setRequestMethod(method);
@@ -160,12 +160,20 @@ public class ServerProxy implements IServerProxy{
 			throws ServerProxyException {
 
 		try {
-			String cookie = userCookie + "; " + gameCookie;
+
+			String cookie = "catan.user=" + userCookie;
+			if(!gameCookie.equals("")){
+				cookie = cookie + "; " + gameCookie;
+			}
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
+			System.out.println("Cookie for GET " + endpoint + " is: " + cookie);
+			System.out.println("User cookie: " + userCookie);
+			System.out.println("Game cookie: " + gameCookie);
 			connection.setRequestMethod(method);
 
+			
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, " + endpoint + " says: "
 					+ connection.getResponseMessage();
@@ -541,7 +549,7 @@ public class ServerProxy implements IServerProxy{
 		try {
 			String call = "/game/model?version=" + currentVersion;
 			String response = submitRequest("GET", call);
-			if(response.equals("true")){
+			if(response.equals("{true\"")){
 				return null;
 			}
 			return makeJSON(submitRequest("GET", call));
@@ -624,7 +632,7 @@ public class ServerProxy implements IServerProxy{
 	public boolean addAI(JSONObject addAIRequest) 
 			throws ServerProxyException {
 		try {
-			 if (submitRequest("POST", "/game/addAI", addAIRequest).equals("Success")) {
+			 if (submitRequest("POST", "/game/addAI", addAIRequest).equals("{uccess")) {
 			 	return true;
 			}
 			return false;

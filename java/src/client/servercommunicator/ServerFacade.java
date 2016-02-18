@@ -46,6 +46,8 @@ public class ServerFacade {
 			return json;
 		}
 		catch(Exception e){
+			System.out.println("The offending JSON: ");
+			System.out.println(stringJSON);
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
 	}

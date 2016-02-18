@@ -27,11 +27,15 @@ public class GameTests {
 		sp.setURL("http://localhost:8081");
 		serverFacade.setProxy(sp);
 		try {
-			gameID = serverFacade.getGames().size();
-			gameID -= 1;
+			serverFacade.login("Sam","sam");
+			String name = "Newgame " + getSeed();
+			JSONObject newGame = (JSONObject) 
+					serverFacade.createNewGame(false, false, false, name);
+			System.out.println("Passed create new game test");
+			gameID = ((Long) newGame.get("id")).intValue();
 			CatanColor color = CatanColor.BLUE;
 			System.out.println("Using 'new' game has ID: " + gameID);
-			serverFacade.login("Sam","sam");
+
 			serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
 			System.out.println("Failed initializing GameTests");
@@ -71,11 +75,17 @@ public class GameTests {
 	public void testlistAI200() {
 		try {
 			serverFacade.listAI();
+			System.out.println("Passed list AI types test");
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed listAI Proxy test");
 		}
 		
+	}
+
+//	@Test
+	public void doNothingTest() {
+		return;
 	}
 
 }
