@@ -1,8 +1,8 @@
 package client.turntracker;
 
 import client.base.*;
-import shared.models.board.piece.PieceType;
-import shared.models.definitions.CatanColor;
+import shared.model.board.piece.PieceType;
+import shared.model.definitions.CatanColor;
 
 /**
  * Interface for the turn tracker view, which displays whose turn it is, and

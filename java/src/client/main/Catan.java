@@ -6,9 +6,9 @@ import client.catan.*;
 import client.login.*;
 import client.join.*;
 import client.misc.*;
-import client.servercommunicator.IServerProxy;
-import client.servercommunicator.ServerFacade;
-import client.servercommunicator.ServerProxy;
+import client.serverfacade.IServerProxy;
+import client.serverfacade.ServerFacade;
+import client.serverfacade.ServerProxy;
 import client.base.*;
 
 /**

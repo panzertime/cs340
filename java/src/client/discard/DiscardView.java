@@ -43,7 +43,7 @@ import javax.swing.border.LineBorder;
 import client.base.OverlayView;
 import client.custom.cwt.RoundedButton;
 import client.utils.ImageUtils;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 import client.utils.FontUtils;
 
 /*

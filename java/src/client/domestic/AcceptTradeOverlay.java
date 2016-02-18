@@ -16,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import client.base.*;
 import client.utils.ImageUtils;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 
 /**

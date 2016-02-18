@@ -4,11 +4,11 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import shared.models.board.piece.PieceType;
-import shared.models.definitions.CatanColor;
 import client.base.*;
 import client.catan.*;
 import client.utils.ImageUtils;
+import shared.model.board.piece.PieceType;
+import shared.model.definitions.CatanColor;
 
 
 /**

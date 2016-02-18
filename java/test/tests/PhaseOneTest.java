@@ -4,7 +4,7 @@ public class PhaseOneTest {
 	public static void main(String[] args) {
 		String[] tests = {
 				"poller.PollerTest",
-				"proxy.ProxyTest",
+				//"proxy.ProxyTest",
 
 				"model.ModelTest",
 				

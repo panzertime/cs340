@@ -1,6 +1,6 @@
 package model.can.use.yearofplenty;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,13 +12,11 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
-import shared.models.hand.ResourceType;
+import client.modelfacade.ModelFacade;
+import shared.model.exceptions.BadJSONException;
+import shared.model.hand.ResourceType;
 
 public class CanUseYearOfPlentyTest {
 	
@@ -62,12 +60,12 @@ public class CanUseYearOfPlentyTest {
 		initModel("good.txt");
 		try {
 			if(modelFacade.canUseYearOfPlenty(one, two) == true) {
-				System.out.println("passed testCanUseYearOfPlenty test when user already played card");
+				System.out.println("passed testCanUseYearOfPlenty test when user can play card");
 			} else {
-				fail("fail testCanUseYearOfPlenty test when user already played card");
+				fail("fail testCanUseYearOfPlenty test when user can play card");
 			}
 		} catch (NullPointerException e) {
-			fail("fail testCanUseYearOfPlenty test when user already played card - could not access model");
+			fail("fail testCanUseYearOfPlenty test when user can play card - could not access model");
 		}
 	}
 	

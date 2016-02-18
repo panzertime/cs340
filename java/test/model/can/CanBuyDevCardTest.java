@@ -15,9 +15,9 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
+import client.modelfacade.ModelFacade;
+import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
 
 public class CanBuyDevCardTest {
 	

@@ -10,8 +10,8 @@ import javax.swing.event.ChangeListener;
 
 import client.base.*;
 import client.utils.*;
-import shared.models.hand.ResourceType;
-import shared.models.hand.development.DevCardType;
+import shared.model.hand.ResourceType;
+import shared.model.hand.development.DevCardType;
 
 import java.util.*;
 

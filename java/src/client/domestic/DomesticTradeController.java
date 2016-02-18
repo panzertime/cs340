@@ -2,7 +2,7 @@ package client.domestic;
 
 import client.base.*;
 import client.misc.*;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 
 /**

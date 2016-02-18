@@ -12,7 +12,7 @@ import client.misc.WaitView;
 import client.roll.RollController;
 import client.roll.RollResultView;
 import client.roll.RollView;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 @SuppressWarnings("serial")
 public class CatanPanel extends JPanel

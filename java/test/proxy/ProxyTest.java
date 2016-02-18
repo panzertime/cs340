@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.junit.Before;
 
-import client.servercommunicator.*;
-import shared.models.board.edge.EdgeLocation;
-import shared.models.board.hex.HexLocation;
-import shared.models.board.vertex.VertexLocation;
-import shared.models.definitions.CatanColor;
-import shared.models.hand.ResourceType;
+import client.serverfacade.*;
+import shared.model.board.edge.EdgeLocation;
+import shared.model.board.hex.HexLocation;
+import shared.model.board.vertex.VertexLocation;
+import shared.model.definitions.CatanColor;
+import shared.model.hand.ResourceType;
+
+import org.junit.Before;
 
 public class ProxyTest {
 	

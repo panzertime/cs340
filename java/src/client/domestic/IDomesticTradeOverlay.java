@@ -2,7 +2,7 @@ package client.domestic;
 
 import client.base.*;
 import client.data.*;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 /**
  * Implementation of the domestic trade overlay, which allows the user to

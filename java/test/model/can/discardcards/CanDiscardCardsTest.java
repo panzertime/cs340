@@ -1,6 +1,6 @@
 package model.can.discardcards;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -13,12 +13,10 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.exceptions.BadJSONException;
-import shared.models.hand.exceptions.BadResourceTypeException;
+import client.modelfacade.ModelFacade;
+import shared.model.exceptions.BadJSONException;
 
 public class CanDiscardCardsTest {
 	
@@ -71,8 +69,6 @@ public class CanDiscardCardsTest {
 			}
 		} catch (NullPointerException e) {
 			fail("failed testCanDiscardCards test when meets parameters - model not created");
-		} catch (BadResourceTypeException e) {
-			fail("failed testCanDiscardCards test when meets parameters - you passed me a bad resource map");
 		}
 	}
 	
@@ -91,8 +87,6 @@ public class CanDiscardCardsTest {
 			fail("failed testCanDiscardCards test when there is no model init");
 		} catch (NullPointerException e) {
 			System.out.println("passed testCanDiscardCards test when there is no model init");
-		} catch (BadResourceTypeException e) {
-			fail("failed testCanDiscardCards test when there is no model init - you passed me a bad resource map");
 		}
 	}
 	
@@ -114,8 +108,6 @@ public class CanDiscardCardsTest {
 			}
 		} catch (NullPointerException e) {
 			fail("failed testCanDiscardCards test when not discarding - model not created");
-		} catch (BadResourceTypeException e) {
-			fail("failed testCanDiscardCards test when not discarding - you passed me a bad resource map");
 		}
 	}
 	
@@ -137,8 +129,6 @@ public class CanDiscardCardsTest {
 			}
 		} catch (NullPointerException e) {
 			fail("failed testCanDiscardCards test when you have less than 8 cards - model not created");
-		} catch (BadResourceTypeException e) {
-			fail("failed testCanDiscardCards test you have less than 8 cards - you passed me a bad resource map");
 		}
 	}
 	
@@ -160,8 +150,6 @@ public class CanDiscardCardsTest {
 			}
 		} catch (NullPointerException e) {
 			fail("failed testCanDiscardCards test when you don't have the cards to discard that you think you do - model not created");
-		} catch (BadResourceTypeException e) {
-			fail("failed testCanDiscardCards test when you don't have the cards to discard that you think you do - you passed me a bad resource map");
 		}
 	}
 }

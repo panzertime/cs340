@@ -7,9 +7,9 @@ import java.io.File;
 
 import javax.swing.*;
 
-import shared.models.hand.ResourceType;
 import client.base.*;
 import client.utils.ImageUtils;
+import shared.model.hand.ResourceType;
 
 //TODO Craig: I think one thing that could help layout is to simply add .preferedSize() to the createGet/GivePane
 // Also, I'm not sure if you have moved the folder for the images, but that is just in the starting variables.  :D

@@ -15,7 +15,7 @@ import javax.swing.*;
 import client.base.*;
 import client.data.*;
 import client.utils.FontUtils;
-import shared.models.hand.ResourceType;
+import shared.model.hand.ResourceType;
 
 
 /**

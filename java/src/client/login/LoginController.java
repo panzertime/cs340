@@ -2,10 +2,6 @@ package client.login;
 
 import client.base.*;
 import client.misc.*;
-import client.servercommunicator.ServerException;
-import client.servercommunicator.ServerFacade;
-import shared.models.ModelFacade;
-import shared.models.exceptions.SignInException;
 
 import java.net.*;
 import java.io.*;
@@ -79,7 +75,7 @@ public class LoginController extends Controller implements ILoginController {
 		String username = getLoginView().getLoginUsername();
 		String password = getLoginView().getLoginPassword();
 		if(username != null && password != null) {
-			try {
+			/*try {
 				ModelFacade.get_instance().signIn(username, password);
 				
 				// If log in succeeded
@@ -87,7 +83,7 @@ public class LoginController extends Controller implements ILoginController {
 				loginAction.execute();
 			} catch (SignInException e) {
 				//TODO : login failed
-			}
+			}*/
 		}
 	}
 
@@ -101,7 +97,7 @@ public class LoginController extends Controller implements ILoginController {
 		if(username != null && password1 != null)
 		{
 			if(password1.equals(password2)) {
-				try {
+				/*try {
 					ModelFacade.get_instance().register(username, password1);
 					
 					// If register succeeded
@@ -109,7 +105,7 @@ public class LoginController extends Controller implements ILoginController {
 					loginAction.execute();
 				} catch (SignInException e) {
 					//TODO : register failed
-				}
+				}*/
 			}
 		}
 	}

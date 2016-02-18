@@ -15,13 +15,13 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
-import shared.models.ModelFacade;
-import shared.models.board.edge.EdgeDirection;
-import shared.models.board.edge.EdgeLocation;
-import shared.models.board.hex.HexLocation;
-import shared.models.exceptions.BadJSONException;
-import shared.models.exceptions.ModelAccessException;
-import shared.models.hand.ResourceType;
+import client.modelfacade.ModelFacade;
+import shared.model.board.edge.EdgeDirection;
+import shared.model.board.edge.EdgeLocation;
+import shared.model.board.hex.HexLocation;
+import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
+import shared.model.hand.ResourceType;
 
 public class CanUseRoadBuildingTest {
 	
