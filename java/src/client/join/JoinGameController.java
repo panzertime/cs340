@@ -148,7 +148,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			messageView.showModal();
 		} else {
 			try {
-				//TODO: add yourself to the game before running this line.
+				//TODO: add yourself to the game
+				//ServerFacade.get_instance().joinGame(gameID, color);
 				ServerFacade.get_instance().createNewGame(randHexes, randNums, randPorts, title);
 				updateGames();
 				getNewGameView().closeModal();
