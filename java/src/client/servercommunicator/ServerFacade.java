@@ -500,41 +500,16 @@ public class ServerFacade {
 		}
 	}
 
-	public Map discard(int playerIndex, List<ResourceType> discardedCards)
+	public Map discard(int playerIndex, Map<ResourceType, int> discardedCards)
 			throws ServerException {
 		try {
 			StringBuilder resList = new StringBuilder();
-			if(discardedCards.contains(ResourceType.BRICK)){
-				resList.append("{brick : 1,");
-			}
-			else {
-				resList.append("{brick : 0,");
-			}
-			if(discardedCards.contains(ResourceType.ORE)){
-				resList.append("ore : 1,");
-			}
-			else {
-				resList.append("ore : 0,");
-			}
-			if(discardedCards.contains(ResourceType.SHEEP)){
-				resList.append("sheep : 1,");
-			}
-			else {
-				resList.append("sheep : 0,");
-			}
-			if(discardedCards.contains(ResourceType.WHEAT)){
-				resList.append("wheat : 1,");
-			}
-			else {
-				resList.append("wheat : 0,");
-			}
-			if(discardedCards.contains(ResourceType.WOOD)){
-				resList.append("wood : 1}");
-			}
-			else {
-				resList.append("wood : 0}");
-			}
-
+			resList.append("{");
+			resList.append("\"brick\" : " + discardedCards.get("BRICK") + ", ");
+			resList.append("\"ore\" : " + discardedCards.get("ORE") + ", ");
+			resList.append("\"sheep\" : " + discardedCards.get("SHEEP") + ", ");
+			resList.append("\"wheat\" : " + discardedCards.get("WHEAT") + ", ");
+			resList.append("\"wood\" : " + discardedCards.get("WOOD") + "}");
 
 			String content = "{type: \"discardCards\", " +
 						"playerIndex: " + playerIndex + ", " +
