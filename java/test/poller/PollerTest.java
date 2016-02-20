@@ -33,6 +33,7 @@ public class PollerTest {
 				fail("Poller failed poll test");
 			}
 			System.out.println("Poller passed poll test");
+			SP.interrupt();
 		}
 		catch(Exception e){
 			fail("Poller had an exception: " + e.toString());
