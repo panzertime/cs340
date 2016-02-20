@@ -500,7 +500,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map discard(int playerIndex, Map<ResourceType, int> discardedCards)
+	public Map discard(int playerIndex, Map<ResourceType, Integer> discardedCards)
 			throws ServerException {
 		try {
 			StringBuilder resList = new StringBuilder();
