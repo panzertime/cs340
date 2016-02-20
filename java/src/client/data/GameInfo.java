@@ -2,6 +2,11 @@ package client.data;
 
 import java.util.*;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import shared.model.exceptions.BadJSONException;
+
 /**
  * Used to pass game information into views<br>
  * <br>
@@ -24,6 +29,45 @@ public class GameInfo
 		setId(-1);
 		setTitle("");
 		players = new ArrayList<PlayerInfo>();
+	}
+	
+	public GameInfo(JSONObject jsonGame) throws BadJSONException {
+		String title = (String) jsonGame.get("title");
+		Long id = (Long) jsonGame.get("id");
+		
+		if(title == null) {
+			throw new BadJSONException("Null Game Title");
+		} else if (id == null) {
+			throw new BadJSONException("Null Game ID");
+		}
+		
+		this.title = title;
+		this.id = id.intValue();
+		
+		JSONArray players = (JSONArray) jsonGame.get("players");
+		this.players = new ArrayList<PlayerInfo>();
+		for(Object player : players) {
+			JSONObject jsonPlayer = (JSONObject) player;
+			PlayerInfo PlayerInfo = new PlayerInfo(jsonPlayer);
+			this.players.add(PlayerInfo);
+		}
+	}
+
+	public JSONObject toJSON() {
+		JSONObject result = new JSONObject();
+		result.put("title", title);
+		result.put("id", id);
+		JSONArray players = playersToJSON();
+		result.put("players", players);
+		return result;
+	}
+
+	private JSONArray playersToJSON() {
+		JSONArray result = new JSONArray();
+		for(PlayerInfo player : players) {
+			result.add(player.toJSON());
+		}
+		return result;
 	}
 	
 	public int getId()

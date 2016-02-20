@@ -2,10 +2,14 @@ package client.login;
 
 import client.base.*;
 import client.misc.*;
+import client.modelfacade.ModelFacade;
+import client.serverfacade.ServerException;
+import client.serverfacade.ServerFacade;
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.lang.reflect.*;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -71,44 +75,52 @@ public class LoginController extends Controller implements ILoginController {
 	@Override
 	public void signIn() {
 		
-		// TODO: log in user
 		String username = getLoginView().getLoginUsername();
 		String password = getLoginView().getLoginPassword();
 		if(username != null && password != null) {
-			/*try {
-				ModelFacade.get_instance().signIn(username, password);
+			try {
+				//ModelFacade.get_instance().signIn(username, password);
+				ServerFacade.get_instance().login(username, password);
 				
 				// If log in succeeded
 				getLoginView().closeModal();
 				loginAction.execute();
-			} catch (SignInException e) {
-				//TODO : login failed
-			}*/
+			} catch (ServerException e) {
+				messageView.setTitle("Error!");
+				messageView.setMessage("Sign in failed.");
+				messageView.showModal();
+			}
 		}
 	}
 
 	@Override
 	public void register() {
-		
-		// TODO: register new user (which, if successful, also logs them in)
 		String username = getLoginView().getRegisterUsername();
+		int usernameLen = username.length();
 		String password1 = getLoginView().getRegisterPassword();
+		int passwordLen = password1.length();
 		String password2 = getLoginView().getRegisterPasswordRepeat();
-		if(username != null && password1 != null)
+		if(username != null && password1 != null &&
+				!(usernameLen < 3 || usernameLen > 7) &&
+				!(passwordLen < 5) && password1.equals(password2) && 
+				!password1.matches("^.*[^a-zA-Z0-9_-].*$"))
 		{
-			if(password1.equals(password2)) {
-				/*try {
-					ModelFacade.get_instance().register(username, password1);
-					
-					// If register succeeded
-					getLoginView().closeModal();
-					loginAction.execute();
-				} catch (SignInException e) {
-					//TODO : register failed
-				}*/
+			try {
+				ServerFacade.get_instance().register(username, password1);
+				
+				// If register succeeded
+				getLoginView().closeModal();
+				loginAction.execute();
+			} catch (ServerException e) {
+				messageView.setTitle("Error!");
+				messageView.setMessage("Register failed.");
+				messageView.showModal();
 			}
+		} else {
+			messageView.setTitle("Warning!");
+			messageView.setMessage("Invalid username or password.");
+			messageView.showModal();
 		}
 	}
-
 }
 
