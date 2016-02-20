@@ -14,8 +14,8 @@ public class PollerTest {
 	
 	@Before
 	public void initFacades() {
-		CanModelFacade.sole().setUserID(0);
-		TestingModelFacade.sole().setUserID(0);
+		CanModelFacade.sole().setUserIndex(0);
+		TestingModelFacade.sole().setUserIndex(0);
 	}
 
 	@Test
@@ -30,8 +30,10 @@ public class PollerTest {
 			SP.start();
 			Thread.sleep(5000);
 			if(!TestingModelFacade.sole().hasModel()){
+				SP.interrupt();
 				fail("Poller failed poll test");
 			}
+			SP.interrupt();
 			System.out.println("Poller passed poll test");
 		}
 		catch(Exception e){

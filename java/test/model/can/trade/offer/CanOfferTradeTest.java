@@ -26,8 +26,8 @@ public class CanOfferTradeTest {
 	
 	@Before
 	public void initFacades() {
-		CanModelFacade.sole().setUserID(0);
-		TestingModelFacade.sole().setUserID(0);
+		CanModelFacade.sole().setUserIndex(0);
+		TestingModelFacade.sole().setUserIndex(0);
 		TestingModelFacade.sole().emptyModel();
 	}
 
