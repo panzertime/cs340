@@ -9,8 +9,8 @@ import client.data.*;
 import client.misc.*;
 import client.modelfacade.ModelFacade;
 import client.modelfacade.get.GetModelFacade;
-import client.serverfacade.ServerException;
-import client.serverfacade.ServerFacade;
+import client.servercommunicator.ServerException;
+import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 

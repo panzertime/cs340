@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import client.serverfacade.ServerFacade;
+import client.servercommunicator.ServerFacade;
 import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;

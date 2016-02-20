@@ -1,6 +1,6 @@
 package shared.model.exceptions;
 
-import client.serverfacade.ServerException;
+import client.servercommunicator.ServerException;
 
 public class JoinGameException extends Exception {
 

@@ -3,8 +3,8 @@ package client.login;
 import client.base.*;
 import client.misc.*;
 import client.modelfacade.ModelFacade;
-import client.serverfacade.ServerException;
-import client.serverfacade.ServerFacade;
+import client.servercommunicator.ServerException;
+import client.servercommunicator.ServerFacade;
 
 import java.net.*;
 import java.io.*;

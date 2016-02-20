@@ -4,9 +4,9 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
-import client.serverfacade.ServerException;
-import client.serverfacade.ServerFacade;
-import client.serverfacade.ServerProxy;
+import client.servercommunicator.ServerException;
+import client.servercommunicator.ServerFacade;
+import client.servercommunicator.ServerProxy;
 
 public class LoginTest {
 	

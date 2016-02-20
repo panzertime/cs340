@@ -5,9 +5,9 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import client.serverfacade.ServerException;
-import client.serverfacade.ServerFacade;
-import client.serverfacade.ServerProxy;
+import client.servercommunicator.ServerException;
+import client.servercommunicator.ServerFacade;
+import client.servercommunicator.ServerProxy;
 import shared.model.definitions.CatanColor;
 
 public class GamesTest {

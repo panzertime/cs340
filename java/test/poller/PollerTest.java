@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.testing.TestingModelFacade;
-import client.serverfacade.FakeProxy;
-import client.serverfacade.ServerFacade;
-import client.serverfacade.ServerPoller;
+import client.servercommunicator.FakeProxy;
+import client.servercommunicator.ServerFacade;
+import client.servercommunicator.ServerPoller;
 
 public class PollerTest {
 	
