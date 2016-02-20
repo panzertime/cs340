@@ -2,7 +2,9 @@ package client.modelfacade;
 
 import org.json.simple.JSONObject;
 
+import client.data.PlayerInfo;
 import shared.model.Model;
+import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 
 public abstract class ModelFacade {
@@ -11,21 +13,30 @@ public abstract class ModelFacade {
 		Model.registerListener(this);
 	}
 
-	protected Integer userID;
-	protected Model gameModel;
+	protected PlayerInfo playerInfo;
 
-	protected Integer getUserIndex() {
-		return gameModel.getIndexFromPlayerID(userID);
-	}
+	protected Model gameModel;
 	
 	public void updateModel(Model model) {
 		gameModel = model;
 	}
 	
 	public void setUserID(Integer userID) {
-		this.userID = userID; 
+		this.playerInfo.setId(userID); 
 	}
 	
+	public void setUserIndex(Integer userIndex) {
+		this.playerInfo.setPlayerIndex(userIndex);
+	}
+	
+	public void setUserColor(CatanColor color) {
+		this.playerInfo.setColor(color);
+	}
+	
+	public void setUserName(String name) {
+		this.playerInfo.setName(name);
+	}
+		
 	synchronized public static void setModel(JSONObject jsonModel) throws BadJSONException {
 		Model.shareNewModel(new Model(jsonModel));
 	}

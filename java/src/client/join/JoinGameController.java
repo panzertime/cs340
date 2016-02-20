@@ -1,9 +1,18 @@
 package client.join;
 
+import java.util.List;
+
+import org.json.simple.JSONArray;
+
 import client.base.*;
 import client.data.*;
 import client.misc.*;
+import client.modelfacade.ModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import client.serverfacade.ServerException;
+import client.serverfacade.ServerFacade;
 import shared.model.definitions.CatanColor;
+import shared.model.exceptions.BadJSONException;
 
 
 /**
@@ -89,8 +98,27 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void start() {
-		
+		GameInfo[] games = getGames();
+		PlayerInfo localPlayer = GetModelFacade.sole().getPlayerInfo();
+		getJoinGameView().setGames(games, localPlayer);
 		getJoinGameView().showModal();
+	}
+
+	private GameInfo[] getGames() {
+		GameInfo[] result = null;
+		try {
+			List GamesList = ServerFacade.get_instance().getGames();
+			Games games = new Games((JSONArray) GamesList);
+			result = games.getGames().toArray(new GameInfo[0]);
+		} catch (ServerException e) {
+			System.err.println("Could not get games after a valid login.");
+			e.printStackTrace();
+		} catch (BadJSONException e) {
+			System.err.println("Received a bad JSON from file.");
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
@@ -113,7 +141,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
-
 		getSelectColorView().showModal();
 	}
 
