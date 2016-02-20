@@ -1,10 +1,9 @@
-package client.servercommunicator;
+package client.serverfacade;
+
+import org.json.simple.JSONObject;
 
 import client.modelfacade.ModelFacade;
-import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
-
-import org.json.simple.*;
 
 /**
  * Periodically pings the server to see if updates need to be synced to the client model
@@ -12,7 +11,6 @@ import org.json.simple.*;
 public class ServerPoller extends Thread {
 	
 	private ServerFacade outbound;
-	private ModelFacade inbound;
 
 	// for testing, no UI to propagate exceptions to yet 
 	private boolean hasFailed;
@@ -20,12 +18,9 @@ public class ServerPoller extends Thread {
 	/**
 	 * constructs new serverpoller
 	 */
-	public ServerPoller(ServerFacade outbound, ModelFacade inbound){
+	public ServerPoller(ServerFacade outbound){
 		super();
-
-		this.inbound = inbound;
 		this.outbound = outbound;
-
 		hasFailed = false;
 	}
 
@@ -33,7 +28,6 @@ public class ServerPoller extends Thread {
 	// for debugging, really
 		return hasFailed;
 	}
-
 
 	/**
 	 * periodically polls server
@@ -61,15 +55,14 @@ public class ServerPoller extends Thread {
 	public void run(){
 		while(true){
 			try {
-				this.sleep(1500);
+				Thread.sleep(1500);
 				JSONObject result = poll();
 				if(result == null){
 					System.out.println("POLLER says: received null input");
 				}
 				else {
 					System.out.println("POLLER says: setting game model");
-					
-					inbound.setModel(result);
+					ModelFacade.setModel(result);
 				}
 			}
 			catch(InterruptedException e){
