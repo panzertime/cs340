@@ -66,7 +66,7 @@ public class ServerPoller extends Thread {
 				}
 			}
 			catch(InterruptedException e){
-				System.out.println("Poller wait interrupted");
+				System.out.println("Poller stopped by interrupt");
 				// do nothing, we will simply skip this poll and wait for the next one
 			}
 			catch(BadJSONException e){
