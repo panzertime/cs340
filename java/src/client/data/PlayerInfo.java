@@ -27,12 +27,16 @@ public class PlayerInfo
 	
 	public PlayerInfo()
 	{
+		createNullPlayer();
+	}
+	
+	private void createNullPlayer() {
 		setId(-1);
 		setPlayerIndex(-1);
 		setName("");
 		setColor(CatanColor.WHITE);
 	}
-	
+
 	public PlayerInfo(JSONObject jsonPlayer) throws BadJSONException {
 		String color = (String) jsonPlayer.get("color");
 		String name = (String) jsonPlayer.get("name");
@@ -44,7 +48,7 @@ public class PlayerInfo
 			throw new BadJSONException("Bad Catan Color inputed");
 		} catch(NullPointerException e) {		
 			if(name == null && id == null) {
-				//uninitialized
+				createNullPlayer();
 				return;
 			} else {
 				throw new BadJSONException("No Catan Color Inputed");
@@ -138,6 +142,16 @@ public class PlayerInfo
 		final PlayerInfo other = (PlayerInfo) obj;
 		
 		return this.id == other.id;
+	}
+
+	/**
+	 * This function assumes that
+	 * id and index = -1 and color is white only for non existing players
+	 * @return Whether or not a player exists
+	 */
+	public boolean exists() {
+		return (!this.name.isEmpty() && this.id != -1 && this.playerIndex != -1
+				&& this.color != CatanColor.WHITE);
 	}
 }
 

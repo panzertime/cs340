@@ -48,8 +48,11 @@ public class GameInfo
 		this.players = new ArrayList<PlayerInfo>();
 		for(Object player : players) {
 			JSONObject jsonPlayer = (JSONObject) player;
-			PlayerInfo PlayerInfo = new PlayerInfo(jsonPlayer);
-			this.players.add(PlayerInfo);
+			PlayerInfo tmpPlayer = new PlayerInfo(jsonPlayer);
+			if(tmpPlayer.exists())
+			{
+				this.players.add(tmpPlayer);
+			} //else, dne, do not add
 		}
 	}
 

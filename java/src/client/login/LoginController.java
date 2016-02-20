@@ -77,19 +77,16 @@ public class LoginController extends Controller implements ILoginController {
 		
 		String username = getLoginView().getLoginUsername();
 		String password = getLoginView().getLoginPassword();
-		if(username != null && password != null) {
-			try {
-				//ModelFacade.get_instance().signIn(username, password);
-				ServerFacade.get_instance().login(username, password);
-				
-				// If log in succeeded
-				getLoginView().closeModal();
-				loginAction.execute();
-			} catch (ServerException e) {
-				messageView.setTitle("Error!");
-				messageView.setMessage("Sign in failed.");
-				messageView.showModal();
-			}
+		try {
+			ServerFacade.get_instance().login(username, password);
+			
+			// If log in succeeded
+			getLoginView().closeModal();
+			loginAction.execute();
+		} catch (ServerException e) {
+			messageView.setTitle("Error!");
+			messageView.setMessage("Sign in failed.");
+			messageView.showModal();
 		}
 	}
 

@@ -98,10 +98,14 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void start() {
+		updateGames();
+		getJoinGameView().showModal();
+	}
+	
+	private void updateGames() {
 		GameInfo[] games = getGames();
 		PlayerInfo localPlayer = GetModelFacade.sole().getPlayerInfo();
 		getJoinGameView().setGames(games, localPlayer);
-		getJoinGameView().showModal();
 	}
 
 	private GameInfo[] getGames() {
@@ -123,20 +127,37 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startCreateNewGame() {
-		
 		getNewGameView().showModal();
 	}
 
 	@Override
 	public void cancelCreateNewGame() {
-		
 		getNewGameView().closeModal();
 	}
 
 	@Override
 	public void createNewGame() {
+		boolean randHexes = getNewGameView().getRandomlyPlaceHexes();
+		boolean randNums = getNewGameView().getRandomlyPlaceNumbers();
+		boolean randPorts = getNewGameView().getUseRandomPorts();
+		String title = getNewGameView().getTitle();
 		
-		getNewGameView().closeModal();
+		if(title.isEmpty()) {
+			messageView.setTitle("Warning!");
+			messageView.setMessage("The game title is empty.");
+			messageView.showModal();
+		} else {
+			try {
+				//TODO: add yourself to the game before running this line.
+				ServerFacade.get_instance().createNewGame(randHexes, randNums, randPorts, title);
+				updateGames();
+				getNewGameView().closeModal();
+			} catch (ServerException e) {
+				System.err.println("Could not add game");
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
