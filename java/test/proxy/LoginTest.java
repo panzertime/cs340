@@ -50,7 +50,7 @@ public class LoginTest {
 	@Test
 	public void testregister200() {
 		String username = "Newguy" + getSeed();
-		System.out.println("Generated random test username: " + username);
+//		System.out.println("Generated random test username: " + username);
 		String password = "Newguypass";
 		try {
 			if(serverFacade.register(username, password) > -1){

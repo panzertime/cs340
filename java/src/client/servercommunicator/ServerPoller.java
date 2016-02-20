@@ -43,8 +43,7 @@ public class ServerPoller extends Thread {
 			return model;
 		}
 		catch(Exception e){ 	
-			System.out.println("Poller exception: " + e.toString());
-			e.printStackTrace();
+		//	System.out.println("Poller exception: " + e.toString());
 
 			hasFailed = true;
 			return null; 
@@ -66,8 +65,9 @@ public class ServerPoller extends Thread {
 				}
 			}
 			catch(InterruptedException e){
+				System.out.println("POLLER says: dying");
 				System.out.println("Poller stopped by interrupt");
-				// do nothing, we will simply skip this poll and wait for the next one
+				return;
 			}
 			catch(BadJSONException e){
 				System.out.println("Poller exception: " + e.toString());

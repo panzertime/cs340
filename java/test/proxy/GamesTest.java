@@ -60,10 +60,9 @@ public class GamesTest {
 		try {
 			JSONObject newGame = (JSONObject) 
 					serverFacade.createNewGame(randomTiles, randomNumbers, randomPorts, name);
-			System.out.println("Passed create new game test");
 			gameID = ((Long) newGame.get("id")).intValue();
 			setID(gameID);
-			System.out.println("New game has ID: " + gameID);
+			System.out.println("Passed create new game test");			
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed createNewGame Proxy test");
@@ -77,7 +76,6 @@ public class GamesTest {
 		gameID = serverFacade.getGames().size();
 		gameID -= 2;
 		CatanColor color = CatanColor.PUCE;
-		System.out.println("Using 'new' game has ID: " + gameID);
 		serverFacade.joinGame(gameID, color);
 		System.out.println("Passed join game test");
 		} catch (ServerException e) {

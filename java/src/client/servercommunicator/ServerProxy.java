@@ -33,11 +33,11 @@ public class ServerProxy implements IServerProxy{
 		char bracket = matchable.charAt(matchable.length() - 1);
 		String closer;
 		if(bracket == ']'){
-			System.out.println("Matching a [");		
+			// System.out.println("Matching a [");		
 			closer = "[";
 		}
 		else {
-			System.out.println("Matching a {");
+			// System.out.println("Matching a {");
 			closer = "{";
 		}
 		return closer + matchable;
@@ -52,7 +52,7 @@ public class ServerProxy implements IServerProxy{
 			return json;
 		}
 		catch(Exception e){
-			System.out.println("Problem parsing JSON: " + stringJSON);
+			// System.out.println("Problem parsing JSON: " + stringJSON);
 			e.printStackTrace();
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
@@ -67,7 +67,7 @@ public class ServerProxy implements IServerProxy{
 			return json;
 		}
 		catch(Exception e){
-			System.out.println("Problem parsing JSON: " + stringJSON);
+			// System.out.println("Problem parsing JSON: " + stringJSON);
 			e.printStackTrace();
 			throw new ServerProxyException("JSON probably invalid", e);
 		}
@@ -91,9 +91,9 @@ public class ServerProxy implements IServerProxy{
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
-			System.out.println("Cookie for POST " + endpoint + " is: " + cookie);
-			System.out.println("User cookie: " + userCookie);
-			System.out.println("Game cookie: " + gameCookie);
+			// System.out.println("Cookie for POST " + endpoint + " is: " + cookie);
+			// System.out.println("User cookie: " + userCookie);
+			// System.out.println("Game cookie: " + gameCookie);
 			connection.setRequestMethod(method);
 			connection.setDoOutput(true);
 			
@@ -106,7 +106,7 @@ public class ServerProxy implements IServerProxy{
 			requestBody.flush();
 			requestBody.close();
 
-			System.out.println("POST arguments are: " + arguments.toJSONString());
+			// System.out.println("POST arguments are: " + arguments.toJSONString());
 	
 			if (connection.getResponseCode() != 200) {
 				String problemMessage = "Request returned 400, server says: "
@@ -168,9 +168,9 @@ public class ServerProxy implements IServerProxy{
 			URLConnection connectionSeed = new URL(serverURL + endpoint).openConnection();
 			HttpURLConnection connection = (HttpURLConnection) connectionSeed;
 			connection.setRequestProperty("Cookie", cookie);
-			System.out.println("Cookie for GET " + endpoint + " is: " + cookie);
-			System.out.println("User cookie: " + userCookie);
-			System.out.println("Game cookie: " + gameCookie);
+			// System.out.println("Cookie for GET " + endpoint + " is: " + cookie);
+			// System.out.println("User cookie: " + userCookie);
+			// System.out.println("Game cookie: " + gameCookie);
 			connection.setRequestMethod(method);
 
 			
@@ -273,7 +273,7 @@ public class ServerProxy implements IServerProxy{
 				userCookie = connection.getHeaderField("Set-cookie");
 				userCookie = userCookie.substring(11);
 				userCookie = userCookie.substring(0, userCookie.length() - 8);
-				System.out.println("Setting cookie: " + userCookie);
+				// System.out.println("Setting cookie: " + userCookie);
 
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}

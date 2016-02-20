@@ -26,10 +26,10 @@ public class GameTest {
 			String name = "Newgame " + getSeed();
 			JSONObject newGame = (JSONObject) 
 					serverFacade.createNewGame(false, false, false, name);
-			System.out.println("Passed create new game test");
+			// System.out.println("Passed create new game test");
 			gameID = ((Long) newGame.get("id")).intValue();
 			CatanColor color = CatanColor.BLUE;
-			System.out.println("Using 'new' game has ID: " + gameID);
+			// System.out.println("Using 'new' game has ID: " + gameID);
 
 			serverFacade.joinGame(gameID, color);
 		} catch (ServerException e) {
@@ -47,6 +47,7 @@ public class GameTest {
 		int version = 0;
 		try {
 			serverFacade.getModel(version);
+			System.out.println("Passed get-model test");
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed getModel Proxy test");
@@ -59,6 +60,7 @@ public class GameTest {
 		String aiType = "LARGEST_ARMY";
 		try {
 			serverFacade.addAI(aiType);
+			System.out.println("Passed add AI test");
 		} catch (ServerException e) {
 			e.printStackTrace();
 			fail("Failed addAI Proxy test");
@@ -78,10 +80,6 @@ public class GameTest {
 		
 	}
 
-//	@Test
-	public void doNothingTest() {
-		return;
-	}
 
 }
 

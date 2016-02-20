@@ -29,13 +29,11 @@ public class PollerTest {
 			ServerPoller SP = new ServerPoller(sFacade);
 			SP.start();
 			Thread.sleep(5000);
+			SP.interrupt();
 			if(!TestingModelFacade.sole().hasModel()){
-				SP.interrupt();
 				fail("Poller failed poll test");
 			}
-			SP.interrupt();
 			System.out.println("Poller passed poll test");
-			SP.interrupt();
 		}
 		catch(Exception e){
 			fail("Poller had an exception: " + e.toString());
