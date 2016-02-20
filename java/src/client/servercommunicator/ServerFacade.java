@@ -1,16 +1,16 @@
-package client.serverfacade;
+package client.servercommunicator;
 
 import java.util.List;
 import java.util.Map;
-
-import org.json.simple.*;
-import org.json.simple.parser.*;
 
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
+
+import org.json.simple.*;
+import org.json.simple.parser.*;
 
 public class ServerFacade {
 	
@@ -500,15 +500,40 @@ public class ServerFacade {
 		}
 	}
 
-	public Map discard(int playerIndex, Map<ResourceType, Integer> resources)
+	public Map discard(int playerIndex, List<ResourceType> discardedCards)
 			throws ServerException {
 		try {
-			String resList = 
-			"{wood : " + resources.get(ResourceType.WOOD) + '\n' +
-			"{brick : " + resources.get(ResourceType.BRICK) + '\n' +
-			"{sheep : " + resources.get(ResourceType.SHEEP) + '\n' +
-			"{wheat : " + resources.get(ResourceType.WHEAT) + '\n' +
-			"{ore : " + resources.get(ResourceType.ORE) + '}';
+			StringBuilder resList = new StringBuilder();
+			if(discardedCards.contains(ResourceType.BRICK)){
+				resList.append("{brick : 1,");
+			}
+			else {
+				resList.append("{brick : 0,");
+			}
+			if(discardedCards.contains(ResourceType.ORE)){
+				resList.append("ore : 1,");
+			}
+			else {
+				resList.append("ore : 0,");
+			}
+			if(discardedCards.contains(ResourceType.SHEEP)){
+				resList.append("sheep : 1,");
+			}
+			else {
+				resList.append("sheep : 0,");
+			}
+			if(discardedCards.contains(ResourceType.WHEAT)){
+				resList.append("wheat : 1,");
+			}
+			else {
+				resList.append("wheat : 0,");
+			}
+			if(discardedCards.contains(ResourceType.WOOD)){
+				resList.append("wood : 1}");
+			}
+			else {
+				resList.append("wood : 0}");
+			}
 
 
 			String content = "{type: \"discardCards\", " +
