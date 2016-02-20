@@ -1,4 +1,4 @@
-package client.serverfacade;
+package client.servercommunicator;
 
 public class ServerException extends Exception {
 

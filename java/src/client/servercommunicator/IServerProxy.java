@@ -1,4 +1,4 @@
-package client.serverfacade;
+package client.servercommunicator;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
