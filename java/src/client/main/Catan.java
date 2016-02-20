@@ -8,6 +8,9 @@ import client.join.*;
 import client.misc.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
+import client.serverfacade.IServerProxy;
+import client.serverfacade.ServerFacade;
+import client.serverfacade.ServerProxy;
 import client.base.*;
 
 /**
@@ -61,6 +64,12 @@ public class Catan extends JFrame
 			public void run()
 			{
 				new Catan();
+				
+				//OUR ADDED CODE: Direct Server Proxy
+				IServerProxy serverProxy = new ServerProxy();
+				serverProxy.setURL("http://localhost:8081");
+				ServerFacade.get_instance().setProxy(serverProxy);
+				//END ADDED CODE
 				
 				PlayerWaitingView playerWaitingView = new PlayerWaitingView();
 				final PlayerWaitingController playerWaitingController = new PlayerWaitingController(

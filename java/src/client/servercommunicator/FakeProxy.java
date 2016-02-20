@@ -530,6 +530,3 @@ public class FakeProxy implements IServerProxy{
 	}
 
 }
-
-
-
