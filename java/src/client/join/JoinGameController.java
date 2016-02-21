@@ -133,6 +133,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	@Override
 	public void cancelCreateNewGame() {
 		getNewGameView().closeModal();
+		resetNewGameModal();
 	}
 
 	@Override
@@ -152,8 +153,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 						randPorts, title);
 				addYourselfToTheGameYouJustCreated(title);
 				updateGames();
-				resetNewGameModal();
 				getNewGameView().closeModal();
+				resetNewGameModal();
 			} catch (ServerException e) {
 				System.err.println("Could not add game");
 				System.err.println(e.getMessage());
@@ -177,7 +178,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 * name as the user just created. In the event that someone else just
 	 * added a game at the same time, it will double check to make sure that
 	 * there are no other users in that game
-	 * @pre User just created a game
+	 * @pre User just created a game, no other user is creating a game with
+	 * the exact same name in the exact same moment as this one
 	 * @post User will be added to the new game
 	 * @param gameName name of the users game
 	 * @throws Exception 
@@ -214,7 +216,6 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void cancelJoinGame() {
-	
 		getJoinGameView().closeModal();
 	}
 
