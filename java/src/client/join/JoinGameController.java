@@ -148,16 +148,62 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 			messageView.showModal();
 		} else {
 			try {
-				//TODO: add yourself to the game
-				//ServerFacade.get_instance().joinGame(gameID, color);
-				ServerFacade.get_instance().createNewGame(randHexes, randNums, randPorts, title);
+				ServerFacade.get_instance().createNewGame(randHexes, randNums,
+						randPorts, title);
+				addYourselfToTheGameYouJustCreated(title);
 				updateGames();
+				resetNewGameModal();
 				getNewGameView().closeModal();
 			} catch (ServerException e) {
 				System.err.println("Could not add game");
 				System.err.println(e.getMessage());
 				e.printStackTrace();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace();
 			}
+		}
+	}
+
+	private void resetNewGameModal() {
+		getNewGameView().setRandomlyPlaceHexes(false);
+		getNewGameView().setRandomlyPlaceNumbers(false);
+		getNewGameView().setUseRandomPorts(false);
+		getNewGameView().setTitle("");
+	}
+
+	/**
+	 * Gets all the games from the server and finds the one with the same
+	 * name as the user just created. In the event that someone else just
+	 * added a game at the same time, it will double check to make sure that
+	 * there are no other users in that game
+	 * @pre User just created a game
+	 * @post User will be added to the new game
+	 * @param gameName name of the users game
+	 * @throws Exception 
+	 */
+	private void addYourselfToTheGameYouJustCreated(String gameName) throws Exception {
+		boolean added = false;
+		GameInfo[] games = getGames();
+		for(int i = 0; i < games.length; i++) {
+			String gameTitle = games[i].getTitle();
+			if(gameTitle.equals(gameName) && games[i].getPlayers().isEmpty()) {
+				int gameID = games[i].getId();
+				CatanColor defaultColor = CatanColor.RED;
+				try {
+					ServerFacade.get_instance().joinGame(gameID, defaultColor);
+					added = true;
+				} catch (ServerException e) {
+					System.err.println("Could not add user to the game he"
+							+ "just created");
+					System.err.println(e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		if(!added) {
+			throw new Exception("Could not add user to his own game");
 		}
 	}
 
