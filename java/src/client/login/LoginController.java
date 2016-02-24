@@ -5,6 +5,7 @@ import client.misc.*;
 import client.modelfacade.ModelFacade;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
+import shared.model.definitions.CatanColor;
 
 import java.net.*;
 import java.io.*;
@@ -78,9 +79,13 @@ public class LoginController extends Controller implements ILoginController {
 		String username = getLoginView().getLoginUsername();
 		String password = getLoginView().getLoginPassword();
 		try {
-			ServerFacade.get_instance().login(username, password);
+			int userID = ServerFacade.get_instance().login(username, password);
 			
 			// If log in succeeded
+			ModelFacade.setUserColor(CatanColor.RED);
+			ModelFacade.setUserID(userID);
+			ModelFacade.setUserName(username);
+			
 			getLoginView().closeModal();
 			loginAction.execute();
 		} catch (ServerException e) {
@@ -103,9 +108,13 @@ public class LoginController extends Controller implements ILoginController {
 				!password1.matches("^.*[^a-zA-Z0-9_-].*$"))
 		{
 			try {
-				ServerFacade.get_instance().register(username, password1);
+				int userID = ServerFacade.get_instance().register(username, password1);
 				
 				// If register succeeded
+				ModelFacade.setUserColor(CatanColor.RED);
+				ModelFacade.setUserID(userID);
+				ModelFacade.setUserName(username);
+				
 				getLoginView().closeModal();
 				loginAction.execute();
 			} catch (ServerException e) {
