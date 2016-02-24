@@ -21,8 +21,8 @@
 	<!-- Input folders -->
 	<property name="java.src" location="java/src"/>
 	<property name="java.test" location="java/test"/>
-    <property name="java.lib" value="java/lib"/>
-    <property name="java.doc" value="java/docs"/>
+	<property name="java.lib" value="java/lib"/>
+	<property name="java.doc" value="java/docs"/>
 	
 	<property name="java.bin" location="java/bin"/>
 	<property name="java.bin.src" location="${java.bin}/src"/>
@@ -126,9 +126,10 @@
 			</fileset>
 		</copy>
  		<jar jarfile="${java.dist}/catan-client.jar" basedir="${java.bin.src}">
+		
 			<manifest>
 				<attribute name="Main-Class" value="client.main.Catan"/>
-				<attribute name="Class-Path" value="lib/gson-2.2.4.jar" />
+				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
 			</manifest>
 		</jar>
  		<jar jarfile="${java.dist}/catan-server.jar" basedir="${java.bin.src}">
