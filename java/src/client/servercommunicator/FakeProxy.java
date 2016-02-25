@@ -187,7 +187,7 @@ public class FakeProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject getModel(int versionNumber)
+	public JSONObject getModel(Integer versionNumber)
 		throws ServerProxyException  {
 		return jsonFromFile("model.json");
 	}

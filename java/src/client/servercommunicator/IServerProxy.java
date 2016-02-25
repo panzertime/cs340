@@ -125,7 +125,7 @@ public interface IServerProxy {
 	 * @return the current state of the game or true if the model is current
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public JSONObject getModel(int currentVersion)
+	public JSONObject getModel(Integer currentVersion)
 		throws ServerProxyException;
 	
 	/**
