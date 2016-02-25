@@ -25,6 +25,7 @@ import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
 import shared.model.exceptions.BadTurnStatusException;
 import shared.model.hand.ResourceType;
+import shared.model.hand.development.DevCardType;
 
 public class Model {
 	
@@ -465,7 +466,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasKnightToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.KNIGHT))
 			return false;
 		if (!canRobPlayer(playerID, newRobberLocation, targetPlayerID))
 			return false;
@@ -479,7 +480,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasYearOfPlentyToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.YEAROFPLENTY))
 			return false;
 		if (!getBank().getHand().hasResource(one, 1))
 			return false;
@@ -495,7 +496,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasRoadBuildingToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.ROADBUILDING))
 			return false;
 		if (!getBoard().canBuildRoad(getActivePlayer(), one))
 			return false;
@@ -513,7 +514,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasMonopolyToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.MONOPOLY))
 			return false;
 		return true;
 	}

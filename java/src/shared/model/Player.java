@@ -366,29 +366,24 @@ public class Player {
 	public Boolean hasDiscarded() {
 		return hasDiscarded;
 	}
-
-	/**
-	 * @return true if player has a YearOfPlenty card available and enabled
-	 */
-	public Boolean hasYearOfPlenty() {
+	
+	public Boolean hasDevCard(DevCardType type)
+	{
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.YEAROFPLENTY)
+			if (card.getType() == type)
 				return true;
 		}
 		return false;
 	}
-
-	/**
-	 * @return true if player has a YearOfPlenty card available and enabled
-	 */
-	public Boolean hasYearOfPlentyToUse() {
+	
+	public Boolean hasDevCardToUse(DevCardType type) {
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.YEAROFPLENTY && card.isEnabled())
+			if (card.getType() == type && card.isEnabled())
 				return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * @pre hasYearOfPlenty
 	 * @param type1
@@ -408,28 +403,7 @@ public class Player {
 		this.receiveResource(type2, 1);
 	}
 
-	/**
-	 * @return true if player has a RoadBuilder card available and enabled
-	 */
-	public Boolean hasRoadBuilding() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.ROADBUILDING)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a RoadBuilder card available and enabled
-	 */
-	public Boolean hasRoadBuildingToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.ROADBUILDING && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * @pre hasRoadBuilder
 	 * @throws NoDevCardFoundException
@@ -439,28 +413,7 @@ public class Player {
 		playedDevelopmentCard = true;
 	}
 
-	/**
-	 * @return true if player has a Monopoly card available and enabled
-	 */
-	public Boolean hasMonopoly() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.MONOPOLY)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a Monopoly card available and enabled
-	 */
-	public Boolean hasMonopolyToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.MONOPOLY && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * @pre hasMonopoly()
 	 * @param type
@@ -481,28 +434,7 @@ public class Player {
 		}
 	}
 
-	/**
-	 * @return true if player has a Knight card available and enabled
-	 */
-	public Boolean hasKnight() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.KNIGHT)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a Knight card available and enabled
-	 */
-	public Boolean hasKnightToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.KNIGHT && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * 
 	 * @throws NoDevCardFoundException
