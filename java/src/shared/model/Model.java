@@ -421,12 +421,13 @@ public class Model {
 	
 	public int canOfferMaritime (Integer playerID, ResourceType inputType)
 	{
-		if (!isActivePlayer(playerID))
+		int highestTrade = 0;
+		PortType portType = null;
+
+		if (!isActivePlayer(playerID) || !getStatus().equalsIgnoreCase("Playing"))
 			return 0;
 			
-			int highestTrade;
-			PortType portType = null;
-			switch (inputType)
+		switch (inputType)
 			{
 			case WOOD:
 				portType = PortType.WOOD;
@@ -444,16 +445,27 @@ public class Model {
 				portType = PortType.ORE;
 				break;
 			}
-			
-			
-//			if (getActivePlayer().hasPort(PortType.THREE))
-			return 0;
+		if (portType == null && this.getActivePlayer().hasResource(inputType, 3))
+			highestTrade = 3;
+		else if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
+			highestTrade = 2;
+		else if (this.getActivePlayer().hasResource(inputType, 4))
+			highestTrade = 4;	
+		
+		return highestTrade;
 	}
 
 
-	public boolean canReceiveMaritime (Integer playerID, ResourceType outputType) {
-		//stub
-		return false;
+	public boolean canReceiveMaritime(Integer playerID, ResourceType outputType) {
+		
+		if (!getBank().getHand().hasResource(outputType, 1))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getStatus().equalsIgnoreCase("Playing"))
+			return false;
+		return true;
+		
 	}
 
 
