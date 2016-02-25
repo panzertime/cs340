@@ -212,7 +212,28 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
+		enableAllColors();
+		disableColors(game);
 		getSelectColorView().showModal();
+	}
+
+	private void enableAllColors() {
+		for(CatanColor color : CatanColor.values()) {
+			getSelectColorView().setColorEnabled(color, true);
+		}
+	}
+
+	private void disableColors(GameInfo game) {
+		List<PlayerInfo> playerList = game.getPlayers();
+		PlayerInfo me = ClientPlayer.sole().getPlayerInfo();
+		int myID = me.getId();
+		for(PlayerInfo player : playerList) {
+			int playerID = player.getId();
+			if(playerID != myID) {
+				CatanColor playerColor = player.getColor();
+				getSelectColorView().setColorEnabled(playerColor, false);
+			}
+		}
 	}
 
 	@Override
