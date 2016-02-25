@@ -12,16 +12,17 @@ public abstract class ModelFacade {
 		Model.registerListener(this);
  	}
 
-	protected Integer userID;
 	protected Model gameModel;
 
 	public void updateModel(Model model) {
 		gameModel = model;
  	}
  	
-	public void setUserID(Integer userID) {
-		this.userID = userID; 
- 	}
+	protected Boolean hasGameModel() {
+		if (gameModel == null)
+			return false;
+		return true;
+	}
 
 	synchronized public static void setModel(JSONObject jsonModel) throws BadJSONException {
 		Model.shareNewModel(new Model(jsonModel));

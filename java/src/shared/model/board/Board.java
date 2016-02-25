@@ -1,11 +1,14 @@
 package shared.model.board;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.map.pseudo.PseudoHex;
 import shared.model.Model;
 import shared.model.Player;
 import shared.model.board.edge.Edge;
@@ -13,12 +16,14 @@ import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.hex.HexType;
 import shared.model.board.hex.tiles.land.ClayHex;
 import shared.model.board.hex.tiles.land.FieldHex;
 import shared.model.board.hex.tiles.land.ForestHex;
 import shared.model.board.hex.tiles.land.LandHex;
 import shared.model.board.hex.tiles.land.MountainHex;
 import shared.model.board.hex.tiles.land.PastureHex;
+import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.hex.tiles.water.PortHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.hex.tiles.water.WaterHex;
@@ -668,5 +673,24 @@ public class Board {
 
 		robber.equals(jsonRobber);
 		return true;
+	}
+	
+	public List<PseudoHex> getPseudoHexes() {
+		List<PseudoHex> phexes = new ArrayList<PseudoHex>();
+		for (Hex hex : new ArrayList<Hex>(hexes.values())) {
+			HexType hexType = hex.getHexType();
+			HexLocation hexLoc = hex.getHexLocation().copy();
+			Integer productionNum = null;
+			EdgeDirection portDirection = null;
+			PortType portType = null;
+			if (hex instanceof ProductionHex)
+				productionNum = ((ProductionHex) hex).getProductionNumber();
+			if (hex instanceof PortHex) {
+				portDirection = ((PortHex) hex).getPortDirection();
+				portType = ((PortHex) hex).getPortType();
+			}
+			phexes.add(new PseudoHex(hexType, hexLoc, productionNum, portDirection, portType));
+		}
+		return phexes;
 	}
 }

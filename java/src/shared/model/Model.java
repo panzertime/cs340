@@ -8,12 +8,17 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoHex;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.logger.Log;
 import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.tiles.water.PortType;
+import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
 import shared.model.exceptions.BadJSONException;
@@ -21,6 +26,7 @@ import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
 import shared.model.exceptions.BadTurnStatusException;
 import shared.model.hand.ResourceType;
+import shared.model.hand.development.DevCardType;
 
 public class Model {
 	
@@ -461,7 +467,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasKnightToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.KNIGHT))
 			return false;
 		if (!canRobPlayer(playerID, newRobberLocation, targetPlayerID))
 			return false;
@@ -475,7 +481,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasYearOfPlentyToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.YEAROFPLENTY))
 			return false;
 		if (!getBank().getHand().hasResource(one, 1))
 			return false;
@@ -491,7 +497,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasRoadBuildingToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.ROADBUILDING))
 			return false;
 		if (!getBoard().canBuildRoad(getActivePlayer(), one))
 			return false;
@@ -509,7 +515,7 @@ public class Model {
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
-		if (!getActivePlayer().hasMonopolyToUse())
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.MONOPOLY))
 			return false;
 		return true;
 	}
@@ -619,4 +625,132 @@ public class Model {
 		return new ArrayList<Player>(players.values());
 	}
 
+	public List<PseudoHex> getPseudoHexes() {
+		return getBoard().getPseudoHexes();
+	}
+	
+	public List<PseudoCity> getPseudoCities() {
+		List<PseudoCity> pcities = new ArrayList<PseudoCity>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			pcities.addAll(player.getPseudoCities());
+		}
+		return pcities;
+	}
+	
+	public List<PseudoSettlement> getPseudoSettlements() {
+		List<PseudoSettlement> psettlements = new ArrayList<PseudoSettlement>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			psettlements.addAll(player.getPseudoSettlements());
+		}
+		return psettlements;
+	}
+	
+	public List<PseudoRoad> getPseudoRoads() {
+		List<PseudoRoad> proads = new ArrayList<PseudoRoad>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			proads.addAll(player.getPseudoRoads());
+		}
+		return proads;
+	}
+
+	
+	//J.R.'s section/////////////////////////////////////////////////////////////////////////
+	
+	public boolean hasDevCardEnabled(DevCardType type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getDevCardAmount(DevCardType type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getResourceAmount(ResourceType type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public ArrayList<Integer> getPlayerIndices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getPoints(int playerIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean isTurn(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isLargestArmy(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isLongestRoad(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public PieceType getPlayerColor(int playerIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getPlayerName(int playerIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isGameOver() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String getWinnerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isClientWinner() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getFreeRoads() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getFreeSettlements() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getFreeCities() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getSoldiers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+		
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

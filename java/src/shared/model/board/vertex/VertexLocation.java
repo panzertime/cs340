@@ -119,5 +119,9 @@ public class VertexLocation
 				return null;
 		}
 	}
+	
+	public VertexLocation copy() {
+		return new VertexLocation(hexLoc.copy(), dir);
+	}
 }
 

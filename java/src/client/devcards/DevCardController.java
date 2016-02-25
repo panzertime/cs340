@@ -1,7 +1,10 @@
 package client.devcards;
 
 import client.base.*;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.get.GetModelFacade;
 import shared.model.hand.ResourceType;
+import shared.model.hand.development.DevCardType;
 
 
 /**
@@ -94,6 +97,29 @@ public class DevCardController extends Controller implements IDevCardController 
 	@Override
 	public void playYearOfPlentyCard(ResourceType resource1, ResourceType resource2) {
 		
+	}
+	
+	public void update() 
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		CanModelFacade canModelFacade = CanModelFacade.sole();
+		
+		this.getPlayCardView().setCardEnabled(DevCardType.KNIGHT, getModelFacade.hasDevCardEnabled(DevCardType.KNIGHT));
+		this.getPlayCardView().setCardAmount(DevCardType.KNIGHT, getModelFacade.getDevCardAmount(DevCardType.KNIGHT)); 
+		
+		this.getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, getModelFacade.hasDevCardEnabled(DevCardType.MONOPOLY));
+		this.getPlayCardView().setCardAmount(DevCardType.MONOPOLY, getModelFacade.getDevCardAmount(DevCardType.MONOPOLY)); 
+		
+		this.getPlayCardView().setCardEnabled(DevCardType.YEAROFPLENTY, getModelFacade.hasDevCardEnabled(DevCardType.YEAROFPLENTY));
+		this.getPlayCardView().setCardAmount(DevCardType.YEAROFPLENTY, getModelFacade.getDevCardAmount(DevCardType.YEAROFPLENTY)); 
+		
+		this.getPlayCardView().setCardEnabled(DevCardType.ROADBUILDING, getModelFacade.hasDevCardEnabled(DevCardType.ROADBUILDING));
+		this.getPlayCardView().setCardAmount(DevCardType.ROADBUILDING, getModelFacade.getDevCardAmount(DevCardType.ROADBUILDING)); 
+		
+		this.getPlayCardView().setCardEnabled(DevCardType.MONUMENT, getModelFacade.hasDevCardEnabled(DevCardType.MONUMENT));
+		this.getPlayCardView().setCardAmount(DevCardType.MONUMENT, getModelFacade.getDevCardAmount(DevCardType.MONUMENT)); 	
+		
+
 	}
 
 }
