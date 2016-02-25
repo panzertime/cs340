@@ -3,7 +3,6 @@ package client.modelfacade.get;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.data.PlayerInfo;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
 
@@ -38,8 +37,5 @@ public class GetModelFacade  extends ModelFacade {
 		for (GetModelFacadeListener listener : listeners)
 			listener.notify();
 	}
-	
-	public PlayerInfo getPlayerInfo() {
-		return playerInfo;
-	}
+
 }

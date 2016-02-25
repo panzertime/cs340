@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 
 import client.base.*;
 import client.data.*;
+import client.main.ClientPlayer;
 import client.misc.*;
 import client.modelfacade.ModelFacade;
 import client.modelfacade.get.GetModelFacade;
@@ -104,7 +105,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	
 	private void updateGames() {
 		GameInfo[] games = getGames();
-		PlayerInfo localPlayer = GetModelFacade.sole().getPlayerInfo();
+		PlayerInfo localPlayer = ClientPlayer.sole().getPlayerInfo();
 		getJoinGameView().setGames(games, localPlayer);
 	}
 
