@@ -18,6 +18,7 @@ import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.tiles.water.PortType;
+import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
 import shared.model.exceptions.BadJSONException;
@@ -651,4 +652,105 @@ public class Model {
 		}
 		return proads;
 	}
+
+	
+	//J.R.'s section/////////////////////////////////////////////////////////////////////////
+	
+	public boolean hasDevCardEnabled(DevCardType type) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getDevCardAmount(DevCardType type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getResourceAmount(ResourceType type) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public ArrayList<Integer> getPlayerIndices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getPoints(int playerIndex) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean isTurn(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isLargestArmy(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isLongestRoad(int playerIndex) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public PieceType getPlayerColor(int playerIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getPlayerName(int playerIndex) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isGameOver() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String getWinnerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isClientWinner() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getFreeRoads() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getFreeSettlements() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getFreeCities() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getSoldiers() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+		
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

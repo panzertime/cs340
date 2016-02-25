@@ -10,6 +10,9 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
+import shared.model.board.piece.PieceType;
+import shared.model.hand.ResourceType;
+import shared.model.hand.development.DevCardType;
 
 public class GetModelFacade  extends ModelFacade {
 
@@ -71,4 +74,97 @@ public class GetModelFacade  extends ModelFacade {
 			return new ArrayList<PseudoRoad>();
 		return gameModel.getPseudoRoads();
 	}
+	
+	
+	//J.R.'s section//////////////////////////////////////////////////////////////////////////////////////////
+	//client only
+	public boolean hasDevCardEnabled(DevCardType type)
+	{
+		return gameModel.hasDevCardEnabled(type);
+	}
+	
+	//client only
+	public int getDevCardAmount(DevCardType type)
+	{
+		return gameModel.getDevCardAmount(type);
+	}
+	
+	//client only
+	public int getResourceAmount(ResourceType type)
+	{
+		return gameModel.getResourceAmount(type);
+	}
+	
+	public ArrayList<Integer> getPlayerIndices()
+	{
+		return gameModel.getPlayerIndices();
+	}
+	
+	public int getPoints(int playerIndex)
+	{
+		return gameModel.getPoints(playerIndex);
+	}
+	
+	public boolean isTurn(int playerIndex)
+	{
+		return gameModel.isTurn(playerIndex);
+	}
+	public boolean isLargestArmy(int playerIndex)
+	{
+		return gameModel.isLargestArmy(playerIndex);
+	}
+	public boolean isLongestRoad(int playerIndex)
+	{
+		return gameModel.isLongestRoad(playerIndex);
+	}
+	public PieceType getPlayerColor(int playerIndex)
+	{
+		return gameModel.getPlayerColor(playerIndex);
+	}
+	public String getPlayerName(int playerIndex)
+	{
+		return gameModel.getPlayerName(playerIndex);
+	}
+	
+	public boolean isGameOver()
+	{
+		return gameModel.isGameOver();
+	}
+	
+	public String getWinnerName()
+	{
+		return gameModel.getWinnerName();
+	}
+	
+	public boolean isClientWinner()
+	{
+		return gameModel.isClientWinner();
+	}
+	
+	//client only
+	public int getFreeRoads()
+	{
+		return gameModel.getFreeRoads();
+	}
+	
+	//client only
+	public int getFreeSettlements()
+	{
+		return gameModel.getFreeSettlements();
+	}
+	
+	//client only
+	public int getFreeCities()
+	{
+		return gameModel.getFreeCities();
+	}
+	
+	//client only
+	public int getSoldiers()
+	{
+		return gameModel.getSoldiers();
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
