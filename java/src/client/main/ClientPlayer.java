@@ -6,9 +6,11 @@ import shared.model.definitions.CatanColor;
 public class ClientPlayer {
 	private static ClientPlayer sole;
 	private PlayerInfo clientInfo;
+	private Integer curGameID;
 	
 	private ClientPlayer() {
 		clientInfo = new PlayerInfo();
+		curGameID = null;
 	}
 	
 	public static ClientPlayer sole() {
@@ -52,5 +54,13 @@ public class ClientPlayer {
 
 	public PlayerInfo getPlayerInfo() {
 		return clientInfo;
+	}
+
+	public void setGameID(Integer gameID) {
+		curGameID = gameID;
+	}
+	
+	public Integer getGameID() {
+		return curGameID;
 	}
 }

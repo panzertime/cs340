@@ -214,6 +214,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	public void startJoinGame(GameInfo game) {
 		enableAllColors();
 		disableColors(game);
+		int gameID = game.getId();
+		ClientPlayer.sole().setGameID(gameID);
 		getSelectColorView().showModal();
 	}
 
@@ -239,15 +241,24 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	@Override
 	public void cancelJoinGame() {
 		getJoinGameView().closeModal();
+		ClientPlayer.sole().setGameID(null);
 	}
 
 	@Override
 	public void joinGame(CatanColor color) {
-		
-		// If join succeeded
-		getSelectColorView().closeModal();
-		getJoinGameView().closeModal();
-		joinAction.execute();
+		//TODO: check that color is real?
+		int gameID = ClientPlayer.sole().getGameID();
+		try {
+			ServerFacade.get_instance().joinGame(gameID, color);
+			
+			// If join succeeded
+			getSelectColorView().closeModal();
+			getJoinGameView().closeModal();
+			joinAction.execute();
+		} catch (ServerException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }
