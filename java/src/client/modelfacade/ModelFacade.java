@@ -14,7 +14,7 @@ public abstract class ModelFacade {
 		playerInfo = new PlayerInfo();
 	}
 
-	protected PlayerInfo playerInfo;
+	protected static PlayerInfo playerInfo;
 
 	protected Model gameModel;
 	
@@ -22,20 +22,24 @@ public abstract class ModelFacade {
 		gameModel = model;
 	}
 	
-	public void setUserID(int userID) {
-		this.playerInfo.setId(userID); 
+	public static void setUserID(int userID) {
+		playerInfo.setId(userID);
 	}
 	
 	public void setUserIndex(int userIndex) {
-		this.playerInfo.setPlayerIndex(userIndex);
+		playerInfo.setPlayerIndex(userIndex);
 	}
 	
-	public void setUserColor(CatanColor color) {
-		this.playerInfo.setColor(color);
+	public static void setUserColor(CatanColor color) {
+		playerInfo.setColor(color);
 	}
 	
-	public void setUserName(String name) {
-		this.playerInfo.setName(name);
+	public static void setUserName(String name) {
+		playerInfo.setName(name);
+	}
+	
+	protected PlayerInfo getPlayerInfo() {
+		return playerInfo;
 	}
 	
 	/** Necessary for when the first model is passed in. Afterwards
