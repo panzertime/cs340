@@ -8,6 +8,10 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoHex;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.logger.Log;
 import shared.model.board.Board;
@@ -619,4 +623,31 @@ public class Model {
 		return new ArrayList<Player>(players.values());
 	}
 
+	public List<PseudoHex> getPseudoHexes() {
+		return getBoard().getPseudoHexes();
+	}
+	
+	public List<PseudoCity> getPseudoCities() {
+		List<PseudoCity> pcities = new ArrayList<PseudoCity>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			pcities.addAll(player.getPseudoCities());
+		}
+		return pcities;
+	}
+	
+	public List<PseudoSettlement> getPseudoSettlements() {
+		List<PseudoSettlement> psettlements = new ArrayList<PseudoSettlement>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			psettlements.addAll(player.getPseudoSettlements());
+		}
+		return psettlements;
+	}
+	
+	public List<PseudoRoad> getPseudoRoads() {
+		List<PseudoRoad> proads = new ArrayList<PseudoRoad>();
+		for (Player player : new ArrayList<Player>(players.values())) {
+			proads.addAll(player.getPseudoRoads());
+		}
+		return proads;
+	}
 }

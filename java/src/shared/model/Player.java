@@ -1,9 +1,14 @@
 package shared.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.City;
 import shared.model.board.piece.Road;
@@ -744,6 +749,35 @@ public class Player {
 
 	public int getHandSize() {
 		return hand.getHandSize();
+	}
+	
+
+	
+	public List<PseudoCity> getPseudoCities() {
+		List<PseudoCity> pcities = new ArrayList<PseudoCity>();
+		for (City city : cities) {
+			if (city.getVertex() != null)
+				pcities.add(new PseudoCity(city.getVertex().getVertexLocation().copy(), userColor));
+		}
+		return pcities;
+	}
+	
+	public List<PseudoSettlement> getPseudoSettlements() {
+		List<PseudoSettlement> psettlements = new ArrayList<PseudoSettlement>();
+		for (Settlement settlement : settlements) {
+			if (settlement.getVertex() != null)
+				psettlements.add(new PseudoSettlement(settlement.getVertex().getVertexLocation().copy(), userColor));
+		}
+		return psettlements;
+	}
+	
+	public List<PseudoRoad> getPseudoRoads() {
+		List<PseudoRoad> proads = new ArrayList<PseudoRoad>();
+		for (Road road : roads) {
+			if (road.getEdge() != null)
+				proads.add(new PseudoRoad(road.getEdge().getEdgeLocation().copy(), userColor));
+		}
+		return proads;
 	}
 
 }

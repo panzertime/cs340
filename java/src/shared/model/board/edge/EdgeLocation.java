@@ -108,5 +108,10 @@ public class EdgeLocation
 				return null;
 		}
 	}
+
+	
+	public EdgeLocation copy() {
+		return new EdgeLocation(hexLoc.copy(), dir);
+	}
 }
 

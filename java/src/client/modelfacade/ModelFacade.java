@@ -42,6 +42,12 @@ public abstract class ModelFacade {
 		return playerInfo;
 	}
 	
+	protected Boolean hasGameModel() {
+		if (gameModel == null)
+			return false;
+		return true;
+	}
+	
 	/** Necessary for when the first model is passed in. Afterwards
 	 * it is no longer necessary as it is always stored in Playerinfo
 	 * @return

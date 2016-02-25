@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.data.PlayerInfo;
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoHex;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
 
@@ -41,5 +45,30 @@ public class GetModelFacade  extends ModelFacade {
 	
 	public PlayerInfo getPlayerInfo() {
 		return playerInfo;
+	}
+	
+
+	public List<PseudoHex> getPseudoHexes() {
+		if (!hasGameModel())
+			return new ArrayList<PseudoHex>();
+		return gameModel.getPseudoHexes();
+	}
+	
+	public List<PseudoCity> getPseudoCities() {
+		if (!hasGameModel())
+			return new ArrayList<PseudoCity>();
+		return gameModel.getPseudoCities();
+	}
+	
+	public List<PseudoSettlement> getPseudoSettlements() {
+		if (!hasGameModel())
+			return new ArrayList<PseudoSettlement>();
+		return gameModel.getPseudoSettlements();
+	}
+	
+	public List<PseudoRoad> getPseudoRoads() {
+		if (!hasGameModel())
+			return new ArrayList<PseudoRoad>();
+		return gameModel.getPseudoRoads();
 	}
 }
