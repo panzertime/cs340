@@ -418,6 +418,56 @@ public class Model {
 			return false;
 		return true;
 	}
+	
+	public int canOfferMaritime (Integer playerID, ResourceType inputType)
+	{
+		int highestTrade = 0;
+		PortType portType = null;
+
+		if (!isActivePlayer(playerID) || !getStatus().equalsIgnoreCase("Playing"))
+			return 0;
+			
+		switch (inputType)
+			{
+			case WOOD:
+				portType = PortType.WOOD;
+				break;
+			case BRICK:
+				portType = PortType.BRICK;
+				break;
+			case SHEEP:
+				portType = PortType.SHEEP;
+				break;
+			case WHEAT:
+				portType = PortType.WHEAT;
+				break;
+			case ORE:	
+				portType = PortType.ORE;
+				break;
+			}
+		if (portType == null && this.getActivePlayer().hasResource(inputType, 3))
+			highestTrade = 3;
+		else if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
+			highestTrade = 2;
+		else if (this.getActivePlayer().hasResource(inputType, 4))
+			highestTrade = 4;	
+		
+		return highestTrade;
+	}
+
+
+	public boolean canReceiveMaritime(Integer playerID, ResourceType outputType) {
+		
+		if (!getBank().getHand().hasResource(outputType, 1))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getStatus().equalsIgnoreCase("Playing"))
+			return false;
+		return true;
+		
+	}
+
 
 	public Boolean canPlaceRobber(Integer playerID, HexLocation location) {
 		if (!isActivePlayer(playerID))
