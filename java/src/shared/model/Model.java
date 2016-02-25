@@ -418,6 +418,44 @@ public class Model {
 			return false;
 		return true;
 	}
+	
+	public int canOfferMaritime (Integer playerID, ResourceType inputType)
+	{
+		if (!isActivePlayer(playerID))
+			return 0;
+			
+			int highestTrade;
+			PortType portType = null;
+			switch (inputType)
+			{
+			case WOOD:
+				portType = PortType.WOOD;
+				break;
+			case BRICK:
+				portType = PortType.BRICK;
+				break;
+			case SHEEP:
+				portType = PortType.SHEEP;
+				break;
+			case WHEAT:
+				portType = PortType.WHEAT;
+				break;
+			case ORE:	
+				portType = PortType.ORE;
+				break;
+			}
+			
+			
+//			if (getActivePlayer().hasPort(PortType.THREE))
+			return 0;
+	}
+
+
+	public boolean canReceiveMaritime (Integer playerID, ResourceType outputType) {
+		//stub
+		return false;
+	}
+
 
 	public Boolean canPlaceRobber(Integer playerID, HexLocation location) {
 		if (!isActivePlayer(playerID))
