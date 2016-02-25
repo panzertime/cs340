@@ -43,7 +43,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 				aiList = ServerFacade.get_instance().listAI();
 				
 				String[] aiChoices = makeAIList(aiList); 
-				//getView().setAIChoices(aiChoices);
+				getView().setAIChoices(aiChoices);
 				//getView().setPlayers(players);
 				getView().showModal();
 			} catch (ServerException e) {
