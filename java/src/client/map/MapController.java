@@ -1,9 +1,13 @@
 package client.map;
 
-import java.util.*;
+import java.util.Random;
 
-import client.base.*;
-import client.data.*;
+import client.base.Controller;
+import client.data.RobPlayerInfo;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
+import client.modelfacade.state.clientstates.ClientState;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
@@ -18,7 +22,7 @@ import shared.model.definitions.CatanColor;
 /**
  * Implementation for the map controller
  */
-public class MapController extends Controller implements IMapController {
+public class MapController extends Controller implements GetModelFacadeListener, IMapController {
 	
 	private IRobView robView;
 	
@@ -111,37 +115,34 @@ public class MapController extends Controller implements IMapController {
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildRoad(edgeLoc);
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildSettlement(vertLoc);
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildCity(vertLoc);
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		
+		//CanModelFacade.sole().canPlaceRobber(hexLoc, playerIndex);
 		return true;
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		
+		DoModelFacade.sole().doBuildRoad(edgeLoc);
 		getView().placeRoad(edgeLoc, CatanColor.ORANGE);
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		
+		DoModelFacade.sole().doBuildSettlement(vertLoc);
 		getView().placeSettlement(vertLoc, CatanColor.ORANGE);
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		
+		DoModelFacade.sole().doBuildCity(vertLoc);
 		getView().placeCity(vertLoc, CatanColor.ORANGE);
 	}
 
@@ -161,8 +162,7 @@ public class MapController extends Controller implements IMapController {
 		
 	}
 	
-	public void playSoldierCard() {	
-		
+	public void playSoldierCard() {
 	}
 	
 	public void playRoadBuildingCard() {	
@@ -171,6 +171,11 @@ public class MapController extends Controller implements IMapController {
 	
 	public void robPlayer(RobPlayerInfo victim) {	
 		
+	}
+
+	@Override
+	public void notify(ClientState state) {
+		// TODO Auto-generated method stub
 	}
 	
 }
