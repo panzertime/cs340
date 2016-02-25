@@ -1,9 +1,14 @@
 package shared.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.City;
 import shared.model.board.piece.Road;
@@ -361,29 +366,24 @@ public class Player {
 	public Boolean hasDiscarded() {
 		return hasDiscarded;
 	}
-
-	/**
-	 * @return true if player has a YearOfPlenty card available and enabled
-	 */
-	public Boolean hasYearOfPlenty() {
+	
+	public Boolean hasDevCard(DevCardType type)
+	{
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.YEAROFPLENTY)
+			if (card.getType() == type)
 				return true;
 		}
 		return false;
 	}
-
-	/**
-	 * @return true if player has a YearOfPlenty card available and enabled
-	 */
-	public Boolean hasYearOfPlentyToUse() {
+	
+	public Boolean hasDevCardToUse(DevCardType type) {
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.YEAROFPLENTY && card.isEnabled())
+			if (card.getType() == type && card.isEnabled())
 				return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * @pre hasYearOfPlenty
 	 * @param type1
@@ -403,28 +403,7 @@ public class Player {
 		this.receiveResource(type2, 1);
 	}
 
-	/**
-	 * @return true if player has a RoadBuilder card available and enabled
-	 */
-	public Boolean hasRoadBuilding() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.ROADBUILDING)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a RoadBuilder card available and enabled
-	 */
-	public Boolean hasRoadBuildingToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.ROADBUILDING && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * @pre hasRoadBuilder
 	 * @throws NoDevCardFoundException
@@ -434,28 +413,7 @@ public class Player {
 		playedDevelopmentCard = true;
 	}
 
-	/**
-	 * @return true if player has a Monopoly card available and enabled
-	 */
-	public Boolean hasMonopoly() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.MONOPOLY)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a Monopoly card available and enabled
-	 */
-	public Boolean hasMonopolyToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.MONOPOLY && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * @pre hasMonopoly()
 	 * @param type
@@ -476,28 +434,7 @@ public class Player {
 		}
 	}
 
-	/**
-	 * @return true if player has a Knight card available and enabled
-	 */
-	public Boolean hasKnight() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.KNIGHT)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @return true if player has a Knight card available and enabled
-	 */
-	public Boolean hasKnightToUse() {
-		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == DevCardType.KNIGHT && card.isEnabled())
-				return true;
-		}
-		return false;
-	}
-
+	
 	/**
 	 * 
 	 * @throws NoDevCardFoundException
@@ -744,6 +681,35 @@ public class Player {
 
 	public int getHandSize() {
 		return hand.getHandSize();
+	}
+	
+
+	
+	public List<PseudoCity> getPseudoCities() {
+		List<PseudoCity> pcities = new ArrayList<PseudoCity>();
+		for (City city : cities) {
+			if (city.getVertex() != null)
+				pcities.add(new PseudoCity(city.getVertex().getVertexLocation().copy(), userColor));
+		}
+		return pcities;
+	}
+	
+	public List<PseudoSettlement> getPseudoSettlements() {
+		List<PseudoSettlement> psettlements = new ArrayList<PseudoSettlement>();
+		for (Settlement settlement : settlements) {
+			if (settlement.getVertex() != null)
+				psettlements.add(new PseudoSettlement(settlement.getVertex().getVertexLocation().copy(), userColor));
+		}
+		return psettlements;
+	}
+	
+	public List<PseudoRoad> getPseudoRoads() {
+		List<PseudoRoad> proads = new ArrayList<PseudoRoad>();
+		for (Road road : roads) {
+			if (road.getEdge() != null)
+				proads.add(new PseudoRoad(road.getEdge().getEdgeLocation().copy(), userColor));
+		}
+		return proads;
 	}
 
 }

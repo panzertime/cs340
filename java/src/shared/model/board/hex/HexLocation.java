@@ -109,6 +109,10 @@ public class HexLocation
 				return null;
 		}
 	}
+
+	public HexLocation copy() {
+		return new HexLocation(getX(), getY());
+	}
 	
 }
 

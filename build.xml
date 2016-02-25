@@ -1,4 +1,4 @@
-﻿<project name="Catan" default="demo-server" basedir=".">
+﻿<project name="Catan" default="info" basedir=".">
 	
 	<description>
 		Catan the game
@@ -196,6 +196,15 @@
 				</java>
   			</sequential>
 		</parallel>
+	</target>
+
+	<target name="info"> 
+		<java classname="org.apache.tools.ant.Main"> 
+			<arg value="-projecthelp" /> 
+			<arg value="-verbose" />
+			<arg value="-buildfile" /> 
+			<arg value="${ant.file}" /> 
+		</java> 
 	</target>
 </project>
 
