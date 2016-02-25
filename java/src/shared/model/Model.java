@@ -706,17 +706,17 @@ public class Model {
 	
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
 	
-	public boolean hasDevCardEnabled(DevCardType type) {
+	public boolean hasDevCardEnabled(DevCardType type, int userID) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public int getDevCardAmount(DevCardType type) {
+	public int getDevCardAmount(DevCardType type, int userID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int getResourceAmount(ResourceType type) {
+	public int getResourceAmount(ResourceType type, int userID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -766,29 +766,29 @@ public class Model {
 		return null;
 	}
 
-	public boolean isClientWinner() {
+	public boolean isClientWinner(int userID) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public int getFreeRoads() {
+	public int getFreeRoads(int userID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int getFreeSettlements() {
+	public int getFreeSettlements(int userID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int getFreeCities() {
+	public int getFreeCities(int userID) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public int getSoldiers() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getSoldiers(int userID) {
+		Player client = getPlayer(userID);
+		return client.getArmies();
 	}
 		
 	

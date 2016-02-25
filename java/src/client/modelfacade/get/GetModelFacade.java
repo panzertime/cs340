@@ -3,6 +3,7 @@ package client.modelfacade.get;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -74,19 +75,19 @@ public class GetModelFacade  extends ModelFacade {
 	//client only
 	public boolean hasDevCardEnabled(DevCardType type)
 	{
-		return gameModel.hasDevCardEnabled(type);
+		return gameModel.hasDevCardEnabled(type, ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getDevCardAmount(DevCardType type)
 	{
-		return gameModel.getDevCardAmount(type);
+		return gameModel.getDevCardAmount(type, ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getResourceAmount(ResourceType type)
 	{
-		return gameModel.getResourceAmount(type);
+		return gameModel.getResourceAmount(type, ClientPlayer.sole().getUserID());
 	}
 	
 	public ArrayList<Integer> getPlayerIndices()
@@ -132,31 +133,31 @@ public class GetModelFacade  extends ModelFacade {
 	
 	public boolean isClientWinner()
 	{
-		return gameModel.isClientWinner();
+		return gameModel.isClientWinner(ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getFreeRoads()
 	{
-		return gameModel.getFreeRoads();
+		return gameModel.getFreeRoads(ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getFreeSettlements()
 	{
-		return gameModel.getFreeSettlements();
+		return gameModel.getFreeSettlements(ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getFreeCities()
 	{
-		return gameModel.getFreeCities();
+		return gameModel.getFreeCities(ClientPlayer.sole().getUserID());
 	}
 	
 	//client only
 	public int getSoldiers()
 	{
-		return gameModel.getSoldiers();
+		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
 	}
 	
 	
