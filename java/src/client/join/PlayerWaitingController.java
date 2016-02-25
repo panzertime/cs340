@@ -38,10 +38,24 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		if(curGame.isFull()) {
 			getView().closeModal();
 		} else {
-			//getView().setAIChoices(value);
-			//getView().setPlayers(players);
-			getView().showModal();
+			List aiList;
+			try {
+				aiList = ServerFacade.get_instance().listAI();
+				
+				String[] aiChoices = makeAIList(aiList); 
+				//getView().setAIChoices(aiChoices);
+				//getView().setPlayers(players);
+				getView().showModal();
+			} catch (ServerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+
+	private String[] makeAIList(List aiList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void setCurrentGame() {
