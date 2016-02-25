@@ -17,7 +17,6 @@ public class Games {
 			JSONObject jsonGame = (JSONObject) game;
 			GameInfo newGame = new GameInfo(jsonGame);
 			this.games.add(newGame);
-
 		}
 	}
 

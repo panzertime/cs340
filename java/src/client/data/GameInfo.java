@@ -102,5 +102,15 @@ public class GameInfo
 	{
 		return Collections.unmodifiableList(players);
 	}
+
+	public boolean isFull() {
+		boolean result = false;
+		int numOfPlayers = players.size();
+		if(numOfPlayers == 4) {
+			result = true;
+		}
+		
+		return result;
+	}
 }
 

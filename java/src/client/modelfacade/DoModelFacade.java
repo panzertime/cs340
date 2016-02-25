@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import client.main.ClientPlayer;
 import client.servercommunicator.ServerFacade;
 import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
@@ -39,7 +40,7 @@ public class DoModelFacade extends ModelFacade {
 			if (!CanModelFacade.sole().canRollDice())
 				throw new IllegalStateException();
 			int number = this.gameModel.getDiceNumber();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().rollNumber(playerInfo.getPlayerIndex(), number);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().rollNumber(ClientPlayer.sole().getUserIndex(), number);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -66,7 +67,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canPlaceRobber(location, victimIndex))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().robPlayer(playerInfo.getPlayerIndex(), victimIndex,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().robPlayer(ClientPlayer.sole().getUserIndex(), victimIndex,
 					location);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -90,7 +91,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuyDevCard())
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buyDevCard(playerInfo.getPlayerIndex());
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buyDevCard(ClientPlayer.sole().getUserIndex());
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -117,7 +118,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canUseYearOfPlenty(resource1, resource2))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().yearOfPlenty(playerInfo.getPlayerIndex(), resource1,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().yearOfPlenty(ClientPlayer.sole().getUserIndex(), resource1,
 					resource2);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -149,7 +150,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canUseRoadBuilding(loc1, loc2))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().roadBuilding(playerInfo.getPlayerIndex(), loc1, loc2);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().roadBuilding(ClientPlayer.sole().getUserIndex(), loc1, loc2);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -179,7 +180,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canUseSoldier(location, victimIndex))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().soldier(playerInfo.getPlayerIndex(), victimIndex,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().soldier(ClientPlayer.sole().getUserIndex(), victimIndex,
 					location);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -202,7 +203,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canUseMonopoly(resource))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().monopoly(resource, playerInfo.getPlayerIndex());
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().monopoly(resource, ClientPlayer.sole().getUserIndex());
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -223,7 +224,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canUseMonument())
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().monument(playerInfo.getPlayerIndex());
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().monument(ClientPlayer.sole().getUserIndex());
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -253,7 +254,7 @@ public class DoModelFacade extends ModelFacade {
 			if (!CanModelFacade.sole().canBuildRoad(roadLocation))
 				throw new IllegalStateException();
 			boolean free = this.gameModel.inSetupRounds();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(playerInfo.getPlayerIndex(), roadLocation,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(ClientPlayer.sole().getUserIndex(), roadLocation,
 					free);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -283,7 +284,7 @@ public class DoModelFacade extends ModelFacade {
 			if (!CanModelFacade.sole().canBuildSettlement(vertLoc))
 				throw new IllegalStateException();
 			boolean free = this.gameModel.inSetupRounds();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(playerInfo.getPlayerIndex(), vertLoc,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc,
 					free);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -310,7 +311,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuildCity(vertLoc))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildCity(playerInfo.getPlayerIndex(), vertLoc);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildCity(ClientPlayer.sole().getUserIndex(), vertLoc);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -335,7 +336,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canOfferTrade(offer, receiverIndex))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().offerTrade(playerInfo.getPlayerIndex(), offer,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().offerTrade(ClientPlayer.sole().getUserIndex(), offer,
 					receiverIndex);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -361,7 +362,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canAcceptTrade())
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().acceptTrade(playerInfo.getPlayerIndex(), willAccept);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().acceptTrade(ClientPlayer.sole().getUserIndex(), willAccept);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -390,7 +391,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canMaritimeTrade(ratio, inputResource, outputResource))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().maritimeTrade(playerInfo.getPlayerIndex(), ratio,
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().maritimeTrade(ClientPlayer.sole().getUserIndex(), ratio,
 					inputResource, outputResource);
 			setModel(jsonModel);
 		} catch (Exception e) {
@@ -413,7 +414,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canDiscardCards(resources))
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().discard(playerInfo.getPlayerIndex(), resources);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().discard(ClientPlayer.sole().getUserIndex(), resources);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -436,7 +437,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canEndTurn())
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().finishTurn(playerInfo.getPlayerIndex());
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().finishTurn(ClientPlayer.sole().getUserIndex());
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -460,7 +461,7 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canSendChat())
 				throw new IllegalStateException();
-			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().sendChat(playerInfo.getPlayerIndex(), message);
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().sendChat(ClientPlayer.sole().getUserIndex(), message);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
