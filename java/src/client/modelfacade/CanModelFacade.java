@@ -181,19 +181,32 @@ public class CanModelFacade extends ModelFacade {
 	}
 
 	/**
-	 * Checks the model to see if the current player can maritime trade
+	 * Checks if a trade offer is possible
 	 * @pre none
-	 * @post whether or not this operation is valid
-	 * @param ratio Port
-	 * @param input Resource
-	 * @param output Resource
-	 * @return post
+	 * @post the highest valid ratio
+	 * @param inputType the type we are considering offering for trade
+	 * @return the highest valid trading ratio for that resource type
 	 * @throws NullPointerException
 	 */
-	public boolean canMaritimeTrade(int ratio, ResourceType inputType, ResourceType outputType)
+	public int canOfferMaritime (ResourceType inputType)
 			throws NullPointerException {
-		return this.gameModel.canMaritimeTrade(playerInfo.getPlayerIndex(), ratio, inputType, outputType);
+		return this.gameModel.canOfferMaritime(playerInfo.getPlayerIndex(), inputType);
 	}
+
+	/**
+	 * Checks if the bank has enough cards to respond to a maritime trade offer
+	 * @pre none, but you should call canOfferMaritime first
+	 * @post the bank tells you whether or not it's ready to trade a given resource
+	 * @param outputType the type we want to get back from trade
+	 * @return TRUE if this trade is available, FALSE if not
+	 * @throws
+	 */
+	public boolean canReceiveMaritime (ResourceType outputType)
+			throws NullPointException {
+		return this.gameModel.canReceiveMaritime(playerInfo.getPlayerIndex(), outputType);
+	}
+	
+
 
 	/**
 	 * Checks the model to see if the current player can DiscardCards
