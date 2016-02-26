@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.main.ClientPlayer;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.testing.TestingModelFacade;
 import client.servercommunicator.FakeProxy;
@@ -14,8 +15,9 @@ public class PollerTest {
 	
 	@Before
 	public void initFacades() {
-		CanModelFacade.sole().setUserIndex(0);
-		TestingModelFacade.sole().setUserIndex(0);
+		//CanModelFacade.sole().setUserIndex(0);
+		//TestingModelFacade.sole().setUserIndex(0);
+		ClientPlayer.sole().setUserIndex(0);
 	}
 
 	@Test

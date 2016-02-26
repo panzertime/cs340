@@ -2,6 +2,7 @@ package client.modelfacade;
 
 import java.util.Map;
 
+import client.main.ClientPlayer;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
@@ -30,7 +31,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canRollDice() throws NullPointerException {
-		return this.gameModel.canRollNumber(playerInfo.getPlayerIndex());
+		return this.gameModel.canRollNumber(ClientPlayer.sole().getUserIndex());
 	}
 
 	/**
@@ -43,7 +44,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException Pre-condition violation
 	 */
 	public boolean canPlaceRobber(HexLocation hexLoc, int playerIndex) throws NullPointerException {
-		return this.gameModel.canRobPlayer(playerInfo.getPlayerIndex(), hexLoc, playerIndex);
+		return this.gameModel.canRobPlayer(ClientPlayer.sole().getUserIndex(), hexLoc, playerIndex);
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canBuyDevCard() throws NullPointerException {
-		return this.gameModel.canBuyDevCard(playerInfo.getPlayerIndex());
+		return this.gameModel.canBuyDevCard(ClientPlayer.sole().getUserIndex());
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) throws NullPointerException {
-		return this.gameModel.canUseYearOfPlenty(playerInfo.getPlayerIndex(), one, two);
+		return this.gameModel.canUseYearOfPlenty(ClientPlayer.sole().getUserIndex(), one, two);
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two) throws NullPointerException {
-		return this.gameModel.canUseRoadBuilding(playerInfo.getPlayerIndex(), one, two);
+		return this.gameModel.canUseRoadBuilding(ClientPlayer.sole().getUserIndex(), one, two);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canUseSoldier(HexLocation newRobberLocation, int victimIndex) throws NullPointerException {
-		return this.gameModel.canUseSoldier(playerInfo.getPlayerIndex(), newRobberLocation, victimIndex);
+		return this.gameModel.canUseSoldier(ClientPlayer.sole().getUserIndex(), newRobberLocation, victimIndex);
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canUseMonopoly(ResourceType type) throws NullPointerException {
-		return this.gameModel.canUseMonopoly(playerInfo.getPlayerIndex(), type);
+		return this.gameModel.canUseMonopoly(ClientPlayer.sole().getUserIndex(), type);
 	}
 
 	/**
@@ -116,7 +117,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canUseMonument() throws NullPointerException {
-		return this.gameModel.canUseMonument(playerInfo.getPlayerIndex());
+		return this.gameModel.canUseMonument(ClientPlayer.sole().getUserIndex());
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException Pre condition violated
 	 */
 	public boolean canBuildRoad(EdgeLocation edgeLoc) throws NullPointerException {
-		return this.gameModel.canBuildRoad(playerInfo.getPlayerIndex(), edgeLoc);
+		return this.gameModel.canBuildRoad(ClientPlayer.sole().getUserIndex(), edgeLoc);
 	}
 
 	/**
@@ -140,7 +141,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException Pre-Conditions violated
 	 */
 	public boolean canBuildSettlement(VertexLocation vertLoc) throws NullPointerException {
-		return this.gameModel.canBuildSettlement(playerInfo.getPlayerIndex(), vertLoc);
+		return this.gameModel.canBuildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException Pre conditions violated
 	 */
 	public boolean canBuildCity(VertexLocation vertLoc) throws NullPointerException {
-		return this.gameModel.canBuildCity(playerInfo.getPlayerIndex(), vertLoc);
+		return this.gameModel.canBuildCity(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException Pre condtion violation
 	 */
 	public boolean canOfferTrade(Map<ResourceType, Integer> resources, Integer receiverIndex) throws NullPointerException {
-		return gameModel.canOfferTrade(playerInfo.getPlayerIndex(), resources, receiverIndex);
+		return gameModel.canOfferTrade(ClientPlayer.sole().getUserIndex(), resources, receiverIndex);
 	}
 	
 	/**
@@ -177,7 +178,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canAcceptTrade() throws NullPointerException {
-		return gameModel.canAcceptTrade(playerInfo.getPlayerIndex());
+		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserIndex());
 	}
 
 	/**
@@ -190,7 +191,7 @@ public class CanModelFacade extends ModelFacade {
 	 */
 	public int canOfferMaritime (ResourceType inputType)
 			throws NullPointerException {
-		return this.gameModel.canOfferMaritime(playerInfo.getPlayerIndex(), inputType);
+		return this.gameModel.canMaritimeTrade(ClientPlayer.sole().getUserIndex(), ratio, inputType, outputType);
 	}
 
 	/**
@@ -218,7 +219,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws BadResourceTypeException
 	 */
 	public boolean canDiscardCards(Map<ResourceType, Integer> resources) throws NullPointerException {
-		return this.gameModel.canDiscardCard(playerInfo.getPlayerIndex(), resources);
+		return this.gameModel.canDiscardCard(ClientPlayer.sole().getUserIndex(), resources);
 	}
 
 	/**
@@ -229,10 +230,10 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canEndTurn() throws NullPointerException {
-		return this.gameModel.canFinishTurn(playerInfo.getPlayerIndex());
+		return this.gameModel.canFinishTurn(ClientPlayer.sole().getUserIndex());
 	}
 
 	public boolean canSendChat() throws NullPointerException {
-		return this.gameModel.canSendChat(playerInfo.getPlayerIndex());
+		return this.gameModel.canSendChat(ClientPlayer.sole().getUserIndex());
 	}
 }

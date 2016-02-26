@@ -1,6 +1,7 @@
 package client.login;
 
 import client.base.*;
+import client.main.ClientPlayer;
 import client.misc.*;
 import client.modelfacade.ModelFacade;
 import client.servercommunicator.ServerException;
@@ -82,9 +83,9 @@ public class LoginController extends Controller implements ILoginController {
 			int userID = ServerFacade.get_instance().login(username, password);
 			
 			// If log in succeeded
-			ModelFacade.setUserColor(CatanColor.RED);
-			ModelFacade.setUserID(userID);
-			ModelFacade.setUserName(username);
+			ClientPlayer.sole().setUserColor(CatanColor.RED);
+			ClientPlayer.sole().setUserID(userID);
+			ClientPlayer.sole().setUserName(username);
 			
 			getLoginView().closeModal();
 			loginAction.execute();
@@ -111,9 +112,9 @@ public class LoginController extends Controller implements ILoginController {
 				int userID = ServerFacade.get_instance().register(username, password1);
 				
 				// If register succeeded
-				ModelFacade.setUserColor(CatanColor.RED);
-				ModelFacade.setUserID(userID);
-				ModelFacade.setUserName(username);
+				ClientPlayer.sole().setUserColor(CatanColor.RED);
+				ClientPlayer.sole().setUserID(userID);
+				ClientPlayer.sole().setUserName(username);
 				
 				getLoginView().closeModal();
 				loginAction.execute();

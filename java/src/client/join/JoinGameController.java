@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 
 import client.base.*;
 import client.data.*;
+import client.main.ClientPlayer;
 import client.misc.*;
 import client.modelfacade.ModelFacade;
 import client.modelfacade.get.GetModelFacade;
@@ -104,7 +105,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	
 	private void updateGames() {
 		GameInfo[] games = getGames();
-		PlayerInfo localPlayer = GetModelFacade.sole().getPlayerInfo();
+		PlayerInfo localPlayer = ClientPlayer.sole().getPlayerInfo();
 		getJoinGameView().setGames(games, localPlayer);
 	}
 
@@ -211,21 +212,53 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void startJoinGame(GameInfo game) {
+		enableAllColors();
+		disableColors(game);
+		int gameID = game.getId();
+		ClientPlayer.sole().setGameID(gameID);
 		getSelectColorView().showModal();
+	}
+
+	private void enableAllColors() {
+		for(CatanColor color : CatanColor.values()) {
+			getSelectColorView().setColorEnabled(color, true);
+		}
+	}
+
+	private void disableColors(GameInfo game) {
+		List<PlayerInfo> playerList = game.getPlayers();
+		PlayerInfo me = ClientPlayer.sole().getPlayerInfo();
+		int myID = me.getId();
+		for(PlayerInfo player : playerList) {
+			int playerID = player.getId();
+			if(playerID != myID) {
+				CatanColor playerColor = player.getColor();
+				getSelectColorView().setColorEnabled(playerColor, false);
+			}
+		}
 	}
 
 	@Override
 	public void cancelJoinGame() {
 		getJoinGameView().closeModal();
+		ClientPlayer.sole().setGameID(null);
 	}
 
 	@Override
 	public void joinGame(CatanColor color) {
-		
-		// If join succeeded
-		getSelectColorView().closeModal();
-		getJoinGameView().closeModal();
-		joinAction.execute();
+		//TODO: check that color is real?
+		int gameID = ClientPlayer.sole().getGameID();
+		try {
+			ServerFacade.get_instance().joinGame(gameID, color);
+			
+			// If join succeeded
+			getSelectColorView().closeModal();
+			getJoinGameView().closeModal();
+			joinAction.execute();
+		} catch (ServerException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 }

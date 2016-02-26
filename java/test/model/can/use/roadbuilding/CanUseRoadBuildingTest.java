@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
+import client.main.ClientPlayer;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
 import client.modelfacade.testing.TestingModelFacade;
@@ -26,8 +27,9 @@ public class CanUseRoadBuildingTest {
 	
 	@Before
 	public void initFacades() {
-		CanModelFacade.sole().setUserIndex(0);
-		TestingModelFacade.sole().setUserIndex(0);
+		//CanModelFacade.sole().setUserIndex(0);
+		//TestingModelFacade.sole().setUserIndex(0);
+		ClientPlayer.sole().setUserIndex(0);
 		TestingModelFacade.sole().emptyModel();
 	}
 

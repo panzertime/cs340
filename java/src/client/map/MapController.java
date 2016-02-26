@@ -1,16 +1,18 @@
 package client.map;
 
-import java.util.*;
-
-import client.base.*;
-import client.data.*;
-import shared.model.board.edge.EdgeDirection;
+import client.base.Controller;
+import client.data.RobPlayerInfo;
+import client.map.pseudo.PseudoCity;
+import client.map.pseudo.PseudoHex;
+import client.map.pseudo.PseudoRoad;
+import client.map.pseudo.PseudoSettlement;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
-import shared.model.board.hex.HexType;
-import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.PieceType;
-import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
 
@@ -18,7 +20,7 @@ import shared.model.definitions.CatanColor;
 /**
  * Implementation for the map controller
  */
-public class MapController extends Controller implements IMapController {
+public class MapController extends Controller implements GetModelFacadeListener, IMapController {
 	
 	private IRobView robView;
 	
@@ -45,103 +47,57 @@ public class MapController extends Controller implements IMapController {
 	
 	protected void initFromModel() {
 		
-		//<temp>
-		
-		Random rand = new Random();
-
-		for (int x = 0; x <= 3; ++x) {
-			
-			int maxY = 3 - x;			
-			for (int y = -3; y <= maxY; ++y) {				
-				int r = rand.nextInt(HexType.values().length);
-				HexType hexType = HexType.values()[r];
-				HexLocation hexLoc = new HexLocation(x, y);
-				getView().addHex(hexLoc, hexType);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.NorthWest),
-						CatanColor.RED);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.SouthWest),
-						CatanColor.BLUE);
-				getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.South),
-						CatanColor.ORANGE);
-				getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
-				getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
-			}
-			
-			if (x != 0) {
-				int minY = x - 3;
-				for (int y = minY; y <= 3; ++y) {
-					int r = rand.nextInt(HexType.values().length);
-					HexType hexType = HexType.values()[r];
-					HexLocation hexLoc = new HexLocation(-x, y);
-					getView().addHex(hexLoc, hexType);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.NorthWest),
-							CatanColor.RED);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.SouthWest),
-							CatanColor.BLUE);
-					getView().placeRoad(new EdgeLocation(hexLoc, EdgeDirection.South),
-							CatanColor.ORANGE);
-					getView().placeSettlement(new VertexLocation(hexLoc,  VertexDirection.NorthWest), CatanColor.GREEN);
-					getView().placeCity(new VertexLocation(hexLoc,  VertexDirection.NorthEast), CatanColor.PURPLE);
-				}
-			}
+		for (PseudoHex hex : GetModelFacade.sole().getPseudoHexes()) {
+			getView().addHex(hex.getHexLoc(), hex.getHexType());
+			if (hex.getProductionNum() != null)
+				getView().addNumber(hex.getHexLoc(), hex.getProductionNum());
+			if (hex.getPortType() != null) 
+				getView().addPort(hex.getPortLocation(), hex.getPortType());
 		}
 		
-		PortType portType = PortType.BRICK;
-		getView().addPort(new EdgeLocation(new HexLocation(0, 3), EdgeDirection.North), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(0, -3), EdgeDirection.South), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 3), EdgeDirection.NorthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(-3, 0), EdgeDirection.SouthEast), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, -3), EdgeDirection.SouthWest), portType);
-		getView().addPort(new EdgeLocation(new HexLocation(3, 0), EdgeDirection.NorthWest), portType);
+		for (PseudoRoad road : GetModelFacade.sole().getPseudoRoads()) {
+			getView().placeRoad(road.getEdgeLoc(), road.getColor());
+		}
 		
-		getView().placeRobber(new HexLocation(0, 0));
+		for (PseudoSettlement settlement : GetModelFacade.sole().getPseudoSettlements()) {
+			getView().placeSettlement(settlement.getVertLoc(), settlement.getColor());
+		}
 		
-		getView().addNumber(new HexLocation(-2, 0), 2);
-		getView().addNumber(new HexLocation(-2, 1), 3);
-		getView().addNumber(new HexLocation(-2, 2), 4);
-		getView().addNumber(new HexLocation(-1, 0), 5);
-		getView().addNumber(new HexLocation(-1, 1), 6);
-		getView().addNumber(new HexLocation(1, -1), 8);
-		getView().addNumber(new HexLocation(1, 0), 9);
-		getView().addNumber(new HexLocation(2, -2), 10);
-		getView().addNumber(new HexLocation(2, -1), 11);
-		getView().addNumber(new HexLocation(2, 0), 12);
-		
-		//</temp>
+		for (PseudoCity city : GetModelFacade.sole().getPseudoCities()) {
+			getView().placeCity(city.getVertLoc(), city.getColor());
+			
+		}
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildRoad(edgeLoc);
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildSettlement(vertLoc);
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
-		
-		return true;
+		return CanModelFacade.sole().canBuildCity(vertLoc);
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		
+		//CanModelFacade.sole().canPlaceRobber(hexLoc, playerIndex);
 		return true;
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		
+		DoModelFacade.sole().doBuildRoad(edgeLoc);
 		getView().placeRoad(edgeLoc, CatanColor.ORANGE);
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		
+		DoModelFacade.sole().doBuildSettlement(vertLoc);
 		getView().placeSettlement(vertLoc, CatanColor.ORANGE);
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		
+		DoModelFacade.sole().doBuildCity(vertLoc);
 		getView().placeCity(vertLoc, CatanColor.ORANGE);
 	}
 
@@ -161,8 +117,7 @@ public class MapController extends Controller implements IMapController {
 		
 	}
 	
-	public void playSoldierCard() {	
-		
+	public void playSoldierCard() {
 	}
 	
 	public void playRoadBuildingCard() {	
@@ -170,6 +125,12 @@ public class MapController extends Controller implements IMapController {
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
+		
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 		
 	}
 	
