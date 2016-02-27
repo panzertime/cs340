@@ -729,7 +729,7 @@ public class Model {
 	public ArrayList<Integer> getPlayerIndices() {
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		indices.addAll(players.keySet());
-		
+
 		return indices;
 	}
 
@@ -743,12 +743,15 @@ public class Model {
 	}
 
 	public boolean isLargestArmy(int playerIndex) {
-		return this.getAchievements().isLargestArmy(getPlayer(playerIndex));
+		Boolean b = this.getAchievements().isLargestArmy(getPlayer(playerIndex));
+		if (b==null) b = false;
+		return b;
 	}
 
 	public boolean isLongestRoad(int playerIndex) {
-		return this.getAchievements().isLongestRoad(getPlayer(playerIndex));
-	}
+		Boolean b = this.getAchievements().isLongestRoad(getPlayer(playerIndex));
+		if (b==null) b = false;
+		return b;	}
 
 	public CatanColor getPlayerColor(int playerIndex) {
 		return getPlayer(playerIndex).getColor();

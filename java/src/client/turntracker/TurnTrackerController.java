@@ -47,6 +47,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
 		
+		
 		for (Integer playerIndex: playerIndices)
 		{
 			
