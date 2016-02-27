@@ -3,12 +3,13 @@ package client.points;
 import client.base.*;
 import client.main.ClientPlayer;
 import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 
 
 /**
  * Implementation for the points controller
  */
-public class PointsController extends Controller implements IPointsController {
+public class PointsController extends Controller implements IPointsController, GetModelFacadeListener {
 
 	private IGameFinishedView finishedView;
 	

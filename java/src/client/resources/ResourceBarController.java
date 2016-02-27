@@ -5,13 +5,14 @@ import java.util.*;
 import client.base.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
 
 
 /**
  * Implementation for the resource bar controller
  */
-public class ResourceBarController extends Controller implements IResourceBarController {
+public class ResourceBarController extends Controller implements IResourceBarController, GetModelFacadeListener {
 
 	private Map<ResourceBarElement, IAction> elementActions;
 	

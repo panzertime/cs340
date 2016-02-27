@@ -3,6 +3,7 @@ package client.devcards;
 import client.base.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
 
@@ -10,7 +11,7 @@ import shared.model.hand.development.DevCardType;
 /**
  * "Dev card" controller implementation
  */
-public class DevCardController extends Controller implements IDevCardController {
+public class DevCardController extends Controller implements IDevCardController, GetModelFacadeListener {
 
 	private IBuyDevCardView buyCardView;
 	private IAction soldierAction;

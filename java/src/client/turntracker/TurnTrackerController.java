@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import client.base.*;
 import client.main.ClientPlayer;
 import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.board.piece.PieceType;
 import shared.model.definitions.CatanColor;
 
@@ -12,7 +13,7 @@ import shared.model.definitions.CatanColor;
 /**
  * Implementation for the turn tracker controller
  */
-public class TurnTrackerController extends Controller implements ITurnTrackerController {
+public class TurnTrackerController extends Controller implements ITurnTrackerController, GetModelFacadeListener {
 
 	public TurnTrackerController(ITurnTrackerView view) {
 		
