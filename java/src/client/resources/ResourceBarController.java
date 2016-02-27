@@ -3,6 +3,9 @@ package client.resources;
 import java.util.*;
 
 import client.base.*;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import shared.model.hand.ResourceType;
 
 
 /**
@@ -67,6 +70,24 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			IAction action = elementActions.get(element);
 			action.execute();
 		}
+	}
+	
+	public void update()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		CanModelFacade canModelFacade = CanModelFacade.sole();
+		
+		this.getView().setElementAmount(ResourceBarElement.WOOD, getModelFacade.getResourceAmount(ResourceType.WOOD));
+		this.getView().setElementAmount(ResourceBarElement.BRICK, getModelFacade.getResourceAmount(ResourceType.BRICK));
+		this.getView().setElementAmount(ResourceBarElement.SHEEP, getModelFacade.getResourceAmount(ResourceType.SHEEP));
+		this.getView().setElementAmount(ResourceBarElement.WHEAT, getModelFacade.getResourceAmount(ResourceType.WHEAT));
+		this.getView().setElementAmount(ResourceBarElement.ORE, getModelFacade.getResourceAmount(ResourceType.ORE));
+		this.getView().setElementAmount(ResourceBarElement.ROAD, getModelFacade.getFreeRoads());
+		this.getView().setElementAmount(ResourceBarElement.SETTLEMENT, getModelFacade.getFreeSettlements());
+		this.getView().setElementAmount(ResourceBarElement.CITY, getModelFacade.getFreeCities());
+		this.getView().setElementAmount(ResourceBarElement.SOLDIERS, getModelFacade.getSoldiers());
+		this.getView().setElementEnabled(ResourceBarElement.BUY_CARD, canModelFacade.canBuyDevCard());
+		
 	}
 
 }
