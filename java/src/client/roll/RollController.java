@@ -1,5 +1,7 @@
 package client.roll;
 
+import java.util.Random;
+
 import client.base.*;
 
 
@@ -36,6 +38,12 @@ public class RollController extends Controller implements IRollController {
 	
 	@Override
 	public void rollDice() {
+		
+		//Rolls two die
+		Random rand = new Random();
+		int  n = rand.nextInt(6) + 1;
+		n += rand.nextInt(6) + 1;
+		this.getResultView().setRollValue(n);
 
 		getResultView().showModal();
 	}
