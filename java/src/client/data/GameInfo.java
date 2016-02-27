@@ -112,5 +112,14 @@ public class GameInfo
 		
 		return result;
 	}
+
+	public PlayerInfo[] getPlayerArray() {
+		int numPlayers = players.size();
+		PlayerInfo[] playerArray = new PlayerInfo[numPlayers];
+		for(int i = 0; i < numPlayers; i++) {
+			playerArray[i] = players.get(i);
+		}
+		return playerArray;
+	}
 }
 

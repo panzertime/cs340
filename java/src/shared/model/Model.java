@@ -727,7 +727,10 @@ public class Model {
 	}
 
 	public ArrayList<Integer> getPlayerIndices() {
-		return (ArrayList<Integer>) players.keySet();
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		indices.addAll(players.keySet());
+		
+		return indices;
 	}
 
 	public int getPoints(int playerIndex) {
