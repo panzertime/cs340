@@ -194,6 +194,22 @@ public class CanModelFacade extends ModelFacade {
 		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserIndex());
 	}
 
+	
+	/**
+	 * Checks the model to see if the current player can maritime trade
+	 * @pre none
+	 * @post whether or not this operation is valid
+	 * @param ratio Port
+	 * @param input Resource
+	 * @param output Resource
+	 * @return post
+	 * @throws NullPointerException
+	 */
+	public boolean canMaritimeTrade(int ratio, ResourceType inputType, ResourceType outputType)
+			throws NullPointerException {
+		return this.gameModel.canMaritimeTrade(ClientPlayer.sole().getUserIndex(), ratio, inputType, outputType);
+	}
+	
 	/**
 	 * Checks if a trade offer is possible
 	 * @pre none
@@ -204,10 +220,7 @@ public class CanModelFacade extends ModelFacade {
 	 */
 	public int canOfferMaritime (ResourceType inputType)
 			throws NullPointerException {
-<<<<<<< HEAD
-		return this.gameModel.canMaritimeTrade(ClientPlayer.sole().getUserIndex(), ratio, inputType, outputType);
-=======
-		return this.gameModel.canOfferMaritime(playerInfo.getPlayerIndex(), inputType);
+		return this.gameModel.canOfferMaritime(ClientPlayer.sole().getUserIndex(), inputType);
 	}
 
 	/**
@@ -219,11 +232,9 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws
 	 */
 	public boolean canReceiveMaritime (ResourceType outputType)
-			throws NullPointException {
-		return this.gameModel.canReceiveMaritime(playerInfo.getPlayerIndex(), outputType);
->>>>>>> 98fbc84543c9119f050af1cf4bf79a715b46d048
-	}
-	
+			throws NullPointerException {
+		return this.gameModel.canReceiveMaritime(ClientPlayer.sole().getUserIndex(), outputType);
+	}	
 
 
 	/**
