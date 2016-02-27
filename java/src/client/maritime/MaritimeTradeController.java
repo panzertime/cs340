@@ -33,13 +33,13 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void startTrade() {
-		
+		// modelFacade.canTrades
 		getTradeOverlay().showModal();
 	}
 
 	@Override
 	public void makeTrade() {
-
+		// modelFacade.doTrades
 		getTradeOverlay().closeModal();
 	}
 
