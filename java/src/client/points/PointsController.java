@@ -24,7 +24,7 @@ public class PointsController extends Controller implements IPointsController {
 		
 		setFinishedView(finishedView);
 		
-		initFromModel();
+		//initFromModel();
 	}
 	
 	public IPointsView getPointsView() {
@@ -40,8 +40,7 @@ public class PointsController extends Controller implements IPointsController {
 	}
 
 	private void initFromModel() {
-		GetModelFacade getModelFacade = GetModelFacade.sole();
-		getPointsView().setPoints(getModelFacade.getPoints(ClientPlayer.sole().getUserIndex()));
+		getPointsView().setPoints(0);
 	}
 	
 	public void update()

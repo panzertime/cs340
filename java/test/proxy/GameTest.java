@@ -44,7 +44,7 @@ public class GameTest {
 
 	@Test
 	public void testgetModel200() {
-		int version = 0;
+		Integer version = null;
 		try {
 			serverFacade.getModel(version);
 			System.out.println("Passed get-model test");

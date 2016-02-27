@@ -8,6 +8,7 @@ import client.base.*;
 import client.data.GameInfo;
 import client.data.Games;
 import client.main.ClientPlayer;
+import client.modelfacade.ModelFacade;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.exceptions.BadJSONException;
@@ -19,6 +20,7 @@ import shared.model.exceptions.BadJSONException;
 public class PlayerWaitingController extends Controller implements IPlayerWaitingController {
 	
 	private GameInfo curGame;
+	private IAction waitAction;
 
 	public PlayerWaitingController(IPlayerWaitingView view) {
 
@@ -31,17 +33,25 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 		return (IPlayerWaitingView)super.getView();
 	}
+	
+	public IAction getWaitAction() {
+		return waitAction;
+	}
+	
+	public void setWaitAction(IAction value) {
+		waitAction = value;
+	}
 
 	@Override
 	public void start() {
 		setCurrentGame();
 		if(curGame.isFull()) {
 			getView().closeModal();
+			ModelFacade.getModelFromServer();
 		} else {
 			List aiList;
 			try {
 				aiList = ServerFacade.get_instance().listAI();
-				
 				String[] aiChoices = makeAIList(aiList); 
 				getView().setAIChoices(aiChoices);
 				//getView().setPlayers(players);

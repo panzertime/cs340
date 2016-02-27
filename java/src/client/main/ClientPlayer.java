@@ -48,7 +48,7 @@ public class ClientPlayer {
 		return clientInfo.getColor();
 	}
 	
-	public String getUserName(String name) {
+	public String getUserName() {
 		return clientInfo.getName();
 	}
 
