@@ -6,6 +6,7 @@ import java.util.Map;
 import client.base.Controller;
 import client.misc.IWaitView;
 import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
@@ -145,7 +146,8 @@ public class DiscardController extends Controller implements IDiscardController,
 
 	@Override
 	public void discard() {
-		
+		DoModelFacade doModelFacade = DoModelFacade.sole();
+		doModelFacade.doDiscard(this.getResourceList());
 		getDiscardView().closeModal();
 		setToStandard();
 	}

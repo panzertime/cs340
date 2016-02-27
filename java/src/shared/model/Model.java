@@ -249,14 +249,6 @@ public class Model {
 		return board;
 	}
 
-	/**
-	 * 
-	 * @return int simulating two six-faced die
-	 */
-	public int getDiceNumber() {
-		return 0;
-
-	}
 
 	/**
 	 * @post - the methods when the dice is rolled are called

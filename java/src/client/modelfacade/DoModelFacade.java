@@ -30,16 +30,16 @@ public class DoModelFacade extends ModelFacade {
 	/**
 	 * Simulates two die, sends the result to the model and server and 
 	 * compares the result models.
+	 * @param number 
 	 * @pre User is logged in, in a game, model state is 'rolling', it's
 	 * the user's turn
 	 * @post client state now becomes 'discarding', 'robbing' or 'playing'
 	 * @pre condition violation
 	 */
-	public void doRollDice() {
+	public void doRollDice(int number) {
 		try {
 			if (!CanModelFacade.sole().canRollDice())
 				throw new IllegalStateException();
-			int number = this.gameModel.getDiceNumber();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().rollNumber(ClientPlayer.sole().getUserIndex(), number);
 			setModel(jsonModel);
 		} catch (Exception e) {
