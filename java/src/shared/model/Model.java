@@ -21,6 +21,7 @@ import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
+import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
@@ -288,8 +289,8 @@ public class Model {
 
 	}
 
-	public Player getPlayer(Integer playerID) {
-		return players.get(playerID);
+	public Player getPlayer(Integer playerIndex) {
+		return players.get(playerIndex);
 	}
 	
 	/**
@@ -299,8 +300,8 @@ public class Model {
 		return players.get(activePlayerIndex);
 	}
 
-	public Boolean isActivePlayer(Integer playerID) {
-		if (activePlayerIndex.equals(playerID))
+	public Boolean isActivePlayer(Integer playerIndex) {
+		if (activePlayerIndex.equals(playerIndex))
 			return true;
 		return false;
 	}
@@ -706,88 +707,91 @@ public class Model {
 	
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
 	
+	//client only
 	public boolean hasDevCardEnabled(DevCardType type, int userID) {
-		// TODO Auto-generated method stub
-		return false;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+
+		return client.hasDevCardToUse(type);
 	}
 
+	//client only
 	public int getDevCardAmount(DevCardType type, int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getDevCardAmount(type);
 	}
 
+	//client only
 	public int getResourceAmount(ResourceType type, int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getResourceAmount(type);
 	}
 
 	public ArrayList<Integer> getPlayerIndices() {
-		// TODO Auto-generated method stub
-		return null;
+		return (ArrayList<Integer>) players.keySet();
 	}
 
 	public int getPoints(int playerIndex) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return getPlayer(playerIndex).getPoints();
 	}
 
 	public boolean isTurn(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
+		return (this.isActivePlayer(playerIndex));
 	}
 
 	public boolean isLargestArmy(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.getAchievements().isLargestArmy(getPlayer(playerIndex));
 	}
 
 	public boolean isLongestRoad(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.getAchievements().isLongestRoad(getPlayer(playerIndex));
 	}
 
-	public PieceType getPlayerColor(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public CatanColor getPlayerColor(int playerIndex) {
+		return getPlayer(playerIndex).getColor();
 	}
 
 	public String getPlayerName(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return getPlayer(playerIndex).getUserName();
 	}
 
 	public boolean isGameOver() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.winnerIndex != -1;
 	}
 
 	public String getWinnerName() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.getWinner().getUserName();
 	}
 
+	//client only
 	public boolean isClientWinner(int userID) {
-		// TODO Auto-generated method stub
-		return false;
+	
+		return (this.getWinner().getPlayerID() == userID);
 	}
 
+	//client only
 	public int getFreeRoads(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getRoadsFree();
 	}
 
+	//client only
 	public int getFreeSettlements(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getSettlementsFree();
 	}
 
+	//client only
 	public int getFreeCities(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getCitiesFree();
 	}
 
+	//client only
 	public int getSoldiers(int userID) {
-		Player client = getPlayer(userID);
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
 		return client.getArmies();
 	}
 		

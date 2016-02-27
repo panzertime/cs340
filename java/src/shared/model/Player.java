@@ -46,7 +46,7 @@ public class Player {
 		String c = (String) player.get("color");
 		if (c == null)
 			throw new BadJSONException();
-		userColor = getColor(c);
+		userColor = determineColor(c);
 		String userName = (String) player.get("name");
 		if (userName == null)
 			throw new BadJSONException();
@@ -85,7 +85,7 @@ public class Player {
 		cities = new City[4];
 		roads = new Road[15];
 
-		initPeices();   
+		initPieces();   
 	}
 
 	public boolean equalsJSON(JSONObject player) {
@@ -94,7 +94,7 @@ public class Player {
 		String c = (String) player.get("color");
 		if (c == null)
 			return false;
-		if (!userColor.equals(getColor(c)))
+		if (!userColor.equals(determineColor(c)))
 			return false;
 		String userName = (String) player.get("name");
 		if (userName == null)
@@ -138,7 +138,7 @@ public class Player {
 		return true;
 	}
 
-	public CatanColor getColor(String s) {
+	public CatanColor determineColor(String s) {
 		s = s.toUpperCase();
 		switch (s) {
 		case "RED":
@@ -163,8 +163,14 @@ public class Player {
 			return null;
 		}
 	}
+	
+	public CatanColor getColor()
+	{
+		return userColor;
+	}
+	
 
-	private void initPeices() {
+	private void initPieces() {
 		for (int i = 0; i < 5; i++)
 			settlements[i] = new Settlement(this);
 		for (int i = 0; i < 4; i++)
@@ -376,6 +382,7 @@ public class Player {
 		return false;
 	}
 	
+
 	public Boolean hasDevCardToUse(DevCardType type) {
 		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == type && card.isEnabled())
@@ -683,6 +690,21 @@ public class Player {
 		return hand.getHandSize();
 	}
 	
+	public int getDevCardAmount(DevCardType type)
+	{
+		int amount = 0;
+		for (DevCard card : hand.getDevCards()) {
+			if (card.getType() == type)
+				amount++;
+		}
+		return amount;
+	}
+	
+
+	public int getResourceAmount(ResourceType type)
+	{
+		return this.hand.getResourceAmount(type);
+	}
 
 	
 	public List<PseudoCity> getPseudoCities() {

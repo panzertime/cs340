@@ -6,9 +6,5 @@ public enum PieceType
 {
 	ROAD, SETTLEMENT, CITY, ROBBER;
 
-	public Color getJavaColor() {
-		// TODO return colors for respective pieces.
-		return null;
-	}
 }
 
