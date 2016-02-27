@@ -47,6 +47,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		initialized = true;
 	}
 	
+	@Override
 	public void update()
 	{
 		if (!initialized)

@@ -45,6 +45,7 @@ public class PointsController extends Controller implements IPointsController, G
 		getPointsView().setPoints(0);
 	}
 	
+	@Override
 	public void update()
 	{
 		GetModelFacade getModelFacade = GetModelFacade.sole();

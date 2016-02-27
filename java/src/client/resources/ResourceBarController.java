@@ -75,6 +75,7 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		}
 	}
 	
+	@Override
 	public void update()
 	{
 		GetModelFacade getModelFacade = GetModelFacade.sole();
