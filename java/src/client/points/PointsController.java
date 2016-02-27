@@ -25,6 +25,7 @@ public class PointsController extends Controller implements IPointsController, G
 		
 		setFinishedView(finishedView);
 		
+		GetModelFacade.registerListener(this);
 		//initFromModel();
 	}
 	
