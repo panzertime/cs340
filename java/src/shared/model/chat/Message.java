@@ -4,7 +4,9 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import client.communication.LogEntry;
 import shared.model.Player;
+import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 
 public class Message {
@@ -44,6 +46,15 @@ public class Message {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public LogEntry toLogEntry() {
+		//CatanColor color = someFunctionCall(source);
+		//LogEntry logEntry = new LogEntry(color, message);
+		//TODO
+		
+		//return logEntry;
+		return null;
 	}
 	
 	

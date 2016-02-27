@@ -21,6 +21,7 @@ import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
+import shared.model.chat.MessageLog;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.BadPlayerIndexException;
@@ -758,6 +759,7 @@ public class Model {
 	public ArrayList<Integer> getPlayerIndices() {
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		indices.addAll(players.keySet());
+
 		return indices;
 	}
 
@@ -827,11 +829,15 @@ public class Model {
 	public int getSoldiers(int userID) {
 		Player client = getPlayer(this.getIndexFromPlayerID(userID));
 		return client.getArmies();
-	}
-		
-	
+	}	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//JOSHUA
+	public MessageLog getMessages() {
+		return chatModel.getChatLog();
+	}
+	///////////////////////
 	
 	
 	
