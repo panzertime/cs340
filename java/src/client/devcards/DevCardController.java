@@ -2,6 +2,7 @@ package client.devcards;
 
 import client.base.*;
 import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
@@ -60,7 +61,8 @@ public class DevCardController extends Controller implements IDevCardController,
 
 	@Override
 	public void buyCard() {
-		
+		DoModelFacade doModelFacade = DoModelFacade.sole();
+		doModelFacade.doBuyDevCard();
 		getBuyCardView().closeModal();
 	}
 
