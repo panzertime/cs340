@@ -94,7 +94,7 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getResourceAmount(type, ClientPlayer.sole().getUserID());
 	}
 	
-	public ArrayList<Integer> getPlayerIndices()
+	public List<Integer> getPlayerIndices()
 	{
 		return gameModel.getPlayerIndices();
 	}
@@ -169,6 +169,9 @@ public class GetModelFacade  extends ModelFacade {
 	//JOSHUA
 	public List<LogEntry> getMessages() {
 		return gameModel.getMessages();
+	}
+	public List<LogEntry> getGameHistory() {
+		return gameModel.getGameHistory();
 	}
 	//////////////////////////////////////////
 

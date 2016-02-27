@@ -757,7 +757,7 @@ public class Model {
 		return client.getResourceAmount(type);
 	}
 
-	public ArrayList<Integer> getPlayerIndices() {
+	public List<Integer> getPlayerIndices() {
 		ArrayList<Integer> indices = new ArrayList<Integer>();
 		indices.addAll(players.keySet());
 
@@ -839,6 +839,11 @@ public class Model {
 		return chatModel.getChatLog().toLogEntryList();
 	}
 	///////////////////////
+
+	public List<LogEntry> getGameHistory() {
+		// TODO Auto-generated method stub
+		return chatModel.getGameLog().toLogEntryList();
+	}
 	
 	
 	

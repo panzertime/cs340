@@ -36,7 +36,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	
 	private void initFromModel() {
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
+		ArrayList<Integer> playerIndices = (ArrayList<Integer>) getModelFacade.getPlayerIndices();
 		
 		for (Integer playerIndex: playerIndices)
 		{
@@ -53,7 +53,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		if (!initialized)
 			initFromModel();
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
+		ArrayList<Integer> playerIndices = (ArrayList<Integer>) getModelFacade.getPlayerIndices();
 		
 		
 		for (Integer playerIndex: playerIndices)
