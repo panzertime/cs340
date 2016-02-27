@@ -18,7 +18,7 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 		
 		super(view);
 		
-		initFromModel();
+		//initFromModel();
 	}
 	
 	@Override
@@ -34,18 +34,10 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	
 	private void initFromModel() {
 		
-		//getView().setLocalPlayerColor(ClientPlayer.sole().getUserColor());
+		getView().setLocalPlayerColor(ClientPlayer.sole().getUserColor());
 		
-		GetModelFacade getModelFacade = GetModelFacade.sole();
-		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
+		//this.getView().initializePlayer(ClientPlayer.sole().getUserIndex(), ClientPlayer.sole().getUserName(), this.getView().);
 		
-		for (Integer playerIndex: playerIndices)
-		{
-			String playerName = getModelFacade.getPlayerName(playerIndex);
-			PieceType playerColor = getModelFacade.getPlayerColor(playerIndex);
-			this.getView().initializePlayer(playerIndex, playerName, playerColor);
-		}
-
 	}
 	
 	public void update()
