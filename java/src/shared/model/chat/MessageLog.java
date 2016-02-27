@@ -1,11 +1,13 @@
 package shared.model.chat;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.communication.LogEntry;
 import shared.model.exceptions.BadJSONException;
 
 public class MessageLog {
@@ -46,6 +48,14 @@ public class MessageLog {
 	
 	public void setMessageList(ArrayList<Message> messageList) {
 		this.messageList = messageList;
+	}
+
+	public List<LogEntry> toLogEntryList() {
+		List<LogEntry> result = new ArrayList<LogEntry>();
+		for(Message message : messageList) {
+			LogEntry logList = message.toLogEntry();
+		}
+		return result;
 	}
 	
 }

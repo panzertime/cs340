@@ -5,6 +5,7 @@ import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.main.ClientPlayer;
 import shared.model.exceptions.BadJSONException;
 
 /**
@@ -120,6 +121,11 @@ public class GameInfo
 			playerArray[i] = players.get(i);
 		}
 		return playerArray;
+	}
+
+	public void setPlayerIndex() {
+		int index = this.players.indexOf(ClientPlayer.sole().getPlayerInfo());
+		ClientPlayer.sole().setUserIndex(index);
 	}
 }
 

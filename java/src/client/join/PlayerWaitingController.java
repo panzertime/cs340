@@ -47,6 +47,7 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	public void start() {
 		setCurrentGame();
 		if(curGame.isFull()) {
+			curGame.setPlayerIndex();
 			getView().closeModal();
 			ModelFacade.getModelFromServer();
 		} else {

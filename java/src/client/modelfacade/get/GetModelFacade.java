@@ -11,6 +11,7 @@ import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
 import shared.model.board.piece.PieceType;
+import shared.model.chat.MessageLog;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
@@ -162,8 +163,12 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
 	}
 	
-	
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//JOSHUA
+	public MessageLog getMessages() {
+		return gameModel.getMessages();
+	}
+	//////////////////////////////////////////
 
 }
