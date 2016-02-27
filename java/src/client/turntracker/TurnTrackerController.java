@@ -15,17 +15,17 @@ import shared.model.definitions.CatanColor;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, GetModelFacadeListener {
 
+	boolean initialized;
 	public TurnTrackerController(ITurnTrackerView view) {
 		
 		super(view);
 		
 		GetModelFacade.registerListener(this);
-		//initFromModel();
 	}
 	
 	@Override
 	public ITurnTrackerView getView() {
-		
+		initialized = false;
 		return (ITurnTrackerView)super.getView();
 	}
 
@@ -35,15 +35,22 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	}
 	
 	private void initFromModel() {
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
 		
-		getView().setLocalPlayerColor(ClientPlayer.sole().getUserColor());
+		for (Integer playerIndex: playerIndices)
+		{
 		
-		//this.getView().initializePlayer(ClientPlayer.sole().getUserIndex(), ClientPlayer.sole().getUserName(), this.getView().);
-		
+		this.getView().initializePlayer(playerIndex, getModelFacade.getPlayerName(playerIndex), getModelFacade.getPlayerColor(playerIndex));
+	
+		}
+		initialized = true;
 	}
 	
 	public void update()
 	{
+		if (!initialized)
+			initFromModel();
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
 		

@@ -57,6 +57,19 @@ public class CanModelFacade extends ModelFacade {
 	public boolean canBuyDevCard() throws NullPointerException {
 		return this.gameModel.canBuyDevCard(ClientPlayer.sole().getUserIndex());
 	}
+	public boolean canSeePlayDevCard() throws NullPointerException {
+		return this.gameModel.isTurn(ClientPlayer.sole().getUserIndex());
+	}
+	
+	public boolean canBuyRoad() throws NullPointerException {
+		return this.gameModel.canBuyRoad(ClientPlayer.sole().getUserIndex());
+	}
+	public boolean canBuySettlement() throws NullPointerException {
+		return this.gameModel.canBuySettlement(ClientPlayer.sole().getUserIndex());
+	}
+	public boolean canBuyCity() throws NullPointerException {
+		return this.gameModel.canBuyCity(ClientPlayer.sole().getUserIndex());
+	}
 
 	/**
 	 * Checks the model to see if the current player can use year of plenty

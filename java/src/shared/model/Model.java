@@ -582,17 +582,18 @@ public class Model {
 	}
 
 	public Boolean canBuildRoad(Integer playerID, EdgeLocation edge) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getActivePlayer().hasRoadPiece())
-			return false;
 		
+
 		if (status.equalsIgnoreCase("Playing")) {
-			if (!getActivePlayer().hasRoadCost())
+			if (!this.canBuyRoad(playerID))
 				return false;
 			if (!getBoard().canBuildRoad(getActivePlayer(), edge))
 				return false;
 		} else if (inSetupRounds()) { 
+			if (!isActivePlayer(playerID))
+				return false;
+			if (!getActivePlayer().hasRoadPiece())
+				return false;
 			if (!getBoard().canBuildSetupRoad(getActivePlayer(), edge))
 				return false;
 		} else {
@@ -600,19 +601,33 @@ public class Model {
 		}
 		return true;
 	}
-
-	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
+	
+	public Boolean canBuyRoad(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getActivePlayer().hasSettlementPiece())
+		if (!getActivePlayer().hasRoadPiece())
 			return false;
+		if (!getActivePlayer().hasRoadCost())
+			return false;
+		return true;
+	}
+	
+
+	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
 		
 		if (status.equalsIgnoreCase("Playing")) {
-			if (!getActivePlayer().hasSettlementCost())
+			if (!this.canBuySettlement(playerID))
 				return false;
 			if (!getBoard().canBuildSettlement(this.getActivePlayer(), vertex))
 				return false;
 		} else if (inSetupRounds()) {
+			if (!isActivePlayer(playerID))
+				return false;
+			if (!getActivePlayer().hasSettlementPiece())
+				return false;
 			if (!getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex))
 				return false;
 		} else {
@@ -620,24 +635,46 @@ public class Model {
 		}
 		return true;
 	}
+	
+	public Boolean canBuySettlement(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
+		if (!getActivePlayer().hasSettlementCost())
+			return false;
+		return true;
+	}
+
 
 	/**
 	 * @param vertex
 	 * @return
 	 */
 	public Boolean canBuildCity(Integer playerID, VertexLocation vertex) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getStatus().equalsIgnoreCase("Playing"))
-			return false;
-		if (!getActivePlayer().hasCityCost())
-			return false;
-		if (!getActivePlayer().hasCityPiece())
+		if (!canBuyCity(playerID))
 			return false;
 		if (!getBoard().canBuildCity(this.getActivePlayer(), vertex))
 			return false;
 		return true;
 	}
+	
+	public Boolean canBuyCity(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
+		if (!getActivePlayer().hasCityCost())
+			return false;
+		return true;
+	}
+
 
 	/**
 	 * checks that the person has been offered a trade and that they have the
@@ -738,7 +775,7 @@ public class Model {
 	}
 
 	public boolean isTurn(int playerIndex) {
-		return (this.isActivePlayer(playerIndex));
+		return (this.isActivePlayer(playerIndex) && (!status.equalsIgnoreCase("Playing")));
 	}
 
 	public boolean isLargestArmy(int playerIndex) {

@@ -90,7 +90,11 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		this.getView().setElementAmount(ResourceBarElement.CITY, getModelFacade.getFreeCities());
 		this.getView().setElementAmount(ResourceBarElement.SOLDIERS, getModelFacade.getSoldiers());
 		this.getView().setElementEnabled(ResourceBarElement.BUY_CARD, canModelFacade.canBuyDevCard());
-		
+		this.getView().setElementEnabled(ResourceBarElement.SETTLEMENT, canModelFacade.canBuySettlement());
+		this.getView().setElementEnabled(ResourceBarElement.CITY, canModelFacade.canBuyCity());
+		this.getView().setElementEnabled(ResourceBarElement.ROAD, canModelFacade.canBuyRoad());
+		this.getView().setElementEnabled(ResourceBarElement.PLAY_CARD, canModelFacade.canSeePlayDevCard());
+
 	}
 
 }
