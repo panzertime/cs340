@@ -1,6 +1,11 @@
 package client.turntracker;
 
+import java.util.ArrayList;
+
 import client.base.*;
+import client.main.ClientPlayer;
+import client.modelfacade.get.GetModelFacade;
+import shared.model.board.piece.PieceType;
 import shared.model.definitions.CatanColor;
 
 
@@ -28,10 +33,39 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	}
 	
 	private void initFromModel() {
-		//<temp>
-		getView().setLocalPlayerColor(CatanColor.RED);
-		//</temp>
+		
+		//getView().setLocalPlayerColor(ClientPlayer.sole().getUserColor());
+		
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
+		
+		for (Integer playerIndex: playerIndices)
+		{
+			String playerName = getModelFacade.getPlayerName(playerIndex);
+			PieceType playerColor = getModelFacade.getPlayerColor(playerIndex);
+			this.getView().initializePlayer(playerIndex, playerName, playerColor);
+		}
+
 	}
+	
+	public void update()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		ArrayList<Integer> playerIndices = getModelFacade.getPlayerIndices();
+		
+		for (Integer playerIndex: playerIndices)
+		{
+			
+			int points = getModelFacade.getPoints(playerIndex);
+			boolean highlight = getModelFacade.isTurn(playerIndex);
+			boolean largestArmy = getModelFacade.isLargestArmy(playerIndex);
+			boolean longestRoad = getModelFacade.isLongestRoad(playerIndex);
+			
+			this.getView().updatePlayer(playerIndex, points, highlight, largestArmy, longestRoad);			
+			
+		}
+	}
+
 
 }
 

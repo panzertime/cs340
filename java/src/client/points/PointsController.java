@@ -1,6 +1,8 @@
 package client.points;
 
 import client.base.*;
+import client.main.ClientPlayer;
+import client.modelfacade.get.GetModelFacade;
 
 
 /**
@@ -38,10 +40,17 @@ public class PointsController extends Controller implements IPointsController {
 	}
 
 	private void initFromModel() {
-		//<temp>		
-		getPointsView().setPoints(5);
-		//</temp>
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		getPointsView().setPoints(getModelFacade.getPoints(ClientPlayer.sole().getUserIndex()));
 	}
 	
+	public void update()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		getPointsView().setPoints(getModelFacade.getPoints(ClientPlayer.sole().getUserIndex()));
+		if (getModelFacade.isGameOver())
+			getFinishedView().setWinner(getModelFacade.getWinnerName(), getModelFacade.isClientWinner());
+
+	}
 }
 

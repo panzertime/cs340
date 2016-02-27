@@ -44,7 +44,7 @@ public class ClientPlayer {
 		return clientInfo.getPlayerIndex();
 	}
 	
-	private CatanColor getUserColor() {
+	public CatanColor getUserColor() {
 		return clientInfo.getColor();
 	}
 	
