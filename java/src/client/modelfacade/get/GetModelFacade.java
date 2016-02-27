@@ -30,7 +30,8 @@ public class GetModelFacade  extends ModelFacade {
 	
 	@Override
 	public void updateModel(Model model) {
-		super.updateModel(model);
+		//super.updateModel(model);
+		this.gameModel = model;
 		notifyListeners();
 	}
 	
@@ -43,7 +44,7 @@ public class GetModelFacade  extends ModelFacade {
 	
 	public void notifyListeners() {
 		for (GetModelFacadeListener listener : listeners)
-			listener.notify();
+			listener.update();
 	}
 
 	public List<PseudoHex> getPseudoHexes() {

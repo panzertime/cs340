@@ -63,9 +63,15 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 		}
 	}
 
+
 	private String[] makeAIList(List aiList) {
-		// TODO Auto-generated method stub
-		return null;
+		int listSize = aiList.size();
+		String[] result = new String[listSize];
+		for(int i = 0; i < listSize; i++) {
+						
+		}
+		
+		return result;
 	}
 
 	private void setCurrentGame() {
