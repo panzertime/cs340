@@ -3,6 +3,7 @@ package client.modelfacade.get;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.communication.LogEntry;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -166,7 +167,7 @@ public class GetModelFacade  extends ModelFacade {
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//JOSHUA
-	public MessageLog getMessages() {
+	public List<LogEntry> getMessages() {
 		return gameModel.getMessages();
 	}
 	//////////////////////////////////////////

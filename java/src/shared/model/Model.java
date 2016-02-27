@@ -8,6 +8,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.communication.LogEntry;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -834,8 +835,8 @@ public class Model {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//JOSHUA
-	public MessageLog getMessages() {
-		return chatModel.getChatLog();
+	public List<LogEntry> getMessages() {
+		return chatModel.getChatLog().toLogEntryList();
 	}
 	///////////////////////
 	
