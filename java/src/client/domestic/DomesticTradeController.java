@@ -292,7 +292,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			
 		}
 		
-
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < getModelFacade.getResourceAmount(ResourceType.WOOD)), (wood > 0));
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < getModelFacade.getResourceAmount(ResourceType.BRICK)), (brick > 0));
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < getModelFacade.getResourceAmount(ResourceType.SHEEP)), (sheep > 0));
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < getModelFacade.getResourceAmount(ResourceType.WHEAT)), (wheat > 0));
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < getModelFacade.getResourceAmount(ResourceType.ORE)), (ore > 0));
 		
 	}
 
