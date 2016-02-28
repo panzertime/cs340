@@ -2,7 +2,9 @@ package client.devcards;
 
 import client.base.*;
 import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
 
@@ -10,7 +12,7 @@ import shared.model.hand.development.DevCardType;
 /**
  * "Dev card" controller implementation
  */
-public class DevCardController extends Controller implements IDevCardController {
+public class DevCardController extends Controller implements IDevCardController, GetModelFacadeListener {
 
 	private IBuyDevCardView buyCardView;
 	private IAction soldierAction;
@@ -32,6 +34,9 @@ public class DevCardController extends Controller implements IDevCardController 
 		this.buyCardView = buyCardView;
 		this.soldierAction = soldierAction;
 		this.roadAction = roadAction;
+		
+		GetModelFacade.registerListener(this);
+
 	}
 
 	public IPlayDevCardView getPlayCardView() {
@@ -56,7 +61,8 @@ public class DevCardController extends Controller implements IDevCardController 
 
 	@Override
 	public void buyCard() {
-		
+		DoModelFacade doModelFacade = DoModelFacade.sole();
+		doModelFacade.doBuyDevCard();
 		getBuyCardView().closeModal();
 	}
 
@@ -99,6 +105,7 @@ public class DevCardController extends Controller implements IDevCardController 
 		
 	}
 	
+	@Override
 	public void update() 
 	{
 		GetModelFacade getModelFacade = GetModelFacade.sole();

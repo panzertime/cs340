@@ -544,10 +544,15 @@ public class ServerProxy implements IServerProxy{
 	 * @throws ServerProxyException problems with connection or in request
 	 */
 	 @Override
-	public JSONObject getModel(int currentVersion)
+	public JSONObject getModel(Integer currentVersion)
 			throws ServerProxyException  {
 		try {
-			String call = "/game/model?version=" + currentVersion;
+			String call;
+			if(currentVersion == null) {
+				call= "/game/model";
+			} else {
+				call= "/game/model?version=" + currentVersion;
+			}
 			String response = submitRequest("GET", call);
 			if(response.equals("{true\"")){
 				return null;

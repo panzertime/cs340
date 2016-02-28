@@ -30,7 +30,7 @@ public interface ITurnTrackerView extends IView
 	 *            The player's color
 	 */
 	void initializePlayer(int playerIndex, String playerName,
-						  PieceType playerColor);
+						  CatanColor playerColor);
 	
 	/**
 	 * Updates the properties for a player in the turn tracker display

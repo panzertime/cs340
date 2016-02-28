@@ -1,6 +1,9 @@
 package client.roll;
 
+import java.util.Random;
+
 import client.base.*;
+import client.modelfacade.DoModelFacade;
 
 
 /**
@@ -36,7 +39,15 @@ public class RollController extends Controller implements IRollController {
 	
 	@Override
 	public void rollDice() {
+		DoModelFacade doModelFacade = DoModelFacade.sole();
+		//Rolls two die
+		Random rand = new Random();
+		int  n = rand.nextInt(6) + 1;
+		n += rand.nextInt(6) + 1;
+		this.getResultView().setRollValue(n);
 
+		doModelFacade.doRollDice(n);
+		
 		getResultView().showModal();
 	}
 

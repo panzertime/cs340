@@ -3,12 +3,16 @@ package client.resources;
 import java.util.*;
 
 import client.base.*;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
+import shared.model.hand.ResourceType;
 
 
 /**
  * Implementation for the resource bar controller
  */
-public class ResourceBarController extends Controller implements IResourceBarController {
+public class ResourceBarController extends Controller implements IResourceBarController, GetModelFacadeListener {
 
 	private Map<ResourceBarElement, IAction> elementActions;
 	
@@ -17,6 +21,8 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 		super(view);
 		
 		elementActions = new HashMap<ResourceBarElement, IAction>();
+		
+		GetModelFacade.registerListener(this);
 	}
 
 	@Override
@@ -67,6 +73,29 @@ public class ResourceBarController extends Controller implements IResourceBarCon
 			IAction action = elementActions.get(element);
 			action.execute();
 		}
+	}
+	
+	@Override
+	public void update()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		CanModelFacade canModelFacade = CanModelFacade.sole();
+		
+		this.getView().setElementAmount(ResourceBarElement.WOOD, getModelFacade.getResourceAmount(ResourceType.WOOD));
+		this.getView().setElementAmount(ResourceBarElement.BRICK, getModelFacade.getResourceAmount(ResourceType.BRICK));
+		this.getView().setElementAmount(ResourceBarElement.SHEEP, getModelFacade.getResourceAmount(ResourceType.SHEEP));
+		this.getView().setElementAmount(ResourceBarElement.WHEAT, getModelFacade.getResourceAmount(ResourceType.WHEAT));
+		this.getView().setElementAmount(ResourceBarElement.ORE, getModelFacade.getResourceAmount(ResourceType.ORE));
+		this.getView().setElementAmount(ResourceBarElement.ROAD, getModelFacade.getFreeRoads());
+		this.getView().setElementAmount(ResourceBarElement.SETTLEMENT, getModelFacade.getFreeSettlements());
+		this.getView().setElementAmount(ResourceBarElement.CITY, getModelFacade.getFreeCities());
+		this.getView().setElementAmount(ResourceBarElement.SOLDIERS, getModelFacade.getSoldiers());
+		this.getView().setElementEnabled(ResourceBarElement.BUY_CARD, canModelFacade.canBuyDevCard());
+		this.getView().setElementEnabled(ResourceBarElement.SETTLEMENT, canModelFacade.canBuySettlement());
+		this.getView().setElementEnabled(ResourceBarElement.CITY, canModelFacade.canBuyCity());
+		this.getView().setElementEnabled(ResourceBarElement.ROAD, canModelFacade.canBuyRoad());
+		this.getView().setElementEnabled(ResourceBarElement.PLAY_CARD, canModelFacade.canSeePlayDevCard());
+
 	}
 
 }

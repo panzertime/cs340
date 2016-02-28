@@ -8,6 +8,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import client.communication.LogEntry;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -21,6 +22,8 @@ import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
+import shared.model.chat.MessageLog;
+import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
@@ -248,14 +251,6 @@ public class Model {
 		return board;
 	}
 
-	/**
-	 * 
-	 * @return int simulating two six-faced die
-	 */
-	public int getDiceNumber() {
-		return 0;
-
-	}
 
 	/**
 	 * @post - the methods when the dice is rolled are called
@@ -288,8 +283,8 @@ public class Model {
 
 	}
 
-	public Player getPlayer(Integer playerID) {
-		return players.get(playerID);
+	public Player getPlayer(Integer playerIndex) {
+		return players.get(playerIndex);
 	}
 	
 	/**
@@ -299,8 +294,8 @@ public class Model {
 		return players.get(activePlayerIndex);
 	}
 
-	public Boolean isActivePlayer(Integer playerID) {
-		if (activePlayerIndex.equals(playerID))
+	public Boolean isActivePlayer(Integer playerIndex) {
+		if (activePlayerIndex.equals(playerIndex))
 			return true;
 		return false;
 	}
@@ -581,17 +576,18 @@ public class Model {
 	}
 
 	public Boolean canBuildRoad(Integer playerID, EdgeLocation edge) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getActivePlayer().hasRoadPiece())
-			return false;
 		
+
 		if (status.equalsIgnoreCase("Playing")) {
-			if (!getActivePlayer().hasRoadCost())
+			if (!this.canBuyRoad(playerID))
 				return false;
 			if (!getBoard().canBuildRoad(getActivePlayer(), edge))
 				return false;
 		} else if (inSetupRounds()) { 
+			if (!isActivePlayer(playerID))
+				return false;
+			if (!getActivePlayer().hasRoadPiece())
+				return false;
 			if (!getBoard().canBuildSetupRoad(getActivePlayer(), edge))
 				return false;
 		} else {
@@ -599,19 +595,33 @@ public class Model {
 		}
 		return true;
 	}
-
-	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
+	
+	public Boolean canBuyRoad(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getActivePlayer().hasSettlementPiece())
+		if (!getActivePlayer().hasRoadPiece())
 			return false;
+		if (!getActivePlayer().hasRoadCost())
+			return false;
+		return true;
+	}
+	
+
+	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
 		
 		if (status.equalsIgnoreCase("Playing")) {
-			if (!getActivePlayer().hasSettlementCost())
+			if (!this.canBuySettlement(playerID))
 				return false;
 			if (!getBoard().canBuildSettlement(this.getActivePlayer(), vertex))
 				return false;
 		} else if (inSetupRounds()) {
+			if (!isActivePlayer(playerID))
+				return false;
+			if (!getActivePlayer().hasSettlementPiece())
+				return false;
 			if (!getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex))
 				return false;
 		} else {
@@ -619,24 +629,46 @@ public class Model {
 		}
 		return true;
 	}
+	
+	public Boolean canBuySettlement(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
+		if (!getActivePlayer().hasSettlementCost())
+			return false;
+		return true;
+	}
+
 
 	/**
 	 * @param vertex
 	 * @return
 	 */
 	public Boolean canBuildCity(Integer playerID, VertexLocation vertex) {
-		if (!isActivePlayer(playerID))
-			return false;
-		if (!getStatus().equalsIgnoreCase("Playing"))
-			return false;
-		if (!getActivePlayer().hasCityCost())
-			return false;
-		if (!getActivePlayer().hasCityPiece())
+		if (!canBuyCity(playerID))
 			return false;
 		if (!getBoard().canBuildCity(this.getActivePlayer(), vertex))
 			return false;
 		return true;
 	}
+	
+	public Boolean canBuyCity(Integer playerID)
+	{
+		if (!status.equalsIgnoreCase("Playing"))
+			return false;
+		if (!isActivePlayer(playerID))
+			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
+		if (!getActivePlayer().hasCityCost())
+			return false;
+		return true;
+	}
+
 
 	/**
 	 * checks that the person has been offered a trade and that they have the
@@ -706,94 +738,112 @@ public class Model {
 	
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
 	
+	//client only
 	public boolean hasDevCardEnabled(DevCardType type, int userID) {
-		// TODO Auto-generated method stub
-		return false;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+
+		return client.hasDevCardToUse(type);
 	}
 
+	//client only
 	public int getDevCardAmount(DevCardType type, int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getDevCardAmount(type);
 	}
 
+	//client only
 	public int getResourceAmount(ResourceType type, int userID) {
-		// TODO Auto-generated method stub
-		return 0;
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getResourceAmount(type);
 	}
 
-	public ArrayList<Integer> getPlayerIndices() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Integer> getPlayerIndices() {
+		ArrayList<Integer> indices = new ArrayList<Integer>();
+		indices.addAll(players.keySet());
+
+		return indices;
 	}
 
 	public int getPoints(int playerIndex) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		return getPlayer(playerIndex).getPoints();
 	}
 
 	public boolean isTurn(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
+		return (this.isActivePlayer(playerIndex) && (!status.equalsIgnoreCase("Playing")));
 	}
 
 	public boolean isLargestArmy(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
+		Boolean b = this.getAchievements().isLargestArmy(getPlayer(playerIndex));
+		if (b==null) b = false;
+		return b;
 	}
 
 	public boolean isLongestRoad(int playerIndex) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		Boolean b = this.getAchievements().isLongestRoad(getPlayer(playerIndex));
+		if (b==null) b = false;
+		return b;	}
 
-	public PieceType getPlayerColor(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public CatanColor getPlayerColor(int playerIndex) {
+		return getPlayer(playerIndex).getColor();
 	}
 
 	public String getPlayerName(int playerIndex) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return getPlayer(playerIndex).getUserName();
 	}
 
 	public boolean isGameOver() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.winnerIndex != -1;
 	}
 
 	public String getWinnerName() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.getWinner().getUserName();
 	}
 
+	//client only
 	public boolean isClientWinner(int userID) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public int getFreeRoads(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getFreeSettlements(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getFreeCities(int userID) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getSoldiers(int userID) {
-		Player client = getPlayer(userID);
-		return client.getArmies();
-	}
-		
 	
+		return (this.getWinner().getPlayerID() == userID);
+	}
+
+	//client only
+	public int getFreeRoads(int userID) {
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getRoadsFree();
+	}
+
+	//client only
+	public int getFreeSettlements(int userID) {
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getSettlementsFree();
+	}
+
+	//client only
+	public int getFreeCities(int userID) {
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getCitiesFree();
+	}
+
+	//client only
+	public int getSoldiers(int userID) {
+		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		return client.getArmies();
+	}	
 	
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//JOSHUA
+	public List<LogEntry> getMessages() {
+		return chatModel.getChatLog().toLogEntryList();
+	}
+	///////////////////////
+
+	public List<LogEntry> getGameHistory() {
+		// TODO Auto-generated method stub
+		return chatModel.getGameLog().toLogEntryList();
+	}
 	
 	
 	

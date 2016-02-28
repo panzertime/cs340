@@ -1,12 +1,15 @@
 package client.points;
 
 import client.base.*;
+import client.main.ClientPlayer;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 
 
 /**
  * Implementation for the points controller
  */
-public class PointsController extends Controller implements IPointsController {
+public class PointsController extends Controller implements IPointsController, GetModelFacadeListener {
 
 	private IGameFinishedView finishedView;
 	
@@ -22,7 +25,8 @@ public class PointsController extends Controller implements IPointsController {
 		
 		setFinishedView(finishedView);
 		
-		initFromModel();
+		GetModelFacade.registerListener(this);
+		//initFromModel();
 	}
 	
 	public IPointsView getPointsView() {
@@ -38,10 +42,17 @@ public class PointsController extends Controller implements IPointsController {
 	}
 
 	private void initFromModel() {
-		//<temp>		
-		getPointsView().setPoints(5);
-		//</temp>
+		getPointsView().setPoints(0);
 	}
 	
+	@Override
+	public void update()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		getPointsView().setPoints(getModelFacade.getPoints(ClientPlayer.sole().getUserIndex()));
+		if (getModelFacade.isGameOver())
+			getFinishedView().setWinner(getModelFacade.getWinnerName(), getModelFacade.isClientWinner());
+
+	}
 }
 

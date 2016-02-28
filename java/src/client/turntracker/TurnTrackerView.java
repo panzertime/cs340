@@ -78,7 +78,7 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 
 	@Override
 	public void initializePlayer(int playerIndex, String playerName,
-			PieceType playerColor) {
+			CatanColor playerColor) {
 				
 		playerPanel[playerIndex].setLayout(new BorderLayout());
 		

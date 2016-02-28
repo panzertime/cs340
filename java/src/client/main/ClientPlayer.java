@@ -44,11 +44,11 @@ public class ClientPlayer {
 		return clientInfo.getPlayerIndex();
 	}
 	
-	private CatanColor getUserColor(CatanColor color) {
+	public CatanColor getUserColor() {
 		return clientInfo.getColor();
 	}
 	
-	public String getUserName(String name) {
+	public String getUserName() {
 		return clientInfo.getName();
 	}
 

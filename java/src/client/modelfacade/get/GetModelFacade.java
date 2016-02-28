@@ -3,6 +3,7 @@ package client.modelfacade.get;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.communication.LogEntry;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -11,6 +12,8 @@ import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
 import shared.model.board.piece.PieceType;
+import shared.model.chat.MessageLog;
+import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
 
@@ -30,7 +33,8 @@ public class GetModelFacade  extends ModelFacade {
 	
 	@Override
 	public void updateModel(Model model) {
-		super.updateModel(model);
+		//super.updateModel(model);
+		this.gameModel = model;
 		notifyListeners();
 	}
 	
@@ -43,7 +47,7 @@ public class GetModelFacade  extends ModelFacade {
 	
 	public void notifyListeners() {
 		for (GetModelFacadeListener listener : listeners)
-			listener.notify();
+			listener.update();
 	}
 
 	public List<PseudoHex> getPseudoHexes() {
@@ -90,7 +94,7 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getResourceAmount(type, ClientPlayer.sole().getUserID());
 	}
 	
-	public ArrayList<Integer> getPlayerIndices()
+	public List<Integer> getPlayerIndices()
 	{
 		return gameModel.getPlayerIndices();
 	}
@@ -112,7 +116,7 @@ public class GetModelFacade  extends ModelFacade {
 	{
 		return gameModel.isLongestRoad(playerIndex);
 	}
-	public PieceType getPlayerColor(int playerIndex)
+	public CatanColor getPlayerColor(int playerIndex)
 	{
 		return gameModel.getPlayerColor(playerIndex);
 	}
@@ -160,8 +164,15 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
 	}
 	
-	
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//JOSHUA
+	public List<LogEntry> getMessages() {
+		return gameModel.getMessages();
+	}
+	public List<LogEntry> getGameHistory() {
+		return gameModel.getGameHistory();
+	}
+	//////////////////////////////////////////
 
 }

@@ -4,7 +4,10 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import client.communication.LogEntry;
+import client.modelfacade.get.GetModelFacade;
 import shared.model.Player;
+import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 
 public class Message {
@@ -44,6 +47,24 @@ public class Message {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public CatanColor getColor()
+	{
+		GetModelFacade getModelFacade = GetModelFacade.sole(); 
+		for (int index: getModelFacade.getPlayerIndices())
+		{
+			if (getSource().equals(getModelFacade.getPlayerName(index)))
+			{
+				return getModelFacade.getPlayerColor(index);
+			}
+		}
+		return null;
+	}
+
+	public LogEntry toLogEntry() {
+		return new LogEntry(getColor(), message);
+		
 	}
 	
 	
