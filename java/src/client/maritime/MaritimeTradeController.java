@@ -33,7 +33,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void startTrade() {
-		// modelFacade.canTrades
+		// setCancelEnabled
+		// modelFacade.canTrades for each
+		// showGiveOptions for each
 		getTradeOverlay().showModal();
 	}
 
@@ -51,22 +53,34 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void setGetResource(ResourceType resource) {
-
+		// selectGetOption
+		// setTradeEnabled
 	}
 
 	@Override
 	public void setGiveResource(ResourceType resource) {
-
+		// selectGiveOption
+		// hideGiveOptions
+		// canRecieveOffer for each
+		// showGetOptions for each
 	}
 
 	@Override
 	public void unsetGetValue() {
+		// these might work by doing .getController.unset*Value() in 
+		// the listener that currently resets in the overlay;
+		// do like a roll back of each stage
+		// like if stage enabled, unset
 
+		// showGetOptions
+		// tradeDisabled
 	}
 
 	@Override
 	public void unsetGiveValue() {
-
+		// hideGetOptions
+		// showGiveOptions
+		// 
 	}
 
 }
