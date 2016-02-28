@@ -841,7 +841,6 @@ public class Model {
 	///////////////////////
 
 	public List<LogEntry> getGameHistory() {
-		// TODO Auto-generated method stub
 		return chatModel.getGameLog().toLogEntryList();
 	}
 	

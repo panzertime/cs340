@@ -7,8 +7,6 @@ import client.main.ClientPlayer;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
-import client.servercommunicator.ServerFacade;
-import shared.model.chat.MessageLog;
 
 
 /**
@@ -20,6 +18,8 @@ public class ChatController extends Controller implements IChatController,
 	public ChatController(IChatView view) {
 		
 		super(view);
+		
+		GetModelFacade.registerListener(this);
 	}
 
 	@Override

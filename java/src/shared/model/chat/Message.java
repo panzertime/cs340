@@ -54,9 +54,11 @@ public class Message {
 		GetModelFacade getModelFacade = GetModelFacade.sole(); 
 		for (int index: getModelFacade.getPlayerIndices())
 		{
-			if (getSource().equals(getModelFacade.getPlayerName(index)))
+			String sourceName = getModelFacade.getPlayerName(index);
+			if (getSource().equals(sourceName))
 			{
-				return getModelFacade.getPlayerColor(index);
+				CatanColor color = getModelFacade.getPlayerColor(index);
+				return color;
 			}
 		}
 		return null;
