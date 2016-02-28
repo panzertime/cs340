@@ -12,6 +12,8 @@ import shared.model.hand.ResourceType;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
+import client.data.Games;
+
 public class ServerFacade {
 	
 	private static ServerFacade _instance;
@@ -21,9 +23,12 @@ public class ServerFacade {
 	private ServerFacade(){
 		proxy = new FakeProxy();
 		player_id = -1;
+		poller = new ServerPoller();
 	}
 
 	private IServerProxy proxy;
+	
+	private ServerPoller poller;
 	
 	public static ServerFacade get_instance() {
 		if(_instance == null) {
@@ -68,6 +73,8 @@ public class ServerFacade {
 			JSONObject cookie = proxy.loginUser(args);
 
 			player_id = ((Long) cookie.get("playerID")).intValue();
+			poller.start();
+			poller.setJoinGameState();
 			return player_id;
 		}
 		catch(Exception e){
@@ -88,6 +95,8 @@ public class ServerFacade {
 			JSONObject cookie = proxy.registerUser(args);
 		//	System.out.println("Cookie is: " + cookie.toJSONString());
 			player_id = ((Long) cookie.get("playerID")).intValue();
+			poller.start();
+			poller.setJoinGameState();
 			return player_id;
 
 		}
@@ -101,7 +110,8 @@ public class ServerFacade {
 	public List getGames() 
 			throws ServerException {
 		try {
-			return proxy.listGames();
+			List games = proxy.listGames();
+			return games;
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -136,6 +146,7 @@ public class ServerFacade {
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");
 			}
+			poller.setPlayerWaitingState();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -539,5 +550,15 @@ public class ServerFacade {
 		catch(Exception e){
 			throw new ServerException(e);
 		}
+	}
+	
+	//JOSHUA
+	//Tell server facade to put Poller into normal state behavior
+	public void setPollerPlayingState() {
+		poller.setPollerPlayingState();
+	}
+
+	public void updateGamesList() {
+		Games.sole().getGamesFromServer();
 	}
 }

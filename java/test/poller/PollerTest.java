@@ -10,6 +10,7 @@ import client.modelfacade.testing.TestingModelFacade;
 import client.servercommunicator.FakeProxy;
 import client.servercommunicator.ServerFacade;
 import client.servercommunicator.ServerPoller;
+import client.servercommunicator.pollerstate.PollerPlayingState;
 
 public class PollerTest {
 	
@@ -28,7 +29,8 @@ public class PollerTest {
 			fp.setURL("java/test/poller/");
 			sFacade.setProxy(fp);
 			
-			ServerPoller SP = new ServerPoller(sFacade);
+			ServerPoller SP = new ServerPoller();
+			SP.setPollerPlayingState();
 			SP.start();
 			Thread.sleep(5000);
 			SP.interrupt();
