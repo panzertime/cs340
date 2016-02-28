@@ -682,9 +682,17 @@ public class Model {
 	public Boolean canAcceptTrade(Integer playerID) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverID() != playerID)
+		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
 			return false;
-		if (!getPlayer(tradeModel.getReceiverID()).hasCards(this.tradeModel.getResourcesToGive()))
+		if (!getPlayer(tradeModel.getReceiverIndex()).hasCards(this.tradeModel.getResourcesToGive()))
+			return false;
+		return true;
+	}
+	
+	public Boolean canViewTrade(Integer playerID) {
+		if (tradeModel == null)
+			return false;
+		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
 			return false;
 		return true;
 	}
@@ -832,6 +840,31 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+/////Trading
+	
+	public int getTradeGetResource(ResourceType type)
+	{
+		return this.tradeModel.getTradeGetResource(type);
+	}
+	
+	public int getTradeGiveResource(ResourceType type)
+	{
+		return this.tradeModel.getTradeGiveResource(type);
+	}	
+
+	public String getTradeSenderName() {
+		return getPlayer(this.tradeModel.getSenderIndex()).getUserName();
+	}
+	
+	public boolean canDomesticTrade(int userID) {
+		if (!isActivePlayer(this.getIndexFromPlayerID(userID)))
+			return false;
+		if (!getStatus().equalsIgnoreCase("Playing"))
+			return false;
+		return true;
+	}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//JOSHUA

@@ -2,13 +2,17 @@ package client.domestic;
 
 import client.base.*;
 import client.misc.*;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
 
 
 /**
  * Domestic trade controller implementation
  */
-public class DomesticTradeController extends Controller implements IDomesticTradeController {
+public class DomesticTradeController extends Controller implements IDomesticTradeController, GetModelFacadeListener {
 
 	private IDomesticTradeOverlay tradeOverlay;
 	private IWaitView waitOverlay;
@@ -113,7 +117,49 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void acceptTrade(boolean willAccept) {
 
+		DoModelFacade doModelFacade = DoModelFacade.sole();
+		doModelFacade.doAcceptTrade(willAccept);
 		getAcceptOverlay().closeModal();
+	}
+
+	@Override
+	public void update() {
+		CanModelFacade canModelFacade = CanModelFacade.sole();
+		this.getTradeView().enableDomesticTrade(canModelFacade.canDomesticTrade());
+		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
+		GetModelFacade getModelFacade = GetModelFacade.sole();
+		if (canModelFacade.canViewTrade()) 
+		{
+			
+			ResourceType type = ResourceType.WOOD;
+
+			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
+			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			
+			type = ResourceType.BRICK;
+
+			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
+			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			
+			type = ResourceType.SHEEP;
+
+			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
+			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+
+			type = ResourceType.WHEAT;
+			
+			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
+			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+
+			type = ResourceType.ORE;
+
+			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
+			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			
+			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
+			
+		}
+		
 	}
 
 }
