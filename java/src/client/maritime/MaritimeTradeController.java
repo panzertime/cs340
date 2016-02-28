@@ -10,6 +10,9 @@ import shared.model.hand.ResourceType;
 public class MaritimeTradeController extends Controller implements IMaritimeTradeController {
 
 	private IMaritimeTradeOverlay tradeOverlay;
+
+	private HashMap<ResourceType,Integer> giveRatios;
+	private HashMap<ResourceType,Integer> getRatios;
 	
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
 		
@@ -33,9 +36,15 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void startTrade() {
-		// setCancelEnabled
-		// modelFacade.canTrades for each
-		// showGiveOptions for each
+		tradeOverlay.setCancelEnabled();
+		for (ResourceType type : ResourceType.values()) {
+			int ratio = CanModelFacade.sole().canOfferMaritime(type);
+			if (ratio != 0) {
+				giveRatios.put(type, ratio);
+			}
+		}
+		ResourceType[] resources = giveRatios.keySet().toArray();
+		showGiveOptions(resources);
 		getTradeOverlay().showModal();
 	}
 
@@ -60,6 +69,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void setGiveResource(ResourceType resource) {
 		// selectGiveOption
+		tradeOverlay.setGiveOption(resource, giveRatios.get(resource));
+		tradeOverlay.hideGiveOptions();
 		// hideGiveOptions
 		// canRecieveOffer for each
 		// showGetOptions for each
