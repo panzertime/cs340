@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.communication.LogEntry;
+import client.data.PlayerInfo;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -190,6 +191,10 @@ public class GetModelFacade  extends ModelFacade {
 	}
 	public String getTradeSenderName() {
 		return gameModel.getTradeSenderName();
+	}
+
+	public PlayerInfo[] getTradingPartners() {
+		return gameModel.getTradingPartner(ClientPlayer.sole().getUserID());
 	}
 
 	//////////////////////////////////////////

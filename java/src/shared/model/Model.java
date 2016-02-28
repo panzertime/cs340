@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import client.communication.LogEntry;
+import client.data.PlayerInfo;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -863,6 +864,25 @@ public class Model {
 			return false;
 		return true;
 	}
+	
+	public PlayerInfo[] getTradingPartner(int userID) {
+		PlayerInfo[] tradingPartners = new PlayerInfo[players.size() - 1];
+		int i = 0;
+		for (Player p: players.values())
+		{
+			if (p.getPlayerID() != userID)
+			{
+				PlayerInfo partner = new PlayerInfo();
+				partner.setId(p.getPlayerID());
+				partner.setPlayerIndex(p.getPlayerIndex());
+				partner.setName(p.getUserName());
+				partner.setColor(p.getColor());
+				tradingPartners[i] = partner;
+				i++;
+			}
+		}
+		return tradingPartners;
+	}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -876,6 +896,8 @@ public class Model {
 	public List<LogEntry> getGameHistory() {
 		return chatModel.getGameLog().toLogEntryList();
 	}
+
+	
 	
 	
 	

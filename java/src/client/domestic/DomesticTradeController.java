@@ -14,10 +14,39 @@ import shared.model.hand.ResourceType;
  */
 public class DomesticTradeController extends Controller implements IDomesticTradeController, GetModelFacadeListener {
 
+	
+	Integer wood;
+	Integer brick;
+	Integer sheep;
+	Integer wheat;
+	Integer ore;
+	
 	private IDomesticTradeOverlay tradeOverlay;
 	private IWaitView waitOverlay;
 	private IAcceptTradeOverlay acceptOverlay;
 
+	private void setToStandard()
+	{
+		wood = 0;
+		brick = 0;
+		sheep = 0;
+		wheat = 0;
+		ore = 0;
+		this.getTradeOverlay().setResourceAmount(ResourceType.WOOD, wood.toString());
+		this.getTradeOverlay().setResourceAmount(ResourceType.BRICK, brick.toString());
+		this.getTradeOverlay().setResourceAmount(ResourceType.SHEEP, sheep.toString());
+		this.getTradeOverlay().setResourceAmount(ResourceType.WHEAT, wheat.toString());
+		this.getTradeOverlay().setResourceAmount(ResourceType.ORE, ore.toString());
+		this.getTradeOverlay().setCancelEnabled(true);
+		this.getTradeOverlay().setTradeEnabled(false);
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, false, false);
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, false, false);
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, false, false);
+		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
+
+	}
+	
 	/**
 	 * DomesticTradeController constructor
 	 * 
@@ -126,8 +155,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void update() {
 		CanModelFacade canModelFacade = CanModelFacade.sole();
 		this.getTradeView().enableDomesticTrade(canModelFacade.canDomesticTrade());
+		this.getTradeOverlay().setResourceSelectionEnabled(canModelFacade.canDomesticTrade());
+		this.getTradeOverlay().setPlayerSelectionEnabled(canModelFacade.canDomesticTrade());
 		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
 		GetModelFacade getModelFacade = GetModelFacade.sole();
+		this.getTradeOverlay().setPlayers(getModelFacade.getTradingPartners());
 		if (canModelFacade.canViewTrade()) 
 		{
 			
@@ -159,6 +191,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
 			
 		}
+		
+
 		
 	}
 
