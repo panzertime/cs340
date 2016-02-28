@@ -80,11 +80,12 @@ public class DevCardController extends Controller implements IDevCardController,
 
 	@Override
 	public void playMonopolyCard(ResourceType resource) {
-		
+		DoModelFacade doModelFacade = DoModelFacade.sole();
 	}
 
 	@Override
 	public void playMonumentCard() {
+		DoModelFacade doModelFacade = DoModelFacade.sole();
 		
 	}
 
