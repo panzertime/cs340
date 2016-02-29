@@ -56,7 +56,6 @@ public class DiscardController extends Controller implements IDiscardController,
 		{
 			buttonPushed = true;
 
-		GetModelFacade getModelFacade = GetModelFacade.sole();
 		switch (resource)
 		{
 	case WOOD:
@@ -187,6 +186,11 @@ public class DiscardController extends Controller implements IDiscardController,
 		sheep = 0;
 		wheat = 0;
 		ore = 0;
+		woodMax = 0;
+		brickMax = 0;
+		sheepMax = 0;
+		wheatMax = 0;
+		oreMax = 0;
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.WOOD, wood);
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.BRICK, brick);
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.SHEEP, sheep);
