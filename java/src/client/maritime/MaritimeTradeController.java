@@ -50,7 +50,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 					giveRatios.put(type, ratio);
 				}
 			}
-			ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
+			if (
+			ResourceType[] resources = new ResourceType[]();
+			resources = (ResourceType[]) giveRatios.keySet().toArray();
 			tradeOverlay.showGiveOptions(resources);
 			getTradeOverlay().showModal();
 		}
