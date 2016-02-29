@@ -1,6 +1,9 @@
 package client.maritime;
 
+import java.util.HashMap;
+
 import client.base.*;
+import client.modelfacade.*;
 import shared.model.hand.ResourceType;
 
 
@@ -36,16 +39,21 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void startTrade() {
-		tradeOverlay.setCancelEnabled();
-		for (ResourceType type : ResourceType.values()) {
-			int ratio = CanModelFacade.sole().canOfferMaritime(type);
-			if (ratio != 0) {
-				giveRatios.put(type, ratio);
+		try {	
+			tradeOverlay.setCancelEnabled(true);
+			for (ResourceType type : ResourceType.values()) {
+				int ratio = CanModelFacade.sole().canOfferMaritime(type);
+				if (ratio != 0) {
+					giveRatios.put(type, ratio);
+				}
 			}
+			ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
+			tradeOverlay.showGiveOptions(resources);
+			getTradeOverlay().showModal();
 		}
-		ResourceType[] resources = giveRatios.keySet().toArray();
-		showGiveOptions(resources);
-		getTradeOverlay().showModal();
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	@Override
@@ -69,7 +77,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void setGiveResource(ResourceType resource) {
 		// selectGiveOption
-		tradeOverlay.setGiveOption(resource, giveRatios.get(resource));
+		tradeOverlay.selectGiveOption(resource, giveRatios.get(resource));
 		tradeOverlay.hideGiveOptions();
 		// hideGiveOptions
 		// canRecieveOffer for each
