@@ -502,11 +502,11 @@ public class ServerFacade {
 			ResourceType inputResource, ResourceType outputResource) 
 			throws ServerException {
 		try {
-			String content = "{type: \"maritimeTrade\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"ratio: " + ratio + ", " +
-						"inputResource: " + inputResource.toString().toLowerCase() + ", " +
-						"outputResource: " + outputResource.toString().toLowerCase() + "}";
+			String content = "{\"type\": \"maritimeTrade\", " +
+						"\"playerIndex\":" + playerIndex + ", " +
+						"\"ratio\":" + ratio + ", " +
+						"\"inputResource\": \"" + inputResource.toString().toLowerCase() + "\", " +
+						"\"outputResource\": \"" + outputResource.toString().toLowerCase() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.maritimeTrade(args);
 		}
