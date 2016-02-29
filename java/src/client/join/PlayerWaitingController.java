@@ -2,31 +2,34 @@ package client.join;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
-
 import client.base.*;
 import client.data.GameInfo;
 import client.data.Games;
-import client.data.PlayerInfo;
+import client.data.GamesObserver;
 import client.main.ClientPlayer;
 import client.modelfacade.ModelFacade;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
-import shared.model.exceptions.BadJSONException;
 
 
 /**
  * Implementation for the player waiting controller
  */
-public class PlayerWaitingController extends Controller implements IPlayerWaitingController {
+public class PlayerWaitingController extends Controller implements 
+	IPlayerWaitingController, GamesObserver {
 	
 	private GameInfo curGame;
 	private IAction waitAction;
+	private boolean gameHasUpdated;
+	private boolean hasJoinedGame;
 
 	public PlayerWaitingController(IPlayerWaitingView view) {
 
 		super(view);
 		curGame = null;
+		Games.sole().registerObserver(this);
+		gameHasUpdated = false;
+		hasJoinedGame = false;
 	}
 
 	@Override
@@ -45,22 +48,47 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 
 	@Override
 	public void start() {
+		hasJoinedGame = true;
+		Games.sole().getGamesFromServer();
 		setCurrentGame();
 		if(curGame.isFull()) {
 			curGame.setPlayerIndex();
-			getView().closeModal();
+			if(getView().isModalShowing()){
+				getView().closeModal();
+			}
 			ModelFacade.getModelFromServer();
 		} else {
-			List aiList;
 			try {
-				aiList = ServerFacade.get_instance().listAI();
-				String[] aiChoices = makeAIList(aiList); 
+				List aiList = ServerFacade.get_instance().listAI();
+				String[] aiChoices;
+				aiChoices = makeAIList(aiList);
 				getView().setAIChoices(aiChoices);
 				getView().setPlayers(curGame.getPlayerArray());
-				getView().showModal();
+				if(!getView().isModalShowing()) {
+					getView().showModal();
+				}
 			} catch (ServerException e) {
-				// TODO Auto-generated catch block
+				System.err.println("Server could not get AI List: " +
+						e.getMessage());
 				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void checkIfFull() {
+		if(curGame.isFull()) {
+			curGame.setPlayerIndex();
+			if(getView().isModalShowing()){
+				getView().closeModal();
+			}
+			ModelFacade.getModelFromServer();
+		} else {
+			getView().setPlayers(curGame.getPlayerArray());
+			if(!getView().isModalShowing()) {
+				getView().showModal();
+			} else {
+				getView().closeModal();
+				getView().showModal();
 			}
 		}
 	}
@@ -78,27 +106,21 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 	}
 
 	private void setCurrentGame() {
-		try {
-			List jsonGames = ServerFacade.get_instance().getGames();
-			Games translateGames = new Games((JSONArray) jsonGames);	
-			List<GameInfo> games = translateGames.getGames();
-			
-			Integer curGameID = ClientPlayer.sole().getGameID();
-			for(GameInfo game : games) {
-				int tmpGameID = game.getId();
-				if(tmpGameID == curGameID) {
+		//Assume since we joined a game it is in our list and it hasn't updated
+		List<GameInfo> games = Games.sole().getGames();
+		gameHasUpdated = false;
+		
+		Integer curGameID = ClientPlayer.sole().getGameID();
+		for(GameInfo game : games) {
+			int tmpGameID = game.getId();
+			if(tmpGameID == curGameID) {
+				if(curGame == null || !curGame.equals(game)) {
 					curGame = game;
-					break;
+					gameHasUpdated = true;
+					curGame.updateClientPlayer();
 				}
+				break;
 			}
-		} catch (ServerException e) {
-			System.err.println("Couldn't get games. "
-					+ "Message from Server Facade" + e.getMessage());
-			e.printStackTrace();
-		} catch (BadJSONException e) {
-			System.err.println("Badd JSON recieved. Error message:"
-					+ e.getLocalizedMessage());
-			e.printStackTrace();
 		}
 	}
 
@@ -114,9 +136,17 @@ public class PlayerWaitingController extends Controller implements IPlayerWaitin
 					+ "Message from Server Proxy: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		start();
+		checkIfFull();
 	}
 
+	@Override
+	public void update() {
+		if(hasJoinedGame) {
+			setCurrentGame();
+			if(gameHasUpdated) {
+				checkIfFull();
+			}
+		}
+	}
 }
 

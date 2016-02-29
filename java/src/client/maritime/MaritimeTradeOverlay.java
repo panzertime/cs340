@@ -265,6 +265,12 @@ public class MaritimeTradeOverlay extends OverlayView implements IMaritimeTradeO
 					reset();//TODO Should I leave this in?  It just emptys the view and starts a new one. should the controller do that?
 					getController().cancelTrade(); 
 				}
+				else if (e.getSource() == givereload) {
+					getController().unsetGiveValue();
+				}
+				else if (e.getSource() == getreload) {
+					getController().unsetGetValue();
+				}
 			}
 		};
 		giveActionListener = new ActionListener() {

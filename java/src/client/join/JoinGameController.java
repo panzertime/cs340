@@ -19,7 +19,8 @@ import shared.model.exceptions.BadJSONException;
 /**
  * Implementation for the join game controller
  */
-public class JoinGameController extends Controller implements IJoinGameController {
+public class JoinGameController extends Controller implements 
+	IJoinGameController, GamesObserver {
 
 	private INewGameView newGameView;
 	private ISelectColorView selectColorView;
@@ -42,6 +43,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		setNewGameView(newGameView);
 		setSelectColorView(selectColorView);
 		setMessageView(messageView);
+		Games.sole().registerObserver(this);
 	}
 	
 	public IJoinGameView getJoinGameView() {
@@ -99,31 +101,15 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 
 	@Override
 	public void start() {
+		Games.sole().getGamesFromServer();
 		updateGames();
 		getJoinGameView().showModal();
 	}
 	
 	private void updateGames() {
-		GameInfo[] games = getGames();
+		GameInfo[] games = Games.sole().getGameArray();
 		PlayerInfo localPlayer = ClientPlayer.sole().getPlayerInfo();
 		getJoinGameView().setGames(games, localPlayer);
-	}
-
-	private GameInfo[] getGames() {
-		GameInfo[] result = null;
-		try {
-			List GamesList = ServerFacade.get_instance().getGames();
-			Games games = new Games((JSONArray) GamesList);
-			result = games.getGames().toArray(new GameInfo[0]);
-		} catch (ServerException e) {
-			System.err.println("Could not get games after a valid login.");
-			e.printStackTrace();
-		} catch (BadJSONException e) {
-			System.err.println("Received a bad JSON from file.");
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 	@Override
@@ -187,7 +173,8 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 	 */
 	private void addYourselfToTheGameYouJustCreated(String gameName) throws Exception {
 		boolean added = false;
-		GameInfo[] games = getGames();
+		Games.sole().getGamesFromServer();
+		GameInfo[] games = Games.sole().getGameArray();
 		for(int i = 0; i < games.length; i++) {
 			String gameTitle = games[i].getTitle();
 			if(gameTitle.equals(gameName) && games[i].getPlayers().isEmpty()) {
@@ -216,6 +203,7 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		disableColors(game);
 		int gameID = game.getId();
 		ClientPlayer.sole().setGameID(gameID);
+		Games.sole().setJoinedGame(gameID);
 		getSelectColorView().showModal();
 	}
 
@@ -261,5 +249,13 @@ public class JoinGameController extends Controller implements IJoinGameControlle
 		}
 	}
 
+	@Override
+	public void update() {
+		if(getJoinGameView().isModalShowing() && Games.sole().hasChanged()) {
+			getJoinGameView().closeModal();
+			updateGames();
+			getJoinGameView().showModal();
+		}
+	}
 }
 

@@ -127,5 +127,34 @@ public class GameInfo
 		int index = this.players.indexOf(ClientPlayer.sole().getPlayerInfo());
 		ClientPlayer.sole().setUserIndex(index);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		boolean result = false;
+		if(obj.getClass() == this.getClass()) {
+			GameInfo game2 = (GameInfo) obj;
+			if(this.id == game2.id && this.players.equals(game2.players)
+					&& this.title.equals(game2.title) )
+				result = true;
+		}
+		return result;
+	}
+
+	/**
+	 * This method exists since two GUIS could be open to the same game. In the
+	 * event the second one has changed the color of the user, we need to
+	 * update our player so that he now has the same CatanColor.
+	 * @pre User has already joined a game
+	 * @post ClientPlayer is updated to match the client player in the JSON
+	 */
+	public void updateClientPlayer() {
+		int clientID = ClientPlayer.sole().getUserID();
+		for(PlayerInfo player : players) {
+			if(player.getId() == clientID) {
+				ClientPlayer.sole().updateClientPlayer(player);
+				break;
+			}
+		}
+	}
 }
 
