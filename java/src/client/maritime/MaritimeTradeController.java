@@ -24,6 +24,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		super(tradeView);
 
 		setTradeOverlay(tradeOverlay);
+		giveRatios = new HashMap<ResourceType,Integer>();
+		getRatios = new HashMap<ResourceType,Integer>();
+		
 	}
 	
 	public IMaritimeTradeView getTradeView() {
@@ -50,10 +53,13 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 					giveRatios.put(type, ratio);
 				}
 			}
-			if (
-			ResourceType[] resources = new ResourceType[]();
-			resources = (ResourceType[]) giveRatios.keySet().toArray();
-			tradeOverlay.showGiveOptions(resources);
+			if (!giveRatios.isEmpty()) {
+				ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
+				getTradeOverlay().showGiveOptions(resources);
+			} 
+			else {
+				getTradeOverlay().showGiveOptions(new ResourceType[5]);
+			}
 			getTradeOverlay().showModal();
 		}
 		catch (Exception e) {
@@ -100,8 +106,13 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 					getRatios.put(type, 1);
 				}
 			}
-			ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
-			tradeOverlay.showGetOptions(resources);
+			if (!getRatios.isEmpty()) {
+				ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
+				getTradeOverlay().showGetOptions(resources);
+			}
+			else {
+				getTradeOverlay().showGetOptions(new ResourceType[5]);
+			}
 		}
 		catch (Exception e) {
 			System.out.println(e.toString());
