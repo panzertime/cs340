@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import client.base.*;
+import client.data.PlayerInfo;
 import client.misc.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
@@ -358,8 +359,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void cancelTrade() {
-
 		getTradeOverlay().closeModal();
+		this.setToStandard();
 	}
 
 	@Override
@@ -368,17 +369,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		DoModelFacade doModelFacade = DoModelFacade.sole();
 		doModelFacade.doAcceptTrade(willAccept);
 		getAcceptOverlay().closeModal();
+		this.setToStandard();
 	}
 
+	PlayerInfo[] tradingPartners = null;
+	
 	@Override
 	public void update() {
+		if (tradingPartners == null) this.getTradeOverlay().setPlayers(GetModelFacade.sole().getTradingPartners());
+
 		CanModelFacade canModelFacade = CanModelFacade.sole();
 		this.getTradeView().enableDomesticTrade(canModelFacade.canDomesticTrade());
 		this.getTradeOverlay().setResourceSelectionEnabled(canModelFacade.canDomesticTrade());
 		this.getTradeOverlay().setPlayerSelectionEnabled(canModelFacade.canDomesticTrade());
 		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		this.getTradeOverlay().setPlayers(getModelFacade.getTradingPartners());
 		if (canModelFacade.canViewTrade()) 
 		{
 			
