@@ -187,10 +187,10 @@ public class DiscardController extends Controller implements IDiscardController,
 	public void update() {
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		int wo = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int b = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int s = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int wh = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int o = getModelFacade.getResourceAmount(ResourceType.WOOD);
+		int b = getModelFacade.getResourceAmount(ResourceType.BRICK);
+		int s = getModelFacade.getResourceAmount(ResourceType.SHEEP);
+		int wh = getModelFacade.getResourceAmount(ResourceType.WHEAT);
+		int o = getModelFacade.getResourceAmount(ResourceType.ORE);
 		
 		this.getDiscardView().setResourceMaxAmount(ResourceType.WOOD, wo);
 		this.getDiscardView().setResourceMaxAmount(ResourceType.BRICK, b);
