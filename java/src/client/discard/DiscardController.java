@@ -82,8 +82,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		}
 		int resourceTotal = wood + brick + sheep + wheat + ore;
 		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		if (canModelFacade.canDiscardCards(this.getResourceList()))
+		if (resourceTotal == discardNeeded)//(CanModelFacade.sole().canDiscardCards(this.getResourceList()))
 		{
 			this.getDiscardView().setDiscardButtonEnabled(true);
 			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, false, (wood > 0));
@@ -141,14 +140,20 @@ public class DiscardController extends Controller implements IDiscardController,
 		
 		int resourceTotal = wood + brick + sheep + wheat + ore;
 		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < woodMax), (wood > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < brickMax), (brick > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < sheepMax), (sheep > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wheatMax), (wheat > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < oreMax), (ore > 0));
-		if (!canModelFacade.canDiscardCards(this.getResourceList()))
+		if (resourceTotal < discardNeeded)//(!CanModelFacade.sole().canDiscardCards(this.getResourceList()))
+		{
 			this.getDiscardView().setDiscardButtonEnabled(false);
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < woodMax), (wood > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < brickMax), (brick > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < sheepMax), (sheep > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wheatMax), (wheat > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < oreMax), (ore > 0));
+		
+		}
+		else
+		{
+			
+		}
 		
 		buttonPushed = false;
 
