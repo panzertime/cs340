@@ -373,9 +373,10 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void update() {
 		CanModelFacade canModelFacade = CanModelFacade.sole();
-		this.getTradeView().enableDomesticTrade(canModelFacade.canDomesticTrade());
-		this.getTradeOverlay().setResourceSelectionEnabled(canModelFacade.canDomesticTrade());
-		this.getTradeOverlay().setPlayerSelectionEnabled(canModelFacade.canDomesticTrade());
+		boolean canDomesticTrade = canModelFacade.canDomesticTrade();
+		this.getTradeView().enableDomesticTrade(canDomesticTrade);
+		this.getTradeOverlay().setResourceSelectionEnabled(canDomesticTrade);
+		this.getTradeOverlay().setPlayerSelectionEnabled(canDomesticTrade);
 		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		this.getTradeOverlay().setPlayers(getModelFacade.getTradingPartners());

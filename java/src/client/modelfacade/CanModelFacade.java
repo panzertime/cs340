@@ -186,7 +186,7 @@ public class CanModelFacade extends ModelFacade {
 	
 
 	public boolean canDomesticTrade() throws NullPointerException {
-		return gameModel.canDomesticTrade(ClientPlayer.sole().getUserIndex());
+		return gameModel.canDomesticTrade(ClientPlayer.sole().getUserID());
 	}
 	
 	/**
