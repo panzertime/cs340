@@ -69,6 +69,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
 		setToStandard();
+		GetModelFacade.registerListener(this);
 	}
 	
 	public IDomesticTradeView getTradeView() {
