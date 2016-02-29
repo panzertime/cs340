@@ -147,11 +147,12 @@ public class PlayerInfo
 	/**
 	 * This function assumes that
 	 * id and index = -1 and color is white only for non existing players
+	 * Furthermore, name must not be blank
 	 * @return Whether or not a player exists
 	 */
 	public boolean exists() {
-		return (!this.name.isEmpty() && this.id != -1 && this.playerIndex != -1
-				&& this.color != CatanColor.WHITE);
+		return (!this.name.isEmpty() || (this.id != -1 && this.playerIndex != -1
+				&& this.color != CatanColor.WHITE));
 	}
 }
 

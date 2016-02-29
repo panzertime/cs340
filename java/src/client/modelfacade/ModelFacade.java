@@ -33,7 +33,7 @@ public abstract class ModelFacade {
 	
 	public static void getModelFromServer() {
 		try {
-			Map jsonModel = ServerFacade.get_instance().getModel(null);
+			Map jsonModel = ServerFacade.get_instance().getFirstModel();
 			setModel((JSONObject) jsonModel);
 		} catch (ServerException e) {
 			System.err.println("Could not get a model of current game"

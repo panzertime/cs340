@@ -251,7 +251,11 @@ public class JoinGameController extends Controller implements
 
 	@Override
 	public void update() {
-		updateGames();
+		if(getJoinGameView().isModalShowing() && Games.sole().hasChanged()) {
+			getJoinGameView().closeModal();
+			updateGames();
+			getJoinGameView().showModal();
+		}
 	}
 }
 

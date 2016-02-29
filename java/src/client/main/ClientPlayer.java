@@ -63,4 +63,21 @@ public class ClientPlayer {
 	public Integer getGameID() {
 		return curGameID;
 	}
+
+	public boolean hasJoinedGame() {
+		boolean result = false;
+		if(curGameID != null) {
+			result = true;
+		}
+		
+		return result;
+	}
+
+	public void updateClientPlayer(PlayerInfo player) {
+		CatanColor playerColor = player.getColor();
+		CatanColor clientColor = clientInfo.getColor();
+		if(!playerColor.equals(clientColor)){
+			clientInfo.setColor(playerColor);
+		}
+	}
 }
