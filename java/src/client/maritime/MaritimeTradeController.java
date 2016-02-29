@@ -1,6 +1,7 @@
 package client.maritime;
 
 import java.util.HashMap;
+import java.util.Arrays;
 
 import client.base.*;
 import client.modelfacade.*;
@@ -54,7 +55,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				}
 			}
 			if (!giveRatios.isEmpty()) {
-				ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
+				Object[] keys = giveRatios.keySet().toArray();
+				ResourceType[] resources = Arrays.copyOf(keys, keys.length, ResourceType[].class);		
 				getTradeOverlay().showGiveOptions(resources);
 			} 
 			else {
@@ -72,6 +74,10 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		try {
 			int ratio = giveRatios.get(giveType);
 			DoModelFacade.sole().doMaritimeTrade(ratio, giveType, getType);
+			giveRatios = new HashMap<ResourceType,Integer>();
+			getRatios = new HashMap<ResourceType,Integer>();
+			giveType = null;
+			getType = null;
 			getTradeOverlay().closeModal();
 		}
 		catch (Exception e) {
@@ -107,7 +113,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 				}
 			}
 			if (!getRatios.isEmpty()) {
-				ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
+				Object[] keys = getRatios.keySet().toArray();
+				ResourceType[] resources = Arrays.copyOf(keys, keys.length, ResourceType[].class);	
 				getTradeOverlay().showGetOptions(resources);
 			}
 			else {

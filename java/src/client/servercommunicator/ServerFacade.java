@@ -325,9 +325,13 @@ public class ServerFacade {
 
 	public Map finishTurn(int playerIndex) throws ServerException {
 		try {
-			String content = "{type: \"finishTurn\", " +
+			/*String content = "{type: \"finishTurn\", " +
 						"playerIndex: " + playerIndex +  "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject args = new JSONObject();
+			args.put("type", "finishTurn");
+			args.put("playerIndex", playerIndex);
+			
 			return proxy.finishTurn(args);
 		}
 		catch(Exception e){
@@ -502,11 +506,11 @@ public class ServerFacade {
 			ResourceType inputResource, ResourceType outputResource) 
 			throws ServerException {
 		try {
-			String content = "{type: \"maritimeTrade\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"ratio: " + ratio + ", " +
-						"inputResource: " + inputResource.toString().toLowerCase() + ", " +
-						"outputResource: " + outputResource.toString().toLowerCase() + "}";
+			String content = "{\"type\": \"maritimeTrade\", " +
+						"\"playerIndex\":" + playerIndex + ", " +
+						"\"ratio\":" + ratio + ", " +
+						"\"inputResource\": \"" + inputResource.toString().toLowerCase() + "\", " +
+						"\"outputResource\": \"" + outputResource.toString().toLowerCase() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.maritimeTrade(args);
 		}

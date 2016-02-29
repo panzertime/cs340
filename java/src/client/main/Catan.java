@@ -1,17 +1,26 @@
 package client.main;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-import client.catan.*;
-import client.login.*;
-import client.join.*;
-import client.misc.*;
+import client.base.IAction;
+import client.catan.CatanPanel;
+import client.join.JoinGameController;
+import client.join.JoinGameView;
+import client.join.NewGameView;
+import client.join.PlayerWaitingController;
+import client.join.PlayerWaitingView;
+import client.join.SelectColorView;
+import client.login.LoginController;
+import client.login.LoginView;
+import client.misc.MessageView;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
+import client.modelfacade.get.GetModelFacade;
 import client.servercommunicator.IServerProxy;
 import client.servercommunicator.ServerFacade;
 import client.servercommunicator.ServerProxy;
-import client.base.*;
 
 /**
  * Main entry point for the Catan program
@@ -50,6 +59,7 @@ public class Catan extends JFrame
 	{
 		CanModelFacade.sole();
 		DoModelFacade.sole();
+		GetModelFacade.sole();
 		
 		try
 		{

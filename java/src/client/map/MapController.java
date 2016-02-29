@@ -6,10 +6,13 @@ import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
-import client.modelfacade.CanModelFacade;
-import client.modelfacade.DoModelFacade;
+import client.map.state.MapState;
+import client.map.state.PlayingMapState;
+import client.map.state.SetupMapState;
+import client.map.state.WaitingMapState;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
+import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
@@ -22,15 +25,14 @@ import shared.model.definitions.CatanColor;
  */
 public class MapController extends Controller implements GetModelFacadeListener, IMapController {
 	
+	
+	private MapState state;
 	private IRobView robView;
 	
 	public MapController(IMapView view, IRobView robView) {
-		
 		super(view);
-		
+		GetModelFacade.registerListener(this);
 		setRobView(robView);
-		
-		initFromModel();
 	}
 	
 	public IMapView getView() {
@@ -45,7 +47,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		this.robView = robView;
 	}
 	
-	protected void initFromModel() {
+	protected void updateView() {
 		
 		for (PseudoHex hex : GetModelFacade.sole().getPseudoHexes()) {
 			getView().addHex(hex.getHexLoc(), hex.getHexType());
@@ -65,46 +67,48 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		
 		for (PseudoCity city : GetModelFacade.sole().getPseudoCities()) {
 			getView().placeCity(city.getVertLoc(), city.getColor());
-			
 		}
+	}
+	
+	protected void updateState() {
+		if (GetModelFacade.sole().isStateWaiting())
+			state = new WaitingMapState(this);
+		else if (GetModelFacade.sole().isStateSetup())
+			state = new SetupMapState(this);
+		else if (GetModelFacade.sole().isStatePlaying())
+			state = new PlayingMapState(this);
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		return CanModelFacade.sole().canBuildRoad(edgeLoc);
+		return state.canPlaceRoad(edgeLoc);
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		return CanModelFacade.sole().canBuildSettlement(vertLoc);
+		return state.canPlaceSettlement(vertLoc);
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
-		return CanModelFacade.sole().canBuildCity(vertLoc);
+		return state.canPlaceCity(vertLoc);
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		//CanModelFacade.sole().canPlaceRobber(hexLoc, playerIndex);
-		return true;
+		return state.canPlaceRobber(hexLoc);
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		DoModelFacade.sole().doBuildRoad(edgeLoc);
-		getView().placeRoad(edgeLoc, CatanColor.ORANGE);
+		state.placeRoad(edgeLoc);
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		DoModelFacade.sole().doBuildSettlement(vertLoc);
-		getView().placeSettlement(vertLoc, CatanColor.ORANGE);
+		state.placeSettlement(vertLoc);
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		DoModelFacade.sole().doBuildCity(vertLoc);
-		getView().placeCity(vertLoc, CatanColor.ORANGE);
+		state.placeCity(vertLoc);
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
-		
 		getView().placeRobber(hexLoc);
-		
 		getRobView().showModal();
 	}
 	
@@ -118,6 +122,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	public void playSoldierCard() {
+		
 	}
 	
 	public void playRoadBuildingCard() {	
@@ -130,8 +135,9 @@ public class MapController extends Controller implements GetModelFacadeListener,
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		Log.debug("Updated Map!");
+		updateView();
+		updateState();
 	}
 	
 }
