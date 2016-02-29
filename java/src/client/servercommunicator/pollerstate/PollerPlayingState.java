@@ -46,10 +46,15 @@ public class PollerPlayingState implements IPollerState {
 				Thread.sleep(1500);
 				JSONObject result = poll();
 				if(result == null){
-					System.out.println("POLLER says: received null input");
+					//Means no update
+					//System.out.println("POLLER says: received null input");
 				}
 				else {
+					//means update
 					//System.out.println("POLLER says: setting game model");
+					Long newVersion = (Long) result.get("version");
+					Integer newIntVersion = newVersion.intValue();
+					version = newIntVersion;
 					ModelFacade.setModel(result);
 				}
 			}
