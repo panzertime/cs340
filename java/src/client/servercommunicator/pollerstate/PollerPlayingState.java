@@ -49,7 +49,7 @@ public class PollerPlayingState implements IPollerState {
 					System.out.println("POLLER says: received null input");
 				}
 				else {
-					System.out.println("POLLER says: setting game model");
+					//System.out.println("POLLER says: setting game model");
 					ModelFacade.setModel(result);
 				}
 			}

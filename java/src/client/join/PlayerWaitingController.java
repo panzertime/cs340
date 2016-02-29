@@ -20,13 +20,16 @@ public class PlayerWaitingController extends Controller implements
 	
 	private GameInfo curGame;
 	private IAction waitAction;
-	String[] aiChoices;
+	private boolean gameHasUpdated;
+	private boolean hasJoinedGame;
 
 	public PlayerWaitingController(IPlayerWaitingView view) {
 
 		super(view);
 		curGame = null;
 		Games.sole().registerObserver(this);
+		gameHasUpdated = false;
+		hasJoinedGame = false;
 	}
 
 	@Override
@@ -45,6 +48,8 @@ public class PlayerWaitingController extends Controller implements
 
 	@Override
 	public void start() {
+		hasJoinedGame = true;
+		Games.sole().getGamesFromServer();
 		setCurrentGame();
 		if(curGame.isFull()) {
 			curGame.setPlayerIndex();
@@ -55,7 +60,8 @@ public class PlayerWaitingController extends Controller implements
 		} else {
 			try {
 				List aiList = ServerFacade.get_instance().listAI();
-				aiChoices = makeAIList(aiList); 
+				String[] aiChoices;
+				aiChoices = makeAIList(aiList);
 				getView().setAIChoices(aiChoices);
 				getView().setPlayers(curGame.getPlayerArray());
 				if(!getView().isModalShowing()) {
@@ -77,9 +83,11 @@ public class PlayerWaitingController extends Controller implements
 			}
 			ModelFacade.getModelFromServer();
 		} else {
-			getView().setAIChoices(aiChoices);
 			getView().setPlayers(curGame.getPlayerArray());
 			if(!getView().isModalShowing()) {
+				getView().showModal();
+			} else {
+				getView().closeModal();
 				getView().showModal();
 			}
 		}
@@ -98,14 +106,19 @@ public class PlayerWaitingController extends Controller implements
 	}
 
 	private void setCurrentGame() {
-		//Assume since we joined a game it is in our list
+		//Assume since we joined a game it is in our list and it hasn't updated
 		List<GameInfo> games = Games.sole().getGames();
+		gameHasUpdated = false;
 		
 		Integer curGameID = ClientPlayer.sole().getGameID();
 		for(GameInfo game : games) {
 			int tmpGameID = game.getId();
 			if(tmpGameID == curGameID) {
-				curGame = game;
+				if(curGame == null || !curGame.equals(game)) {
+					curGame = game;
+					gameHasUpdated = true;
+					curGame.updateClientPlayer();
+				}
 				break;
 			}
 		}
@@ -128,8 +141,12 @@ public class PlayerWaitingController extends Controller implements
 
 	@Override
 	public void update() {
-		setCurrentGame();
-		checkIfFull();
+		if(hasJoinedGame) {
+			setCurrentGame();
+			if(gameHasUpdated) {
+				checkIfFull();
+			}
+		}
 	}
 }
 

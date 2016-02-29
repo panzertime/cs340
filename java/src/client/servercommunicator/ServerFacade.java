@@ -146,7 +146,6 @@ public class ServerFacade {
 			if(proxy.joinGame(args) == false){
 				throw new ServerException("Join game failed");
 			}
-			poller.setPlayerWaitingState();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -560,5 +559,10 @@ public class ServerFacade {
 
 	public void updateGamesList() {
 		Games.sole().getGamesFromServer();
+	}
+
+	public Map getFirstModel() throws ServerException {
+		poller.setPollerPlayingState();
+		return getModel(null);
 	}
 }

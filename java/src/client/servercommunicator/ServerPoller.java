@@ -5,7 +5,6 @@ import org.json.simple.JSONObject;
 import client.modelfacade.ModelFacade;
 import client.servercommunicator.pollerstate.IPollerState;
 import client.servercommunicator.pollerstate.PollerJoinGameState;
-import client.servercommunicator.pollerstate.PollerPlayerWaitingState;
 import client.servercommunicator.pollerstate.PollerPlayingState;
 import shared.model.exceptions.BadJSONException;
 
@@ -51,10 +50,6 @@ public class ServerPoller extends Thread {
 
 	public void setJoinGameState() {
 		state = new PollerJoinGameState();
-	}
-
-	public void setPlayerWaitingState() {
-		state = new PollerPlayerWaitingState();
 	}
 
 	public void setPollerPlayingState() {

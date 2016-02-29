@@ -16,6 +16,7 @@ public class Games {
 	private Integer joinedGame;
 	
 	private List<GamesObserver> gamesObservers;
+	private boolean hasChanged;
 	
 	public void registerObserver(GamesObserver gamesObservers) {
 		this.gamesObservers.add(gamesObservers);
@@ -28,12 +29,20 @@ public class Games {
 	}
 	
 	public void loadJSONGames(JSONArray games) throws BadJSONException {
+		List<GameInfo> oldGames = this.games;
 		this.games = new ArrayList<GameInfo>();
 		for(Object game : games) {
 			JSONObject jsonGame = (JSONObject) game;
 			GameInfo newGame = new GameInfo(jsonGame);
 			this.games.add(newGame);
 		}
+		
+		if(this.games.equals(oldGames)) {
+			this.hasChanged = false;
+		} else {
+			this.hasChanged = true;
+		}
+		
 		notifyObservers();
 	}
 	
@@ -41,6 +50,7 @@ public class Games {
 		games = null;
 		joinedGame = null;
 		gamesObservers = new ArrayList<GamesObserver>();
+		hasChanged = true;
 	}
 
 	public static Games sole() {
@@ -90,5 +100,9 @@ public class Games {
 
 	public void setJoinedGame(int gameID) {
 		joinedGame = gameID;
+	}
+
+	public boolean hasChanged() {
+		return hasChanged;
 	}
 }
