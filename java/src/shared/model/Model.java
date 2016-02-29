@@ -789,6 +789,7 @@ public class Model {
 	public boolean isTurn(int playerIndex) {
 		return (this.isActivePlayer(playerIndex));
 	}
+	
 
 	public boolean isLargestArmy(int playerIndex) {
 		Boolean b = this.getAchievements().isLargestArmy(getPlayer(playerIndex));
@@ -868,7 +869,7 @@ public class Model {
 	public boolean canDomesticTrade(int userID) {
 		if (!isActivePlayer(this.getIndexFromPlayerID(userID)))
 			return false;
-		if (!getStatus().equalsIgnoreCase("Playing"))
+		if (!statusIsPlaying())
 			return false;
 		return true;
 	}
