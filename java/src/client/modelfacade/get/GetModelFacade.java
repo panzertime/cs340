@@ -12,9 +12,6 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
-import shared.model.TradeModel;
-import shared.model.board.piece.PieceType;
-import shared.model.chat.MessageLog;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
@@ -51,7 +48,9 @@ public class GetModelFacade  extends ModelFacade {
 		for (GetModelFacadeListener listener : listeners)
 			listener.update();
 	}
+	
 
+	
 	public List<PseudoHex> getPseudoHexes() {
 		if (!hasGameModel())
 			return new ArrayList<PseudoHex>();
@@ -75,6 +74,31 @@ public class GetModelFacade  extends ModelFacade {
 			return new ArrayList<PseudoRoad>();
 		return gameModel.getPseudoRoads();
 	}
+	
+	
+	
+	public boolean isStateWaiting() {
+		if (!gameModel.isActivePlayer(ClientPlayer.sole().getUserID()))
+			return false;
+		return true;
+	}
+	
+	public boolean isStatePlaying() {
+		if (isStateWaiting())
+			return false;
+		if (!gameModel.statusIsPlaying())
+			return false;
+		return true;
+	}
+	
+	public boolean isStateSetup() { 
+		if (isStateWaiting())
+			return false;
+		if (!gameModel.statusIsSetup())
+			return false;
+		return true;
+	}
+	
 	
 	
 	//J.R.'s section//////////////////////////////////////////////////////////////////////////////////////////

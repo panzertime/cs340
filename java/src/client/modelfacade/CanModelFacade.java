@@ -43,8 +43,13 @@ public class CanModelFacade extends ModelFacade {
 	 * @return Whether or not a robber can move there
 	 * @throws NullPointerException Pre-condition violation
 	 */
-	public boolean canPlaceRobber(HexLocation hexLoc, int playerIndex) throws NullPointerException {
-		return this.gameModel.canRobPlayer(ClientPlayer.sole().getUserIndex(), hexLoc, playerIndex);
+	public boolean canPlaceRobber(HexLocation hexLoc) throws NullPointerException {
+		return this.gameModel.canPlaceRobber(ClientPlayer.sole().getUserIndex(), hexLoc);
+	}
+	
+	
+	public boolean canRobPlayer(Integer playerIndex) throws NullPointerException {
+		return this.gameModel.canRobPlayer(ClientPlayer.sole().getUserIndex(), playerIndex);
 	}
 
 	/**
@@ -145,6 +150,11 @@ public class CanModelFacade extends ModelFacade {
 		return this.gameModel.canBuildRoad(ClientPlayer.sole().getUserIndex(), edgeLoc);
 	}
 
+	public boolean canSetupRoad(EdgeLocation edgeLoc) throws NullPointerException {
+		return this.gameModel.canSetupRoad(ClientPlayer.sole().getUserIndex(), edgeLoc);
+	}
+
+
 	/**
 	 * Asks the inspector if a user may place a settlement there.
 	 * @pre vertLoc is valid, game is in state where user can place settlement
@@ -155,6 +165,10 @@ public class CanModelFacade extends ModelFacade {
 	 */
 	public boolean canBuildSettlement(VertexLocation vertLoc) throws NullPointerException {
 		return this.gameModel.canBuildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc);
+	}
+	
+	public boolean canSetupSettlement(VertexLocation vertLoc) throws NullPointerException {
+		return this.gameModel.canSetupSettlement(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 
 	/**
