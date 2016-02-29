@@ -365,7 +365,14 @@ public class Model {
 			return false;
 		return true;
 	}
-
+	
+	public boolean shouldDiscard(int userIndex) {
+		if (!getActivePlayer().canDiscardCard())
+			return false;
+		return true;
+	}
+	
+	
 	// Preconditions
 	// It is your turn
 	// The client model�s status is 'Rolling'
@@ -896,6 +903,8 @@ public class Model {
 	public List<LogEntry> getGameHistory() {
 		return chatModel.getGameLog().toLogEntryList();
 	}
+
+
 
 	
 	

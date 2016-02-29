@@ -23,6 +23,12 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	Integer sheep;
 	Integer wheat;
 	Integer ore;
+	Boolean sendingWood;
+	Boolean sendingBrick;
+	Boolean sendingSheep;
+	Boolean sendingWheat;
+	Boolean sendingOre;
+	
 	int receiverIndex;
 	
 	private IDomesticTradeOverlay tradeOverlay;
@@ -69,6 +75,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
 		setToStandard();
+		GetModelFacade.registerListener(this);
 	}
 	
 	public IDomesticTradeView getTradeView() {

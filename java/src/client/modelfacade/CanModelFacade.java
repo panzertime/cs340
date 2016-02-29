@@ -258,6 +258,10 @@ public class CanModelFacade extends ModelFacade {
 	public boolean canDiscardCards(Map<ResourceType, Integer> resources) throws NullPointerException {
 		return this.gameModel.canDiscardCard(ClientPlayer.sole().getUserIndex(), resources);
 	}
+	
+	public boolean shouldDiscard() throws NullPointerException {
+		return this.gameModel.shouldDiscard(ClientPlayer.sole().getUserIndex());
+	}
 
 	/**
 	 * Checks the model to see if the current player can finish his turn
