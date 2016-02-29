@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import client.communication.LogEntry;
+import client.data.PlayerInfo;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -11,6 +12,7 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
+import shared.model.TradeModel;
 import shared.model.board.piece.PieceType;
 import shared.model.chat.MessageLog;
 import shared.model.definitions.CatanColor;
@@ -164,6 +166,20 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
 	}
 	
+	/////Trading
+	
+	public int getTradeGetResource(ResourceType type)
+	{
+		return gameModel.getTradeGetResource(type);
+		
+	}
+	
+	public int getTradeGiveResource(ResourceType type)
+	{
+		return gameModel.getTradeGiveResource(type);
+		
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//JOSHUA
@@ -173,6 +189,15 @@ public class GetModelFacade  extends ModelFacade {
 	public List<LogEntry> getGameHistory() {
 		return gameModel.getGameHistory();
 	}
+	public String getTradeSenderName() {
+		return gameModel.getTradeSenderName();
+	}
+
+	public PlayerInfo[] getTradingPartners() {
+		return gameModel.getTradingPartner(ClientPlayer.sole().getUserID());
+	}
+
 	//////////////////////////////////////////
+
 
 }

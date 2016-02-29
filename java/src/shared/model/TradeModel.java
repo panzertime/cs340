@@ -10,22 +10,22 @@ import shared.model.hand.ResourceType;
 
 public class TradeModel {
 	
-	private Integer senderID;
+	private Integer senderIndex;
 	/**
-	 * @return the senderID
+	 * @return the senderIndex
 	 */
-	public Integer getSenderID() {
-		return senderID;
+	public Integer getSenderIndex() {
+		return senderIndex;
 	}
 
 	/**
-	 * @return the receiverID
+	 * @return the receiverIndex
 	 */
-	public Integer getReceiverID() {
-		return receiverID;
+	public Integer getReceiverIndex() {
+		return receiverIndex;
 	}
 
-	private Integer receiverID;
+	private Integer receiverIndex;
 	private Integer wood;
 	private Integer brick;
 	private Integer sheep;
@@ -36,12 +36,12 @@ public class TradeModel {
 	public TradeModel(JSONObject tradeOffer) throws BadJSONException
 	{
 		if (tradeOffer == null) return;
-		Long senderID = ((Long) tradeOffer.get("sender"));
-		Long receiverID = ((Long) tradeOffer.get("receiver"));
-		if (senderID == null || receiverID == null)
+		Long senderIndex = ((Long) tradeOffer.get("sender"));
+		Long receiverIndex = ((Long) tradeOffer.get("receiver"));
+		if (senderIndex == null || receiverIndex == null)
 			throw new BadJSONException();
-		this.senderID = senderID.intValue();
-		this.receiverID = receiverID.intValue();
+		this.senderIndex = senderIndex.intValue();
+		this.receiverIndex = receiverIndex.intValue();
 		
 		JSONObject offer = (JSONObject)tradeOffer.get("offer");
 		if (offer == null)
@@ -65,11 +65,11 @@ public class TradeModel {
 
 
 	public boolean equalsJSON(JSONObject tradeOffer) {
-		Long senderID = ((Long) tradeOffer.get("sender"));
-		Long receiverID = ((Long) tradeOffer.get("receiver"));
-		if (senderID == null || receiverID == null)
+		Long senderIndex = ((Long) tradeOffer.get("sender"));
+		Long receiverIndex = ((Long) tradeOffer.get("receiver"));
+		if (senderIndex == null || receiverIndex == null)
 			return false;
-		if (this.senderID != senderID.intValue() || this.receiverID != receiverID.intValue())
+		if (this.senderIndex != senderIndex.intValue() || this.receiverIndex != receiverIndex.intValue())
 			return false;
 		
 		JSONObject offer = (JSONObject)tradeOffer.get("offer");
@@ -141,7 +141,62 @@ public class TradeModel {
 		this.ore = ore;
 	}
 
-
+	public int getTradeGetResource(ResourceType type)
+	{
+		switch (type)
+		{
+		case WOOD:
+			if (this.getWood() > 0)
+				return wood;
+			else return 0;
+		case BRICK:
+			if (this.getBrick() > 0)
+				return wood;
+			else return 0;
+		case SHEEP:
+			if (this.getSheep() > 0)
+				return wood;
+			else return 0;
+		case WHEAT:
+			if (this.getWheat() > 0)
+				return wood;
+			else return 0;
+		case ORE:
+			if (this.getOre() > 0)
+				return wood;
+			else return 0;
+		}
+		return 0;
+		
+	}
+	
+	public int getTradeGiveResource(ResourceType type)
+	{
+		switch (type)
+		{
+		case WOOD:
+			if (this.getWood() < 0)
+				return wood;
+			else return 0;
+		case BRICK:
+			if (this.getBrick() < 0)
+				return wood;
+			else return 0;
+		case SHEEP:
+			if (this.getSheep() < 0)
+				return wood;
+			else return 0;
+		case WHEAT:
+			if (this.getWheat() < 0)
+				return wood;
+			else return 0;
+		case ORE:
+			if (this.getOre() < 0)
+				return wood;
+			else return 0;
+		}		return 0;
+		
+	}
 
 	public Map<ResourceType, Integer> getResourcesToGive() {
 		Map<ResourceType, Integer> resources = new HashMap<ResourceType, Integer>();

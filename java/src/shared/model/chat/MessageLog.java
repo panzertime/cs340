@@ -54,6 +54,7 @@ public class MessageLog {
 		List<LogEntry> result = new ArrayList<LogEntry>();
 		for(Message message : messageList) {
 			LogEntry logList = message.toLogEntry();
+			result.add(logList);
 		}
 		return result;
 	}

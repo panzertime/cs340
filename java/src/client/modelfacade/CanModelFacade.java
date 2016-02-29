@@ -170,6 +170,11 @@ public class CanModelFacade extends ModelFacade {
 		return this.gameModel.canBuildCity(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 	
+
+	public boolean canDomesticTrade() throws NullPointerException {
+		return gameModel.canDomesticTrade(ClientPlayer.sole().getUserIndex());
+	}
+	
 	/**
 	 * Checks the model through the inspector to see if a user can trade
 	 * @pre User is logged in, in a game, in his turn
@@ -192,6 +197,10 @@ public class CanModelFacade extends ModelFacade {
 	 */
 	public boolean canAcceptTrade() throws NullPointerException {
 		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserIndex());
+	}
+	
+	public boolean canViewTrade() throws NullPointerException {
+		return gameModel.canViewTrade(ClientPlayer.sole().getUserIndex());
 	}
 
 	
@@ -264,4 +273,5 @@ public class CanModelFacade extends ModelFacade {
 	public boolean canSendChat() throws NullPointerException {
 		return this.gameModel.canSendChat(ClientPlayer.sole().getUserIndex());
 	}
+
 }

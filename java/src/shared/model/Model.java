@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import client.communication.LogEntry;
+import client.data.PlayerInfo;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -682,9 +683,17 @@ public class Model {
 	public Boolean canAcceptTrade(Integer playerID) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverID() != playerID)
+		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
 			return false;
-		if (!getPlayer(tradeModel.getReceiverID()).hasCards(this.tradeModel.getResourcesToGive()))
+		if (!getPlayer(tradeModel.getReceiverIndex()).hasCards(this.tradeModel.getResourcesToGive()))
+			return false;
+		return true;
+	}
+	
+	public Boolean canViewTrade(Integer playerID) {
+		if (tradeModel == null)
+			return false;
+		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
 			return false;
 		return true;
 	}
@@ -832,6 +841,50 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+/////Trading
+	
+	public int getTradeGetResource(ResourceType type)
+	{
+		return this.tradeModel.getTradeGetResource(type);
+	}
+	
+	public int getTradeGiveResource(ResourceType type)
+	{
+		return this.tradeModel.getTradeGiveResource(type);
+	}	
+
+	public String getTradeSenderName() {
+		return getPlayer(this.tradeModel.getSenderIndex()).getUserName();
+	}
+	
+	public boolean canDomesticTrade(int userID) {
+		if (!isActivePlayer(this.getIndexFromPlayerID(userID)))
+			return false;
+		if (!getStatus().equalsIgnoreCase("Playing"))
+			return false;
+		return true;
+	}
+	
+	public PlayerInfo[] getTradingPartner(int userID) {
+		PlayerInfo[] tradingPartners = new PlayerInfo[players.size() - 1];
+		int i = 0;
+		for (Player p: players.values())
+		{
+			if (p.getPlayerID() != userID)
+			{
+				PlayerInfo partner = new PlayerInfo();
+				partner.setId(p.getPlayerID());
+				partner.setPlayerIndex(p.getPlayerIndex());
+				partner.setName(p.getUserName());
+				partner.setColor(p.getColor());
+				tradingPartners[i] = partner;
+				i++;
+			}
+		}
+		return tradingPartners;
+	}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//JOSHUA
@@ -841,9 +894,10 @@ public class Model {
 	///////////////////////
 
 	public List<LogEntry> getGameHistory() {
-		// TODO Auto-generated method stub
 		return chatModel.getGameLog().toLogEntryList();
 	}
+
+	
 	
 	
 	
