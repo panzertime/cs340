@@ -16,6 +16,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	private HashMap<ResourceType,Integer> giveRatios;
 	private HashMap<ResourceType,Integer> getRatios;
+	private ResourceType giveType;
+	private ResourceType getType;
 	
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
 		
@@ -58,8 +60,14 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void makeTrade() {
-		// modelFacade.doTrades
-		getTradeOverlay().closeModal();
+		try {
+			int ratio = giveRatios.get(giveType);
+			DoModelFacade.sole().doMaritimeTrade(ratio, giveType, getType);
+			getTradeOverlay().closeModal();
+		}
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	@Override
@@ -72,34 +80,45 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void setGetResource(ResourceType resource) {
 		// selectGetOption
 		// setTradeEnabled
+		tradeOverlay.selectGetOption(resource, getRatios.get(resource));
+		getType = resource;
+		tradeOverlay.setTradeEnabled(true);
 	}
 
 	@Override
 	public void setGiveResource(ResourceType resource) {
-		// selectGiveOption
-		tradeOverlay.selectGiveOption(resource, giveRatios.get(resource));
-		tradeOverlay.hideGiveOptions();
-		// hideGiveOptions
-		// canRecieveOffer for each
-		// showGetOptions for each
+		try {
+			tradeOverlay.selectGiveOption(resource, giveRatios.get(resource));
+			giveType = resource;
+			tradeOverlay.hideGiveOptions();
+			for (ResourceType type : ResourceType.values()) {
+				boolean ratio = CanModelFacade.sole().canReceiveMaritime(type);
+				if (ratio) {
+					getRatios.put(type, 1);
+				}
+			}
+			ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
+			tradeOverlay.showGetOptions(resources);
+		}
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	@Override
 	public void unsetGetValue() {
-		// these might work by doing .getController.unset*Value() in 
-		// the listener that currently resets in the overlay;
-		// do like a roll back of each stage
-		// like if stage enabled, unset
-
-		// showGetOptions
-		// tradeDisabled
+		tradeOverlay.setTradeEnabled(false);
+		getType = null;
+		ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
+		tradeOverlay.showGetOptions(resources);
 	}
 
 	@Override
 	public void unsetGiveValue() {
-		// hideGetOptions
-		// showGiveOptions
-		// 
+		giveType = null;
+		ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
+		tradeOverlay.showGiveOptions(resources);
+
 	}
 
 }
