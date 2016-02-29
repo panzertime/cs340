@@ -44,6 +44,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		try {	
 			tradeOverlay.setCancelEnabled(true);
 			for (ResourceType type : ResourceType.values()) {
+				System.out.println("Checking give ratio for " + type.toString());
 				int ratio = CanModelFacade.sole().canOfferMaritime(type);
 				if (ratio != 0) {
 					giveRatios.put(type, ratio);
@@ -54,7 +55,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			getTradeOverlay().showModal();
 		}
 		catch (Exception e) {
-			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 	}
 
