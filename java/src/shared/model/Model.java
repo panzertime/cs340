@@ -787,7 +787,7 @@ public class Model {
 	}
 
 	public boolean isTurn(int playerIndex) {
-		return (this.isActivePlayer(playerIndex) && (!statusIsPlaying()));
+		return (this.isActivePlayer(playerIndex));
 	}
 
 	public boolean isLargestArmy(int playerIndex) {
@@ -899,22 +899,42 @@ public class Model {
 	public List<LogEntry> getMessages() {
 		return chatModel.getChatLog().toLogEntryList();
 	}
+	
+	public boolean hasTradeOffer() {
+		boolean result = false;
+		if(this.tradeModel != null) {
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	public boolean statusIsRolling() {
+		boolean result = false;
+		if(status.equalsIgnoreCase("Rolling")) {
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean statusIsDiscarding() {
+		boolean result = false;
+		if(status.equalsIgnoreCase("Discarding")) {
+			result = true;
+		}
+		return result;
+	}
+
+	public boolean statusIsRobbing() {
+		boolean result = false;
+		if(status.equalsIgnoreCase("Robbing")) {
+			result = true;
+		}
+		return result;
+	}	
 	///////////////////////
 
 	public List<LogEntry> getGameHistory() {
 		return chatModel.getGameLog().toLogEntryList();
 	}
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

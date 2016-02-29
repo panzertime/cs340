@@ -221,6 +221,22 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getTradingPartner(ClientPlayer.sole().getUserID());
 	}
 
+	public boolean hasTradeOffer() {
+		return gameModel.hasTradeOffer();
+	}
+
+	public boolean isStateRolling() {
+		return gameModel.statusIsRolling();
+	}
+
+	public boolean isStateDiscarding() {
+		return gameModel.statusIsDiscarding();
+	}
+
+	public boolean isStateRobbing() {
+		return gameModel.statusIsRobbing();
+	}
+
 	//////////////////////////////////////////
 
 

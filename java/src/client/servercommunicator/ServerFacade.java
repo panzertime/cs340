@@ -325,9 +325,13 @@ public class ServerFacade {
 
 	public Map finishTurn(int playerIndex) throws ServerException {
 		try {
-			String content = "{type: \"finishTurn\", " +
+			/*String content = "{type: \"finishTurn\", " +
 						"playerIndex: " + playerIndex +  "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject args = new JSONObject();
+			args.put("type", "finishTurn");
+			args.put("playerIndex", playerIndex);
+			
 			return proxy.finishTurn(args);
 		}
 		catch(Exception e){
