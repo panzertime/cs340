@@ -15,7 +15,7 @@ import shared.model.definitions.CatanColor;
  */
 public class TurnTrackerController extends Controller implements ITurnTrackerController, GetModelFacadeListener {
 
-	boolean initialized;
+	private boolean initialized;
 	public TurnTrackerController(ITurnTrackerView view) {
 		
 		super(view);
@@ -52,17 +52,16 @@ public class TurnTrackerController extends Controller implements ITurnTrackerCon
 	{
 		if (!initialized)
 			initFromModel();
-		GetModelFacade getModelFacade = GetModelFacade.sole();
-		ArrayList<Integer> playerIndices = (ArrayList<Integer>) getModelFacade.getPlayerIndices();
-		
+		ArrayList<Integer> playerIndices = (ArrayList<Integer>) GetModelFacade.sole().getPlayerIndices();
+		this.getView().setLocalPlayerColor(ClientPlayer.sole().getUserColor());
 		
 		for (Integer playerIndex: playerIndices)
 		{
 			
-			int points = getModelFacade.getPoints(playerIndex);
-			boolean highlight = getModelFacade.isTurn(playerIndex);
-			boolean largestArmy = getModelFacade.isLargestArmy(playerIndex);
-			boolean longestRoad = getModelFacade.isLongestRoad(playerIndex);
+			int points = GetModelFacade.sole().getPoints(playerIndex);
+			boolean highlight = GetModelFacade.sole().isTurn(playerIndex);
+			boolean largestArmy = GetModelFacade.sole().isLargestArmy(playerIndex);
+			boolean longestRoad = GetModelFacade.sole().isLongestRoad(playerIndex);
 			
 			this.getView().updatePlayer(playerIndex, points, highlight, largestArmy, longestRoad);			
 			
