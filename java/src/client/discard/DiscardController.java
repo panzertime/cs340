@@ -221,14 +221,14 @@ public class DiscardController extends Controller implements IDiscardController,
 		sheepMax = getModelFacade.getResourceAmount(ResourceType.SHEEP);
 		wheatMax = getModelFacade.getResourceAmount(ResourceType.WHEAT);
 		oreMax = getModelFacade.getResourceAmount(ResourceType.ORE);
-		
-		if (getModelFacade.mustDiscard() && !this.getDiscardView().isModalShowing())
+		boolean mustDiscard = getModelFacade.mustDiscard();
+		if (mustDiscard && !this.getDiscardView().isModalShowing())
 		{
 			this.getDiscardView().showModal();
 		}
-	//	else if(GetModelFacade.sole().isStateDiscarding() && !this.getWaitView().isModalShowing())
-	//	{	this.getWaitView().showModal();
-	//	}
+		else if(GetModelFacade.sole().isStateDiscarding() && !mustDiscard  && !this.getWaitView().isModalShowing())
+		{	this.getWaitView().showModal();
+		}
 		else if (!GetModelFacade.sole().isStateDiscarding() && this.getWaitView().isModalShowing())
 		{
 			this.getWaitView().closeModal();
