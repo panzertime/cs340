@@ -44,7 +44,6 @@ public class RollController extends Controller implements IRollController, GetMo
 	
 	@Override
 	public void rollDice() {
-		DoModelFacade doModelFacade = DoModelFacade.sole();
 		//Rolls two die
 		Random rand = new Random();
 		int  n = rand.nextInt(6) + 1;
@@ -53,9 +52,11 @@ public class RollController extends Controller implements IRollController, GetMo
 
 
 		
-		doModelFacade.doRollDice(n);
-		
+		DoModelFacade.sole().doRollDice(n);
+		this.getRollView().closeModal();
+
 		getResultView().showModal();
+
 	}
 
 
