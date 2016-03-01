@@ -5,6 +5,7 @@ import java.util.List;
 
 import client.communication.LogEntry;
 import client.data.PlayerInfo;
+import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -12,6 +13,7 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
+import shared.model.board.hex.HexLocation;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
@@ -75,6 +77,10 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getPseudoRoads();
 	}
 	
+	public HexLocation getRobberLocation() {
+		return gameModel.getRobberLocation();
+	}
+	
 	
 	
 	public boolean isStateWaiting() {
@@ -103,6 +109,10 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.canStartSetupSettlement(ClientPlayer.sole().getUserIndex());
 	}
 	
+	
+	public RobPlayerInfo[] getRobbablePlayer(HexLocation robberLoc) {
+		return gameModel.getRobbablePlayersAt(robberLoc);
+	}
 	
 	
 	//J.R.'s section//////////////////////////////////////////////////////////////////////////////////////////

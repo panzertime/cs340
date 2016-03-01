@@ -2,12 +2,11 @@ package client.roll;
 
 import java.util.Random;
 
-import javax.swing.Timer;
-
-import client.base.*;
+import client.base.Controller;
 import client.main.ClientPlayer;
-import client.modelfacade.*;
-import client.modelfacade.get.*;
+import client.modelfacade.DoModelFacade;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 
 
 /**
@@ -50,11 +49,8 @@ public class RollController extends Controller implements IRollController, GetMo
 		int  n = rand.nextInt(6) + 1;
 		n += rand.nextInt(6) + 1;
 		getResultView().setRollValue(n);
-
-
 		
 		DoModelFacade.sole().doRollDice(n);
-		this.getRollView().closeModal();
 
 		getResultView().showModal();
 

@@ -182,7 +182,7 @@ public class Board {
 				throw new BadJSONException();
 			Integer ownerID = ownerIndexLong.intValue();
 
-			Player player = game.getPlayer(ownerID);
+			Player player = game.getPlayerFromIndex(ownerID);
 			if (player == null)
 				throw new BadJSONException();
 			
@@ -212,7 +212,7 @@ public class Board {
 				throw new BadJSONException();
 			Integer ownerID = ownerIndexLong.intValue();
 
-			Player player = game.getPlayer(ownerID);
+			Player player = game.getPlayerFromIndex(ownerID);
 			if (player == null)
 				throw new BadJSONException();
 			
@@ -242,7 +242,7 @@ public class Board {
 				throw new BadJSONException();
 			Integer ownerID = ownerIndexLong.intValue();
 
-			Player player = game.getPlayer(ownerID);
+			Player player = game.getPlayerFromIndex(ownerID);
 			if (player == null)
 				throw new BadJSONException();
 			
@@ -414,7 +414,8 @@ public class Board {
 				return false;
 		}
 		for (Edge edge : edges) {
-			if (edge.getRoad().getOwner().equals(player))
+			Road road = edge.getRoad();
+			if (road != null && road.getOwner().equals(player))
 				return true;
 		}
 		return false;
@@ -712,5 +713,19 @@ public class Board {
 			phexes.add(new PseudoHex(hexType, hexLoc, productionNum, portDirection, portType));
 		}
 		return phexes;
+	}
+	
+	public HexLocation getRobberLocation() {
+		return robber.getHex().getHexLocation().copy();
+	}
+
+	public boolean couldBeRobbedFrom(HexLocation robberLoc, Integer targetPlayerIndex) {
+		for(Vertex vertex : hexes.get(robberLoc).getVerts()) {
+			if (vertex.hasBuilding()) {
+				if (vertex.getBuilding().getOwner().getPlayerIndex() == targetPlayerIndex)
+					return true;
+			}
+		}
+		return false;
 	}
 }

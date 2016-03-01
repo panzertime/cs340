@@ -1,11 +1,11 @@
 package client.map.state;
 
+import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
-import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
@@ -38,16 +38,20 @@ public class SetupSettlementMapState extends MapState {
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		Log.debug("BUILD THE DAMN SETTLEMENT");
 		DoModelFacade.sole().doSetupSettlement(vertLoc);
 		mapController.getView().placeSettlement(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
 	}
+
+	public void placeRobber(HexLocation hexLoc) {
+	}
+
+	public void robPlayer(RobPlayerInfo victim) {
+	}
 	
 	public Boolean canCancelDrop() {
 		return false;
 	}
-
 }

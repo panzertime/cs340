@@ -154,7 +154,7 @@ public class Vertex {
 		for (Edge edge : edges) {
 			Hex hexLeft = edge.getLeftHex(this);
 			if (hexLeft != null) {
-				if (hexLeft instanceof PortHex) {
+				if (hexLeft instanceof PortHex && ((PortHex) hexLeft).getPortType() == portType) {
 					if (hexLeft.getEdge(((PortHex) hexLeft).getPortDirection()) == edge) {
 						return true;
 					}
@@ -162,7 +162,7 @@ public class Vertex {
 			}
 			Hex hexRight = edge.getLeftHex(this);
 			if (hexRight != null) {
-				if (hexRight instanceof PortHex) {
+				if (hexRight instanceof PortHex && ((PortHex) hexRight).getPortType() == portType) {
 					if (hexRight.getEdge(((PortHex) hexRight).getPortDirection()) == edge) {
 						return true;
 					}

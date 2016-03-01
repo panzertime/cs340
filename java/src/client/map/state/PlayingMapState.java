@@ -1,5 +1,6 @@
 package client.map.state;
 
+import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
@@ -14,8 +15,6 @@ public class PlayingMapState extends MapState {
 	public PlayingMapState(MapController mapController) {
 		super(mapController);
 	}
-
-	protected MapController mapController;
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		return CanModelFacade.sole().canBuildRoad(edgeLoc);
@@ -46,6 +45,15 @@ public class PlayingMapState extends MapState {
 	public void placeCity(VertexLocation vertLoc) {
 		DoModelFacade.sole().doBuildCity(vertLoc);
 		mapController.getView().placeCity(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
+	}
+
+	public void placeRobber(HexLocation hexLoc) {
+		mapController.getView().placeRobber(hexLoc);
+		mapController.getRobView().showModal();
+	}
+
+	public void robPlayer(RobPlayerInfo victim) {
+		DoModelFacade.sole().doRobPlayer(GetModelFacade.sole().getRobberLocation(), victim.getPlayerIndex());
 	}
 	
 	public Boolean canCancelDrop() {
