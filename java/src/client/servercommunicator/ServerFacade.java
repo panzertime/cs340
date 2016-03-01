@@ -549,11 +549,11 @@ public class ServerFacade {
 						"discardedCards: " + resList.toString() + "}";
 			JSONObject args = makeJSON(content);*/
 			JSONObject resList = new JSONObject();
-			resList.put("brick", discardedCards.get("BRICK"));
-			resList.put("ore", discardedCards.get("ORE"));
-			resList.put("sheep", discardedCards.get("SHEEP"));
-			resList.put("wheat", discardedCards.get("WHEAT"));
-			resList.put("wood", discardedCards.get("WOOD"));
+			resList.put("brick", discardedCards.get(ResourceType.BRICK));
+			resList.put("ore", discardedCards.get(ResourceType.ORE));
+			resList.put("sheep", discardedCards.get(ResourceType.SHEEP));
+			resList.put("wheat", discardedCards.get(ResourceType.WHEAT));
+			resList.put("wood", discardedCards.get(ResourceType.WOOD));
 			
 			JSONObject args = new JSONObject();
 			args.put("type", "discardCards");
