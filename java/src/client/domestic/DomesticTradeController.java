@@ -390,38 +390,17 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		if (CanModelFacade.sole().canViewTrade()) 
 		{
+			this.getAcceptOverlay().reset();
 			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();
-			ResourceType type = ResourceType.WOOD;
-			int resource = 0;
 			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
 
-			resource = GetModelFacade.sole().getTradeResource(type);
-			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
-			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 			
-			type = ResourceType.BRICK;
-
-			resource = GetModelFacade.sole().getTradeResource(type);
-			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
-			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
-			
-			type = ResourceType.SHEEP;
-
-			resource = GetModelFacade.sole().getTradeResource(type);
-			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
-			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
-
-			type = ResourceType.WHEAT;
-			
-			resource = GetModelFacade.sole().getTradeResource(type);
-			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
-			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
-
-			type = ResourceType.ORE;
-
-			resource = GetModelFacade.sole().getTradeResource(type);
-			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
-			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
+			for (ResourceType type: ResourceType.values())
+			{
+				int resource = GetModelFacade.sole().getTradeResource(type);
+				if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
+				if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			}
 			
 			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
 
