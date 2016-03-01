@@ -1,4 +1,5 @@
 package client.roll;
+import shared.logger.Log;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -85,6 +86,7 @@ public class RollView extends OverlayView implements IRollView {
 	@Override
 	public void setMessage(String message) {
 		label.setText(message);
+		Log.debug("Model.status - " + message);
 	}
 
 }
