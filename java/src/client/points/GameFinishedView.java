@@ -8,7 +8,9 @@ import javax.swing.*;
 
 import client.base.*;
 import client.main.Catan;
+import client.modelfacade.DoModelFacade;
 import client.utils.*;
+import shared.model.exceptions.BadJSONException;
 
 
 /**
