@@ -897,6 +897,7 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+
 	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
 			return false;
