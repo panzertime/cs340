@@ -80,7 +80,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		break;
 		}
 		int resourceTotal = wood + brick + sheep + wheat + ore;
-		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
+		this.getDiscardView().setStateMessage("Discard " + resourceTotal + "/" + discardNeeded);
 		if (resourceTotal == discardNeeded)//(CanModelFacade.sole().canDiscardCards(this.getResourceList()))
 		{
 			this.getDiscardView().setDiscardButtonEnabled(true);
@@ -138,7 +138,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		}
 		
 		int resourceTotal = wood + brick + sheep + wheat + ore;
-		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
+		this.getDiscardView().setStateMessage("Discard " + resourceTotal + "/" + discardNeeded);
 		if (resourceTotal < discardNeeded)//(!CanModelFacade.sole().canDiscardCards(this.getResourceList()))
 		{
 			this.getDiscardView().setDiscardButtonEnabled(false);
@@ -248,7 +248,7 @@ public class DiscardController extends Controller implements IDiscardController,
 		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (0 < wheatMax), wheat > 0);
 		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (0 < oreMax), ore > 0);
 		int cardsToDiscard = wood + brick + sheep + wheat + ore;
-		this.getDiscardView().setStateMessage(cardsToDiscard + "/" + discardNeeded);
+		this.getDiscardView().setStateMessage("Discard " + cardsToDiscard + "/" + discardNeeded);
 	}
 
 }
