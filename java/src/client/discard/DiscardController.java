@@ -161,10 +161,11 @@ public class DiscardController extends Controller implements IDiscardController,
 
 	@Override
 	public void discard() {
-		DoModelFacade doModelFacade = DoModelFacade.sole();
-		doModelFacade.doDiscard(this.getResourceList());
+		DoModelFacade.sole().doDiscard(this.getResourceList());
 		getDiscardView().closeModal();
 		setToStandard();
+		if (GetModelFacade.sole().isStateDiscarding())
+			this.getWaitView().showModal();
 	}
 
 	private Map<ResourceType, Integer> getResourceList()
@@ -224,6 +225,13 @@ public class DiscardController extends Controller implements IDiscardController,
 		if (getModelFacade.mustDiscard() && !this.getDiscardView().isModalShowing())
 		{
 			this.getDiscardView().showModal();
+		}
+	//	else if(GetModelFacade.sole().isStateDiscarding() && !this.getWaitView().isModalShowing())
+	//	{	this.getWaitView().showModal();
+	//	}
+		else if (!GetModelFacade.sole().isStateDiscarding() && this.getWaitView().isModalShowing())
+		{
+			this.getWaitView().closeModal();
 		}
 		int totalCards = woodMax + brickMax + sheepMax + wheatMax + oreMax;
 		discardNeeded = totalCards / 2;
