@@ -213,8 +213,6 @@ public class DiscardController extends Controller implements IDiscardController,
 	@Override
 	public void update() {
 		
-	
-		
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
 		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);
