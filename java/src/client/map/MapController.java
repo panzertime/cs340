@@ -138,11 +138,11 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	 * 
 	 */
 	public void playSoldierCard() {
-		
+	
 	}
 	
 	public void playRoadBuildingCard() {	
-		
+		getView().startDrop(PieceType.ROAD, ClientPlayer.sole().getUserColor(), true);
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
