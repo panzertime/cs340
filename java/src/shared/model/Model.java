@@ -698,10 +698,10 @@ public class Model {
 		return true;
 	}
 	
-	public Boolean canViewTrade(Integer playerID) {
+	public Boolean canViewTrade(Integer playerIndex) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
+		if (tradeModel.getReceiverIndex() != playerIndex)
 			return false;
 		return true;
 	}

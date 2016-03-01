@@ -376,19 +376,23 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	
 	@Override
 	public void update() {
-		if (tradingPartners == null) this.getTradeOverlay().setPlayers(GetModelFacade.sole().getTradingPartners());
-
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		boolean canDomesticTrade = canModelFacade.canDomesticTrade();
+		if (!GetModelFacade.sole().hasTradeOffer()) {
+			if (this.getWaitOverlay().isModalShowing()) this.getWaitOverlay().closeModal();
+		}
+		if (tradingPartners == null)
+			{ tradingPartners = GetModelFacade.sole().getTradingPartners();
+			this.getTradeOverlay().setPlayers(tradingPartners);
+			}
+		boolean canDomesticTrade = CanModelFacade.sole().canDomesticTrade();
 		this.getTradeView().enableDomesticTrade(canDomesticTrade);
 		this.getTradeOverlay().setResourceSelectionEnabled(canDomesticTrade);
 		this.getTradeOverlay().setPlayerSelectionEnabled(canDomesticTrade);
-		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		if (canModelFacade.canViewTrade()) 
+		if (CanModelFacade.sole().canViewTrade()) 
 		{
-			
+			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();
 			ResourceType type = ResourceType.WOOD;
+			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
 
 			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
 			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));

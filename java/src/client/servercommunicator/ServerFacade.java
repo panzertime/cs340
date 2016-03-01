@@ -470,7 +470,7 @@ public class ServerFacade {
 	public Map offerTrade(int playerIndex, Map<ResourceType, Integer> offer,
 			int receiver) throws ServerException {
 		try {
-			String resList = "{brick: " + offer.get(ResourceType.BRICK) +
+			/*String resList = "{brick: " + offer.get(ResourceType.BRICK) +
 						", ore: " + offer.get(ResourceType.ORE) +
 						", sheep: " + offer.get(ResourceType.SHEEP) +
 						", wheat: " + offer.get(ResourceType.WHEAT) +
@@ -480,8 +480,21 @@ public class ServerFacade {
 						"playerIndex: " + playerIndex + ", " +
 						"offer: " + resList + ", " +
 						"receiver : " + receiver + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.offerTrade(args);
+			JSONObject args = makeJSON(content);*/
+			JSONObject resList = new JSONObject();
+			resList.put("brick", offer.get(ResourceType.BRICK));
+			resList.put("ore", offer.get(ResourceType.ORE));
+			resList.put("sheep", offer.get(ResourceType.SHEEP));
+			resList.put("wheat", offer.get(ResourceType.WHEAT));
+			resList.put("wood", offer.get(ResourceType.WOOD));
+			
+			JSONObject content = new JSONObject();
+			content.put("type", "offerTrade");
+			content.put("playerIndex", playerIndex);
+			content.put("offer", resList);
+			content.put("receiver", receiver);
+			
+			return proxy.offerTrade(content);
 		}
 		catch(Exception e){
 			throw new ServerException(e);

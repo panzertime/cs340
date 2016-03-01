@@ -386,8 +386,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doAcceptTrade(boolean willAccept) {
 		try {
-			if (!CanModelFacade.sole().canAcceptTrade())
-				throw new IllegalStateException();
+			/*if (!CanModelFacade.sole().canAcceptTrade())
+				throw new IllegalStateException();*/
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().acceptTrade(ClientPlayer.sole().getUserIndex(), willAccept);
 			setModel(jsonModel);
 		} catch (Exception e) {
