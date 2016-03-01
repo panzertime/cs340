@@ -30,6 +30,13 @@ public class PlayerInfo
 		createNullPlayer();
 	}
 	
+	public PlayerInfo(Integer id, Integer playerIndex, String name, CatanColor color) {
+		this.id = id;
+		this.playerIndex = playerIndex;
+		this.name = name;
+		this.color = color;
+	}
+	
 	private void createNullPlayer() {
 		setId(-1);
 		setPlayerIndex(-1);

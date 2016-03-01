@@ -433,7 +433,7 @@ public class ServerFacade {
 			json.put("free", setupMode);
 			json.put("roadLocation", edgeLoc.toJSON());
 			
-			return proxy.buildSettlement(json);
+			return proxy.buildRoad(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -460,11 +460,14 @@ public class ServerFacade {
 	public Map buildCity(int playerIndex, VertexLocation vertLoc) 
 			throws ServerException {
 		try {
-			String content = "{type: \"buildCity\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"vertexLocation: " + vertLoc.toString() +  "}";
-			JSONObject args = makeJSON(content);
-			return proxy.buildCity(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "buildCity");
+			json.put("playerIndex", playerIndex);
+			json.put("free", false);
+			json.put("vertexLocation", vertLoc.toJSON());
+			
+			return proxy.buildCity(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);

@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 
 import client.communication.LogEntry;
 import client.data.PlayerInfo;
+import client.data.RobPlayerInfo;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -119,8 +120,8 @@ public class Model {
 		Long largestArmyOwnerID = ((Long) turnTracker.get("largestArmy"));
 		if (longestRoadOwnerID == null || largestArmyOwnerID == null)
 			throw new BadJSONException();
-		achievements = new Achievements(getPlayer(longestRoadOwnerID.intValue()),
-				getPlayer(largestArmyOwnerID.intValue()));
+		achievements = new Achievements(getPlayerFromIndex(longestRoadOwnerID.intValue()),
+				getPlayerFromIndex(largestArmyOwnerID.intValue()));
 
 		if ((JSONObject) jsonMap.get("tradeOffer") == null)
 			tradeModel = null;
@@ -281,7 +282,7 @@ public class Model {
 
 	}
 
-	public Player getPlayer(Integer playerIndex) {
+	public Player getPlayerFromIndex(Integer playerIndex) {
 		return players.get(playerIndex);
 	}
 	
@@ -318,8 +319,8 @@ public class Model {
 		return players.get(winnerIndex);
 	}
 
-	public void setWinner(Integer playerID) {
-		this.winnerIndex = playerID;
+	public void setWinner(Integer playerIndex) {
+		this.winnerIndex = playerIndex;
 	}
 
 	public void setVersion(int version) {
@@ -394,10 +395,10 @@ public class Model {
 	// The status of the client model is 'Discarding'
 	// You have over 7 cards
 	// You have the cards you're choosing to discard
-	public Boolean canDiscardCard(Integer playerID, Map<ResourceType, Integer> resources) {
+	public Boolean canDiscardCard(Integer playerIndex, Map<ResourceType, Integer> resources) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStateDiscarding())
 			return false;
@@ -418,16 +419,16 @@ public class Model {
 	// Preconditions
 	// It is your turn
 	// The client model�s status is 'Rolling'
-	public Boolean canRollNumber(Integer playerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canRollNumber(Integer playerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStateRolling())
 			return false;
 		return true;
 	}
 
-	public Boolean canOfferTrade(Integer playerID, Map<ResourceType, Integer> resourceList, Integer receiverIndex) {
-		if (!isActivePlayer(playerID))
+	public Boolean canOfferTrade(Integer playerIndex, Map<ResourceType, Integer> resourceList, Integer receiverIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -438,11 +439,11 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canMaritimeTrade(Integer playerID, int ratio, ResourceType input, ResourceType output)
+	public Boolean canMaritimeTrade(Integer playerIndex, int ratio, ResourceType input, ResourceType output)
 	{
 		if (!getBank().getHand().hasResource(output, 1))
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -515,7 +516,7 @@ public class Model {
 	public Boolean canPlaceRobber(Integer playerIndex, HexLocation location) {
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!isStatePlaying())
+		if (!isStateRobbing())
 			return false;
 		if (!getBoard().canPlaceRobber(location))
 			return false;
@@ -524,13 +525,20 @@ public class Model {
 
 	public Boolean canRobPlayer(Integer playerIndex, Integer targetPlayerIndex) {
 		if (!isActivePlayer(playerIndex))
+<<<<<<< HEAD
 			return false;
 		if (!isStatePlaying())
 			return false;
 		Player targetPlayer = getPlayer(targetPlayerIndex);
+=======
+			return false;
+		Player targetPlayer = getPlayerFromIndex(targetPlayerIndex);
+>>>>>>> e31629a033eecf485adcc7ec232ac911375ba71e
 		if (targetPlayer == null)
 			return false;
 		if (targetPlayer.getHandSize() < 1)
+			return false;
+		if (!board.robberAdjacent(targetPlayer.getPlayerIndex()))
 			return false;
 		return true;
 	}
@@ -557,7 +565,11 @@ public class Model {
 		return true;
 	}
 
+<<<<<<< HEAD
 	public Boolean canUseSoldier(Integer playerIndex, HexLocation newRobberLocation, Integer targetPlayerIndex) {
+=======
+	public Boolean canUseSoldier(Integer playerIndex, HexLocation newRobberLocation, Integer targetPlayerID) {
+>>>>>>> e31629a033eecf485adcc7ec232ac911375ba71e
 		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
@@ -568,7 +580,11 @@ public class Model {
 			return false;
 		if (!canPlaceRobber(playerIndex, newRobberLocation)) 
 			return false;
+<<<<<<< HEAD
 		if (!canRobPlayer(playerIndex, targetPlayerIndex))
+=======
+		if (!canRobPlayer(playerIndex, targetPlayerID))
+>>>>>>> e31629a033eecf485adcc7ec232ac911375ba71e
 			return false;
 		return true;
 	}
@@ -607,8 +623,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canUseMonopoly(Integer playerID, ResourceType type) {
-		if (!isActivePlayer(playerID))
+	public Boolean canUseMonopoly(Integer playerIndex, ResourceType type) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -619,8 +635,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canUseMonument(Integer playerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canUseMonument(Integer playerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -629,30 +645,30 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canBuildRoad(Integer playerID, EdgeLocation edge) {
+	public Boolean canBuildRoad(Integer playerIndex, EdgeLocation edge) {
 		if (!isStatePlaying())
 			return false;
-		if (!this.canBuyRoad(playerID))
+		if (!this.canBuyRoad(playerIndex))
 			return false;
 		if (!getBoard().canBuildRoad(getActivePlayer(), edge))
 			return false;
 		return true;
 	}
 	
-	public Boolean canBuyRoad(Integer playerID) {
+	public Boolean canBuyRoad(Integer playerIndex) {
 		if (!isStatePlaying())
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!getActivePlayer().hasRoadCost())
 			return false;
 		return true;
 	}
 
-	public Boolean canStartSetupRoad(Integer playerID) {
+	public Boolean canStartSetupRoad(Integer playerIndex) {
 		if (!isStateSetupRoad())
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		for (Player player : players.values()) {
 			if (player.getRoadsPlaced() < getActivePlayer().getRoadsPlaced())
@@ -661,28 +677,28 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canSetupRoad(Integer playerID, EdgeLocation edge) {
-		if (!canStartSetupRoad(playerID))
+	public Boolean canSetupRoad(Integer playerIndex, EdgeLocation edge) {
+		if (!canStartSetupRoad(playerIndex))
 			return false;
 		if (!getBoard().canBuildSetupRoad(getActivePlayer(), edge))
 			return false;
 		return true;
 	}
 
-	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
+	public Boolean canBuildSettlement(Integer playerIndex, VertexLocation vertex) {
 		if (!isStatePlaying())
 			return false;
-		if (!this.canBuySettlement(playerID))
+		if (!this.canBuySettlement(playerIndex))
 			return false;
 		if (!getBoard().canBuildSettlement(this.getActivePlayer(), vertex))
 			return false;
 		return true;
 	}
 	
-	public Boolean canBuySettlement(Integer playerID) {
+	public Boolean canBuySettlement(Integer playerIndex) {
 		if (!isStatePlaying())
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!getActivePlayer().hasRoadPiece())
 			return false;
@@ -691,10 +707,10 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canStartSetupSettlement(Integer playerID) {
+	public Boolean canStartSetupSettlement(Integer playerIndex) {
 		if (!isStateSetupSettlement())
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		for (Player player : players.values()) {
 			if (player.getSettlementsPlaced() < getActivePlayer().getSettlementsPlaced())
@@ -703,26 +719,26 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canSetupSettlement(Integer playerID, VertexLocation vertex) {
-		if (!canStartSetupSettlement(playerID))
+	public Boolean canSetupSettlement(Integer playerIndex, VertexLocation vertex) {
+		if (!canStartSetupSettlement(playerIndex))
 			return false;
 		if (!getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex))
 			return false;
 		return true;
 	}
 
-	public Boolean canBuildCity(Integer playerID, VertexLocation vertex) {
-		if (!canBuyCity(playerID))
+	public Boolean canBuildCity(Integer playerIndex, VertexLocation vertex) {
+		if (!canBuyCity(playerIndex))
 			return false;
 		if (!getBoard().canBuildCity(this.getActivePlayer(), vertex))
 			return false;
 		return true;
 	}
 	
-	public Boolean canBuyCity(Integer playerID) {
+	public Boolean canBuyCity(Integer playerIndex) {
 		if (!isStatePlaying())
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!getActivePlayer().hasRoadPiece())
 			return false;
@@ -741,12 +757,12 @@ public class Model {
 	 * @return if a given trade can be made
 	 * @throws BadJSONException
 	 */
-	public Boolean canAcceptTrade(Integer playerID) {
+	public Boolean canAcceptTrade(Integer playerIndex) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerID))
+		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerIndex))
 			return false;
-		if (!getPlayer(tradeModel.getReceiverIndex()).hasCards(this.tradeModel.getResourcesToGive()))
+		if (!getPlayerFromIndex(tradeModel.getReceiverIndex()).hasCards(this.tradeModel.getResourcesToGive()))
 			return false;
 		return true;
 	}
@@ -766,8 +782,8 @@ public class Model {
 	 * @post true
 	 * @return true
 	 */
-	public Boolean canSendChat(Integer playerID) {
-		if (playerID == null) {
+	public Boolean canSendChat(Integer playerIndex) {
+		if (playerIndex == null) {
 			return false;
 		}
 		return true;
@@ -810,20 +826,20 @@ public class Model {
 	
 	//client only
 	public boolean hasDevCardEnabled(DevCardType type, int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 
 		return client.hasDevCardToUse(type);
 	}
 
 	//client only
 	public int getDevCardAmount(DevCardType type, int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getDevCardAmount(type);
 	}
 
 	//client only
 	public int getResourceAmount(ResourceType type, int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getResourceAmount(type);
 	}
 
@@ -836,26 +852,26 @@ public class Model {
 
 	public int getPoints(int playerIndex) {
 	
-		return getPlayer(playerIndex).getPoints();
+		return getPlayerFromIndex(playerIndex).getPoints();
 	}
 	public boolean isLargestArmy(int playerIndex) {
-		Boolean b = this.getAchievements().isLargestArmy(getPlayer(playerIndex));
+		Boolean b = this.getAchievements().isLargestArmy(getPlayerFromIndex(playerIndex));
 		if (b==null) b = false;
 		return b;
 	}
 
 	public boolean isLongestRoad(int playerIndex) {
-		Boolean b = this.getAchievements().isLongestRoad(getPlayer(playerIndex));
+		Boolean b = this.getAchievements().isLongestRoad(getPlayerFromIndex(playerIndex));
 		if (b==null) b = false;
 		return b;	}
 
 	public CatanColor getPlayerColor(int playerIndex) {
-		return getPlayer(playerIndex).getColor();
+		return getPlayerFromIndex(playerIndex).getColor();
 	}
 
 	public String getPlayerName(int playerIndex) {
 
-		return getPlayer(playerIndex).getUserName();
+		return getPlayerFromIndex(playerIndex).getUserName();
 	}
 
 	public boolean isGameOver() {
@@ -875,25 +891,25 @@ public class Model {
 
 	//client only
 	public int getFreeRoads(int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getRoadsFree();
 	}
 
 	//client only
 	public int getFreeSettlements(int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getSettlementsFree();
 	}
 
 	//client only
 	public int getFreeCities(int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getCitiesFree();
 	}
 
 	//client only
 	public int getSoldiers(int userID) {
-		Player client = getPlayer(this.getIndexFromPlayerID(userID));
+		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
 		return client.getArmies();
 	}	
 	
@@ -901,7 +917,7 @@ public class Model {
 	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
 			return false;
-		if (!getPlayer(userIndex).canDiscardCard())
+		if (!getPlayerFromIndex(userIndex).canDiscardCard())
 			return false;
 		return true;
 	}	
@@ -915,7 +931,7 @@ public class Model {
 	}
 
 	public String getTradeSenderName() {
-		return getPlayer(this.tradeModel.getSenderIndex()).getUserName();
+		return getPlayerFromIndex(this.tradeModel.getSenderIndex()).getUserName();
 	}
 	
 	public boolean canDomesticTrade(int userID) {
@@ -965,5 +981,16 @@ public class Model {
 
 	public List<LogEntry> getGameHistory() {
 		return chatModel.getGameLog().toLogEntryList();
+	}
+
+	public RobPlayerInfo[] getRobbablePlayers() {
+		ArrayList<RobPlayerInfo> targets = new ArrayList<RobPlayerInfo>();
+		for (Player player : players.values()) {
+			if (this.canRobPlayer(getActivePlayer().getPlayerIndex(), player.getPlayerIndex()))
+				targets.add(new RobPlayerInfo(player.getPlayerID(), player.getPlayerIndex(), player.getUserName(), player.getColor(), player.getHandSize()));
+			
+		}
+		Log.debug("Targets Availible to rob: " + targets.size());
+		return targets.toArray(new RobPlayerInfo[0]);
 	}
 }

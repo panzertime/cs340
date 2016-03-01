@@ -5,6 +5,7 @@ import java.util.List;
 
 import client.communication.LogEntry;
 import client.data.PlayerInfo;
+import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
@@ -103,6 +104,10 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.canStartSetupSettlement(ClientPlayer.sole().getUserIndex());
 	}
 	
+	
+	public RobPlayerInfo[] getRobbablePlayer() {
+		return gameModel.getRobbablePlayers();
+	}
 	
 	
 	//J.R.'s section//////////////////////////////////////////////////////////////////////////////////////////

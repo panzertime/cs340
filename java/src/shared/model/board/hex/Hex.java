@@ -7,7 +7,6 @@ import shared.model.board.edge.Edge;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
-import shared.model.exceptions.BadJSONException;
 
 public abstract class Hex {
 	
@@ -166,5 +165,9 @@ public abstract class Hex {
     	if (hexLocation.getY() != (Long) jsonHexLoc.get("y"))
     		return false;
     	return true;
+    }
+    
+    public Vertex[] getVerts() {
+    	return verts;
     }
 }

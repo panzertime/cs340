@@ -1,5 +1,7 @@
 package client.data;
 
+import shared.model.definitions.CatanColor;
+
 /**
  * Used to pass player information into the rob view<br>
  * <br>
@@ -16,21 +18,15 @@ package client.data;
 public class RobPlayerInfo extends PlayerInfo
 {
 	
-	private int numCards;
+	private Integer numCards;
 	
-	public RobPlayerInfo()
-	{
-		super();
-	}
-	
-	public int getNumCards()
-	{
-		return numCards;
-	}
-	
-	public void setNumCards(int numCards)
-	{
+	public RobPlayerInfo(Integer id, Integer playerIndex, String name, CatanColor color, Integer numCards) {
+		super(id, playerIndex, name, color);
 		this.numCards = numCards;
+	}
+	
+	public int getNumCards(){
+		return numCards;
 	}
 	
 }

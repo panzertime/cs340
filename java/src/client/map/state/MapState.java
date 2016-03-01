@@ -28,4 +28,6 @@ public abstract class MapState {
 	public abstract void placeCity(VertexLocation vertLoc);
 	
 	public abstract Boolean canCancelDrop();
+
+	public abstract void placeRobber(HexLocation hexLoc);
 }

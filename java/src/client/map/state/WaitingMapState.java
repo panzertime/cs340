@@ -10,8 +10,6 @@ public class WaitingMapState  extends MapState{
 	public WaitingMapState(MapController mapController) {
 		super(mapController);
 	}
-
-	protected MapController mapController;
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		return false;
@@ -37,8 +35,11 @@ public class WaitingMapState  extends MapState{
 
 	public void placeCity(VertexLocation vertLoc) {
 	}
+
+	public void placeRobber(HexLocation hexLoc) {
+	}
 	
 	public Boolean canCancelDrop() {
-		return false;
+		return true;
 	}
 }

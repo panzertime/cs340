@@ -2,12 +2,14 @@ package client.map;
 
 import client.base.Controller;
 import client.data.RobPlayerInfo;
+import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.map.state.MapState;
 import client.map.state.PlayingMapState;
+import client.map.state.RobbingMapState;
 import client.map.state.SetupRoadMapState;
 import client.map.state.SetupSettlementMapState;
 import client.map.state.WaitingMapState;
@@ -18,7 +20,6 @@ import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
-import shared.model.definitions.CatanColor;
 
 
 /**
@@ -42,7 +43,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		return (IMapView)super.getView();
 	}
 	
-	private IRobView getRobView() {
+	public IRobView getRobView() {
 		return robView;
 	}
 	private void setRobView(IRobView robView) {
@@ -83,6 +84,9 @@ public class MapController extends Controller implements GetModelFacadeListener,
 			if (!(state instanceof SetupRoadMapState))
 				state = new SetupRoadMapState(this);
 			Log.debug("MapController.state - Setup:Road");
+		} else if (GetModelFacade.sole().isStateRobbing()) {
+			state = new RobbingMapState(this);
+			Log.debug("MapController.state - Robbing");
 		} else if (GetModelFacade.sole().isStatePlaying()) {
 			state = new PlayingMapState(this);
 			Log.debug("MapController.state - Playing");
@@ -118,13 +122,12 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
-		getView().placeRobber(hexLoc);
-		getRobView().showModal();
+		state.placeRobber(hexLoc);
 	}
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		
-		getView().startDrop(pieceType, CatanColor.ORANGE, state.canCancelDrop());
+		getView().startDrop(pieceType, ClientPlayer.sole().getUserColor(), state.canCancelDrop());
 	}
 	
 	public void cancelMove() {

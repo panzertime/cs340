@@ -44,9 +44,11 @@ public class SetupRoadMapState extends MapState {
 
 	public void placeCity(VertexLocation vertLoc) {
 	}
+
+	public void placeRobber(HexLocation hexLoc) {
+	}
 	
 	public Boolean canCancelDrop() {
 		return false;
 	}
-
 }

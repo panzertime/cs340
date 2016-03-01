@@ -1,28 +1,26 @@
 package client.map.state;
 
-import client.main.ClientPlayer;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
-import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 
-public class SetupSettlementMapState extends MapState {
+public class RobbingMapState extends MapState {
 	
-	public SetupSettlementMapState(MapController mapController) {
+	public RobbingMapState(MapController mapController) {
 		super(mapController);
-		mapController.startMove(PieceType.SETTLEMENT, true, true);
+		mapController.startMove(PieceType.ROBBER, true, true);
 	}
-
+	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		return false;
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		return CanModelFacade.sole().canSetupSettlement(vertLoc);
+		return false;
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
@@ -30,21 +28,22 @@ public class SetupSettlementMapState extends MapState {
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		return false;
+		return CanModelFacade.sole().canPlaceRobber(hexLoc);
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		DoModelFacade.sole().doSetupSettlement(vertLoc);
-		mapController.getView().placeSettlement(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
+		mapController.getView().placeRobber(hexLoc);
+		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer());
+		mapController.getRobView().showModal();
 	}
 	
 	public Boolean canCancelDrop() {
