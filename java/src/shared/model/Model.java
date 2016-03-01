@@ -206,8 +206,6 @@ public class Model {
 	}
 
 	public void setStatus(String status) throws BadStatusException {
-		Log.debug("Model.status - " + status);
-		Log.debug("Model.activePlayerIndex - " + activePlayerIndex);
 		if (status.equalsIgnoreCase("Rolling")) {
 			this.status = status;
 			return;
