@@ -191,17 +191,12 @@ public class GetModelFacade  extends ModelFacade {
 	}
 	
 	/////Trading
+
 	
-	public int getTradeGetResource(ResourceType type)
+	public int getTradeResource(ResourceType type)
 	{
-		return gameModel.getTradeGetResource(type);
-		
-	}
-	
-	public int getTradeGiveResource(ResourceType type)
-	{
-		return gameModel.getTradeGiveResource(type);
-		
+		return gameModel.getTradeResource(type);
+
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////

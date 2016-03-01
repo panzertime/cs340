@@ -852,15 +852,11 @@ public class Model {
 	
 /////Trading
 	
-	public int getTradeGetResource(ResourceType type)
-	{
-		return this.tradeModel.getTradeGetResource(type);
-	}
 	
-	public int getTradeGiveResource(ResourceType type)
+	public int getTradeResource(ResourceType type)
 	{
-		return this.tradeModel.getTradeGiveResource(type);
-	}	
+		return this.tradeModel.getTradeResource(type);
+	}
 
 	public String getTradeSenderName() {
 		return getPlayer(this.tradeModel.getSenderIndex()).getUserName();
