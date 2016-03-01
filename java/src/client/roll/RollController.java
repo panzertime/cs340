@@ -2,6 +2,8 @@ package client.roll;
 
 import java.util.Random;
 
+import javax.swing.Timer;
+
 import client.base.*;
 import client.modelfacade.*;
 import client.modelfacade.get.*;
@@ -13,7 +15,7 @@ import client.modelfacade.get.*;
 public class RollController extends Controller implements IRollController, GetModelFacadeListener {
 
 	private IRollResultView resultView;
-
+	//private Timer diceTimer; 
 	/**
 	 * RollController constructor
 	 * 
@@ -42,23 +44,27 @@ public class RollController extends Controller implements IRollController, GetMo
 	
 	@Override
 	public void rollDice() {
-		DoModelFacade doModelFacade = DoModelFacade.sole();
 		//Rolls two die
 		Random rand = new Random();
 		int  n = rand.nextInt(6) + 1;
 		n += rand.nextInt(6) + 1;
 		getResultView().setRollValue(n);
 
-		doModelFacade.doRollDice(n);
+
 		
+		DoModelFacade.sole().doRollDice(n);
+		this.getRollView().closeModal();
+
 		getResultView().showModal();
+
 	}
 
 
 	// override update: check that it's my turn, and that i'm rolling, then do rollDice
 	@Override
 	public void update() {
-		//
+		if (GetModelFacade.sole().isStateRolling() && !this.getRollView().isModalShowing())
+			this.getRollView().showModal();
 	}
 }
 

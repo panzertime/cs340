@@ -106,8 +106,6 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 
 	@Override
 	public void setGetResource(ResourceType resource) {
-		// selectGetOption
-		// setTradeEnabled
 		tradeOverlay.selectGetOption(resource, getRatios.get(resource));
 		getType = resource;
 		tradeOverlay.setTradeEnabled(true);
@@ -118,7 +116,6 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		try {
 			tradeOverlay.selectGiveOption(resource, giveRatios.get(resource));
 			giveType = resource;
-			tradeOverlay.hideGiveOptions();
 			for (ResourceType type : ResourceType.values()) {
 				boolean ratio = CanModelFacade.sole().canReceiveMaritime(type);
 				if (ratio) {
@@ -127,7 +124,9 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			}
 			if (!getRatios.isEmpty()) {
 				Object[] keys = getRatios.keySet().toArray();
-				ResourceType[] resources = Arrays.copyOf(keys, keys.length, ResourceType[].class);	
+				ResourceType[] resources = Arrays.copyOf(keys, keys.length, ResourceType[].class);
+			//	getTradeOverlay().reset();
+			//	getTradeOverlay().hideGiveOptions();				
 				getTradeOverlay().showGetOptions(resources);
 			}
 			else {
@@ -143,16 +142,14 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void unsetGetValue() {
 		tradeOverlay.setTradeEnabled(false);
 		getType = null;
-		ResourceType[] resources = (ResourceType[]) getRatios.keySet().toArray();
-		tradeOverlay.showGetOptions(resources);
-	}
+		this.setGiveResource(giveType);
+		}
 
 	@Override
 	public void unsetGiveValue() {
+		getType = null;
 		giveType = null;
-		ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
-		tradeOverlay.showGiveOptions(resources);
-
+		this.startTrade();
 	}
 
 	@Override
