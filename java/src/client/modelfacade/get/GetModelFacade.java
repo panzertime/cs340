@@ -187,7 +187,7 @@ public class GetModelFacade  extends ModelFacade {
 	//client only
 	public int getSoldiers()
 	{
-		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
+		return gameModel.getSoldiers(ClientPlayer.sole().getUserIndex());
 	}
 	
 	

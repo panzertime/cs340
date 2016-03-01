@@ -438,8 +438,6 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doDiscard(Map<ResourceType, Integer> resources) {
 		try {
-			if (!CanModelFacade.sole().canDiscardCards(resources))
-				throw new IllegalStateException();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().discard(ClientPlayer.sole().getUserIndex(), resources);
 			setModel(jsonModel);
 		} catch (Exception e) {

@@ -850,12 +850,10 @@ public class Model {
 		return client.getArmies();
 	}	
 	
-	public boolean mustDiscard(int userID) {
-		if (!isActivePlayer(userID))
-			return false;
+	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
 			return false;
-		if (!getActivePlayer().canDiscardCard())
+		if (!getPlayer(userIndex).canDiscardCard())
 			return false;
 		return true;
 	}	
