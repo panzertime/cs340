@@ -20,8 +20,8 @@ import shared.model.exceptions.BadJSONException;
 public class PlayerInfo
 {
 	
-	private int id;
-	private int playerIndex;
+	private Integer id;
+	private Integer playerIndex;
 	private String name;
 	private CatanColor color;
 	

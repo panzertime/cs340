@@ -8,7 +8,8 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.map.state.MapState;
 import client.map.state.PlayingMapState;
-import client.map.state.SetupMapState;
+import client.map.state.SetupRoadMapState;
+import client.map.state.SetupSettlementMapState;
 import client.map.state.WaitingMapState;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
@@ -32,6 +33,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	public MapController(IMapView view, IRobView robView) {
 		super(view);
 		GetModelFacade.registerListener(this);
+		state = new WaitingMapState(this);
 		setRobView(robView);
 	}
 	
@@ -48,7 +50,6 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	protected void updateView() {
-		
 		for (PseudoHex hex : GetModelFacade.sole().getPseudoHexes()) {
 			getView().addHex(hex.getHexLoc(), hex.getHexType());
 			if (hex.getProductionNum() != null)
@@ -71,12 +72,21 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	protected void updateState() {
-		if (GetModelFacade.sole().isStateWaiting())
+		if (GetModelFacade.sole().isStateWaiting()) {
 			state = new WaitingMapState(this);
-		else if (GetModelFacade.sole().isStateSetup())
-			state = new SetupMapState(this);
-		else if (GetModelFacade.sole().isStatePlaying())
+			Log.debug("MapController.state - Waiting");
+		} else if (GetModelFacade.sole().isStateSetupSettlement()) {
+			if (!(state instanceof SetupSettlementMapState))
+				state = new SetupSettlementMapState(this);
+			Log.debug("MapController.state - Setup:Settlement");
+		} else if (GetModelFacade.sole().isStateSetupRoad()) {
+			if (!(state instanceof SetupRoadMapState))
+				state = new SetupRoadMapState(this);
+			Log.debug("MapController.state - Setup:Road");
+		} else if (GetModelFacade.sole().isStatePlaying()) {
 			state = new PlayingMapState(this);
+			Log.debug("MapController.state - Playing");
+		}
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -114,13 +124,16 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		
-		getView().startDrop(pieceType, CatanColor.ORANGE, true);
+		getView().startDrop(pieceType, CatanColor.ORANGE, state.canCancelDrop());
 	}
 	
 	public void cancelMove() {
 		
 	}
 	
+	/**
+	 * 
+	 */
 	public void playSoldierCard() {
 		
 	}
@@ -135,7 +148,6 @@ public class MapController extends Controller implements GetModelFacadeListener,
 
 	@Override
 	public void update() {
-		Log.debug("Updated Map!");
 		updateView();
 		updateState();
 	}

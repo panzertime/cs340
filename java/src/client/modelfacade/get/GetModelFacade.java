@@ -78,7 +78,7 @@ public class GetModelFacade  extends ModelFacade {
 	
 	
 	public boolean isStateWaiting() {
-		if (!gameModel.isActivePlayer(ClientPlayer.sole().getUserID()))
+		if (gameModel.isActivePlayer(ClientPlayer.sole().getUserIndex()))
 			return false;
 		return true;
 	}
@@ -86,17 +86,21 @@ public class GetModelFacade  extends ModelFacade {
 	public boolean isStatePlaying() {
 		if (isStateWaiting())
 			return false;
-		if (!gameModel.statusIsPlaying())
+		if (!gameModel.isStatePlaying())
 			return false;
 		return true;
 	}
 	
-	public boolean isStateSetup() { 
+	public boolean isStateSetupRoad() {
 		if (isStateWaiting())
 			return false;
-		if (!gameModel.statusIsSetup())
+		return gameModel.canStartSetupRoad(ClientPlayer.sole().getUserIndex());
+	}
+	
+	public boolean isStateSetupSettlement() {
+		if (isStateWaiting())
 			return false;
-		return true;
+		return gameModel.canStartSetupSettlement(ClientPlayer.sole().getUserIndex());
 	}
 	
 	
@@ -227,15 +231,15 @@ public class GetModelFacade  extends ModelFacade {
 	}
 
 	public boolean isStateRolling() {
-		return gameModel.statusIsRolling();
+		return gameModel.isStateRolling();
 	}
 
 	public boolean isStateDiscarding() {
-		return gameModel.statusIsDiscarding();
+		return gameModel.isStateDiscarding();
 	}
 
 	public boolean isStateRobbing() {
-		return gameModel.statusIsRobbing();
+		return gameModel.isStateRobbing();
 	}
 
 	//////////////////////////////////////////

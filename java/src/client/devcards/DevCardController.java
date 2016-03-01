@@ -1,6 +1,7 @@
 package client.devcards;
 
 import client.base.*;
+import client.main.ClientPlayer;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
@@ -111,25 +112,23 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void update() 
 	{
-		GetModelFacade getModelFacade = GetModelFacade.sole();
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		
-		this.getPlayCardView().setCardEnabled(DevCardType.KNIGHT, getModelFacade.hasDevCardEnabled(DevCardType.KNIGHT));
-		this.getPlayCardView().setCardAmount(DevCardType.KNIGHT, getModelFacade.getDevCardAmount(DevCardType.KNIGHT)); 
-		
-		this.getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, getModelFacade.hasDevCardEnabled(DevCardType.MONOPOLY));
-		this.getPlayCardView().setCardAmount(DevCardType.MONOPOLY, getModelFacade.getDevCardAmount(DevCardType.MONOPOLY)); 
-		
-		this.getPlayCardView().setCardEnabled(DevCardType.YEAROFPLENTY, getModelFacade.hasDevCardEnabled(DevCardType.YEAROFPLENTY));
-		this.getPlayCardView().setCardAmount(DevCardType.YEAROFPLENTY, getModelFacade.getDevCardAmount(DevCardType.YEAROFPLENTY)); 
-		
-		this.getPlayCardView().setCardEnabled(DevCardType.ROADBUILDING, getModelFacade.hasDevCardEnabled(DevCardType.ROADBUILDING));
-		this.getPlayCardView().setCardAmount(DevCardType.ROADBUILDING, getModelFacade.getDevCardAmount(DevCardType.ROADBUILDING)); 
-		
-		this.getPlayCardView().setCardEnabled(DevCardType.MONUMENT, getModelFacade.hasDevCardEnabled(DevCardType.MONUMENT));
-		this.getPlayCardView().setCardAmount(DevCardType.MONUMENT, getModelFacade.getDevCardAmount(DevCardType.MONUMENT)); 	
-		
-
+		int playerIndex = ClientPlayer.sole().getUserIndex();
+		if(GetModelFacade.sole().isTurn(playerIndex)) {
+			this.getPlayCardView().setCardEnabled(DevCardType.KNIGHT, GetModelFacade.sole().hasDevCardEnabled(DevCardType.KNIGHT));
+			this.getPlayCardView().setCardAmount(DevCardType.KNIGHT, GetModelFacade.sole().getDevCardAmount(DevCardType.KNIGHT)); 
+			
+			this.getPlayCardView().setCardEnabled(DevCardType.MONOPOLY, GetModelFacade.sole().hasDevCardEnabled(DevCardType.MONOPOLY));
+			this.getPlayCardView().setCardAmount(DevCardType.MONOPOLY, GetModelFacade.sole().getDevCardAmount(DevCardType.MONOPOLY)); 
+			
+			this.getPlayCardView().setCardEnabled(DevCardType.YEAROFPLENTY, GetModelFacade.sole().hasDevCardEnabled(DevCardType.YEAROFPLENTY));
+			this.getPlayCardView().setCardAmount(DevCardType.YEAROFPLENTY, GetModelFacade.sole().getDevCardAmount(DevCardType.YEAROFPLENTY)); 
+			
+			this.getPlayCardView().setCardEnabled(DevCardType.ROADBUILDING, GetModelFacade.sole().hasDevCardEnabled(DevCardType.ROADBUILDING));
+			this.getPlayCardView().setCardAmount(DevCardType.ROADBUILDING, GetModelFacade.sole().getDevCardAmount(DevCardType.ROADBUILDING)); 
+			
+			this.getPlayCardView().setCardEnabled(DevCardType.MONUMENT, GetModelFacade.sole().hasDevCardEnabled(DevCardType.MONUMENT));
+			this.getPlayCardView().setCardAmount(DevCardType.MONUMENT, GetModelFacade.sole().getDevCardAmount(DevCardType.MONUMENT)); 	
+		}		
 	}
 
 }
