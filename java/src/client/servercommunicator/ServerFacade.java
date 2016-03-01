@@ -294,11 +294,11 @@ public class ServerFacade {
 		try {
 			JSONObject json = new JSONObject();
 			
-			json.put("type", "sendChat");
+			json.put("type", "rollNumber");
 			json.put("playerIndex", playerIndex);
-			json.put("content", number);
+			json.put("number", number);
 			
-			return proxy.sendChat(json);
+			return proxy.rollNumber(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
