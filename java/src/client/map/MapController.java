@@ -2,6 +2,7 @@ package client.map;
 
 import client.base.Controller;
 import client.data.RobPlayerInfo;
+import client.main.ClientPlayer;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
@@ -19,7 +20,6 @@ import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
-import shared.model.definitions.CatanColor;
 
 
 /**
@@ -127,7 +127,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
 		
-		getView().startDrop(pieceType, CatanColor.ORANGE, state.canCancelDrop());
+		getView().startDrop(pieceType, ClientPlayer.sole().getUserColor(), state.canCancelDrop());
 	}
 	
 	public void cancelMove() {
