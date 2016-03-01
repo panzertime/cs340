@@ -70,6 +70,8 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		for (PseudoCity city : GetModelFacade.sole().getPseudoCities()) {
 			getView().placeCity(city.getVertLoc(), city.getColor());
 		}
+		
+		getView().placeRobber(GetModelFacade.sole().getRobberLocation());
 	}
 	
 	protected void updateState() {
@@ -146,7 +148,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
-		
+		state.robPlayer(victim);
 	}
 
 	@Override

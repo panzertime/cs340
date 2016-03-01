@@ -714,9 +714,13 @@ public class Board {
 		}
 		return phexes;
 	}
+	
+	public HexLocation getRobberLocation() {
+		return robber.getHex().getHexLocation().copy();
+	}
 
-	public boolean robberAdjacent(Integer targetPlayerIndex) {
-		for(Vertex vertex : robber.getHex().getVerts()) {
+	public boolean couldBeRobbedFrom(HexLocation robberLoc, Integer targetPlayerIndex) {
+		for(Vertex vertex : hexes.get(robberLoc).getVerts()) {
 			if (vertex.hasBuilding()) {
 				if (vertex.getBuilding().getOwner().getPlayerIndex() == targetPlayerIndex)
 					return true;

@@ -1,5 +1,6 @@
 package client.map.state;
 
+import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
@@ -45,6 +46,9 @@ public class SetupSettlementMapState extends MapState {
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
+	}
+
+	public void robPlayer(RobPlayerInfo victim) {
 	}
 	
 	public Boolean canCancelDrop() {

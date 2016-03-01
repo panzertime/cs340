@@ -309,12 +309,13 @@ public class ServerFacade {
 			HexLocation location) 
 			throws ServerException {
 		try {
-			String content = "{type: \"robPlayer\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"victimIndex: " + victimIndex + ", " +
-						"location: " + location + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.robPlayer(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "robPlayer");
+			json.put("playerIndex", playerIndex);
+			json.put("victimIndex", victimIndex);
+			json.put("location", location.toJSON());
+			return proxy.robPlayer(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
