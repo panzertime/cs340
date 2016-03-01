@@ -140,63 +140,27 @@ public class TradeModel {
 	public void setOre(Integer ore) {
 		this.ore = ore;
 	}
-
-	public int getTradeGetResource(ResourceType type)
-	{
+	
+	
+	public int getTradeResource(ResourceType type) {
+		// TODO Auto-generated method stub
 		switch (type)
 		{
 		case WOOD:
-			if (this.getWood() > 0)
 				return wood;
-			else return 0;
 		case BRICK:
-			if (this.getBrick() > 0)
-				return wood;
-			else return 0;
+				return brick;
 		case SHEEP:
-			if (this.getSheep() > 0)
-				return wood;
-			else return 0;
+				return sheep;
 		case WHEAT:
-			if (this.getWheat() > 0)
-				return wood;
-			else return 0;
+				return wheat;
 		case ORE:
-			if (this.getOre() > 0)
-				return wood;
-			else return 0;
+				return ore;
 		}
 		return 0;
 		
 	}
-	
-	public int getTradeGiveResource(ResourceType type)
-	{
-		switch (type)
-		{
-		case WOOD:
-			if (this.getWood() < 0)
-				return wood;
-			else return 0;
-		case BRICK:
-			if (this.getBrick() < 0)
-				return wood;
-			else return 0;
-		case SHEEP:
-			if (this.getSheep() < 0)
-				return wood;
-			else return 0;
-		case WHEAT:
-			if (this.getWheat() < 0)
-				return wood;
-			else return 0;
-		case ORE:
-			if (this.getOre() < 0)
-				return wood;
-			else return 0;
-		}		return 0;
-		
-	}
+
 
 	public Map<ResourceType, Integer> getResourcesToGive() {
 		Map<ResourceType, Integer> resources = new HashMap<ResourceType, Integer>();

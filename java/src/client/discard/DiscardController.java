@@ -17,11 +17,13 @@ import shared.model.hand.ResourceType;
  */
 public class DiscardController extends Controller implements IDiscardController, GetModelFacadeListener {
 
-	int wood;
-	int brick;
-	int sheep;
-	int wheat;
-	int ore;
+	private int wood = 0;
+	private int brick = 0;
+	private int sheep = 0;
+	private int wheat = 0;
+	private int ore = 0;
+	boolean buttonPushed = false;
+	private int discardNeeded = 0;
 	
 	private IWaitView waitView;
 	
@@ -34,9 +36,9 @@ public class DiscardController extends Controller implements IDiscardController,
 	public DiscardController(IDiscardView view, IWaitView waitView) {
 		
 		super(view);
-		
-		this.waitView = waitView;
 		setToStandard();
+		this.waitView = waitView;
+		
 		GetModelFacade.registerListener(this);
 	}
 
@@ -50,106 +52,120 @@ public class DiscardController extends Controller implements IDiscardController,
 
 	@Override
 	public void increaseAmount(ResourceType resource) {
-		
-		GetModelFacade getModelFacade = GetModelFacade.sole();
+		if (!buttonPushed)
+		{
+			buttonPushed = true;
+
 		switch (resource)
 		{
 	case WOOD:
-		if (wood < getModelFacade.getResourceAmount(resource))
-		{
 		wood++;
 		this.getDiscardView().setResourceDiscardAmount(resource, wood);
-		}
 		break;
 	case BRICK:
-		if (brick < getModelFacade.getResourceAmount(resource))
-		{
 		brick++;
 		this.getDiscardView().setResourceDiscardAmount(resource, brick);
-		}
 		break;
 	case SHEEP:
-		if (sheep < getModelFacade.getResourceAmount(resource))
-		{
 		sheep++;
 		this.getDiscardView().setResourceDiscardAmount(resource, sheep);
-		}
 		break;
 	case WHEAT:
-		if (wheat < getModelFacade.getResourceAmount(resource))
-		{
 		wheat++;
 		this.getDiscardView().setResourceDiscardAmount(resource, wheat);
-		}
 		break;
 	case ORE:
-		if (ore < getModelFacade.getResourceAmount(resource))
-		{
 		ore++;
 		this.getDiscardView().setResourceDiscardAmount(resource, ore);
-		}
 		break;
 		}
-		
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		if (canModelFacade.canDiscardCards(this.getResourceList()))
+		int resourceTotal = wood + brick + sheep + wheat + ore;
+		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
+		if (resourceTotal == discardNeeded)//(CanModelFacade.sole().canDiscardCards(this.getResourceList()))
+		{
 			this.getDiscardView().setDiscardButtonEnabled(true);
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, false, (wood > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, false, (brick > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, false, (sheep > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, false, (wheat > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, false, (ore > 0));
+		}
+		else
+		{
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < woodMax), (wood > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < brickMax), (brick > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < sheepMax), (sheep > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wheatMax), (wheat > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < oreMax), (ore > 0));
 
+		}
+		buttonPushed = false;
+
+		}
+		
 	}
 	
 
 	@Override
 	public void decreaseAmount(ResourceType resource) {
-		
+		if (!buttonPushed)
+		{
+			buttonPushed = true;
+
 		switch (resource)
 		{
 		case WOOD:
-			if (wood > 0)
-			{
+
 				wood--;
 				this.getDiscardView().setResourceDiscardAmount(resource, wood);
-			}
-			break;
+		break;
 		case BRICK:
-			if (brick > 0)
-			{
 				brick--;
 				this.getDiscardView().setResourceDiscardAmount(resource, brick);
-			}	
 			break;
 		case SHEEP:
-			if (sheep > 0)
-			{
 			sheep--;
 			this.getDiscardView().setResourceDiscardAmount(resource, sheep);
-			}
 			break;
 		case WHEAT:
-			if (wheat > 0)
-			{
 				wheat--;
 				this.getDiscardView().setResourceDiscardAmount(resource, wheat);
-			}
 			break;
 		case ORE:
-			if (ore > 0)
-			{
 				ore--;
 				this.getDiscardView().setResourceDiscardAmount(resource, ore);
-			}
 			break;
 		}
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		if (!canModelFacade.canDiscardCards(this.getResourceList()))
+		
+		int resourceTotal = wood + brick + sheep + wheat + ore;
+		this.getDiscardView().setStateMessage(resourceTotal + "/" + discardNeeded);
+		if (resourceTotal < discardNeeded)//(!CanModelFacade.sole().canDiscardCards(this.getResourceList()))
+		{
 			this.getDiscardView().setDiscardButtonEnabled(false);
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < woodMax), (wood > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < brickMax), (brick > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < sheepMax), (sheep > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wheatMax), (wheat > 0));
+			this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < oreMax), (ore > 0));
+		
+		}
+		else
+		{
+			
+		}
+		
+		buttonPushed = false;
+
+		}
 	}
 
 	@Override
 	public void discard() {
-		DoModelFacade doModelFacade = DoModelFacade.sole();
-		doModelFacade.doDiscard(this.getResourceList());
+		DoModelFacade.sole().doDiscard(this.getResourceList());
 		getDiscardView().closeModal();
 		setToStandard();
+		if (GetModelFacade.sole().isStateDiscarding())
+			this.getWaitView().showModal();
 	}
 
 	private Map<ResourceType, Integer> getResourceList()
@@ -165,11 +181,17 @@ public class DiscardController extends Controller implements IDiscardController,
 	
 	private void setToStandard()
 	{
+		this.getDiscardView().setStateMessage("");
 		wood = 0;
 		brick = 0;
 		sheep = 0;
 		wheat = 0;
 		ore = 0;
+		woodMax = 0;
+		brickMax = 0;
+		sheepMax = 0;
+		wheatMax = 0;
+		oreMax = 0;
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.WOOD, wood);
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.BRICK, brick);
 		this.getDiscardView().setResourceDiscardAmount(ResourceType.SHEEP, sheep);
@@ -183,26 +205,50 @@ public class DiscardController extends Controller implements IDiscardController,
 		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, false, false);
 	}
 	
+	int woodMax;
+	int brickMax;
+	int sheepMax;
+	int wheatMax;
+	int oreMax;
 	@Override
 	public void update() {
+		
+	
+		
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		int wo = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int b = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int s = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int wh = getModelFacade.getResourceAmount(ResourceType.WOOD);
-		int o = getModelFacade.getResourceAmount(ResourceType.WOOD);
+		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
+		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);
+		sheepMax = getModelFacade.getResourceAmount(ResourceType.SHEEP);
+		wheatMax = getModelFacade.getResourceAmount(ResourceType.WHEAT);
+		oreMax = getModelFacade.getResourceAmount(ResourceType.ORE);
+		boolean mustDiscard = getModelFacade.mustDiscard();
+		if (mustDiscard && !this.getDiscardView().isModalShowing())
+		{
+			this.getDiscardView().showModal();
+		}
+		else if(GetModelFacade.sole().isStateDiscarding() && !mustDiscard  && !this.getWaitView().isModalShowing())
+		{	this.getWaitView().showModal();
+		}
+		else if (!GetModelFacade.sole().isStateDiscarding() && this.getWaitView().isModalShowing())
+		{
+			this.getWaitView().closeModal();
+		}
+		int totalCards = woodMax + brickMax + sheepMax + wheatMax + oreMax;
+		discardNeeded = totalCards / 2;
 		
-		this.getDiscardView().setResourceMaxAmount(ResourceType.WOOD, wo);
-		this.getDiscardView().setResourceMaxAmount(ResourceType.BRICK, b);
-		this.getDiscardView().setResourceMaxAmount(ResourceType.SHEEP, s);
-		this.getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, wh);
-		this.getDiscardView().setResourceMaxAmount(ResourceType.ORE, o);
+		this.getDiscardView().setResourceMaxAmount(ResourceType.WOOD, woodMax);
+		this.getDiscardView().setResourceMaxAmount(ResourceType.BRICK, brickMax);
+		this.getDiscardView().setResourceMaxAmount(ResourceType.SHEEP, sheepMax);
+		this.getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, wheatMax);
+		this.getDiscardView().setResourceMaxAmount(ResourceType.ORE, oreMax);
 		
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < wo), (wood > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < b), (brick > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < s), (sheep > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wh), (wheat > 0));
-		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < o), (ore > 0));
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (0 < woodMax), wood > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (0 < brickMax), brick > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (0 < sheepMax), sheep > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (0 < wheatMax), wheat > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (0 < oreMax), ore > 0);
+		int cardsToDiscard = wood + brick + sheep + wheat + ore;
+		this.getDiscardView().setStateMessage(cardsToDiscard + "/" + discardNeeded);
 	}
 
 }

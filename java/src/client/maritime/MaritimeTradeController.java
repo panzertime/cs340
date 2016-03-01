@@ -5,13 +5,15 @@ import java.util.Arrays;
 
 import client.base.*;
 import client.modelfacade.*;
+import client.modelfacade.get.GetModelFacade;
+import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
 
 
 /**
  * Implementation for the maritime trade controller
  */
-public class MaritimeTradeController extends Controller implements IMaritimeTradeController {
+public class MaritimeTradeController extends Controller implements IMaritimeTradeController, GetModelFacadeListener {
 
 	private IMaritimeTradeOverlay tradeOverlay;
 
@@ -20,6 +22,16 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	private ResourceType giveType;
 	private ResourceType getType;
 	
+	
+	private void reset()
+	{
+		giveRatios = new HashMap<ResourceType,Integer>();
+		getRatios = new HashMap<ResourceType,Integer>();
+		giveType = null;
+		getType = null;
+	}
+	
+	
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
 		
 		super(tradeView);
@@ -27,6 +39,8 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		setTradeOverlay(tradeOverlay);
 		giveRatios = new HashMap<ResourceType,Integer>();
 		getRatios = new HashMap<ResourceType,Integer>();
+		GetModelFacade.registerListener(this);
+
 		
 	}
 	
@@ -75,10 +89,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		try {
 			int ratio = giveRatios.get(giveType);
 			DoModelFacade.sole().doMaritimeTrade(ratio, giveType, getType);
-			giveRatios = new HashMap<ResourceType,Integer>();
-			getRatios = new HashMap<ResourceType,Integer>();
-			giveType = null;
-			getType = null;
+			reset();
 			getTradeOverlay().closeModal();
 		}
 		catch (Exception e) {
@@ -90,6 +101,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void cancelTrade() {
 
 		getTradeOverlay().closeModal();
+		reset();
 	}
 
 	@Override
@@ -141,6 +153,11 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		ResourceType[] resources = (ResourceType[]) giveRatios.keySet().toArray();
 		tradeOverlay.showGiveOptions(resources);
 
+	}
+
+	@Override
+	public void update() {
+		this.getTradeView().enableMaritimeTrade(CanModelFacade.sole().canDomesticTrade());		
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import client.base.*;
+import client.data.PlayerInfo;
 import client.misc.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
@@ -23,6 +24,21 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	Integer sheep;
 	Integer wheat;
 	Integer ore;
+	int woodMax;
+	int brickMax;
+	int sheepMax;
+	int wheatMax;
+	int oreMax;
+	
+	boolean buttonPushed = false;
+
+
+	 int sendingWood = 1;
+	 int sendingBrick = 1;
+	 int sendingSheep = 1;
+	 int sendingWheat = 1; 
+	 int sendingOre = 1;
+	 
 	int receiverIndex;
 	
 	private IDomesticTradeOverlay tradeOverlay;
@@ -31,17 +47,24 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	private void setToStandard()
 	{
-		wood = 0;
-		brick = 0;
-		sheep = 0;
-		wheat = 0;
-		ore = 0;
+
+		 wood = 0;
+		 brick = 0;
+		 sheep = 0;
+		 wheat = 0;
+		 ore = 0;
+
+		 woodMax = 0;
+		 brickMax = 0;
+		 sheepMax = 0;
+		 wheatMax = 0;
+		 oreMax = 0;
 		receiverIndex = 0;
-		this.getTradeOverlay().setResourceAmount(ResourceType.WOOD, wood.toString());
-		this.getTradeOverlay().setResourceAmount(ResourceType.BRICK, brick.toString());
-		this.getTradeOverlay().setResourceAmount(ResourceType.SHEEP, sheep.toString());
-		this.getTradeOverlay().setResourceAmount(ResourceType.WHEAT, wheat.toString());
-		this.getTradeOverlay().setResourceAmount(ResourceType.ORE, ore.toString());
+		this.getTradeOverlay().setResourceAmount(ResourceType.WOOD, "0");
+		this.getTradeOverlay().setResourceAmount(ResourceType.BRICK, "0");
+		this.getTradeOverlay().setResourceAmount(ResourceType.SHEEP, "0");
+		this.getTradeOverlay().setResourceAmount(ResourceType.WHEAT, "0");
+		this.getTradeOverlay().setResourceAmount(ResourceType.ORE, "0");
 		this.getTradeOverlay().setCancelEnabled(true);
 		this.getTradeOverlay().setTradeEnabled(false);
 		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, false, false);
@@ -69,6 +92,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		setWaitOverlay(waitOverlay);
 		setAcceptOverlay(acceptOverlay);
 		setToStandard();
+		GetModelFacade.registerListener(this);
 	}
 	
 	public IDomesticTradeView getTradeView() {
@@ -108,93 +132,96 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void decreaseResourceAmount(ResourceType resource) {
+		
+		if (!buttonPushed)
+		{
+			buttonPushed = true;
+
 		switch (resource)
 		{
 		case WOOD:
-			if (wood > 0)
-			{
 				wood--;
 				this.getTradeOverlay().setResourceAmount(resource, wood.toString());
-			}
+				if (wood == 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, true, false);
 			break;
 		case BRICK:
-			if (brick > 0)
-			{
 				brick--;
 				this.getTradeOverlay().setResourceAmount(resource, brick.toString());
-			}	
+				if (brick == 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, true, false);
+
 			break;
 		case SHEEP:
-			if (sheep > 0)
-			{
 			sheep--;
 			this.getTradeOverlay().setResourceAmount(resource, sheep.toString());
-			}
+			if (sheep == 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, true, false);
+
 			break;
 		case WHEAT:
-			if (wheat > 0)
-			{
 				wheat--;
 				this.getTradeOverlay().setResourceAmount(resource, wheat.toString());
-			}
+				if (wheat == 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, true, false);
+
 			break;
 		case ORE:
-			if (ore > 0)
-			{
 				ore--;
 				this.getTradeOverlay().setResourceAmount(resource, ore.toString());
-			}
+				if (ore == 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, true, false);
+
 			break;
 		}
 		
 		this.getTradeOverlay().setTradeEnabled(CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
 	
+		buttonPushed = false;
 
+		}
 	}
 
 	@Override
 	public void increaseResourceAmount(ResourceType resource) {
-		GetModelFacade getModelFacade = GetModelFacade.sole();
+		
+		if (!buttonPushed)
+		{
+			buttonPushed = true;
 		switch (resource)
 		{
 	case WOOD:
-		if (wood < getModelFacade.getResourceAmount(resource))
-		{
 		wood++;
 		this.getTradeOverlay().setResourceAmount(resource, wood.toString());
-		}
+		if (sendingWood > 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, wood < woodMax, true);
+		else this.getTradeOverlay().setResourceAmountChangeEnabled(resource, (wood < (19-woodMax)), true);
 		break;
 	case BRICK:
-		if (brick < getModelFacade.getResourceAmount(resource))
-		{
 		brick++;
 		this.getTradeOverlay().setResourceAmount(resource, brick.toString());
-		}
+		if (sendingBrick > 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, brick < brickMax, true);
+		else this.getTradeOverlay().setResourceAmountChangeEnabled(resource, (wood < (19-woodMax)), true);
 		break;
 	case SHEEP:
-		if (sheep < getModelFacade.getResourceAmount(resource))
-		{
 		sheep++;
 		this.getTradeOverlay().setResourceAmount(resource, sheep.toString());
-		}
+		if (sendingSheep > 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, sheep < sheepMax, true);
+		else this.getTradeOverlay().setResourceAmountChangeEnabled(resource, (sheep < (19-sheepMax)), true);
 		break;
 	case WHEAT:
-		if (wheat < getModelFacade.getResourceAmount(resource))
-		{
 		wheat++;
 		this.getTradeOverlay().setResourceAmount(resource, wheat.toString());
-		}
+		if (sendingWheat > 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, wheat < wheatMax, true);
+		else this.getTradeOverlay().setResourceAmountChangeEnabled(resource, (wheat < (19-wheatMax)), true);
 		break;
 	case ORE:
-		if (ore < getModelFacade.getResourceAmount(resource))
-		{
 		ore++;
 		this.getTradeOverlay().setResourceAmount(resource, ore.toString());
-		}
+		if (sendingOre > 0) this.getTradeOverlay().setResourceAmountChangeEnabled(resource, ore < oreMax, true);
+		else this.getTradeOverlay().setResourceAmountChangeEnabled(resource, (ore < (19-oreMax)), true);
 		break;
 		}
 		
 		this.getTradeOverlay().setTradeEnabled(CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+		
+		buttonPushed = false;
+
+		}
 	}
 
 	@Override
@@ -209,11 +236,11 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	private Map<ResourceType, Integer> getResourceList()
 	{
 		Map<ResourceType, Integer> resources = new HashMap<ResourceType, Integer>();
-		resources.put(ResourceType.WOOD, wood);
-		resources.put(ResourceType.BRICK, brick);
-		resources.put(ResourceType.SHEEP, sheep);
-		resources.put(ResourceType.WHEAT, wheat);
-		resources.put(ResourceType.ORE, ore);
+		resources.put(ResourceType.WOOD, wood * sendingWood);
+		resources.put(ResourceType.BRICK, brick * sendingBrick);
+		resources.put(ResourceType.SHEEP, sheep * sendingSheep);
+		resources.put(ResourceType.WHEAT, wheat * sendingWheat);
+		resources.put(ResourceType.ORE, ore * sendingOre);
 		return resources;
 	}
 	
@@ -224,23 +251,116 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void setResourceToReceive(ResourceType resource) {
+		switch (resource)
+		{
+		case WOOD:
+			if (sendingWood > 0) wood = 0;
+			sendingWood = -1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < (19-woodMax)), (wood > 0));
+			this.getTradeOverlay().setResourceAmount(resource, wood.toString());
+			break;
+		case BRICK:
+			if (sendingBrick > 0) brick = 0;
+			sendingBrick = -1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, brick < (19-brickMax), (brick > 0));
+			this.getTradeOverlay().setResourceAmount(resource, brick.toString());
 
+			break;
+		case SHEEP:
+			if (sendingSheep > 0) sheep = 0;
+			sendingSheep = -1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sheep < (19-sheepMax), (sheep > 0));
+			this.getTradeOverlay().setResourceAmount(resource, sheep.toString());
+
+			break;
+		case WHEAT:
+			if (sendingWheat > 0) wheat = 0;
+			sendingWheat = -1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, wheat < (19-wheatMax), (wheat > 0));
+			this.getTradeOverlay().setResourceAmount(resource, wheat.toString());
+
+			break;
+		case ORE:
+			if (sendingOre > 0) ore = 0;
+			sendingOre = -1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, ore < (19-oreMax), (ore > 0));
+			this.getTradeOverlay().setResourceAmount(resource, ore.toString());
+
+			break;
+		}
 	}
 
 	@Override
 	public void setResourceToSend(ResourceType resource) {
+				
+		switch (resource)
+		{
+		case WOOD:
+			if (sendingWood < 0) wood = 0;
+			sendingWood = 1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(resource, wood < woodMax, (wood > 0));
+			this.getTradeOverlay().setResourceAmount(resource, wood.toString());
+
+			break;
+		case BRICK:
+			if (sendingBrick < 0) brick = 0;
+			sendingBrick = 1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(resource, brick < brickMax, (brick > 0));
+			this.getTradeOverlay().setResourceAmount(resource, brick.toString());
+
+			break;
+		case SHEEP:
+			if (sendingSheep < 0) sheep = 0;
+			sendingSheep = 1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(resource, sheep < sheepMax, (sheep > 0));
+			this.getTradeOverlay().setResourceAmount(resource, sheep.toString());
+
+			break;
+		case WHEAT:
+			if (sendingWheat < 0) wheat = 0;
+			sendingWheat = 1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(resource, wheat < wheatMax, (wheat > 0));
+			this.getTradeOverlay().setResourceAmount(resource, wheat.toString());
+
+			break;
+		case ORE:
+			if (sendingOre < 0) ore = 0;
+			sendingOre = 1;
+			this.getTradeOverlay().setResourceAmountChangeEnabled(resource, ore < oreMax, (ore > 0));
+			this.getTradeOverlay().setResourceAmount(resource, ore.toString());
+			break;
+		}
 
 	}
 
 	@Override
 	public void unsetResource(ResourceType resource) {
-
+		switch (resource)
+		{
+		case WOOD:
+			wood = 0;
+			break;
+		case BRICK:
+			brick = 0;
+			break;
+		case SHEEP:
+			sheep = 0;
+			break;
+		case WHEAT:
+			wheat = 0;
+			break;
+		case ORE:
+			ore = 0;
+			break;
+		}
+		this.getTradeOverlay().setResourceAmount(resource, "");
+		this.getTradeOverlay().setResourceAmountChangeEnabled(resource, false, false);
 	}
 
 	@Override
 	public void cancelTrade() {
-
 		getTradeOverlay().closeModal();
+		this.setToStandard();
 	}
 
 	@Override
@@ -249,54 +369,74 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		DoModelFacade doModelFacade = DoModelFacade.sole();
 		doModelFacade.doAcceptTrade(willAccept);
 		getAcceptOverlay().closeModal();
+		this.setToStandard();
 	}
 
+	PlayerInfo[] tradingPartners = null;
+	
 	@Override
 	public void update() {
-		CanModelFacade canModelFacade = CanModelFacade.sole();
-		this.getTradeView().enableDomesticTrade(canModelFacade.canDomesticTrade());
-		this.getTradeOverlay().setResourceSelectionEnabled(canModelFacade.canDomesticTrade());
-		this.getTradeOverlay().setPlayerSelectionEnabled(canModelFacade.canDomesticTrade());
-		this.getAcceptOverlay().setAcceptEnabled(canModelFacade.canAcceptTrade());
+		if (!GetModelFacade.sole().hasTradeOffer()) {
+			if (this.getWaitOverlay().isModalShowing()) this.getWaitOverlay().closeModal();
+		}
+		if (tradingPartners == null)
+			{ tradingPartners = GetModelFacade.sole().getTradingPartners();
+			this.getTradeOverlay().setPlayers(tradingPartners);
+			}
+		boolean canDomesticTrade = CanModelFacade.sole().canDomesticTrade();
+		this.getTradeView().enableDomesticTrade(canDomesticTrade);
+		this.getTradeOverlay().setResourceSelectionEnabled(canDomesticTrade);
+		this.getTradeOverlay().setPlayerSelectionEnabled(canDomesticTrade);
 		GetModelFacade getModelFacade = GetModelFacade.sole();
-		this.getTradeOverlay().setPlayers(getModelFacade.getTradingPartners());
-		if (canModelFacade.canViewTrade()) 
+		if (CanModelFacade.sole().canViewTrade()) 
 		{
-			
+			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();
 			ResourceType type = ResourceType.WOOD;
+			int resource = 0;
+			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
 
-			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
-			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			resource = GetModelFacade.sole().getTradeResource(type);
+			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 			
 			type = ResourceType.BRICK;
 
-			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
-			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			resource = GetModelFacade.sole().getTradeResource(type);
+			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 			
 			type = ResourceType.SHEEP;
 
-			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
-			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			resource = GetModelFacade.sole().getTradeResource(type);
+			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 
 			type = ResourceType.WHEAT;
 			
-			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
-			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			resource = GetModelFacade.sole().getTradeResource(type);
+			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 
 			type = ResourceType.ORE;
 
-			this.getAcceptOverlay().addGetResource(type, getModelFacade.getTradeGetResource(type));
-			this.getAcceptOverlay().addGiveResource(type, getModelFacade.getTradeGiveResource(type));
+			resource = GetModelFacade.sole().getTradeResource(type);
+			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
+			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 			
-			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
+			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
+
 			
 		}
-		
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < getModelFacade.getResourceAmount(ResourceType.WOOD)), (wood > 0));
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < getModelFacade.getResourceAmount(ResourceType.BRICK)), (brick > 0));
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < getModelFacade.getResourceAmount(ResourceType.SHEEP)), (sheep > 0));
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < getModelFacade.getResourceAmount(ResourceType.WHEAT)), (wheat > 0));
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < getModelFacade.getResourceAmount(ResourceType.ORE)), (ore > 0));
+		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
+		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);
+		sheepMax = getModelFacade.getResourceAmount(ResourceType.SHEEP);
+		wheatMax = getModelFacade.getResourceAmount(ResourceType.WHEAT);
+		oreMax = getModelFacade.getResourceAmount(ResourceType.ORE);
+//		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, (wood < woodMax), (wood > 0));
+//		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, (brick < brickMax), (brick > 0));
+//		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, (sheep < sheepMax), (sheep > 0));
+//		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, (wheat < wheatMax), (wheat > 0));
+//		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, (ore < oreMax), (ore > 0));
 		
 	}
 

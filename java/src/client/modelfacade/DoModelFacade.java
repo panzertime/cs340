@@ -63,12 +63,12 @@ public class DoModelFacade extends ModelFacade {
 	 * @throws PlayingException
 	 *             Pre-conditions violated
 	 */
-	public void doPlaceRobber(HexLocation location, int victimIndex) {
+	public void doRobPlayer(HexLocation robberLocation, int victimIndex) {
 		try {
-			if (!CanModelFacade.sole().canPlaceRobber(location, victimIndex))
+			if (!CanModelFacade.sole().canPlaceRobber(robberLocation))
 				throw new IllegalStateException();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().robPlayer(ClientPlayer.sole().getUserIndex(), victimIndex,
-					location);
+					robberLocation);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -253,7 +253,20 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuildRoad(roadLocation))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.inSetupRounds();
+			boolean free = this.gameModel.statusIsSetup();
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(ClientPlayer.sole().getUserIndex(), roadLocation,
+					free);
+			setModel(jsonModel);
+		} catch (Exception e) {
+			Log.error(e);
+		}
+	}
+
+	public void doSetupRoad(EdgeLocation roadLocation) {
+		try {
+			if (!CanModelFacade.sole().canSetupRoad(roadLocation))
+				throw new IllegalStateException();
+			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(ClientPlayer.sole().getUserIndex(), roadLocation,
 					free);
 			setModel(jsonModel);
@@ -283,7 +296,20 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuildSettlement(vertLoc))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.inSetupRounds();
+			boolean free = this.gameModel.statusIsSetup();
+			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc,
+					free);
+			setModel(jsonModel);
+		} catch (Exception e) {
+			Log.error(e);
+		}
+	}
+
+	public void doSetupSettlement(VertexLocation vertLoc) {
+		try {
+			if (!CanModelFacade.sole().canSetupSettlement(vertLoc))
+				throw new IllegalStateException();
+			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc,
 					free);
 			setModel(jsonModel);
@@ -360,8 +386,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doAcceptTrade(boolean willAccept) {
 		try {
-			if (!CanModelFacade.sole().canAcceptTrade())
-				throw new IllegalStateException();
+			/*if (!CanModelFacade.sole().canAcceptTrade())
+				throw new IllegalStateException();*/
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().acceptTrade(ClientPlayer.sole().getUserIndex(), willAccept);
 			setModel(jsonModel);
 		} catch (Exception e) {
