@@ -2,7 +2,8 @@ package client.roll;
 
 import java.util.Random;
 
-import javax.swing.Timer;
+import javax.swing.*;
+import java.awt.event.*;
 
 import client.base.*;
 import client.main.ClientPlayer;
@@ -51,10 +52,9 @@ public class RollController extends Controller implements IRollController, GetMo
 		n += rand.nextInt(6) + 1;
 		getResultView().setRollValue(n);
 
-
+		System.out.println("ROLLING DICE: " + n);
 		
 		DoModelFacade.sole().doRollDice(n);
-		this.getRollView().closeModal();
 
 		getResultView().showModal();
 
