@@ -391,7 +391,6 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		if (CanModelFacade.sole().canViewTrade()) 
 		{
 			this.getAcceptOverlay().reset();
-			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();
 			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
 
 			
@@ -403,8 +402,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			}
 			
 			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
-
 			
+			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();			
 		}
 		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
 		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);
