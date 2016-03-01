@@ -271,68 +271,38 @@ public class Board {
 	}
 
 	public Vertex getVertexAt(VertexLocation vertexLoc) {
-		Hex hex = getHexAt(vertexLoc.getHexLoc());
+		VertexDirection vertDir = vertexLoc.getDir();
+		HexLocation hexLoc = vertexLoc.getHexLoc();
+		Hex hex = getHexAt(hexLoc);
 		Vertex vertex = null;
-		vertex = hex.getVertex(vertexLoc.getDir());
+		if (hex != null)
+			vertex = hex.getVertex(vertDir);
+		if (hex == null) {
+			hex = getHexAt(hexLoc.getNeighborLoc(vertDir.toRightEdge()));
+			if (hex != null)
+				vertex = hex.getVertex(vertDir.toRightEdge().toOpposite().toRightVertex());
+		}
+		if (hex == null) {
+			hex = getHexAt(hexLoc.getNeighborLoc(vertDir.toLeftEdge()));
+			if (hex != null)
+				vertex = hex.getVertex(vertDir.toLeftEdge().toOpposite().toLeftVertex());
+		}
 		return vertex;
 	}
 
 	public Edge getEdgeAt(EdgeLocation edgeLoc) {
-		Hex hex = getHexAt(edgeLoc.getHexLoc());
+		EdgeDirection edgeDir = edgeLoc.getDir();
+		HexLocation hexLoc = edgeLoc.getHexLoc();
+		Hex hex = getHexAt(hexLoc);
 		Edge edge = null;
-		edge = hex.getEdge(edgeLoc.getDir());
+		if (hex != null)
+			edge = hex.getEdge(edgeDir);
+		if (edge == null) {
+			hex = getHexAt(hexLoc.getNeighborLoc(edgeDir));
+			if (hex != null)
+				edge = hex.getEdge(edgeDir.toOpposite());
+		}
 		return edge;
-	}
-
-	public Boolean canPlaceRobber(HexLocation hexLoc) {
-		Hex target = hexes.get(hexLoc);
-		if (target == null)
-			return false;
-		if (!target.isBuildable())
-			return false;
-		if (target.getHexLocation().equals(robber.getHex().getHexLocation()))
-			return false;
-		return true;
-	}
-
-	/**
-	 * @param vertexLoc
-	 *            a vertexLocation to be checked
-	 * @return True if a settlement can be build
-	 */
-	public Boolean canBuildSettlement(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
-		Vertex vertex = getVertexAt(vertexLoc);
-		if (vertex.hasBuilding())
-			return false;
-		if (!vertex.isBuildable())
-			return false;
-
-		Edge[] edges = vertex.getAllEdges();
-		for (Edge edge : edges) {
-			if (edge.getOtherVertex(vertex).hasBuilding())
-				return false;
-		}
-		for (Edge edge : edges) {
-			if (edge.getRoad().getOwner().equals(player))
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * @param vertexLoc
-	 *            A vertexLocation to be checked
-	 * @return - True if a city can be built
-	 */
-	public Boolean canBuildCity(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
-		Vertex vertex = getVertexAt(vertexLoc);
-		if (!vertex.hasBuilding())
-			return false;
-		if (!vertex.getBuilding().getOwner().equals(player))
-			return false;
-		if (!(vertex.getBuilding() instanceof Settlement))
-			return false;
-		return true;
 	}
 
 	/**
@@ -363,6 +333,22 @@ public class Board {
 					return true;
 			}
 
+		}
+		return false;
+	}
+
+	public boolean canBuildSetupRoad(Player player, EdgeLocation edgeLocation) {
+		Edge edge = getEdgeAt(edgeLocation);
+		if (edge.hasRoad())
+			return false;
+		if (!edge.isBuildable())
+			return false;
+		for (Vertex vertex : edge.getAllVertices()) {
+			if (vertex.getBuilding() != null && vertex.getBuilding().getOwner().equals(player)) {
+				if (!vertex.getLeftEdge(edge).hasRoad() && !vertex.getRightEdge(edge).hasRoad()) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -410,20 +396,27 @@ public class Board {
 		return false;
 	}
 
-	public boolean canBuildSetupRoad(Player player, EdgeLocation edgeLocation) {
-		Edge edge = getEdgeAt(edgeLocation);
-		if (edge.hasRoad())
+	/**
+	 * @param vertexLoc
+	 *            a vertexLocation to be checked
+	 * @return True if a settlement can be build
+	 */
+	public Boolean canBuildSettlement(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
+		Vertex vertex = getVertexAt(vertexLoc);
+		if (vertex.hasBuilding())
 			return false;
-		if (!edge.isBuildable())
+		if (!vertex.isBuildable())
 			return false;
-		for (Vertex vertex : edge.getAllVertices()) {
 
-			if (vertex.getBuilding() != null && vertex.getBuilding().getOwner().equals(player) && !vertex.getLeftEdge(edge).hasRoad()
-					&& !vertex.getRightEdge(edge).hasRoad()) {
-				return true;
-			}
+		Edge[] edges = vertex.getAllEdges();
+		for (Edge edge : edges) {
+			if (edge.getOtherVertex(vertex).hasBuilding())
+				return false;
 		}
-
+		for (Edge edge : edges) {
+			if (edge.getRoad().getOwner().equals(player))
+				return true;
+		}
 		return false;
 	}
 
@@ -438,6 +431,33 @@ public class Board {
 			if (edge.getOtherVertex(vertex).hasBuilding())
 			return false;
 		}
+		return true;
+	}
+
+	/**
+	 * @param vertexLoc
+	 *            A vertexLocation to be checked
+	 * @return - True if a city can be built
+	 */
+	public Boolean canBuildCity(Player player, VertexLocation vertexLoc) throws IndexOutOfBoundsException {
+		Vertex vertex = getVertexAt(vertexLoc);
+		if (!vertex.hasBuilding())
+			return false;
+		if (!vertex.getBuilding().getOwner().equals(player))
+			return false;
+		if (!(vertex.getBuilding() instanceof Settlement))
+			return false;
+		return true;
+	}
+
+	public Boolean canPlaceRobber(HexLocation hexLoc) {
+		Hex target = hexes.get(hexLoc);
+		if (target == null)
+			return false;
+		if (!target.isBuildable())
+			return false;
+		if (target.getHexLocation().equals(robber.getHex().getHexLocation()))
+			return false;
 		return true;
 	}
 

@@ -1,5 +1,7 @@
 package shared.model.board.edge;
 
+import org.json.simple.JSONObject;
+
 import shared.model.board.hex.HexLocation;
 
 /**
@@ -45,6 +47,14 @@ public class EdgeLocation
 	public String toString()
 	{
 		return "EdgeLocation [hexLoc=" + hexLoc + ", dir=" + dir + "]";
+	}
+	
+	public JSONObject toJSON()
+	{
+		JSONObject json = new JSONObject();
+		json.putAll(dir.toJSON());
+		json.putAll(hexLoc.toJSON());
+		return json;
 	}
 	
 	@Override

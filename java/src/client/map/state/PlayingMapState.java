@@ -47,4 +47,8 @@ public class PlayingMapState extends MapState {
 		DoModelFacade.sole().doBuildCity(vertLoc);
 		mapController.getView().placeCity(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
+	
+	public Boolean canCancelDrop() {
+		return true;
+	}
 }

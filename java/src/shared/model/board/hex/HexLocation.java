@@ -60,6 +60,13 @@ public class HexLocation
 	{
 		return "HexLocation [x=" + x + ", y=" + y + "]";
 	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		json.put("x", new Integer(x));
+		json.put("y", new Integer(y));
+		return json;
+	}
 	
 	@Override
 	public int hashCode()

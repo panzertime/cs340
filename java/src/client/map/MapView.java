@@ -1,11 +1,21 @@
 package client.map;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import client.base.*;
-import client.data.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
+import client.base.IController;
+import client.base.IView;
+import client.base.OverlayView;
+import client.base.PanelView;
+import client.data.RobPlayerInfo;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.HexType;
