@@ -393,7 +393,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();
 			ResourceType type = ResourceType.WOOD;
 			int resource = 0;
-			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
+			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
 
 			resource = GetModelFacade.sole().getTradeResource(type);
 			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
@@ -423,7 +423,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			if (resource < 0) this.getAcceptOverlay().addGiveResource(type, resource);
 			if (resource > 0) this.getAcceptOverlay().addGetResource(type, resource);
 			
-			this.getAcceptOverlay().setPlayerName(getModelFacade.getTradeSenderName());
+			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
+
 			
 		}
 		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
