@@ -850,6 +850,16 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+	public boolean mustDiscard(int userID) {
+		if (!isActivePlayer(userID))
+			return false;
+		if (!getStatus().equalsIgnoreCase("Discarding"))
+			return false;
+		if (!getActivePlayer().canDiscardCard())
+			return false;
+		return true;
+	}	
+	
 /////Trading
 	
 	

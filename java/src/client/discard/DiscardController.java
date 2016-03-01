@@ -212,6 +212,8 @@ public class DiscardController extends Controller implements IDiscardController,
 	@Override
 	public void update() {
 		
+	
+		
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
 		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);
@@ -219,7 +221,12 @@ public class DiscardController extends Controller implements IDiscardController,
 		wheatMax = getModelFacade.getResourceAmount(ResourceType.WHEAT);
 		oreMax = getModelFacade.getResourceAmount(ResourceType.ORE);
 		
-		discardNeeded = (woodMax + brickMax + sheepMax + wheatMax + oreMax) / 2;
+		if (getModelFacade.mustDiscard() && !this.getDiscardView().isModalShowing())
+		{
+			this.getDiscardView().showModal();
+		}
+		int totalCards = woodMax + brickMax + sheepMax + wheatMax + oreMax;
+		discardNeeded = totalCards / 2;
 		
 		this.getDiscardView().setResourceMaxAmount(ResourceType.WOOD, woodMax);
 		this.getDiscardView().setResourceMaxAmount(ResourceType.BRICK, brickMax);

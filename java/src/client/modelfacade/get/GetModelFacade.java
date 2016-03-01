@@ -190,6 +190,12 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getSoldiers(ClientPlayer.sole().getUserID());
 	}
 	
+	
+	public boolean mustDiscard()
+	{
+		return gameModel.mustDiscard(ClientPlayer.sole().getUserID());
+	}
+	
 	/////Trading
 
 	
