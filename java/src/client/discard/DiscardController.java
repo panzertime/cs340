@@ -242,11 +242,13 @@ public class DiscardController extends Controller implements IDiscardController,
 		this.getDiscardView().setResourceMaxAmount(ResourceType.WHEAT, wheatMax);
 		this.getDiscardView().setResourceMaxAmount(ResourceType.ORE, oreMax);
 		
-//		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (0 < wo), false);
-//		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (0 < b), false);
-//		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (0 < s), false);
-//		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (0 < wh), false);
-//		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (0 < o), false);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WOOD, (0 < woodMax), wood > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.BRICK, (0 < brickMax), brick > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.SHEEP, (0 < sheepMax), sheep > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.WHEAT, (0 < wheatMax), wheat > 0);
+		this.getDiscardView().setResourceAmountChangeEnabled(ResourceType.ORE, (0 < oreMax), ore > 0);
+		int cardsToDiscard = wood + brick + sheep + wheat + ore;
+		this.getDiscardView().setStateMessage(cardsToDiscard + "/" + discardNeeded);
 	}
 
 }
