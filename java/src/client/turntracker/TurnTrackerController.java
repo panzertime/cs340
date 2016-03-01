@@ -60,7 +60,7 @@ public class TurnTrackerController extends Controller implements
 		int clientIndex = ClientPlayer.sole().getUserIndex();
 		
 		//update Game state
-		if(GetModelFacade.sole().isStateDiscarding()) {
+		if(GetModelFacade.sole().mustDiscard()) {
 			this.getView().updateGameState(DISCARD, false);
 		} else if(GetModelFacade.sole().isTurn(clientIndex)) {
 			if(GetModelFacade.sole().isStateRolling()) {

@@ -226,9 +226,9 @@ public class DiscardController extends Controller implements IDiscardController,
 		{
 			this.getDiscardView().showModal();
 		}
-	//	else if(GetModelFacade.sole().isStateDiscarding() && !this.getWaitView().isModalShowing())
-	//	{	this.getWaitView().showModal();
-	//	}
+		else if(GetModelFacade.sole().isStateDiscarding() && !this.getWaitView().isModalShowing())
+		{	this.getWaitView().showModal();
+		}
 		else if (!GetModelFacade.sole().isStateDiscarding() && this.getWaitView().isModalShowing())
 		{
 			this.getWaitView().closeModal();
