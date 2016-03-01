@@ -276,16 +276,13 @@ public class ServerFacade {
 	public Map sendChat(int playerIndex, String message)
 			throws ServerException {
 		try {
-			//String content = "{type: \"sendChat\", " +
-			//			"playerIndex: " + playerIndex + ", " +
-			//			"content: \"" + message + "\"}";
-			//JSONObject args = makeJSON(content);
-			//return proxy.sendChat(args);
-			JSONObject jsonChat = new JSONObject();
-			jsonChat.put("type", "sendChat");
-			jsonChat.put("playerIndex", playerIndex);
-			jsonChat.put("content", message);
-			return proxy.sendChat(jsonChat);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "sendChat");
+			json.put("playerIndex", playerIndex);
+			json.put("content", message);
+			
+			return proxy.sendChat(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -295,11 +292,13 @@ public class ServerFacade {
 	public Map rollNumber(int playerIndex, int number) 
 			throws ServerException {
 		try {
-			String content = "{type: \"rollNumber\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"number: " + number + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.rollNumber(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "sendChat");
+			json.put("playerIndex", playerIndex);
+			json.put("content", number);
+			
+			return proxy.sendChat(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
