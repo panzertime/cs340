@@ -210,7 +210,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @throws NullPointerException
 	 */
 	public boolean canAcceptTrade() throws NullPointerException {
-		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserIndex());
+		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserID());
 	}
 	
 	public boolean canViewTrade() throws NullPointerException {
