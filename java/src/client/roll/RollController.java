@@ -55,7 +55,6 @@ public class RollController extends Controller implements IRollController, GetMo
 		System.out.println("ROLLING DICE: " + n);
 		
 		DoModelFacade.sole().doRollDice(n);
-		this.getRollView().closeModal();
 
 		getResultView().showModal();
 
