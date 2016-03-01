@@ -3,16 +3,15 @@ package client.servercommunicator;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import client.data.Games;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
-
-import org.json.simple.*;
-import org.json.simple.parser.*;
-
-import client.data.Games;
 
 public class ServerFacade {
 	
@@ -325,14 +324,12 @@ public class ServerFacade {
 
 	public Map finishTurn(int playerIndex) throws ServerException {
 		try {
-			/*String content = "{type: \"finishTurn\", " +
-						"playerIndex: " + playerIndex +  "}";
-			JSONObject args = makeJSON(content);*/
-			JSONObject args = new JSONObject();
-			args.put("type", "finishTurn");
-			args.put("playerIndex", playerIndex);
+			JSONObject json = new JSONObject();
 			
-			return proxy.finishTurn(args);
+			json.put("type", "finishTurn");
+			json.put("playerIndex", playerIndex);
+			
+			return proxy.buildSettlement(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -423,15 +420,17 @@ public class ServerFacade {
 		}
 	}
 
-	public Map buildRoad(int playerIndex, EdgeLocation roadLocation, 
-			boolean free) throws ServerException {
-		try {
-			String content = "{type: \"buildRoad\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"roadLocation: \"" + roadLocation.toString() + "\", " +
-						"free: " + free + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.buildRoad(args);
+	public Map buildRoad(int playerIndex, EdgeLocation edgeLoc, 
+			boolean setupMode) throws ServerException {
+		try {			
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "buildRoad");
+			json.put("playerIndex", playerIndex);
+			json.put("free", setupMode);
+			json.put("roadLocation", edgeLoc.toJSON());
+			
+			return proxy.buildSettlement(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -441,12 +440,14 @@ public class ServerFacade {
 	public Map buildSettlement(int playerIndex, VertexLocation vertLoc, 
 			boolean setupMode) throws ServerException {
 		try {
-			String content = "{type: \"buildSettlement\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"vertexLocation: " + vertLoc.toString() + ", " +
-						"free: " + setupMode + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.buildSettlement(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "buildSettlement");
+			json.put("playerIndex", playerIndex);
+			json.put("free", setupMode);
+			json.put("vertexLocation", vertLoc.toJSON());
+			
+			return proxy.buildSettlement(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -470,17 +471,6 @@ public class ServerFacade {
 	public Map offerTrade(int playerIndex, Map<ResourceType, Integer> offer,
 			int receiver) throws ServerException {
 		try {
-			/*String resList = "{brick: " + offer.get(ResourceType.BRICK) +
-						", ore: " + offer.get(ResourceType.ORE) +
-						", sheep: " + offer.get(ResourceType.SHEEP) +
-						", wheat: " + offer.get(ResourceType.WHEAT) +
-						", wood: " + offer.get(ResourceType.WOOD) + "}";
-
-			String content = "{type: \"offerTrade\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"offer: " + resList + ", " +
-						"receiver : " + receiver + "}";
-			JSONObject args = makeJSON(content);*/
 			JSONObject resList = new JSONObject();
 			resList.put("brick", offer.get(ResourceType.BRICK));
 			resList.put("ore", offer.get(ResourceType.ORE));

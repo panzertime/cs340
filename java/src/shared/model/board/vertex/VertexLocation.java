@@ -1,5 +1,7 @@
 package shared.model.board.vertex;
 
+import org.json.simple.JSONObject;
+
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.hex.HexLocation;
 
@@ -46,6 +48,14 @@ public class VertexLocation
 	public String toString()
 	{
 		return "VertexLocation [hexLoc=" + hexLoc + ", dir=" + dir + "]";
+	}
+	
+	public JSONObject toJSON()
+	{
+		JSONObject json = new JSONObject();
+		json.putAll(dir.toJSON());
+		json.putAll(hexLoc.toJSON());
+		return json;
 	}
 	
 	@Override

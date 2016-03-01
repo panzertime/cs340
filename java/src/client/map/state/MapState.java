@@ -26,4 +26,6 @@ public abstract class MapState {
 	public abstract void placeSettlement(VertexLocation vertLoc);
 
 	public abstract void placeCity(VertexLocation vertLoc);
+	
+	public abstract Boolean canCancelDrop();
 }

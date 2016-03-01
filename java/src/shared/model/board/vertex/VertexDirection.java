@@ -1,5 +1,7 @@
 package shared.model.board.vertex;
 
+import org.json.simple.JSONObject;
+
 import shared.model.board.edge.EdgeDirection;
 import shared.model.exceptions.BadJSONException;
 
@@ -7,6 +9,7 @@ public enum VertexDirection
 {
 	West, NorthWest, NorthEast, East, SouthEast, SouthWest;
 	
+	private String json;
 	private VertexDirection opposite;
 	private VertexDirection right;
 	private VertexDirection left;
@@ -34,6 +37,13 @@ public enum VertexDirection
 	
 	static
 	{
+		West.json = "W";
+		NorthWest.json = "NW";
+		NorthEast.json = "NE";
+		East.json = "E";
+		SouthEast.json = "SE";
+		SouthWest.json = "SW";
+		
 		West.opposite = East;
 		NorthWest.opposite = SouthEast;
 		NorthEast.opposite = SouthWest;
@@ -88,6 +98,12 @@ public enum VertexDirection
 	
 	public VertexDirection toRight() {
 		return right;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		json.put("direction", this.json);
+		return json;
 	}
 }
 
