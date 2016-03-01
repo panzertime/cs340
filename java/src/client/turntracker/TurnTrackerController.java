@@ -49,7 +49,7 @@ public class TurnTrackerController extends Controller implements
 	public void endTurn() {
 		DoModelFacade.sole().doEndTurn();
 	}
-
+	
 	@Override
 	public void update() {
 		ArrayList<Integer> playerIndices = (ArrayList<Integer>) GetModelFacade
@@ -57,6 +57,52 @@ public class TurnTrackerController extends Controller implements
 		
 		//Update Turn stuff
 		int clientIndex = ClientPlayer.sole().getUserIndex();
+
+		for (Integer playerIndex : playerIndices) {
+			
+			//check to see if we need to update our colors
+			CatanColor updatedColors = GetModelFacade.sole().getPlayerColor(playerIndex);
+			//if(!playerColor.equals(updatedColors)) {
+				String playerName = GetModelFacade.sole().getPlayerName(playerIndex);
+				this.getView().initializePlayer(playerIndex,
+						playerName,
+						updatedColors);
+				//this.playerColor[playerIndex] = updatedColors;
+				if(clientIndex == playerIndex) {
+					ClientPlayer.sole().setUserColor(updatedColors);
+					this.getView().setLocalPlayerColor(updatedColors);
+				}
+			//}
+
+			//check update in players:
+			// 1 - points
+			// 2 - turn
+			// 3 - largest army status
+			// 4 - lognest road status
+			int updatedPoints = GetModelFacade.sole().getPoints(playerIndex);
+			boolean updatedHighlight = GetModelFacade.sole().isTurn(playerIndex);
+			boolean updatedLargestArmy = GetModelFacade.sole().isLargestArmy(
+					playerIndex);
+			boolean updatedLongestRoad = GetModelFacade.sole().isLongestRoad(
+					playerIndex);
+			this.getView().updatePlayer(playerIndex, updatedPoints, updatedHighlight,
+					updatedLargestArmy, updatedLongestRoad);
+			
+			/*if(updatedPoints != this.playerPoints[playerIndex] || 
+					updatedHighlight != this.playerTurn[playerIndex] || 
+					updatedLargestArmy != this.playerArmy[playerIndex] ||
+					updatedLongestRoad != this.playerRoad[playerIndex])
+			{*/
+				//if there is an inconsistency, update it in the view
+				//and save the new values
+				/*this.playerPoints[playerIndex] = updatedPoints;
+				this.playerTurn[playerIndex] = updatedHighlight;
+				this.playerArmy[playerIndex] = updatedLargestArmy;
+				this.playerRoad[playerIndex] = updatedLongestRoad;
+				this.getView().updatePlayer(playerIndex, 6, updatedHighlight,
+						updatedLargestArmy, updatedLongestRoad);*/
+			//}
+		}
 		
 		//update Game state
 		if(GetModelFacade.sole().mustDiscard()) {
@@ -75,50 +121,6 @@ public class TurnTrackerController extends Controller implements
 			} else {
 				this.getView().updateGameState(WAITING, false);
 			}
-		}
-
-		for (Integer playerIndex : playerIndices) {
-			
-			//check to see if we need to update our colors
-			CatanColor updatedColors = GetModelFacade.sole().getPlayerColor(playerIndex);
-			if(!playerColor.equals(updatedColors)) {
-				String playerName = GetModelFacade.sole().getPlayerName(playerIndex);
-				this.getView().initializePlayer(playerIndex,
-						playerName,
-						updatedColors);
-				this.playerColor[playerIndex] = updatedColors;
-				if(clientIndex == playerIndex) {
-					ClientPlayer.sole().setUserColor(updatedColors);
-					this.getView().setLocalPlayerColor(updatedColors);
-				}
-			}	
-
-			//check update in players:
-			// 1 - points
-			// 2 - turn
-			// 3 - largest army status
-			// 4 - lognest road status
-			int updatedPoints = GetModelFacade.sole().getPoints(playerIndex);
-			boolean updatedHighlight = GetModelFacade.sole().isTurn(playerIndex);
-			boolean updatedLargestArmy = GetModelFacade.sole().isLargestArmy(
-					playerIndex);
-			boolean updatedLongestRoad = GetModelFacade.sole().isLongestRoad(
-					playerIndex);
-			
-			if(updatedPoints != this.playerPoints[playerIndex] || 
-					updatedHighlight != this.playerTurn[playerIndex] || 
-					updatedLargestArmy != this.playerArmy[playerIndex] ||
-					updatedLongestRoad != this.playerRoad[playerIndex])
-			{
-				//if there is an inconsistency, update it in the view
-				//and save the new values
-				this.playerPoints[playerIndex] = updatedPoints;
-				this.playerTurn[playerIndex] = updatedHighlight;
-				this.playerArmy[playerIndex] = updatedLargestArmy;
-				this.playerRoad[playerIndex] = updatedLongestRoad;
-				this.getView().updatePlayer(playerIndex, updatedPoints, updatedHighlight,
-						updatedLargestArmy, updatedLongestRoad);
-			}	
 		}
 	}
 

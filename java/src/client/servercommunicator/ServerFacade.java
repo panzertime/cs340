@@ -460,10 +460,14 @@ public class ServerFacade {
 	public Map buildCity(int playerIndex, VertexLocation vertLoc) 
 			throws ServerException {
 		try {
-			String content = "{type: \"buildCity\", " +
+			/*String content = "{type: \"buildCity\", " +
 						"playerIndex: " + playerIndex + ", " +
 						"vertexLocation: " + vertLoc.toString() +  "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject args = new JSONObject();
+			args.put("type", "buildCity");
+			args.put("playerIndex", playerIndex);
+			args.put("vertexLocation", vertLoc.toJSON());
 			return proxy.buildCity(args);
 		}
 		catch(Exception e){

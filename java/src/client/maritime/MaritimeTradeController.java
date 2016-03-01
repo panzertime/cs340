@@ -25,6 +25,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	
 	private void reset()
 	{
+		this.getTradeOverlay().reset();
 		giveRatios = new HashMap<ResourceType,Integer>();
 		getRatios = new HashMap<ResourceType,Integer>();
 		giveType = null;

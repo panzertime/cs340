@@ -43,6 +43,8 @@ public class Catan extends JFrame
 		this.setContentPane(catanPanel);
 		
 		display();
+		
+		loginController = null;
 	}
 	
 	private void display()
@@ -109,7 +111,7 @@ public class Catan extends JFrame
 				
 				LoginView loginView = new LoginView();
 				MessageView loginMessageView = new MessageView();
-				LoginController loginController = new LoginController(
+				loginController = new LoginController(
 																	  loginView,
 																	  loginMessageView);
 				loginController.setLoginAction(new IAction() {
@@ -125,6 +127,12 @@ public class Catan extends JFrame
 				loginController.start();
 			}
 		});
+	}
+	
+	static private LoginController loginController;
+	
+	public static IAction getLoginAction() {
+		return loginController.getLoginAction();
 	}
 	
 }
