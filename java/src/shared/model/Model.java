@@ -644,6 +644,8 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
+		if (!getActivePlayer().hasRoadCost())
+			return false;
 		return true;
 	}
 
@@ -895,15 +897,8 @@ public class Model {
 		return client.getArmies();
 	}	
 	
-<<<<<<< HEAD
-	public boolean mustDiscard(int userID) {
-		if (!isActivePlayer(userID))
-			return false;
-		if (!isStateDiscarding())
-=======
 	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
->>>>>>> a4d805f75b10fee6580f7afc54943239234d00cf
 			return false;
 		if (!getPlayer(userIndex).canDiscardCard())
 			return false;
