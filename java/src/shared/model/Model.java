@@ -464,12 +464,12 @@ public class Model {
 		return true;
 	}
 	
-	public int canOfferMaritime (Integer playerID, ResourceType inputType)
+	public int canOfferMaritime (Integer playerIndex, ResourceType inputType)
 	{
 		int highestTrade = 0;
 		PortType portType = null;
 
-		if (!isActivePlayer(playerID) || !isStatePlaying())
+		if (!isActivePlayer(playerIndex) || !isStatePlaying())
 			return 0;
 			
 		switch (inputType)
@@ -500,11 +500,11 @@ public class Model {
 		return highestTrade;
 	}
 
-	public boolean canReceiveMaritime(Integer playerID, ResourceType outputType) {
+	public boolean canReceiveMaritime(Integer playerIndex, ResourceType outputType) {
 		
 		if (!getBank().getHand().hasResource(outputType, 1))
 			return false;
-		if (!isActivePlayer(playerID))
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -512,8 +512,8 @@ public class Model {
 		
 	}
 
-	public Boolean canPlaceRobber(Integer playerID, HexLocation location) {
-		if (!isActivePlayer(playerID))
+	public Boolean canPlaceRobber(Integer playerIndex, HexLocation location) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -522,12 +522,12 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canRobPlayer(Integer playerID, Integer targetPlayerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canRobPlayer(Integer playerIndex, Integer targetPlayerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
-		Player targetPlayer = getPlayer(targetPlayerID);
+		Player targetPlayer = getPlayer(targetPlayerIndex);
 		if (targetPlayer == null)
 			return false;
 		if (targetPlayer.getHandSize() < 1)
@@ -535,8 +535,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canFinishTurn(Integer playerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canFinishTurn(Integer playerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (isStateSetup())
 			return true; //Weird check! Be careful to change this
@@ -545,8 +545,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canBuyDevCard(Integer playerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canBuyDevCard(Integer playerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -557,8 +557,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canUseSoldier(Integer playerID, HexLocation newRobberLocation, Integer targetPlayerID) {
-		if (!isActivePlayer(playerID))
+	public Boolean canUseSoldier(Integer playerIndex, HexLocation newRobberLocation, Integer targetPlayerIndex) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -566,15 +566,15 @@ public class Model {
 			return false;
 		if (!getActivePlayer().hasDevCardToUse(DevCardType.KNIGHT))
 			return false;
-		if (!canPlaceRobber(playerID, newRobberLocation)) 
+		if (!canPlaceRobber(playerIndex, newRobberLocation)) 
 			return false;
-		if (!canRobPlayer(playerID, targetPlayerID))
+		if (!canRobPlayer(playerIndex, targetPlayerIndex))
 			return false;
 		return true;
 	}
 
-	public Boolean canUseYearOfPlenty(Integer playerID, ResourceType one, ResourceType two) {
-		if (!isActivePlayer(playerID))
+	public Boolean canUseYearOfPlenty(Integer playerIndex, ResourceType one, ResourceType two) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
@@ -589,8 +589,8 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canUseRoadBuilding(Integer playerID, EdgeLocation one, EdgeLocation two) {
-		if (!isActivePlayer(playerID))
+	public Boolean canUseRoadBuilding(Integer playerIndex, EdgeLocation one, EdgeLocation two) {
+		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
 			return false;
