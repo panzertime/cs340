@@ -8,60 +8,71 @@ import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 
-public class PlayingMapState extends MapState {
+public class RoadBuildingMapState extends MapState {
 	
-	public PlayingMapState(MapController mapController) {
+	private EdgeLocation edgeLocPrevious;
+	
+	
+	
+	public RoadBuildingMapState(MapController mapController) {
 		super(mapController);
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		return CanModelFacade.sole().canBuildRoad(edgeLoc);
+		if (edgeLocPrevious == null) {
+			return CanModelFacade.sole().canSetupRoad(edgeLoc);
+		} else {
+			return CanModelFacade.sole().canUseRoadBuilding(edgeLocPrevious, edgeLoc);
+		}
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
-		return CanModelFacade.sole().canBuildSettlement(vertLoc);
+		return false;
 	}
 
 	public boolean canPlaceCity(VertexLocation vertLoc) {
-		return CanModelFacade.sole().canBuildCity(vertLoc);
+		return false;
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		return CanModelFacade.sole().canPlaceRobber(hexLoc);
+		return false;
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		DoModelFacade.sole().doBuildRoad(edgeLoc);
-		mapController.getView().placeRoad(edgeLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
+		if (edgeLocPrevious == null) {
+			edgeLocPrevious = edgeLoc;
+			mapController.getView().placeRoad(edgeLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
+			mapController.startMove(PieceType.ROAD, true, true);
+		} else {
+			DoModelFacade.sole().doUseRoadBuilding(edgeLocPrevious, edgeLoc);
+			mapController.getView().placeRoad(edgeLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
+		}
 	}
 
 	public void placeSettlement(VertexLocation vertLoc) {
-		DoModelFacade.sole().doBuildSettlement(vertLoc);
-		mapController.getView().placeSettlement(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
 
 	public void placeCity(VertexLocation vertLoc) {
-		DoModelFacade.sole().doBuildCity(vertLoc);
-		mapController.getView().placeCity(vertLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		DoModelFacade.sole().doRobPlayer(GetModelFacade.sole().getRobberLocation(), victim.getPlayerIndex());
 	}
 	
 	public void playSoldierCard() {
 	}
 	
-	public void playRoadBuildingCard() {	
+	public void playRoadBuildingCard() {
+		mapController.startMove(PieceType.ROAD, true, true);
 	}
 	
 	public Boolean canCancelDrop() {
-		return true;
+		return false;
 	}
 	
 	public void cancelMove() {

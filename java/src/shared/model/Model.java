@@ -981,7 +981,6 @@ public class Model {
 				targets.add(new RobPlayerInfo(player.getPlayerID(), player.getPlayerIndex(), player.getUserName(), player.getColor(), player.getHandSize()));
 			
 		}
-		Log.debug("Targets Availible to rob: " + targets.size());
 		return targets.toArray(new RobPlayerInfo[0]);
 	}
 }

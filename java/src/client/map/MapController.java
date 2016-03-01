@@ -9,13 +9,14 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.map.state.MapState;
 import client.map.state.PlayingMapState;
+import client.map.state.RoadBuildingMapState;
 import client.map.state.RobbingMapState;
 import client.map.state.SetupRoadMapState;
 import client.map.state.SetupSettlementMapState;
+import client.map.state.SoldierMapState;
 import client.map.state.WaitingMapState;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
-import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.piece.PieceType;
@@ -77,21 +78,21 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	protected void updateState() {
 		if (GetModelFacade.sole().isStateWaiting()) {
 			state = new WaitingMapState(this);
-			Log.debug("MapController.state - Waiting");
+			//Log.debug("MapController.state - Waiting");
 		} else if (GetModelFacade.sole().isStateSetupSettlement()) {
 			if (!(state instanceof SetupSettlementMapState))
 				state = new SetupSettlementMapState(this);
-			Log.debug("MapController.state - Setup:Settlement");
+			//Log.debug("MapController.state - Setup:Settlement");
 		} else if (GetModelFacade.sole().isStateSetupRoad()) {
 			if (!(state instanceof SetupRoadMapState))
 				state = new SetupRoadMapState(this);
-			Log.debug("MapController.state - Setup:Road");
+			//Log.debug("MapController.state - Setup:Road");
 		} else if (GetModelFacade.sole().isStateRobbing()) {
 			state = new RobbingMapState(this);
-			Log.debug("MapController.state - Robbing");
+			//Log.debug("MapController.state - Robbing");
 		} else if (GetModelFacade.sole().isStatePlaying()) {
 			state = new PlayingMapState(this);
-			Log.debug("MapController.state - Playing");
+			//Log.debug("MapController.state - Playing");
 		}
 	}
 
@@ -128,7 +129,6 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
-		
 		getView().startDrop(pieceType, ClientPlayer.sole().getUserColor(), state.canCancelDrop());
 	}
 	
@@ -140,11 +140,13 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	 * 
 	 */
 	public void playSoldierCard() {
-	
+		state = new SoldierMapState(this);
+		state.playSoldierCard();
 	}
 	
 	public void playRoadBuildingCard() {	
-		getView().startDrop(PieceType.ROAD, ClientPlayer.sole().getUserColor(), true);
+		state = new RoadBuildingMapState(this);
+		state.playRoadBuildingCard();
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	

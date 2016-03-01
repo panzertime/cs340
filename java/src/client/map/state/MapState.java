@@ -29,8 +29,14 @@ public abstract class MapState {
 	public abstract void placeCity(VertexLocation vertLoc);
 	
 	public abstract Boolean canCancelDrop();
+	
+	public abstract void cancelMove();
 
 	public abstract void placeRobber(HexLocation hexLoc);
 	
 	public abstract void robPlayer(RobPlayerInfo victim);
+
+	public abstract void playSoldierCard();
+	
+	public abstract void playRoadBuildingCard();
 }
