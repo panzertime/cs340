@@ -1,5 +1,6 @@
 package client.map.state;
 
+import client.data.RobPlayerInfo;
 import client.map.MapController;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
@@ -37,6 +38,9 @@ public class WaitingMapState  extends MapState{
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
+	}
+
+	public void robPlayer(RobPlayerInfo victim) {
 	}
 	
 	public Boolean canCancelDrop() {

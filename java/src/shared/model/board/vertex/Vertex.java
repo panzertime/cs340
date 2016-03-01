@@ -162,7 +162,7 @@ public class Vertex {
 			}
 			Hex hexRight = edge.getLeftHex(this);
 			if (hexRight != null) {
-				if (hexRight instanceof PortHex && ((PortHex) hexLeft).getPortType() == portType) {
+				if (hexRight instanceof PortHex && ((PortHex) hexRight).getPortType() == portType) {
 					if (hexRight.getEdge(((PortHex) hexRight).getPortDirection()) == edge) {
 						return true;
 					}

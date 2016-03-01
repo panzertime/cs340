@@ -13,6 +13,7 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import shared.model.Model;
+import shared.model.board.hex.HexLocation;
 import shared.model.definitions.CatanColor;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
@@ -76,6 +77,10 @@ public class GetModelFacade  extends ModelFacade {
 		return gameModel.getPseudoRoads();
 	}
 	
+	public HexLocation getRobberLocation() {
+		return gameModel.getRobberLocation();
+	}
+	
 	
 	
 	public boolean isStateWaiting() {
@@ -105,8 +110,8 @@ public class GetModelFacade  extends ModelFacade {
 	}
 	
 	
-	public RobPlayerInfo[] getRobbablePlayer() {
-		return gameModel.getRobbablePlayers();
+	public RobPlayerInfo[] getRobbablePlayer(HexLocation robberLoc) {
+		return gameModel.getRobbablePlayersAt(robberLoc);
 	}
 	
 	

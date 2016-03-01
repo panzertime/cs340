@@ -523,15 +523,17 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canRobPlayer(Integer playerIndex, Integer targetPlayerIndex) {
+	public Boolean canRobPlayerFrom(HexLocation robberLoc, Integer playerIndex, Integer targetPlayerIndex) {
 		if (!isActivePlayer(playerIndex))
+			return false;
+		if (playerIndex == targetPlayerIndex)
 			return false;
 		Player targetPlayer = getPlayerFromIndex(targetPlayerIndex);
 		if (targetPlayer == null)
 			return false;
 		if (targetPlayer.getHandSize() < 1)
 			return false;
-		if (!board.robberAdjacent(targetPlayer.getPlayerIndex()))
+		if (!board.couldBeRobbedFrom(robberLoc, targetPlayer.getPlayerIndex()))
 			return false;
 		return true;
 	}
@@ -558,7 +560,7 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canUseSoldier(Integer playerIndex, HexLocation newRobberLocation, Integer targetPlayerID) {
+	public Boolean canUseSoldier(Integer playerIndex, HexLocation newRobberLocation, Integer targetPlayerIndex) {
 		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStatePlaying())
@@ -569,7 +571,7 @@ public class Model {
 			return false;
 		if (!canPlaceRobber(playerIndex, newRobberLocation)) 
 			return false;
-		if (!canRobPlayer(playerIndex, targetPlayerID))
+		if (!board.couldBeRobbedFrom(newRobberLocation, targetPlayerIndex))
 			return false;
 		return true;
 	}
@@ -805,6 +807,10 @@ public class Model {
 		}
 		return proads;
 	}
+	
+	public HexLocation getRobberLocation() {
+		return board.getRobberLocation();
+	}
 
 	
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
@@ -967,10 +973,10 @@ public class Model {
 		return chatModel.getGameLog().toLogEntryList();
 	}
 
-	public RobPlayerInfo[] getRobbablePlayers() {
+	public RobPlayerInfo[] getRobbablePlayersAt(HexLocation robberLoc) {
 		ArrayList<RobPlayerInfo> targets = new ArrayList<RobPlayerInfo>();
 		for (Player player : players.values()) {
-			if (this.canRobPlayer(getActivePlayer().getPlayerIndex(), player.getPlayerIndex()))
+			if (this.canRobPlayerFrom(robberLoc, getActivePlayer().getPlayerIndex(), player.getPlayerIndex()))
 				targets.add(new RobPlayerInfo(player.getPlayerID(), player.getPlayerIndex(), player.getUserName(), player.getColor(), player.getHandSize()));
 			
 		}

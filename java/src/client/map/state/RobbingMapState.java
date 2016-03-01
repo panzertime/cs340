@@ -1,7 +1,9 @@
 package client.map.state;
 
+import client.data.RobPlayerInfo;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
@@ -42,8 +44,12 @@ public class RobbingMapState extends MapState {
 
 	public void placeRobber(HexLocation hexLoc) {
 		mapController.getView().placeRobber(hexLoc);
-		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer());
+		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer(hexLoc));
 		mapController.getRobView().showModal();
+	}
+
+	public void robPlayer(RobPlayerInfo victim) {
+		DoModelFacade.sole().doRobPlayer(GetModelFacade.sole().getRobberLocation(), victim.getPlayerIndex());
 	}
 	
 	public Boolean canCancelDrop() {
