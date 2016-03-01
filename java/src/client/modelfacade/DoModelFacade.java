@@ -253,9 +253,8 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuildRoad(roadLocation))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(ClientPlayer.sole().getUserIndex(), roadLocation,
-					free);
+					false);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -266,9 +265,8 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canSetupRoad(roadLocation))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildRoad(ClientPlayer.sole().getUserIndex(), roadLocation,
-					free);
+					true);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -296,9 +294,8 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canBuildSettlement(vertLoc))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc,
-					free);
+					false);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);
@@ -309,9 +306,8 @@ public class DoModelFacade extends ModelFacade {
 		try {
 			if (!CanModelFacade.sole().canSetupSettlement(vertLoc))
 				throw new IllegalStateException();
-			boolean free = this.gameModel.statusIsSetup();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().buildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc,
-					free);
+					true);
 			setModel(jsonModel);
 		} catch (Exception e) {
 			Log.error(e);

@@ -36,11 +36,11 @@ public class ClientPlayer {
 		clientInfo.setName(name);
 	}
 	
-	public int getUserID() {
+	public Integer getUserID() {
 		return clientInfo.getId();
 	}
 	
-	public int getUserIndex() {
+	public Integer getUserIndex() {
 		return clientInfo.getPlayerIndex();
 	}
 	

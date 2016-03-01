@@ -37,4 +37,8 @@ public class WaitingMapState  extends MapState{
 
 	public void placeCity(VertexLocation vertLoc) {
 	}
+	
+	public Boolean canCancelDrop() {
+		return false;
+	}
 }

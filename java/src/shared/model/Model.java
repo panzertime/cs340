@@ -226,7 +226,6 @@ public class Model {
 			return;
 		}
 		throw new BadStatusException();
-
 	}
 
 	/**
@@ -335,16 +334,54 @@ public class Model {
 		this.status = status;
 	}
 
-	public boolean statusIsSetup() {
+	private boolean isStateSetup() {
 		if (status.equalsIgnoreCase("FirstRound") || status.equalsIgnoreCase("SecondRound"))
 			return true;
 		return false;
 	}
 	
-	public boolean statusIsPlaying() {
+	public boolean isStateSetupRoad() {
+		if (!isStateSetup())
+			return false;
+		if (!getActivePlayer().shouldSetupRoad())
+			return false;
+		return true;
+	}
+	
+	public boolean isStateSetupSettlement() {
+		if (!isStateSetup())
+			return false;
+		if (!getActivePlayer().shouldSetupSettlement())
+			return false;
+		return true;
+	}
+	
+	public boolean isStatePlaying() {
 		if (!status.equalsIgnoreCase("Playing"))
 			return false;
 		return true;
+	}
+	
+	public boolean isStateRolling() {
+		if(!status.equalsIgnoreCase("Rolling"))
+			return false;
+		return true;
+	}
+
+	public boolean isStateDiscarding() {
+		if(!status.equalsIgnoreCase("Discarding"))
+			return false;
+		return true;
+	}
+
+	public boolean isStateRobbing() {
+		if(!status.equalsIgnoreCase("Robbing"))
+			return false;
+		return true;
+	}
+
+	public boolean isTurn(int playerIndex) {
+		return (this.isActivePlayer(playerIndex));
 	}
 	
 	
@@ -362,7 +399,7 @@ public class Model {
 		// discard
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getStatus().equalsIgnoreCase("Discarding"))
+		if (!isStateDiscarding())
 			return false;
 		if (!getActivePlayer().canDiscardCard())
 			return false;
@@ -384,7 +421,7 @@ public class Model {
 	public Boolean canRollNumber(Integer playerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getStatus().equalsIgnoreCase("Rolling"))
+		if (!isStateRolling())
 			return false;
 		return true;
 	}
@@ -392,7 +429,7 @@ public class Model {
 	public Boolean canOfferTrade(Integer playerID, Map<ResourceType, Integer> resourceList, Integer receiverIndex) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().hasCards(resourceList))
 			return false;
@@ -407,7 +444,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().hasResource(input, ratio))
 			return false;
@@ -432,7 +469,7 @@ public class Model {
 		int highestTrade = 0;
 		PortType portType = null;
 
-		if (!isActivePlayer(playerID) || !statusIsPlaying())
+		if (!isActivePlayer(playerID) || !isStatePlaying())
 			return 0;
 			
 		switch (inputType)
@@ -469,7 +506,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		return true;
 		
@@ -478,7 +515,7 @@ public class Model {
 	public Boolean canPlaceRobber(Integer playerID, HexLocation location) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getBoard().canPlaceRobber(location))
 			return false;
@@ -488,7 +525,7 @@ public class Model {
 	public Boolean canRobPlayer(Integer playerID, Integer targetPlayerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		Player targetPlayer = getPlayer(targetPlayerID);
 		if (targetPlayer == null)
@@ -501,7 +538,9 @@ public class Model {
 	public Boolean canFinishTurn(Integer playerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (isStateSetup())
+			return true; //Weird check! Be careful to change this
+		if (!isStatePlaying())
 			return false;
 		return true;
 	}
@@ -509,7 +548,7 @@ public class Model {
 	public Boolean canBuyDevCard(Integer playerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (getBank().getHand().getDevCards().size() < 1)
 			return false;
@@ -521,7 +560,7 @@ public class Model {
 	public Boolean canUseSoldier(Integer playerID, HexLocation newRobberLocation, Integer targetPlayerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
@@ -537,7 +576,7 @@ public class Model {
 	public Boolean canUseYearOfPlenty(Integer playerID, ResourceType one, ResourceType two) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
@@ -553,7 +592,7 @@ public class Model {
 	public Boolean canUseRoadBuilding(Integer playerID, EdgeLocation one, EdgeLocation two) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
@@ -571,7 +610,7 @@ public class Model {
 	public Boolean canUseMonopoly(Integer playerID, ResourceType type) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!getActivePlayer().canPlayDevelopmentCard())
 			return false;
@@ -583,7 +622,7 @@ public class Model {
 	public Boolean canUseMonument(Integer playerID) {
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (getActivePlayer().getVictoryPointsWithMonuments() < 10)
 			return false;
@@ -591,7 +630,7 @@ public class Model {
 	}
 
 	public Boolean canBuildRoad(Integer playerID, EdgeLocation edge) {
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!this.canBuyRoad(playerID))
 			return false;
@@ -601,23 +640,27 @@ public class Model {
 	}
 	
 	public Boolean canBuyRoad(Integer playerID) {
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!isActivePlayer(playerID))
-			return false;
-		if (!getActivePlayer().hasRoadPiece())
-			return false;
-		if (!getActivePlayer().hasRoadCost())
 			return false;
 		return true;
 	}
 
-	public Boolean canSetupRoad(Integer playerID, EdgeLocation edge) {
-		if (!statusIsSetup())
+	public Boolean canStartSetupRoad(Integer playerID) {
+		if (!isStateSetupRoad())
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getActivePlayer().hasRoadPiece())
+		for (Player player : players.values()) {
+			if (player.getRoadsPlaced() < getActivePlayer().getRoadsPlaced())
+				return false;
+		}
+		return true;
+	}
+
+	public Boolean canSetupRoad(Integer playerID, EdgeLocation edge) {
+		if (!canStartSetupRoad(playerID))
 			return false;
 		if (!getBoard().canBuildSetupRoad(getActivePlayer(), edge))
 			return false;
@@ -625,7 +668,7 @@ public class Model {
 	}
 
 	public Boolean canBuildSettlement(Integer playerID, VertexLocation vertex) {
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!this.canBuySettlement(playerID))
 			return false;
@@ -635,7 +678,7 @@ public class Model {
 	}
 	
 	public Boolean canBuySettlement(Integer playerID) {
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
@@ -646,12 +689,20 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canSetupSettlement(Integer playerID, VertexLocation vertex) {
-		if (!statusIsSetup())
+	public Boolean canStartSetupSettlement(Integer playerID) {
+		if (!isStateSetupSettlement())
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
-		if (!getActivePlayer().hasSettlementPiece())
+		for (Player player : players.values()) {
+			if (player.getSettlementsPlaced() < getActivePlayer().getSettlementsPlaced())
+				return false;
+		}
+		return true;
+	}
+
+	public Boolean canSetupSettlement(Integer playerID, VertexLocation vertex) {
+		if (!canStartSetupSettlement(playerID))
 			return false;
 		if (!getBoard().canBuildSetupSettlement(this.getActivePlayer(), vertex))
 			return false;
@@ -667,7 +718,7 @@ public class Model {
 	}
 	
 	public Boolean canBuyCity(Integer playerID) {
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
@@ -785,12 +836,6 @@ public class Model {
 	
 		return getPlayer(playerIndex).getPoints();
 	}
-
-	public boolean isTurn(int playerIndex) {
-		return (this.isActivePlayer(playerIndex));
-	}
-	
-
 	public boolean isLargestArmy(int playerIndex) {
 		Boolean b = this.getAchievements().isLargestArmy(getPlayer(playerIndex));
 		if (b==null) b = false;
@@ -850,6 +895,7 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+
 	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
 			return false;
@@ -873,7 +919,7 @@ public class Model {
 	public boolean canDomesticTrade(int userID) {
 		if (!isActivePlayer(this.getIndexFromPlayerID(userID)))
 			return false;
-		if (!statusIsPlaying())
+		if (!isStatePlaying())
 			return false;
 		return true;
 	}
@@ -911,30 +957,6 @@ public class Model {
 			result = true;
 		}
 		
-		return result;
-	}
-	
-	public boolean statusIsRolling() {
-		boolean result = false;
-		if(status.equalsIgnoreCase("Rolling")) {
-			result = true;
-		}
-		return result;
-	}
-
-	public boolean statusIsDiscarding() {
-		boolean result = false;
-		if(status.equalsIgnoreCase("Discarding")) {
-			result = true;
-		}
-		return result;
-	}
-
-	public boolean statusIsRobbing() {
-		boolean result = false;
-		if(status.equalsIgnoreCase("Robbing")) {
-			result = true;
-		}
 		return result;
 	}	
 	///////////////////////

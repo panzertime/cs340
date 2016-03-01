@@ -241,14 +241,6 @@ public class Player {
 		return false;
 	}
 
-	public boolean hasRoadPiece(int i) {
-		for (Road road : roads) {
-			if (!road.isPlaced())
-				i--;
-		}
-		return (i <= 0);
-	}
-
 	/**
 	 * @throws NoRemainingResourceException 
 	 * @pre hasSettlementCost
@@ -641,7 +633,31 @@ public class Player {
 		}
 		return null;
 	}
-
+	
+	public Integer getRoadsPlaced() {
+		return 15 - getRoadsFree();
+	}
+	
+	public Integer getSettlementsPlaced() {
+		return 5 - getSettlementsFree();
+	}
+	
+	public Boolean shouldSetupRoad() {
+		if (getRoadsPlaced() > 1)
+			return false;
+		if (!(getRoadsPlaced() < getSettlementsPlaced()))
+			return false;
+		return true;
+	}
+	public Boolean shouldSetupSettlement() {
+		if (getSettlementsPlaced() > 1)
+			return false;
+		if (!(getRoadsPlaced() == getSettlementsPlaced()))
+			return false;
+		return true;
+	}
+	
+	
 	public Boolean hasPort(PortType portType) {
 		for (City city : cities) {
 			if (city.hasPort(portType))

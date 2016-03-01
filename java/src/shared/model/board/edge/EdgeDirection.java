@@ -1,5 +1,8 @@
 package shared.model.board.edge;
 
+import org.json.simple.JSONObject;
+
+import shared.model.board.vertex.VertexDirection;
 import shared.model.exceptions.BadJSONException;
 
 public enum EdgeDirection
@@ -7,9 +10,12 @@ public enum EdgeDirection
 	
 	NorthWest, North, NorthEast, SouthEast, South, SouthWest;
 	
+	private String json;
 	private EdgeDirection opposite;
 	private EdgeDirection right;
 	private EdgeDirection left;
+	private VertexDirection rightVertex;
+	private VertexDirection leftVertex;
 	
 	public static EdgeDirection fromJSON(String jsonEdgeDir) throws BadJSONException {
 		switch (jsonEdgeDir) {
@@ -32,6 +38,13 @@ public enum EdgeDirection
 	
 	static
 	{
+		NorthWest.json = "NW";
+		North.json = "N";
+		NorthEast.json = "NE";
+		SouthEast.json = "SE";
+		South.json = "N";
+		SouthWest.json = "NE";
+		
 		NorthWest.opposite = SouthEast;
 		North.opposite = South;
 		NorthEast.opposite = SouthWest;
@@ -52,6 +65,20 @@ public enum EdgeDirection
 		SouthEast.left = NorthEast;
 		South.left = SouthEast;
 		SouthWest.left = South;
+		
+		NorthWest.rightVertex = VertexDirection.NorthWest;
+		North.rightVertex = VertexDirection.NorthEast;
+		NorthEast.rightVertex = VertexDirection.East;
+		SouthEast.rightVertex = VertexDirection.SouthEast;
+		South.rightVertex = VertexDirection.SouthWest;
+		SouthWest.rightVertex = VertexDirection.West;
+		
+		NorthWest.leftVertex = VertexDirection.West;
+		North.leftVertex = VertexDirection.NorthWest;
+		NorthEast.leftVertex = VertexDirection.NorthEast;
+		SouthEast.leftVertex = VertexDirection.East;
+		South.leftVertex = VertexDirection.SouthEast;
+		SouthWest.leftVertex = VertexDirection.SouthWest;
 	}
 	
 	public EdgeDirection toOpposite() {
@@ -64,6 +91,20 @@ public enum EdgeDirection
 	
 	public EdgeDirection toLeft() {
 		return left;
+	}
+
+	public VertexDirection toRightVertex() {
+		return rightVertex;
+	}
+	
+	public VertexDirection toLeftVertex() {
+		return leftVertex;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+		json.put("direction", this.json);
+		return json;
 	}
 }
 

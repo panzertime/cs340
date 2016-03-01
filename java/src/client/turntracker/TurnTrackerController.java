@@ -2,13 +2,12 @@ package client.turntracker;
 
 import java.util.ArrayList;
 
-import shared.model.definitions.CatanColor;
-import client.base.*;
+import client.base.Controller;
 import client.main.ClientPlayer;
-import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
+import shared.model.definitions.CatanColor;
 
 /**
  * Implementation for the turn tracker controller
