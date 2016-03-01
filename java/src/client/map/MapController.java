@@ -50,7 +50,6 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	}
 	
 	protected void updateView() {
-		
 		for (PseudoHex hex : GetModelFacade.sole().getPseudoHexes()) {
 			getView().addHex(hex.getHexLoc(), hex.getHexType());
 			if (hex.getProductionNum() != null)
@@ -132,6 +131,9 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		
 	}
 	
+	/**
+	 * 
+	 */
 	public void playSoldierCard() {
 		
 	}

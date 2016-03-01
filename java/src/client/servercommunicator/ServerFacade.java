@@ -337,9 +337,13 @@ public class ServerFacade {
 
 	public Map buyDevCard(int playerIndex) throws ServerException {
 		try {
-			String content = "{type: \"buyDevCard\", " +
+			/*String content = "{type: \"buyDevCard\", " +
 						"playerIndex: " + playerIndex + "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject args = new JSONObject();
+			args.put("type", "buyDevCard");
+			args.put("playerIndex", playerIndex);
+			
 			return proxy.buyDevCard(args);
 		}
 		catch(Exception e){
@@ -493,10 +497,15 @@ public class ServerFacade {
 	public Map acceptTrade(int playerIndex, boolean willAccept) 
 			throws ServerException {
 		try {
-			String content = "{type: \"acceptTrade\", " +
+			/*String content = "{type: \"acceptTrade\", " +
 						"playerIndex: " + playerIndex + ", " +
 						"willAccept: " + willAccept +  "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject args = new JSONObject();
+			args.put("type", "acceptTrade");
+			args.put("playerIndex", playerIndex);
+			args.put("willAccept", willAccept);
+			
 			return proxy.acceptTrade(args);
 		}
 		catch(Exception e){
@@ -524,7 +533,7 @@ public class ServerFacade {
 	public Map discard(int playerIndex, Map<ResourceType, Integer> discardedCards)
 			throws ServerException {
 		try {
-			StringBuilder resList = new StringBuilder();
+			/*StringBuilder resList = new StringBuilder();
 			resList.append("{");
 			resList.append("\"brick\" : " + discardedCards.get("BRICK") + ", ");
 			resList.append("\"ore\" : " + discardedCards.get("ORE") + ", ");
@@ -535,7 +544,19 @@ public class ServerFacade {
 			String content = "{type: \"discardCards\", " +
 						"playerIndex: " + playerIndex + ", " +
 						"discardedCards: " + resList.toString() + "}";
-			JSONObject args = makeJSON(content);
+			JSONObject args = makeJSON(content);*/
+			JSONObject resList = new JSONObject();
+			resList.put("brick", discardedCards.get("BRICK"));
+			resList.put("ore", discardedCards.get("ORE"));
+			resList.put("sheep", discardedCards.get("SHEEP"));
+			resList.put("wheat", discardedCards.get("WHEAT"));
+			resList.put("wood", discardedCards.get("WOOD"));
+			
+			JSONObject args = new JSONObject();
+			args.put("type", "discardCards");
+			args.put("playerIndex", playerIndex);
+			args.put("discardedCards", resList);
+			
 			return proxy.discardCards(args);
 		}
 		catch(Exception e){
