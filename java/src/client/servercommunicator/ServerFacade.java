@@ -355,10 +355,10 @@ public class ServerFacade {
 	public Map yearOfPlenty(int playerIndex, ResourceType resource1, 
 			ResourceType resource2) throws ServerException {
 		try {
-			String content = "{type: \"Year_of_Plenty\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"resource1: " + resource1.toString() + ", " +
-						"resource2: " + resource2.toString() + "}";
+			String content = "{\"type\":\"Year_of_Plenty\", " +
+						"\"playerIndex\":" + playerIndex + ", " +
+						"\"resource\":\"" + resource1.toString() + "\", " +
+						"\"resource2\":\"" + resource2.toString() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.yearOfPlenty(args);
 		}
@@ -370,10 +370,10 @@ public class ServerFacade {
 	public Map roadBuilding(int playerIndex, EdgeLocation spot1, 
 			EdgeLocation spot2) throws ServerException {
 		try {
-			String content = "{type: \"Road_Building\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"spot1: " + spot1.toString() + ", " +
-						"spot2: " + spot2.toString() + "}";
+			String content = "{\"type\": \"Road_Building\", " +
+						"\"playerIndex\":" + playerIndex + ", " +
+						"\"spot1\":\"" + spot1.toString() + "\", " +
+						"\"spot2\":\"" + spot2.toString() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.roadBuilding(args);
 		}
@@ -386,10 +386,10 @@ public class ServerFacade {
 	public Map soldier(int playerIndex, int victimIndex, 
 			HexLocation location) throws ServerException {
 		try {
-			String content = "{type: \"Soldier\", " +
-						"playerIndex: " + playerIndex + ", " +
-						"victimIndex: " + victimIndex + ", " +
-						"location: " + location.toString() + "}";
+			String content = "{\"type\":\"Soldier\", " +
+						"\"playerIndex\":" + playerIndex + ", " +
+						"\"victimIndex\":" + victimIndex + ", " +
+						"\"location\":\"" + location.toString() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.soldier(args);
 		}
@@ -401,9 +401,9 @@ public class ServerFacade {
 	public Map monopoly(ResourceType resource, int playerIndex) 
 			throws ServerException {
 		try {
-			String content = "{type: \"Monopoly\", " +
-						"resource: \"" + resource.toString().toLowerCase() + "\", " +
-						"playerIndex: " + playerIndex + "}";
+			String content = "{\"type\":\"Monopoly\", " +
+						"\"resource\":\"" + resource.toString().toLowerCase() + "\", " +
+						"\"playerIndex\":" + playerIndex + "}";
 			JSONObject args = makeJSON(content);
 			return proxy.monopoly(args);
 		}
@@ -414,8 +414,8 @@ public class ServerFacade {
 
 	public Map monument(int playerIndex) throws ServerException {
 		try {
-			String content = "{type: \"Monument\", " +
-						"playerIndex: " + playerIndex + "}";
+			String content = "{\"type\":\"Monument\", " +
+						"\"playerIndex\":" + playerIndex + "}";
 			JSONObject args = makeJSON(content);
 			return proxy.monument(args);
 		}
