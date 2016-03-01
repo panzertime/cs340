@@ -644,6 +644,8 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerID))
 			return false;
+		if (!getActivePlayer().hasRoadCost())
+			return false;
 		return true;
 	}
 
