@@ -22,6 +22,16 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	private ResourceType giveType;
 	private ResourceType getType;
 	
+	
+	private void reset()
+	{
+		giveRatios = new HashMap<ResourceType,Integer>();
+		getRatios = new HashMap<ResourceType,Integer>();
+		giveType = null;
+		getType = null;
+	}
+	
+	
 	public MaritimeTradeController(IMaritimeTradeView tradeView, IMaritimeTradeOverlay tradeOverlay) {
 		
 		super(tradeView);
@@ -78,10 +88,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 		try {
 			int ratio = giveRatios.get(giveType);
 			DoModelFacade.sole().doMaritimeTrade(ratio, giveType, getType);
-			giveRatios = new HashMap<ResourceType,Integer>();
-			getRatios = new HashMap<ResourceType,Integer>();
-			giveType = null;
-			getType = null;
+			reset();
 			getTradeOverlay().closeModal();
 		}
 		catch (Exception e) {
@@ -93,6 +100,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void cancelTrade() {
 
 		getTradeOverlay().closeModal();
+		reset();
 	}
 
 	@Override
