@@ -17,7 +17,7 @@ public class PlayingMapState extends MapState {
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
-		return CanModelFacade.sole().canBuildRoad(edgeLoc);
+		return CanModelFacade.sole().canSetupRoad(edgeLoc);
 	}
 
 	public boolean canPlaceSettlement(VertexLocation vertLoc) {
@@ -33,7 +33,7 @@ public class PlayingMapState extends MapState {
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
-		DoModelFacade.sole().doBuildRoad(edgeLoc);
+		DoModelFacade.sole().doSetupRoad(edgeLoc);
 		mapController.getView().placeRoad(edgeLoc, GetModelFacade.sole().getPlayerColor(ClientPlayer.sole().getUserIndex()));
 	}
 
