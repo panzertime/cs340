@@ -61,6 +61,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	public void startTrade() {
 		try {	
 			tradeOverlay.setCancelEnabled(true);
+			tradeOverlay.setTradeEnabled(false);
 			for (ResourceType type : ResourceType.values()) {
 				System.out.println("Checking give ratio for " + type.toString());
 				int ratio = CanModelFacade.sole().canOfferMaritime(type);
