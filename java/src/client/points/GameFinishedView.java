@@ -7,7 +7,10 @@ import java.awt.image.*;
 import javax.swing.*;
 
 import client.base.*;
+import client.main.Catan;
+import client.modelfacade.DoModelFacade;
 import client.utils.*;
+import shared.model.exceptions.BadJSONException;
 
 
 /**
@@ -78,6 +81,7 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 			
 			if (e.getSource() == okButton) {
 				closeModal();
+				Catan.getLoginAction().execute();
 			}
 		}	
 	};

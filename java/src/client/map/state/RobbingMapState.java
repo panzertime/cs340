@@ -12,6 +12,8 @@ import shared.model.board.vertex.VertexLocation;
 
 public class RobbingMapState extends MapState {
 	
+	public HexLocation robberLoc;
+	
 	public RobbingMapState(MapController mapController) {
 		super(mapController);
 		mapController.startMove(PieceType.ROBBER, true, true);
@@ -43,16 +45,26 @@ public class RobbingMapState extends MapState {
 	}
 
 	public void placeRobber(HexLocation hexLoc) {
+		robberLoc = hexLoc;
 		mapController.getView().placeRobber(hexLoc);
 		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer(hexLoc));
 		mapController.getRobView().showModal();
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		DoModelFacade.sole().doRobPlayer(GetModelFacade.sole().getRobberLocation(), victim.getPlayerIndex());
+		DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+	}
+	
+	public void playSoldierCard() {
+	}
+	
+	public void playRoadBuildingCard() {	
 	}
 	
 	public Boolean canCancelDrop() {
-		return false;
+		return true;
+	}
+	
+	public void cancelMove() {
 	}
 }

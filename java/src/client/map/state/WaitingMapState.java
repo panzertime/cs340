@@ -43,7 +43,16 @@ public class WaitingMapState  extends MapState{
 	public void robPlayer(RobPlayerInfo victim) {
 	}
 	
+	public void playSoldierCard() {
+	}
+	
+	public void playRoadBuildingCard() {	
+	}
+	
 	public Boolean canCancelDrop() {
 		return true;
+	}
+	
+	public void cancelMove() {
 	}
 }

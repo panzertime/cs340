@@ -491,10 +491,10 @@ public class Model {
 				portType = PortType.ORE;
 				break;
 			}
-		if (portType == null && this.getActivePlayer().hasResource(inputType, 3))
-			highestTrade = 3;
-		else if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
+		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
 			highestTrade = 2;
+		else if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
+			highestTrade = 3;
 		else if (this.getActivePlayer().hasResource(inputType, 4))
 			highestTrade = 4;	
 		
@@ -904,6 +904,7 @@ public class Model {
 		return client.getArmies();
 	}	
 	
+
 	public boolean mustDiscard(int userIndex) {
 		if (!getStatus().equalsIgnoreCase("Discarding"))
 			return false;
@@ -980,7 +981,6 @@ public class Model {
 				targets.add(new RobPlayerInfo(player.getPlayerID(), player.getPlayerIndex(), player.getUserName(), player.getColor(), player.getHandSize()));
 			
 		}
-		Log.debug("Targets Availible to rob: " + targets.size());
 		return targets.toArray(new RobPlayerInfo[0]);
 	}
 }

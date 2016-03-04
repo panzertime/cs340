@@ -1,6 +1,7 @@
 package client.points;
 
 import client.base.*;
+import client.main.Catan;
 import client.main.ClientPlayer;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
@@ -51,7 +52,13 @@ public class PointsController extends Controller implements IPointsController, G
 		GetModelFacade getModelFacade = GetModelFacade.sole();
 		getPointsView().setPoints(getModelFacade.getPoints(ClientPlayer.sole().getUserIndex()));
 		if (getModelFacade.isGameOver())
+		{
 			getFinishedView().setWinner(getModelFacade.getWinnerName(), getModelFacade.isClientWinner());
+			if (!this.getFinishedView().isModalShowing())
+				{
+					this.getFinishedView().showModal();
+				}
+		}
 
 	}
 }

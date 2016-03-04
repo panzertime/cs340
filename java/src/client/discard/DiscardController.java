@@ -231,6 +231,10 @@ public class DiscardController extends Controller implements IDiscardController,
 		{
 			this.getWaitView().closeModal();
 		}
+		else if (!GetModelFacade.sole().isStateDiscarding() && this.getDiscardView().isModalShowing())
+		{
+			this.getDiscardView().closeModal();
+		}
 		int totalCards = woodMax + brickMax + sheepMax + wheatMax + oreMax;
 		discardNeeded = totalCards / 2;
 		

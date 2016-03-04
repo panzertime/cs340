@@ -411,8 +411,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doMaritimeTrade(int ratio, ResourceType inputResource, ResourceType outputResource) {
 		try {
-			if (!CanModelFacade.sole().canMaritimeTrade(ratio, inputResource, outputResource))
-				throw new IllegalStateException();
+			/*if (!CanModelFacade.sole().canMaritimeTrade(ratio, inputResource, outputResource))
+				throw new IllegalStateException();*/
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().maritimeTrade(ClientPlayer.sole().getUserIndex(), ratio,
 					inputResource, outputResource);
 			setModel(jsonModel);

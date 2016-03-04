@@ -51,7 +51,16 @@ public class SetupSettlementMapState extends MapState {
 	public void robPlayer(RobPlayerInfo victim) {
 	}
 	
+	public void playSoldierCard() {
+	}
+	
+	public void playRoadBuildingCard() {	
+	}
+	
 	public Boolean canCancelDrop() {
 		return false;
+	}
+	
+	public void cancelMove() {
 	}
 }
