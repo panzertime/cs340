@@ -35,7 +35,7 @@ public class ServerPoller extends Thread {
 	}
 
 	@Override
-	public void run(){
+	synchronized public void run(){
 		while(true){
 			try {
 				Thread.sleep(1500);
