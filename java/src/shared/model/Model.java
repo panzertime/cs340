@@ -490,12 +490,14 @@ public class Model {
 			case ORE:	
 				portType = PortType.ORE;
 				break;
+			default :
+				break;
 			}
 		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
 			highestTrade = 2;
-		else if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
+		if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
 			highestTrade = 3;
-		else if (this.getActivePlayer().hasResource(inputType, 4))
+		if (this.getActivePlayer().hasResource(inputType, 4))
 			highestTrade = 4;	
 		
 		return highestTrade;
