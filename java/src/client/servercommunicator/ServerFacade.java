@@ -357,8 +357,8 @@ public class ServerFacade {
 		try {
 			String content = "{\"type\":\"Year_of_Plenty\", " +
 						"\"playerIndex\":" + playerIndex + ", " +
-						"\"resource\":\"" + resource1.toString() + "\", " +
-						"\"resource2\":\"" + resource2.toString() + "\"}";
+						"\"resource1\":\"" + resource1.toString().toLowerCase() + "\", " +
+						"\"resource2\":\"" + resource2.toString().toLowerCase() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.yearOfPlenty(args);
 		}
@@ -372,8 +372,8 @@ public class ServerFacade {
 		try {
 			String content = "{\"type\": \"Road_Building\", " +
 						"\"playerIndex\":" + playerIndex + ", " +
-						"\"spot1\":\"" + spot1.toString() + "\", " +
-						"\"spot2\":\"" + spot2.toString() + "\"}";
+						"\"spot1\":\"" + spot1.toJSON() + "\", " +
+						"\"spot2\":\"" + spot2.toJSON() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.roadBuilding(args);
 		}
@@ -389,7 +389,7 @@ public class ServerFacade {
 			String content = "{\"type\":\"Soldier\", " +
 						"\"playerIndex\":" + playerIndex + ", " +
 						"\"victimIndex\":" + victimIndex + ", " +
-						"\"location\":\"" + location.toString() + "\"}";
+						"\"location\":\"" + location.toJSON() + "\"}";
 			JSONObject args = makeJSON(content);
 			return proxy.soldier(args);
 		}
