@@ -126,7 +126,7 @@ public class DevCardController extends Controller implements IDevCardController,
 			this.getPlayCardView().setCardEnabled(DevCardType.ROADBUILDING, GetModelFacade.sole().hasDevCardEnabled(DevCardType.ROADBUILDING));
 			this.getPlayCardView().setCardAmount(DevCardType.ROADBUILDING, GetModelFacade.sole().getDevCardAmount(DevCardType.ROADBUILDING)); 
 			
-			this.getPlayCardView().setCardEnabled(DevCardType.MONUMENT, GetModelFacade.sole().hasDevCardEnabled(DevCardType.MONUMENT));
+			this.getPlayCardView().setCardEnabled(DevCardType.MONUMENT, CanModelFacade.sole().canUseMonument());
 			this.getPlayCardView().setCardAmount(DevCardType.MONUMENT, GetModelFacade.sole().getDevCardAmount(DevCardType.MONUMENT)); 	
 		}		
 	}
