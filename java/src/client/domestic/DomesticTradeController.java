@@ -5,6 +5,7 @@ import java.util.Map;
 
 import client.base.*;
 import client.data.PlayerInfo;
+import client.main.ClientPlayer;
 import client.misc.*;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
@@ -53,20 +54,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		 sheep = 0;
 		 wheat = 0;
 		 ore = 0;
-
 		receiverIndex = 0;
-		this.getTradeOverlay().setResourceAmount(ResourceType.WOOD, "0");
-		this.getTradeOverlay().setResourceAmount(ResourceType.BRICK, "0");
-		this.getTradeOverlay().setResourceAmount(ResourceType.SHEEP, "0");
-		this.getTradeOverlay().setResourceAmount(ResourceType.WHEAT, "0");
-		this.getTradeOverlay().setResourceAmount(ResourceType.ORE, "0");
-		this.getTradeOverlay().setCancelEnabled(true);
-		this.getTradeOverlay().setTradeEnabled(false);
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WOOD, woodMax > 0, false);
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.BRICK, brickMax > 0, false);
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.SHEEP, sheepMax > 0, false);
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.WHEAT, wheatMax > 0, false);
-		this.getTradeOverlay().setResourceAmountChangeEnabled(ResourceType.ORE, oreMax > 0, false);
 		if (!isInit) this.getTradeOverlay().reset();
 	}
 	
@@ -165,7 +153,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			break;
 		}
 		
-		this.getTradeOverlay().setTradeEnabled(CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
 	
 		buttonPushed = false;
 
@@ -212,7 +200,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		break;
 		}
 		
-		this.getTradeOverlay().setTradeEnabled(CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
 		
 		buttonPushed = false;
 
@@ -242,6 +230,8 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		receiverIndex = playerIndex;
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+
 	}
 
 	@Override
