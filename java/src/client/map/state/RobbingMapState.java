@@ -54,6 +54,8 @@ public class RobbingMapState extends MapState {
 
 	public void robPlayer(RobPlayerInfo victim) {
 		DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+		mapController.getRobView().closeModal();
+		mapController.getRobView().setPlayers(null);
 	}
 	
 	public void playSoldierCard() {

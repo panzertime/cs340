@@ -516,8 +516,6 @@ public class Model {
 	public Boolean canPlaceRobber(Integer playerIndex, HexLocation location) {
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!isStateRobbing())
-			return false;
 		if (!getBoard().canPlaceRobber(location))
 			return false;
 		return true;

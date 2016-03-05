@@ -54,17 +54,21 @@ public class RollController extends Controller implements IRollController, GetMo
 		getResultView().setRollValue(n);
 	//	} while (n == 7);
 		DoModelFacade.sole().doRollDice(n);
-
 		getResultView().showModal();
-
+		
 	}
 
-
+	//boolean hasRolled = false;
+	
 	// override update: check that it's my turn, and that i'm rolling, then do rollDice
 	@Override
 	public void update() {
 		if (GetModelFacade.sole().isStateRolling() && GetModelFacade.sole().isTurn(ClientPlayer.sole().getUserIndex()) && !this.getRollView().isModalShowing() && !this.getResultView().isModalShowing())
+		{
 			this.getRollView().showModal();
+		//	hasRolled = true;
+		}
+		//if (!GetModelFacade.sole().isStateRolling()) hasRolled = false;
 		
 	}
 }
