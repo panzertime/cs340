@@ -55,4 +55,10 @@ public class WaitingMapState  extends MapState{
 	
 	public void cancelMove() {
 	}
+
+	@Override
+	public void startMove() {
+		// TODO Auto-generated method stub
+		
+	}
 }

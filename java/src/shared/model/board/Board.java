@@ -41,7 +41,7 @@ public class Board {
 
 	private Model game;
 	private Robber robber;
-	private Map<HexLocation, Hex> hexes;
+	private static Map<HexLocation, Hex> hexes;
 
 	/**
 	 * @param jsonMap new version of the map as passed by the model
@@ -266,11 +266,11 @@ public class Board {
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
-	public Hex getHexAt(HexLocation hexLocation) {
+	public static Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
 
-	public Vertex getVertexAt(VertexLocation vertexLoc) {
+	public static Vertex getVertexAt(VertexLocation vertexLoc) {
 		VertexDirection vertDir = vertexLoc.getDir();
 		HexLocation hexLoc = vertexLoc.getHexLoc();
 		Hex hex = getHexAt(hexLoc);

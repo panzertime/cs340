@@ -13,9 +13,10 @@ import shared.model.board.vertex.VertexLocation;
 
 public class SetupSettlementMapState extends MapState {
 	
+	boolean init = false;
 	public SetupSettlementMapState(MapController mapController) {
 		super(mapController);
-		mapController.startMove(PieceType.SETTLEMENT, true, true);
+		init = true;
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -63,4 +64,14 @@ public class SetupSettlementMapState extends MapState {
 	
 	public void cancelMove() {
 	}
+	
+	public void startMove()
+	{
+		if (init)
+		{
+		mapController.startMove(PieceType.SETTLEMENT, true, true);
+		init = false;
+		}
+	}
+	
 }
