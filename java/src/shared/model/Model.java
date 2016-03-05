@@ -899,8 +899,8 @@ public class Model {
 	}
 
 	//client only
-	public int getSoldiers(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getSoldiers(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getArmies();
 	}	
 	

@@ -207,7 +207,7 @@ public class GetModelFacade  extends ModelFacade {
 	
 	public boolean mustDiscard()
 	{
-		return gameModel.mustDiscard(ClientPlayer.sole().getUserID());
+		return gameModel.mustDiscard(ClientPlayer.sole().getUserIndex());
 	}
 	
 	/////Trading
