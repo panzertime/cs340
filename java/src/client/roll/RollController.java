@@ -77,6 +77,7 @@ public class RollController extends Controller implements IRollController, GetMo
 	        timer.scheduleAtFixedRate(new TimerTask() {
 	            int i = 4;
 	            public void run() {
+	                i--;
 	                if (i< 0)
 	                {
 	                    rollDice();
