@@ -46,10 +46,13 @@ public class RollController extends Controller implements IRollController, GetMo
 	public void rollDice() {
 		//Rolls two die
 		Random rand = new Random();
-		int  n = rand.nextInt(6) + 1;
+		int n = 0;
+	//	do
+	//	{
+		n = rand.nextInt(6) + 1;
 		n += rand.nextInt(6) + 1;
 		getResultView().setRollValue(n);
-		
+	//	} while (n == 7);
 		DoModelFacade.sole().doRollDice(n);
 
 		getResultView().showModal();

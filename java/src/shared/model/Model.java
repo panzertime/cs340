@@ -647,6 +647,8 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
 		if (!getActivePlayer().hasRoadCost())
 			return false;
 		return true;
@@ -687,7 +689,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!getActivePlayer().hasRoadPiece())
+		if (!getActivePlayer().hasSettlementPiece())
 			return false;
 		if (!getActivePlayer().hasSettlementCost())
 			return false;
@@ -727,7 +729,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!getActivePlayer().hasRoadPiece())
+		if (!getActivePlayer().hasCityPiece())
 			return false;
 		if (!getActivePlayer().hasCityCost())
 			return false;
