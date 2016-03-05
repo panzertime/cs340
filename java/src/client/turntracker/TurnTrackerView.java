@@ -133,6 +133,13 @@ public class TurnTrackerView extends PanelView implements ITurnTrackerView {
 
 		gameStatePanel.updateGameState(stateMessage, enable);
 	}
+
+	@Override
+	public void updateColor(int playerIndex, CatanColor updatedColor) {
+		Color newColor = updatedColor.getJavaColor();
+		playerPanel[playerIndex].getComponent(1).setBackground(newColor);
+		playerPanel[playerIndex].setBackground(newColor);
+	}
 	
 }
 

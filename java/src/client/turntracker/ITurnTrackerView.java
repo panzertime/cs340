@@ -58,5 +58,17 @@ public interface ITurnTrackerView extends IView
 	 *            Whether or not the game state button should be enabled
 	 */
 	void updateGameState(String stateMessage, boolean enable);
+
+	/**
+	 * Added by Joshua:
+	 * This is to be used to update the color when a client changes colors
+	 * in two different clients. Not the most necessary thing, but it will
+	 * definitely improve the quality of the product.
+	 * @pre The user has been initialized
+	 * @post The users color will now reflect that passed in here
+	 * @param playerIndex numer 1 - 4
+	 * @param updatedColor Color to change for the given player
+	 */
+	void updateColor(int playerIndex, CatanColor updatedColor);
 }
 

@@ -27,6 +27,7 @@ public class TurnTrackerController extends Controller implements
 	private final String DISCARD = "Discard Cards";
 	private final String ROBBER = "Place the Robber";
 	private final String TRADE = "Accept or Reject Trade";
+	private boolean initialized;
 
 	public TurnTrackerController(ITurnTrackerView view) {
 
@@ -38,6 +39,7 @@ public class TurnTrackerController extends Controller implements
 		playerArmy = new boolean[4];
 		playerColor = new CatanColor[4];
 		playerTurn = new boolean[4];
+		initialized = false;
 	}
 
 	@Override
@@ -52,59 +54,85 @@ public class TurnTrackerController extends Controller implements
 	
 	@Override
 	public void update() {
-		ArrayList<Integer> playerIndices = (ArrayList<Integer>) GetModelFacade
-				.sole().getPlayerIndices();
-		
-		//Update Turn stuff
 		int clientIndex = ClientPlayer.sole().getUserIndex();
-
-		for (Integer playerIndex : playerIndices) {
-			
-			//check to see if we need to update our colors
-			CatanColor updatedColors = GetModelFacade.sole().getPlayerColor(playerIndex);
-			//if(!playerColor.equals(updatedColors)) {
-				String playerName = GetModelFacade.sole().getPlayerName(playerIndex);
-				this.getView().initializePlayer(playerIndex,
-						playerName,
-						updatedColors);
-				//this.playerColor[playerIndex] = updatedColors;
-				if(clientIndex == playerIndex) {
-					ClientPlayer.sole().setUserColor(updatedColors);
-					this.getView().setLocalPlayerColor(updatedColors);
+		if(!initialized) {
+			initialize(clientIndex);
+			initialized = true;
+		}		
+		
+		for(int playerIndex = 0; playerIndex < 4; playerIndex++) {
+			CatanColor updatedColor = 
+					GetModelFacade.sole().getPlayerColor(playerIndex);
+			if(!this.playerColor[playerIndex].equals(updatedColor)) {
+				this.getView().updateColor(playerIndex, updatedColor);
+				if(playerIndex == clientIndex) {
+					getView().setLocalPlayerColor(updatedColor);
+					ClientPlayer.sole().setUserColor(updatedColor);
 				}
-			//}
-
-			//check update in players:
-			// 1 - points
-			// 2 - turn
-			// 3 - largest army status
-			// 4 - lognest road status
+			}
+			
 			int updatedPoints = GetModelFacade.sole().getPoints(playerIndex);
 			boolean updatedHighlight = GetModelFacade.sole().isTurn(playerIndex);
 			boolean updatedLargestArmy = GetModelFacade.sole().isLargestArmy(
 					playerIndex);
 			boolean updatedLongestRoad = GetModelFacade.sole().isLongestRoad(
 					playerIndex);
-			this.getView().updatePlayer(playerIndex, updatedPoints, updatedHighlight,
-					updatedLargestArmy, updatedLongestRoad);
 			
-			/*if(updatedPoints != this.playerPoints[playerIndex] || 
-					updatedHighlight != this.playerTurn[playerIndex] || 
-					updatedLargestArmy != this.playerArmy[playerIndex] ||
-					updatedLongestRoad != this.playerRoad[playerIndex])
-			{*/
-				//if there is an inconsistency, update it in the view
-				//and save the new values
-				/*this.playerPoints[playerIndex] = updatedPoints;
-				this.playerTurn[playerIndex] = updatedHighlight;
-				this.playerArmy[playerIndex] = updatedLargestArmy;
-				this.playerRoad[playerIndex] = updatedLongestRoad;
-				this.getView().updatePlayer(playerIndex, 6, updatedHighlight,
-						updatedLargestArmy, updatedLongestRoad);*/
-			//}
+			
+			if(isUpdatedInfo(updatedPoints, updatedHighlight, 
+					updatedLargestArmy, updatedLongestRoad, playerIndex)) {
+				
+				this.getView().updatePlayer(playerIndex, updatedPoints, 
+						updatedHighlight, updatedLargestArmy, 
+						updatedLongestRoad);
+				
+				updateInfo(updatedPoints, updatedHighlight, updatedLargestArmy,
+						updatedLongestRoad, playerIndex);
+			}
+			
+			updateGameState(clientIndex);
 		}
-		
-		//update Game state
+	}
+
+	private boolean isUpdatedInfo(int updatedPoints, boolean updatedHighlight,
+			boolean updatedLargestArmy,	boolean updatedLongestRoad, 
+			int playerIndex) {
+		boolean result = false;
+		if(updatedPoints != this.playerPoints[playerIndex] || 
+				updatedHighlight != this.playerTurn[playerIndex] || 
+				updatedLargestArmy != this.playerArmy[playerIndex] ||
+				updatedLongestRoad != this.playerRoad[playerIndex]) {
+			result = true;
+		}
+		return result;
+	}
+
+	private void updateInfo(int updatedPoints, boolean updatedHighlight,
+			boolean updatedLargestArmy,	boolean updatedLongestRoad, 
+			int playerIndex) {
+		this.playerPoints[playerIndex] = updatedPoints;
+		this.playerTurn[playerIndex] = updatedHighlight;
+		this.playerArmy[playerIndex] = updatedLargestArmy;
+		this.playerRoad[playerIndex] = updatedLongestRoad;		
+	}
+
+	private void initialize(int clientIndex) {
+		for(int playerIndex = 0; playerIndex < 4; playerIndex++) {
+			String playerName = 
+					GetModelFacade.sole().getPlayerName(playerIndex);
+			CatanColor playerColor = 
+					GetModelFacade.sole().getPlayerColor(playerIndex);
+			getView().initializePlayer(playerIndex, playerName, playerColor);
+			this.playerColor[playerIndex] = playerColor;
+			if(playerIndex == clientIndex) {
+				getView().setLocalPlayerColor(playerColor);
+				ClientPlayer.sole().setUserColor(playerColor);
+			}
+		}
+		updateGameState(clientIndex);
+	}
+
+	private void updateGameState(int clientIndex) {
 		if(GetModelFacade.sole().mustDiscard()) {
 			this.getView().updateGameState(DISCARD, false);
 		} else if(GetModelFacade.sole().isTurn(clientIndex)) {
