@@ -1,6 +1,10 @@
 package client.roll;
 
+import java.time.LocalDateTime;
 import java.util.Random;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import client.base.Controller;
 import client.main.ClientPlayer;
@@ -44,6 +48,9 @@ public class RollController extends Controller implements IRollController, GetMo
 	
 	@Override
 	public void rollDice() {
+		this.getRollView().closeModal();
+		timer.cancel();
+		hasRolled = true;
 		//Rolls two die
 		Random rand = new Random();
 		int n = 0;
@@ -58,18 +65,39 @@ public class RollController extends Controller implements IRollController, GetMo
 		
 	}
 
-	//boolean hasRolled = false;
+	boolean hasRolled = false;
+	//LocalDateTime start;
+	//LocalDateTime end;
+	Timer timer;
 	
 	// override update: check that it's my turn, and that i'm rolling, then do rollDice
 	@Override
 	public void update() {
 		if (GetModelFacade.sole().isStateRolling() && GetModelFacade.sole().isTurn(ClientPlayer.sole().getUserIndex()) && !this.getRollView().isModalShowing() && !this.getResultView().isModalShowing())
 		{
+			hasRolled = false;
 			this.getRollView().showModal();
-		//	hasRolled = true;
+			//start = LocalDateTime.now();
+			//end = start.plusSeconds(4);
+			
+			
+	        timer = new Timer();
+	        timer.scheduleAtFixedRate(new TimerTask() {
+	            int i = 4;
+	            public void run() {
+	                System.out.println(i--);
+	                if (i< 0)
+	                {
+	                    rollDice();
+	                }
+	            }
+	        }, 0, 1000);
+		
+
 		}
-		//if (!GetModelFacade.sole().isStateRolling()) hasRolled = false;
+		
 		
 	}
+
 }
 
