@@ -493,12 +493,17 @@ public class Model {
 			default :
 				break;
 			}
-		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
-			highestTrade = 2;
+		System.out.println("Player has port " + portType + "? " + this.getActivePlayer().hasPort(portType));
+		System.out.println("Player has enough port " + portType + "? " + this.getActivePlayer().hasResource(inputType, 2));
+		
+		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2)){
+			System.out.println("Player has port " + portType);
+			return 2;
+		}
 		if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
-			highestTrade = 3;
+			return 3;	
 		if (this.getActivePlayer().hasResource(inputType, 4))
-			highestTrade = 4;	
+			return 4;
 		
 		return highestTrade;
 	}

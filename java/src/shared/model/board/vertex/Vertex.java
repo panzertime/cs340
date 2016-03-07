@@ -154,18 +154,27 @@ public class Vertex {
 		for (Edge edge : edges) {
 			Hex hexLeft = edge.getLeftHex(this);
 			if (hexLeft != null) {
+
+if (hexLeft instanceof PortHex)
+	System.out.println(((PortHex) hexLeft).getPortType());
+
 				if (hexLeft instanceof PortHex && ((PortHex) hexLeft).getPortType() == portType) {
-					if (hexLeft.getEdge(((PortHex) hexLeft).getPortDirection()) == edge) {
+					System.out.println("Hex has port type " + portType);
+				//	if (hexLeft.getEdge(((PortHex) hexLeft).getPortDirection()) == edge) {
+				//	System.out.println("Hex has port direction left");
 						return true;
-					}
+				//	}
 				}
 			}
 			Hex hexRight = edge.getLeftHex(this);
 			if (hexRight != null) {
+if (hexRight instanceof PortHex)
+	System.out.println(((PortHex) hexRight).getPortType());
+
 				if (hexRight instanceof PortHex && ((PortHex) hexRight).getPortType() == portType) {
-					if (hexRight.getEdge(((PortHex) hexRight).getPortDirection()) == edge) {
+				//	if (hexRight.getEdge(((PortHex) hexRight).getPortDirection()) == edge) {
 						return true;
-					}
+				//	}
 				}
 			}
 		}
