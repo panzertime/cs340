@@ -62,7 +62,6 @@ public class RollController extends Controller implements IRollController, GetMo
 		n += rand.nextInt(6) + 1;
 		getResultView().setRollValue(n);
 	//	} while (n == 7);
-		
 		DoModelFacade.sole().doRollDice(n);
 		getResultView().showModal();
 		
@@ -91,7 +90,8 @@ public class RollController extends Controller implements IRollController, GetMo
 	                System.out.println(i--);
 	                if (i< 0)
 	                {
-	                    rollDice();
+	                    	rollDice();
+			 
 	                }
 	            }
 	        }, 0, 1000);
@@ -103,4 +103,5 @@ public class RollController extends Controller implements IRollController, GetMo
 	}
 
 }
+
 
