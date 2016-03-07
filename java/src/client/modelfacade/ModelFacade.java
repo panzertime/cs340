@@ -1,13 +1,13 @@
  package client.modelfacade;
-
- import java.util.Map;
+ 
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.Model;
- import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.BadJSONException;
 
 public abstract class ModelFacade {
 

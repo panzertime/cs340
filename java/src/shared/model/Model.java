@@ -49,7 +49,7 @@ public class Model {
 	private Bank bank;
 	private Achievements achievements;
 	private Integer activePlayerIndex;
-	private Integer winnerIndex;
+	private Integer winnerID;
 	private Integer version;
 	private String status;
 	private ChatModel chatModel;
@@ -96,7 +96,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			throw new BadJSONException();
-		this.winnerIndex = winnerID.intValue();
+		this.winnerID = winnerID.intValue();
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
 		if (turnTracker == null)
@@ -156,7 +156,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			return false;
-		if (winnerID.intValue() != this.winnerIndex)
+		if (winnerID.intValue() != this.winnerID)
 			return false;
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
@@ -316,11 +316,11 @@ public class Model {
 	}
 
 	public Player getWinner() {
-		return players.get(winnerIndex);
+		return players.get(getIndexFromPlayerID(winnerID));
 	}
 
-	public void setWinner(Integer playerIndex) {
-		this.winnerIndex = playerIndex;
+	public void setWinner(Integer playerID) {
+		this.winnerID = playerID;
 	}
 
 	public void setVersion(int version) {
@@ -869,7 +869,7 @@ public class Model {
 	}
 
 	public boolean isGameOver() {
-		return this.winnerIndex != -1;
+		return this.winnerID != -1;
 	}
 
 	public String getWinnerName() {

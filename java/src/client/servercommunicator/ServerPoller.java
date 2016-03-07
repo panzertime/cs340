@@ -48,7 +48,7 @@ public class ServerPoller extends Thread {
 		}
 	}
 
-	public void setJoinGameState() {
+	public void setPollerJoinGameState() {
 		state = new PollerJoinGameState();
 	}
 
