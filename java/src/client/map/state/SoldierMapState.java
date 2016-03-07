@@ -66,6 +66,7 @@ public class SoldierMapState extends MapState {
 	}
 	
 	public void cancelMove() {
+		mapController.setState(new PlayingMapState(mapController));
 	}
 
 	@Override

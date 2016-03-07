@@ -48,7 +48,7 @@ public class CanModelFacade extends ModelFacade {
 	}
 	
 	
-	public boolean canRobPlayer(HexLocation robberLoc, Integer playerIndex) throws NullPointerException {
+	public boolean canRobPlayerFrom(HexLocation robberLoc, Integer playerIndex) throws NullPointerException {
 		return this.gameModel.canRobPlayerFrom(robberLoc, ClientPlayer.sole().getUserIndex(), playerIndex);
 	}
 

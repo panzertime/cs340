@@ -1,15 +1,30 @@
 package client.map;
 
-import java.util.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.RenderingHints;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import javax.swing.*;
+import java.util.Map;
 
-import client.base.*;
-import client.utils.*;
+import javax.swing.JComponent;
+
+import client.base.IController;
+import client.utils.ImageUtils;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
@@ -612,15 +627,18 @@ public class MapComponent extends JComponent
 		g2.translate(this.getWidth() / 2, this.getHeight() / 2);
 		g2.scale(scale, scale);
 		g2.translate(-WORLD_WIDTH / 2, -WORLD_HEIGHT / 2);
-		
-		drawHexes(g2);
-		drawPorts(g2);
-		drawNumbers(g2);
-		drawRobber(g2);
-		drawRoads(g2);
-		drawSettlements(g2);
-		drawCities(g2);
-		drawDropShape(g2);
+		try {
+			drawHexes(g2);
+			drawPorts(g2);
+			drawNumbers(g2);
+			drawRobber(g2);
+			drawRoads(g2);
+			drawSettlements(g2);
+			drawCities(g2);
+			drawDropShape(g2);
+		} catch (Exception e) {
+			//broken concurrent modification no idea
+		}
 	}
 	
 	private void drawHexes(Graphics2D g2)

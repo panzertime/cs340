@@ -47,8 +47,13 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	public IRobView getRobView() {
 		return robView;
 	}
+	
 	private void setRobView(IRobView robView) {
 		this.robView = robView;
+	}
+	
+	public void setState(MapState state) {
+		this.state = state;
 	}
 	
 	protected void updateView() {
@@ -137,20 +142,24 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	
 	
 	public void cancelMove() {
-		
+		state.cancelMove();
 	}
 	
 	/**
 	 * 
 	 */
 	public void playSoldierCard() {
-		state = new SoldierMapState(this);
-		state.playSoldierCard();
+		if (state instanceof SoldierMapState) {
+			state = new SoldierMapState(this);
+			state.playSoldierCard();
+		}
 	}
 	
 	public void playRoadBuildingCard() {	
-		state = new RoadBuildingMapState(this);
-		state.playRoadBuildingCard();
+		if (state instanceof RoadBuildingMapState) {
+			state = new RoadBuildingMapState(this);
+			state.playRoadBuildingCard();
+		}
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	

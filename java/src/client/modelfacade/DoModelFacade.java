@@ -65,8 +65,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doRobPlayer(HexLocation robberLocation, int victimIndex) {
 		try {
-			/*if (!CanModelFacade.sole().canPlaceRobber(robberLocation))
-				throw new IllegalStateException();*/
+			if (!CanModelFacade.sole().canPlaceRobber(robberLocation))
+				throw new IllegalStateException();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().robPlayer(ClientPlayer.sole().getUserIndex(), victimIndex,
 					robberLocation);
 			setModel(jsonModel);
