@@ -6,3 +6,4 @@ dist/
 .project
 *.html
 *.log
+java/catan.log.lck
