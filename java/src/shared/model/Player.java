@@ -659,15 +659,21 @@ public class Player {
 	
 	
 	public Boolean hasPort(PortType portType) {
+		boolean flag = false;
 		for (City city : cities) {
-			if (city.hasPort(portType))
-				return true;
+			if (city.isPlaced()){
+				if (city.hasPort(portType))
+					flag = true;
+			}
 		}
 		for (Settlement settlement : settlements) {
-			if (settlement.hasPort(portType))
-				return true;
+			if(settlement.isPlaced()){
+				if (settlement.hasPort(portType)){
+					flag = true;
+				}
+			}
 		}
-		return false;
+		return flag;
 	}
 
 	public Boolean hasRoadCost() {
