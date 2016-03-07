@@ -72,9 +72,15 @@ public class RoadBuildingMapState extends MapState {
 	}
 	
 	public Boolean canCancelDrop() {
-		return false;
+		return true;
 	}
 	
 	public void cancelMove() {
+	}
+
+	@Override
+	public void startMove() {
+		// TODO Auto-generated method stub
+		
 	}
 }

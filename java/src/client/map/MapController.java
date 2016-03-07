@@ -82,13 +82,16 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		} else if (GetModelFacade.sole().isStateSetupSettlement()) {
 			if (!(state instanceof SetupSettlementMapState))
 				state = new SetupSettlementMapState(this);
+				state.startMove();
 			//Log.debug("MapController.state - Setup:Settlement");
 		} else if (GetModelFacade.sole().isStateSetupRoad()) {
 			if (!(state instanceof SetupRoadMapState))
 				state = new SetupRoadMapState(this);
+				state.startMove();
 			//Log.debug("MapController.state - Setup:Road");
 		} else if (GetModelFacade.sole().isStateRobbing()) {
 			state = new RobbingMapState(this);
+			state.startMove();
 			//Log.debug("MapController.state - Robbing");
 		} else if (GetModelFacade.sole().isStatePlaying()) {
 			state = new PlayingMapState(this);
@@ -128,9 +131,10 @@ public class MapController extends Controller implements GetModelFacadeListener,
 		state.placeRobber(hexLoc);
 	}
 	
-	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {	
+	public void startMove(PieceType pieceType, boolean isFree, boolean allowDisconnected) {
 		getView().startDrop(pieceType, ClientPlayer.sole().getUserColor(), state.canCancelDrop());
 	}
+	
 	
 	public void cancelMove() {
 		

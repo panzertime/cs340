@@ -14,9 +14,10 @@ public class RobbingMapState extends MapState {
 	
 	public HexLocation robberLoc;
 	
+	boolean init = false;
 	public RobbingMapState(MapController mapController) {
 		super(mapController);
-		mapController.startMove(PieceType.ROBBER, true, true);
+		init = true;
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -53,6 +54,8 @@ public class RobbingMapState extends MapState {
 
 	public void robPlayer(RobPlayerInfo victim) {
 		DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+		mapController.getRobView().closeModal();
+		mapController.getRobView().setPlayers(null);
 	}
 	
 	public void playSoldierCard() {
@@ -62,9 +65,18 @@ public class RobbingMapState extends MapState {
 	}
 	
 	public Boolean canCancelDrop() {
-		return true;
+		return false;
 	}
 	
 	public void cancelMove() {
+	}
+	
+	public void startMove()
+	{
+		if (init)
+		{
+		mapController.startMove(PieceType.ROBBER, true, true);
+		init = false;
+		}
 	}
 }

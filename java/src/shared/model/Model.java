@@ -518,8 +518,6 @@ public class Model {
 	public Boolean canPlaceRobber(Integer playerIndex, HexLocation location) {
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!isStateRobbing())
-			return false;
 		if (!getBoard().canPlaceRobber(location))
 			return false;
 		return true;
@@ -649,6 +647,8 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
 		if (!getActivePlayer().hasRoadCost())
 			return false;
 		return true;
@@ -689,7 +689,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!getActivePlayer().hasRoadPiece())
+		if (!getActivePlayer().hasSettlementPiece())
 			return false;
 		if (!getActivePlayer().hasSettlementCost())
 			return false;
@@ -729,7 +729,7 @@ public class Model {
 			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (!getActivePlayer().hasRoadPiece())
+		if (!getActivePlayer().hasCityPiece())
 			return false;
 		if (!getActivePlayer().hasCityCost())
 			return false;
@@ -901,8 +901,8 @@ public class Model {
 	}
 
 	//client only
-	public int getSoldiers(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getSoldiers(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getArmies();
 	}	
 	

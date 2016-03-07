@@ -3,6 +3,7 @@ package shared.model.board.piece;
 import org.json.simple.JSONObject;
 
 import shared.model.Player;
+import shared.model.board.Board;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.vertex.Vertex;
@@ -57,7 +58,7 @@ public abstract class Building {
 	public Boolean hasPort(PortType portType) {
 		if (!isPlaced())
 			return false;
-		return vertex.hasPort(portType);
+		return (vertex.hasPort(portType) || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
 	}
 	
 	public boolean equals(JSONObject jsonHex) {

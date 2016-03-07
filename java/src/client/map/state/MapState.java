@@ -39,4 +39,6 @@ public abstract class MapState {
 	public abstract void playSoldierCard();
 	
 	public abstract void playRoadBuildingCard();
+	
+	public abstract void startMove();
 }
