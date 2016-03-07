@@ -119,19 +119,19 @@ public class GetModelFacade  extends ModelFacade {
 	//client only
 	public boolean hasDevCardEnabled(DevCardType type)
 	{
-		return gameModel.hasDevCardEnabled(type, ClientPlayer.sole().getUserID());
+		return gameModel.hasDevCardEnabled(type, ClientPlayer.sole().getUserIndex());
 	}
 	
 	//client only
 	public int getDevCardAmount(DevCardType type)
 	{
-		return gameModel.getDevCardAmount(type, ClientPlayer.sole().getUserID());
+		return gameModel.getDevCardAmount(type, ClientPlayer.sole().getUserIndex());
 	}
 	
 	//client only
 	public int getResourceAmount(ResourceType type)
 	{
-		return gameModel.getResourceAmount(type, ClientPlayer.sole().getUserID());
+		return gameModel.getResourceAmount(type, ClientPlayer.sole().getUserIndex());
 	}
 	
 	public List<Integer> getPlayerIndices()

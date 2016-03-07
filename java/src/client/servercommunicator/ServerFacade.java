@@ -73,7 +73,7 @@ public class ServerFacade {
 
 			player_id = ((Long) cookie.get("playerID")).intValue();
 			poller.start();
-			poller.setJoinGameState();
+			poller.setPollerJoinGameState();
 			return player_id;
 		}
 		catch(Exception e){
@@ -95,7 +95,7 @@ public class ServerFacade {
 		//	System.out.println("Cookie is: " + cookie.toJSONString());
 			player_id = ((Long) cookie.get("playerID")).intValue();
 			poller.start();
-			poller.setJoinGameState();
+			poller.setPollerJoinGameState();
 			return player_id;
 
 		}
@@ -594,5 +594,9 @@ public class ServerFacade {
 	public Map getFirstModel() throws ServerException {
 		poller.setPollerPlayingState();
 		return getModel(null);
+	}
+
+	public void setPollerJoinGameState() {
+		poller.setPollerJoinGameState();
 	}
 }

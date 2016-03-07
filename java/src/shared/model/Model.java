@@ -49,7 +49,7 @@ public class Model {
 	private Bank bank;
 	private Achievements achievements;
 	private Integer activePlayerIndex;
-	private Integer winnerIndex;
+	private Integer winnerID;
 	private Integer version;
 	private String status;
 	private ChatModel chatModel;
@@ -96,7 +96,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			throw new BadJSONException();
-		this.winnerIndex = winnerID.intValue();
+		this.winnerID = winnerID.intValue();
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
 		if (turnTracker == null)
@@ -156,7 +156,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			return false;
-		if (winnerID.intValue() != this.winnerIndex)
+		if (winnerID.intValue() != this.winnerID)
 			return false;
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
@@ -316,11 +316,11 @@ public class Model {
 	}
 
 	public Player getWinner() {
-		return players.get(winnerIndex);
+		return players.get(getIndexFromPlayerID(winnerID));
 	}
 
-	public void setWinner(Integer playerIndex) {
-		this.winnerIndex = playerIndex;
+	public void setWinner(Integer playerID) {
+		this.winnerID = playerID;
 	}
 
 	public void setVersion(int version) {
@@ -490,13 +490,16 @@ public class Model {
 			case ORE:	
 				portType = PortType.ORE;
 				break;
+			default :
+				break;
 			}
+		
 		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
-			highestTrade = 2;
-		else if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
-			highestTrade = 3;
-		else if (this.getActivePlayer().hasResource(inputType, 4))
-			highestTrade = 4;	
+			return 2;
+		if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
+			return 3;	
+		if (this.getActivePlayer().hasResource(inputType, 4))
+			return 4;
 		
 		return highestTrade;
 	}
@@ -816,21 +819,21 @@ public class Model {
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
 	
 	//client only
-	public boolean hasDevCardEnabled(DevCardType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public boolean hasDevCardEnabled(DevCardType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 
 		return client.hasDevCardToUse(type);
 	}
 
 	//client only
-	public int getDevCardAmount(DevCardType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getDevCardAmount(DevCardType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getDevCardAmount(type);
 	}
 
 	//client only
-	public int getResourceAmount(ResourceType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getResourceAmount(ResourceType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getResourceAmount(type);
 	}
 
@@ -866,7 +869,7 @@ public class Model {
 	}
 
 	public boolean isGameOver() {
-		return this.winnerIndex != -1;
+		return this.winnerID != -1;
 	}
 
 	public String getWinnerName() {
