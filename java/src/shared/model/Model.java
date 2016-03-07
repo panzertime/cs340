@@ -493,13 +493,9 @@ public class Model {
 			default :
 				break;
 			}
-		System.out.println("Player has port " + portType + "? " + this.getActivePlayer().hasPort(portType));
-		System.out.println("Player has enough port " + portType + "? " + this.getActivePlayer().hasResource(inputType, 2));
 		
-		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2)){
-			System.out.println("Player has port " + portType);
+		if (this.getActivePlayer().hasPort(portType) && this.getActivePlayer().hasResource(inputType, 2))
 			return 2;
-		}
 		if (this.getActivePlayer().hasPort(PortType.THREE) && this.getActivePlayer().hasResource(inputType, 3))
 			return 3;	
 		if (this.getActivePlayer().hasResource(inputType, 4))

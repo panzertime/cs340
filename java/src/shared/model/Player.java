@@ -661,23 +661,18 @@ public class Player {
 	public Boolean hasPort(PortType portType) {
 		boolean flag = false;
 		for (City city : cities) {
-		System.out.println("City has port " + portType + "? " + city.hasPort(portType));
 			if (city.isPlaced()){
 				if (city.hasPort(portType))
 					flag = true;
 			}
 		}
 		for (Settlement settlement : settlements) {
-		System.out.println("Settlement has port " + portType + "? " + settlement.hasPort(portType));
-		if(settlement.isPlaced()){
-			System.out.println("Checking placed settlement");
-			if (settlement.hasPort(portType)){
-				System.out.println("Settlement has port type " + portType);
-				flag = true;
+			if(settlement.isPlaced()){
+				if (settlement.hasPort(portType)){
+					flag = true;
+				}
 			}
 		}
-		}
-		System.out.println(" => Player has port " + portType + "? " + flag);
 		return flag;
 	}
 

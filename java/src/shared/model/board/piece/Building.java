@@ -58,9 +58,6 @@ public abstract class Building {
 	public Boolean hasPort(PortType portType) {
 		if (!isPlaced())
 			return false;
-System.out.println("Building has port type " + portType +"?" + vertex.hasPort(portType));
-System.out.println("::Building has port type " + portType +"?" + Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
-System.out.println("Going to return " +  (vertex.hasPort(portType) || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType)));
 	return (vertex.hasPort(portType) || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
 	}
 	
