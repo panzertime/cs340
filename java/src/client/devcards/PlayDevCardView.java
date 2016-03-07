@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import client.base.*;
+import client.modelfacade.CanModelFacade;
 import client.utils.*;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
@@ -215,7 +216,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 			else if (selectedDevCard == DevCardType.YEAROFPLENTY) {
 				useButton.setText("use year of plenty");
 				useButton.setEnabled(resCard1.getSelectedResourceCard() != null &&
-										resCard2.getSelectedResourceCard() != null);
+										resCard2.getSelectedResourceCard() != null && CanModelFacade.sole().canUseYearOfPlenty(resCard1.getSelectedResourceCard(),resCard2.getSelectedResourceCard()));
 				resCard1.setEnabled(true);
 				resCard2.setEnabled(true);
 			}

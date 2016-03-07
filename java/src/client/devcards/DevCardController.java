@@ -130,6 +130,5 @@ public class DevCardController extends Controller implements IDevCardController,
 			this.getPlayCardView().setCardAmount(DevCardType.MONUMENT, GetModelFacade.sole().getDevCardAmount(DevCardType.MONUMENT)); 	
 		}		
 	}
-
 }
 

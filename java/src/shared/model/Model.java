@@ -818,21 +818,21 @@ public class Model {
 	//J.R.'s section/////////////////////////////////////////////////////////////////////////
 	
 	//client only
-	public boolean hasDevCardEnabled(DevCardType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public boolean hasDevCardEnabled(DevCardType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 
 		return client.hasDevCardToUse(type);
 	}
 
 	//client only
-	public int getDevCardAmount(DevCardType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getDevCardAmount(DevCardType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getDevCardAmount(type);
 	}
 
 	//client only
-	public int getResourceAmount(ResourceType type, int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getResourceAmount(ResourceType type, int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getResourceAmount(type);
 	}
 
