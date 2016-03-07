@@ -1,6 +1,7 @@
 package client.map.state;
 
 import client.data.RobPlayerInfo;
+import client.main.ClientPlayer;
 import client.map.MapController;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
@@ -53,7 +54,14 @@ public class RobbingMapState extends MapState {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex())
+			{DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+			
+			}
+		else
+		{
+			DoModelFacade.sole().doRobPlayer(robberLoc, -1);
+		}
 		mapController.getRobView().closeModal();
 		mapController.getRobView().setPlayers(null);
 	}
