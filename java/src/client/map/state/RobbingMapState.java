@@ -52,15 +52,11 @@ public class RobbingMapState extends MapState {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex())
-			{DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
-			
-			}
-		else
-		{
+		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex()) {
+			DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+		} else {
 			DoModelFacade.sole().doRobPlayer(robberLoc, -1);
 		}
-		mapController.getRobView().closeModal();
 		mapController.getRobView().setPlayers(null);
 	}
 	
