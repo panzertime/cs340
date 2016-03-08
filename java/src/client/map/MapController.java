@@ -91,16 +91,19 @@ public class MapController extends Controller implements GetModelFacadeListener,
 			if (!(state instanceof SetupSettlementMapState)) {
 				state = new SetupSettlementMapState(this);
 				Log.debug("MapController.state - Setup:Settlement");
+				startMove(PieceType.SETTLEMENT, true, true);
 			}
 		} else if (GetModelFacade.sole().isStateSetupRoad()) {
 			if (!(state instanceof SetupRoadMapState)) {
 				state = new SetupRoadMapState(this);
 				Log.debug("MapController.state - Setup:Road");
+				startMove(PieceType.ROAD, true, false);
 			}
 		} else if (GetModelFacade.sole().isStateRobbing()) {
 			if (!(state instanceof RobbingMapState)) {
 				state = new RobbingMapState(this);
 				Log.debug("MapController.state - Robbing");
+				startMove(PieceType.ROBBER, true, true);
 			}
 		} else if (GetModelFacade.sole().isStatePlaying()) {
 			if (!(state instanceof PlayingMapState)) {
