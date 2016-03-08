@@ -52,17 +52,10 @@ public class PollerPlayingState implements IPollerState {
 				else {
 					//means update
 					//System.out.println("POLLER says: setting game model");
-					Long winner = (Long) result.get("winner");
-					Integer intWinner = winner.intValue();
-					if(intWinner == -1) {
-						Long newVersion = (Long) result.get("version");
-						Integer newIntVersion = newVersion.intValue();
-						version = newIntVersion;
-						ModelFacade.setModel(result);
-					} else {
-						ServerFacade.get_instance().setPollerJoinGameState();
-						break;
-					}
+					Long newVersion = (Long) result.get("version");
+					Integer newIntVersion = newVersion.intValue();
+					version = newIntVersion;
+					ModelFacade.setModel(result);
 				}
 			}
 			catch(InterruptedException e){
@@ -74,7 +67,6 @@ public class PollerPlayingState implements IPollerState {
 				System.out.println("Poller exception: " + e.toString());
 				e.printStackTrace();
 			}
-
 		}
 	}
 
