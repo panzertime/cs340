@@ -14,11 +14,9 @@ import shared.model.board.vertex.VertexLocation;
 public class RobbingMapState extends MapState {
 	
 	public HexLocation robberLoc;
-	
-	boolean init = false;
 	public RobbingMapState(MapController mapController) {
 		super(mapController);
-		init = true;
+		mapController.startMove(PieceType.ROBBER, true, true);
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -77,14 +75,5 @@ public class RobbingMapState extends MapState {
 	}
 	
 	public void cancelMove() {
-	}
-	
-	public void startMove()
-	{
-		if (init)
-		{
-		mapController.startMove(PieceType.ROBBER, true, true);
-		init = false;
-		}
 	}
 }

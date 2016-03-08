@@ -655,9 +655,9 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canStartSetupRoad(Integer playerIndex) {
-//		if (!isStateSetupRoad())
-//			return false;
+	public Boolean canStartSetupRoad(Integer playerIndex) { 
+		if (!isStateSetupRoad())
+			return false;
 		if (!isActivePlayer(playerIndex))
 			return false;
 		for (Player player : players.values()) {
