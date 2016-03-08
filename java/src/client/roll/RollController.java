@@ -1,8 +1,6 @@
 package client.roll;
 
-import java.time.LocalDateTime;
 import java.util.Random;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -60,9 +58,9 @@ public class RollController extends Controller implements IRollController, GetMo
 	//	{
 		n = rand.nextInt(6) + 1;
 		n += rand.nextInt(6) + 1;
-		getResultView().setRollValue(n);
+		getResultView().setRollValue(7);
 	//	} while (n == 7);
-		DoModelFacade.sole().doRollDice(n);
+		DoModelFacade.sole().doRollDice(7);
 		getResultView().showModal();
 		
 	}

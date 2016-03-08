@@ -16,6 +16,7 @@ import client.base.IView;
 import client.base.OverlayView;
 import client.base.PanelView;
 import client.data.RobPlayerInfo;
+import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.HexType;
@@ -23,8 +24,6 @@ import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
-
-import client.main.ClientPlayer;
 
 
 /**
@@ -112,7 +111,9 @@ public class MapView extends PanelView implements IMapView
 		overlay = new MapOverlay(map);
 		overlay.setController(overlayController);
 		overlay.startDrop(pieceType, pieceColor, isCancelAllowed);
+		Log.debug("About to Show the modal");
 		overlay.showModal();
+		Log.debug("Showed Modal");
 	}
 	
 	private IMapController overlayController = new IMapController() {

@@ -6,6 +6,7 @@ import client.map.MapController;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
+import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
@@ -15,6 +16,7 @@ public class RobbingMapState extends MapState {
 	public HexLocation robberLoc;
 	public RobbingMapState(MapController mapController) {
 		super(mapController);
+		Log.debug("New Robbing State");
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -45,6 +47,7 @@ public class RobbingMapState extends MapState {
 	public void placeRobber(HexLocation hexLoc) {
 		robberLoc = hexLoc;
 		mapController.getView().placeRobber(hexLoc);
+		// clear players somehow?
 		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer(hexLoc));
 		mapController.getRobView().showModal();
 	}

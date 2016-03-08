@@ -207,6 +207,7 @@ public class Model {
 	}
 
 	public void setStatus(String status) throws BadStatusException {
+		Log.debug(status);
 		if (status.equalsIgnoreCase("Rolling")) {
 			this.status = status;
 			return;
