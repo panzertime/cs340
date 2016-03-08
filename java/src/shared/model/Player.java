@@ -376,8 +376,10 @@ public class Player {
 	
 
 	public Boolean hasDevCardToUse(DevCardType type) {
+		if (playedDevelopmentCard)
+			return false;
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == type && card.isEnabled() && !playedDevelopmentCard)
+			if (card.getType() == type && card.isEnabled())
 				return true;
 		}
 		return false;
