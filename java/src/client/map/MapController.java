@@ -100,7 +100,7 @@ public class MapController extends Controller implements GetModelFacadeListener,
 				startMove(PieceType.ROAD, true, false);
 			}
 		} else if (GetModelFacade.sole().isStateRobbing()) {
-			if (!(state instanceof RobbingMapState)) {
+			if (!(state instanceof RobbingMapState) && !getRobView().isModalShowing()) {
 				state = new RobbingMapState(this);
 				Log.debug("MapController.state - Robbing");
 				startMove(PieceType.ROBBER, true, true);
