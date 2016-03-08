@@ -35,7 +35,7 @@ public class ServerPoller extends Thread {
 	}
 
 	@Override
-	public void run(){
+	synchronized public void run(){
 		while(true){
 			try {
 				Thread.sleep(1500);
@@ -48,7 +48,7 @@ public class ServerPoller extends Thread {
 		}
 	}
 
-	public void setJoinGameState() {
+	public void setPollerJoinGameState() {
 		state = new PollerJoinGameState();
 	}
 

@@ -17,6 +17,7 @@ import client.login.LoginView;
 import client.misc.MessageView;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
+import client.modelfacade.ModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.servercommunicator.IServerProxy;
 import client.servercommunicator.ServerFacade;
@@ -118,6 +119,7 @@ public class Catan extends JFrame
 					@Override
 					public void execute()
 					{
+						//ModelFacade.clearModel();
 						joinController.start();
 					}
 				});

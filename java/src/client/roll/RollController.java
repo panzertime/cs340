@@ -48,7 +48,9 @@ public class RollController extends Controller implements IRollController, GetMo
 	
 	@Override
 	public void rollDice() {
+		if(this.getRollView() != null && this.getRollView().isModalShowing()){	
 		this.getRollView().closeModal();
+		}
 		timer.cancel();
 		hasRolled = true;
 		//Rolls two die
@@ -88,7 +90,8 @@ public class RollController extends Controller implements IRollController, GetMo
 	                System.out.println(i--);
 	                if (i< 0)
 	                {
-	                    rollDice();
+	                    	rollDice();
+			 
 	                }
 	            }
 	        }, 0, 1000);
@@ -100,4 +103,5 @@ public class RollController extends Controller implements IRollController, GetMo
 	}
 
 }
+
 

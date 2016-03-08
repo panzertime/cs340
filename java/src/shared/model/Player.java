@@ -377,7 +377,7 @@ public class Player {
 
 	public Boolean hasDevCardToUse(DevCardType type) {
 		for (DevCard card : hand.getDevCards()) {
-			if (card.getType() == type && card.isEnabled())
+			if (card.getType() == type && card.isEnabled() && !playedDevelopmentCard)
 				return true;
 		}
 		return false;
@@ -659,15 +659,21 @@ public class Player {
 	
 	
 	public Boolean hasPort(PortType portType) {
+		boolean flag = false;
 		for (City city : cities) {
-			if (city.hasPort(portType))
-				return true;
+			if (city.isPlaced()){
+				if (city.hasPort(portType))
+					flag = true;
+			}
 		}
 		for (Settlement settlement : settlements) {
-			if (settlement.hasPort(portType))
-				return true;
+			if(settlement.isPlaced()){
+				if (settlement.hasPort(portType)){
+					flag = true;
+				}
+			}
 		}
-		return false;
+		return flag;
 	}
 
 	public Boolean hasRoadCost() {
