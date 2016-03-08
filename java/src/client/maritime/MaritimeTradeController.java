@@ -1,10 +1,11 @@
 package client.maritime;
 
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashMap;
 
-import client.base.*;
-import client.modelfacade.*;
+import client.base.Controller;
+import client.modelfacade.CanModelFacade;
+import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
 import shared.model.hand.ResourceType;
@@ -64,7 +65,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			tradeOverlay.setCancelEnabled(true);
 			tradeOverlay.setTradeEnabled(false);
 			for (ResourceType type : ResourceType.values()) {
-				System.out.println("Checking give ratio for " + type.toString());
+				//System.out.println("Checking give ratio for " + type.toString());
 				int ratio = CanModelFacade.sole().canOfferMaritime(type);
 				if (ratio != 0) {
 					giveRatios.put(type, ratio);
