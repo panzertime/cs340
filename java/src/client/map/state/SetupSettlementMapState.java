@@ -8,14 +8,12 @@ import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
-import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 
 public class SetupSettlementMapState extends MapState {
 	
 	public SetupSettlementMapState(MapController mapController) {
 		super(mapController);
-		mapController.startMove(PieceType.SETTLEMENT, true, true);
 	}
 
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {

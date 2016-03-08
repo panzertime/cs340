@@ -21,7 +21,7 @@ public class RoadBuildingMapState extends MapState {
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		if (edgeLocPrevious == null) {
-			return CanModelFacade.sole().canSetupRoad(edgeLoc);
+			return CanModelFacade.sole().canUseRoadBuildingSingle(edgeLoc);
 		} else {
 			return CanModelFacade.sole().canUseRoadBuilding(edgeLocPrevious, edgeLoc);
 		}
