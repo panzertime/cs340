@@ -1,6 +1,5 @@
 package client.servercommunicator;
 
-import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -262,7 +261,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of AI Types
 	 */
-	public List listAI() 
+	public JSONArray listAI() 
 		throws ServerException {
 		try {
 			return proxy.listAI();
