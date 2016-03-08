@@ -672,7 +672,7 @@ public class Model {
 		return true;
 	}
 
-	public Boolean canStartSetupRoad(Integer playerIndex) { 
+	public Boolean canStartSetupRoad(Integer playerIndex) {
 		if (!isStateSetupRoad())
 			return false;
 		if (!isActivePlayer(playerIndex))

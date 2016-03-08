@@ -49,7 +49,11 @@ public class RollController extends Controller implements IRollController, GetMo
 		if(this.getRollView() != null && this.getRollView().isModalShowing()){	
 		this.getRollView().closeModal();
 		}
+		timer.purge();
 		timer.cancel();
+		if(hasRolled){
+			return;
+		}
 		hasRolled = true;
 		//Rolls two die
 		Random rand = new Random();
@@ -82,17 +86,20 @@ public class RollController extends Controller implements IRollController, GetMo
 			
 			
 	        timer = new Timer();
-	        timer.scheduleAtFixedRate(new TimerTask() {
-	            int i = 4;
+	        timer.schedule(new TimerTask() {
+	           // int i = 4;
 	            public void run() {
-	                System.out.println(i--);
-	                if (i< 0)
-	                {
+	             //   System.out.println(i--);
+	               // if (i == 0)
+	                //{
 	                    	rollDice();
+			//	i = 4;
+				this.cancel();
+				timer.cancel();
 			 
-	                }
+	               // }
 	            }
-	        }, 0, 1000);
+	        }, (long) 4000);
 		
 
 		}
