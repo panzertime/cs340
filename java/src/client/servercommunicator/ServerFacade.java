@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import client.data.Games;
+import shared.logger.Log;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexLocation;
@@ -307,6 +308,7 @@ public class ServerFacade {
 	public JSONObject robPlayer(int playerIndex, int victimIndex, 
 			HexLocation location) 
 			throws ServerException {
+		Log.debug("SERVER: robPlayer()");
 		try {
 			JSONObject json = new JSONObject();
 			
