@@ -101,6 +101,10 @@ public class CanModelFacade extends ModelFacade {
 	public boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two) throws NullPointerException {
 		return this.gameModel.canUseRoadBuilding(ClientPlayer.sole().getUserIndex(), one, two);
 	}
+	
+	public Boolean canUseRoadBuildingSingle(EdgeLocation one) throws NullPointerException {
+		return this.gameModel.canUseRoadBuildingSingle(ClientPlayer.sole().getUserIndex(), one);
+	}
 
 	/**
 	 * Checks the model to see if the current player can use soldier

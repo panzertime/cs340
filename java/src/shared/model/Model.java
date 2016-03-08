@@ -611,6 +611,22 @@ public class Model {
 			return false;
 		return true;
 	}
+	
+	public Boolean canUseRoadBuildingSingle(Integer playerIndex, EdgeLocation one) {
+		if (!isActivePlayer(playerIndex))
+			return false;
+		if (!isStatePlaying())
+			return false;
+		if (!getActivePlayer().canPlayDevelopmentCard())
+			return false;
+		if (!getActivePlayer().hasDevCardToUse(DevCardType.ROADBUILDING))
+			return false;
+		if (!getBoard().canBuildRoad(getActivePlayer(), one))
+			return false;
+		if (!getActivePlayer().hasRoadPiece())
+			return false;
+		return true;
+	}
 
 	public Boolean canUseMonopoly(Integer playerIndex, ResourceType type) {
 		if (!isActivePlayer(playerIndex))
