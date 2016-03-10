@@ -29,7 +29,7 @@ public class PlayingMapState extends MapState {
 	}
 
 	public boolean canPlaceRobber(HexLocation hexLoc) {
-		return CanModelFacade.sole().canPlaceRobber(hexLoc);
+		return false;
 	}
 
 	public void placeRoad(EdgeLocation edgeLoc) {
@@ -51,7 +51,6 @@ public class PlayingMapState extends MapState {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		DoModelFacade.sole().doRobPlayer(GetModelFacade.sole().getRobberLocation(), victim.getPlayerIndex());
 	}
 	
 	public void playSoldierCard() {
@@ -65,11 +64,5 @@ public class PlayingMapState extends MapState {
 	}
 	
 	public void cancelMove() {
-	}
-
-	@Override
-	public void startMove() {
-		// TODO Auto-generated method stub
-		
 	}
 }

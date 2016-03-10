@@ -8,17 +8,13 @@ import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
-import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 
 public class RobbingMapState extends MapState {
 	
 	public HexLocation robberLoc;
-	
-	boolean init = false;
 	public RobbingMapState(MapController mapController) {
 		super(mapController);
-		init = true;
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
@@ -54,15 +50,11 @@ public class RobbingMapState extends MapState {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex())
-			{DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
-			
-			}
-		else
-		{
+		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex()) {
+			DoModelFacade.sole().doRobPlayer(robberLoc, victim.getPlayerIndex());
+		} else {
 			DoModelFacade.sole().doRobPlayer(robberLoc, -1);
 		}
-		mapController.getRobView().closeModal();
 		mapController.getRobView().setPlayers(null);
 	}
 	
@@ -77,14 +69,5 @@ public class RobbingMapState extends MapState {
 	}
 	
 	public void cancelMove() {
-	}
-	
-	public void startMove()
-	{
-		if (init)
-		{
-		mapController.startMove(PieceType.ROBBER, true, true);
-		init = false;
-		}
 	}
 }

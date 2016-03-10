@@ -15,15 +15,13 @@ public class RoadBuildingMapState extends MapState {
 	
 	private EdgeLocation edgeLocPrevious;
 	
-	
-	
 	public RoadBuildingMapState(MapController mapController) {
 		super(mapController);
 	}
 	
 	public boolean canPlaceRoad(EdgeLocation edgeLoc) {
 		if (edgeLocPrevious == null) {
-			return CanModelFacade.sole().canSetupRoad(edgeLoc);
+			return CanModelFacade.sole().canUseRoadBuildingSingle(edgeLoc);
 		} else {
 			return CanModelFacade.sole().canUseRoadBuilding(edgeLocPrevious, edgeLoc);
 		}
@@ -76,11 +74,9 @@ public class RoadBuildingMapState extends MapState {
 	}
 	
 	public void cancelMove() {
-	}
-
-	@Override
-	public void startMove() {
-		// TODO Auto-generated method stub
-		
+		if (edgeLocPrevious != null) {
+			DoModelFacade.sole().doUseRoadBuilding(edgeLocPrevious, edgeLocPrevious);
+		}
+		mapController.setState(new PlayingMapState(mapController));
 	}
 }

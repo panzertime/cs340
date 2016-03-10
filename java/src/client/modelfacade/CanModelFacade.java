@@ -48,7 +48,7 @@ public class CanModelFacade extends ModelFacade {
 	}
 	
 	
-	public boolean canRobPlayer(HexLocation robberLoc, Integer playerIndex) throws NullPointerException {
+	public boolean canRobPlayerFrom(HexLocation robberLoc, Integer playerIndex) throws NullPointerException {
 		return this.gameModel.canRobPlayerFrom(robberLoc, ClientPlayer.sole().getUserIndex(), playerIndex);
 	}
 
@@ -100,6 +100,10 @@ public class CanModelFacade extends ModelFacade {
 	 */
 	public boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two) throws NullPointerException {
 		return this.gameModel.canUseRoadBuilding(ClientPlayer.sole().getUserIndex(), one, two);
+	}
+	
+	public Boolean canUseRoadBuildingSingle(EdgeLocation one) throws NullPointerException {
+		return this.gameModel.canUseRoadBuildingSingle(ClientPlayer.sole().getUserIndex(), one);
 	}
 
 	/**

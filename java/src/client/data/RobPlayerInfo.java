@@ -25,6 +25,10 @@ public class RobPlayerInfo extends PlayerInfo
 		this.numCards = numCards;
 	}
 	
+	public RobPlayerInfo() {
+		playerIndex = -1;
+	}
+
 	public int getNumCards(){
 		return numCards;
 	}

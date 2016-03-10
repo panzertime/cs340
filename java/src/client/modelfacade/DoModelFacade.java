@@ -65,8 +65,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doRobPlayer(HexLocation robberLocation, int victimIndex) {
 		try {
-			/*if (!CanModelFacade.sole().canPlaceRobber(robberLocation))
-				throw new IllegalStateException();*/
+			if (!CanModelFacade.sole().canPlaceRobber(robberLocation))
+				throw new IllegalStateException();
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().robPlayer(ClientPlayer.sole().getUserIndex(), victimIndex,
 					robberLocation);
 			setModel(jsonModel);
@@ -178,8 +178,8 @@ public class DoModelFacade extends ModelFacade {
 	 */
 	public void doUseSoldier(HexLocation location, int victimIndex) {
 		try {
-			if (!CanModelFacade.sole().canUseSoldier(location, victimIndex))
-				throw new IllegalStateException();
+			/*if (!CanModelFacade.sole().canUseSoldier(location, victimIndex))
+				throw new IllegalStateException();*/
 			JSONObject jsonModel = (JSONObject) ServerFacade.get_instance().soldier(ClientPlayer.sole().getUserIndex(), victimIndex,
 					location);
 			setModel(jsonModel);

@@ -1,8 +1,8 @@
 package client.servercommunicator;
 
-import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -106,11 +106,10 @@ public class ServerFacade {
 
 	//GAMES(PRE-GAME)
 		//USED BY MODEL
-	public List getGames() 
+	public JSONArray getGames() 
 			throws ServerException {
 		try {
-			List games = proxy.listGames();
-			return games;
+			return proxy.listGames();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -118,7 +117,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map createNewGame(boolean randomTiles, boolean randomNumbers, 
+	public JSONObject createNewGame(boolean randomTiles, boolean randomNumbers, 
 				boolean randomPorts, String name) 
 				throws ServerException{
 		try {
@@ -190,7 +189,7 @@ public class ServerFacade {
 	 * @param version current Version number of game(optional = null)
 	 * @return Updated game model OR Null if there is no update
 	 */
-	public Map getModel(Integer version) 
+	public JSONObject getModel(Integer version) 
 			throws ServerException{
 		try {
 			return proxy.getModel(version);
@@ -204,7 +203,7 @@ public class ServerFacade {
 	/**
 	 * Just used by the server communicator
 	 */
-	public Map reset()
+	public JSONObject reset()
 			throws ServerException {
 		try {
 			return proxy.reset();
@@ -219,7 +218,7 @@ public class ServerFacade {
 	 * @param commands list of commands in the game
 	 * @return Game Model
 	 */
-	public Map postCommands(Map commands)
+	public JSONObject postCommands(Map commands)
 			throws ServerException {
 		try {
 			return proxy.executeCommands(new JSONObject(commands));
@@ -233,7 +232,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of commands in the game thus far
 	 */
-	public Map getCommands()
+	public JSONObject getCommands()
 			throws ServerException {
 		try {
 			return proxy.getCommands();
@@ -262,7 +261,7 @@ public class ServerFacade {
 	 * 
 	 * @return list of AI Types
 	 */
-	public List listAI() 
+	public JSONArray listAI() 
 		throws ServerException {
 		try {
 			return proxy.listAI();
@@ -273,7 +272,7 @@ public class ServerFacade {
 	}
 
 	//MOVES
-	public Map sendChat(int playerIndex, String message)
+	public JSONObject sendChat(int playerIndex, String message)
 			throws ServerException {
 		try {
 			JSONObject json = new JSONObject();
@@ -289,7 +288,7 @@ public class ServerFacade {
 		}
 	}
 	
-	public Map rollNumber(int playerIndex, int number) 
+	public JSONObject rollNumber(int playerIndex, int number) 
 			throws ServerException {
 		try {
 			JSONObject json = new JSONObject();
@@ -305,7 +304,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map robPlayer(int playerIndex, int victimIndex, 
+	public JSONObject robPlayer(int playerIndex, int victimIndex, 
 			HexLocation location) 
 			throws ServerException {
 		try {
@@ -322,7 +321,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map finishTurn(int playerIndex) throws ServerException {
+	public JSONObject finishTurn(int playerIndex) throws ServerException {
 		try {
 			JSONObject json = new JSONObject();
 			
@@ -336,7 +335,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map buyDevCard(int playerIndex) throws ServerException {
+	public JSONObject buyDevCard(int playerIndex) throws ServerException {
 		try {
 			/*String content = "{type: \"buyDevCard\", " +
 						"playerIndex: " + playerIndex + "}";
@@ -352,30 +351,34 @@ public class ServerFacade {
 		}
 	}
 
-	public Map yearOfPlenty(int playerIndex, ResourceType resource1, 
+	public JSONObject yearOfPlenty(int playerIndex, ResourceType resource1, 
 			ResourceType resource2) throws ServerException {
 		try {
-			String content = "{\"type\":\"Year_of_Plenty\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"resource1\":\"" + resource1.toString().toLowerCase() + "\", " +
-						"\"resource2\":\"" + resource2.toString().toLowerCase() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.yearOfPlenty(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Year_of_Plenty");
+			json.put("playerIndex", playerIndex);
+			json.put("resource1", resource1.toString().toLowerCase());
+			json.put("resource2", resource2.toString().toLowerCase());
+			
+			return proxy.yearOfPlenty(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
 		}
 	}
 
-	public Map roadBuilding(int playerIndex, EdgeLocation spot1, 
+	public JSONObject roadBuilding(int playerIndex, EdgeLocation spot1, 
 			EdgeLocation spot2) throws ServerException {
 		try {
-			String content = "{\"type\": \"Road_Building\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"spot1\":\"" + spot1.toJSON() + "\", " +
-						"\"spot2\":\"" + spot2.toJSON() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.roadBuilding(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Road_Building");
+			json.put("playerIndex", playerIndex);
+			json.put("spot1", spot1.toJSON());
+			json.put("spot2", spot1.toJSON());
+			
+			return proxy.roadBuilding(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -383,50 +386,56 @@ public class ServerFacade {
 	}
 
 
-	public Map soldier(int playerIndex, int victimIndex, 
+	public JSONObject soldier(int playerIndex, int victimIndex, 
 			HexLocation location) throws ServerException {
 		try {
-			String content = "{\"type\":\"Soldier\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"victimIndex\":" + victimIndex + ", " +
-						"\"location\":\"" + location.toJSON() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.soldier(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Soldier");
+			json.put("playerIndex", playerIndex);
+			json.put("victimIndex", victimIndex);
+			json.put("location", location.toJSON());
+
+			return proxy.soldier(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
 		}
 	}
 
-	public Map monopoly(ResourceType resource, int playerIndex) 
+	public JSONObject monopoly(ResourceType resource, int playerIndex) 
 			throws ServerException {
 		try {
-			String content = "{\"type\":\"Monopoly\", " +
-						"\"resource\":\"" + resource.toString().toLowerCase() + "\", " +
-						"\"playerIndex\":" + playerIndex + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.monopoly(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Monopoly");
+			json.put("playerIndex", playerIndex);
+			json.put("resource", resource.toString().toLowerCase());
+			
+			return proxy.monopoly(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
 		}
 	}
 
-	public Map monument(int playerIndex) throws ServerException {
+	public JSONObject monument(int playerIndex) throws ServerException {
 		try {
-			String content = "{\"type\":\"Monument\", " +
-						"\"playerIndex\":" + playerIndex + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.monument(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Monument");
+			json.put("playerIndex", playerIndex);
+			
+			return proxy.monument(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
 		}
 	}
 
-	public Map buildRoad(int playerIndex, EdgeLocation edgeLoc, 
+	public JSONObject buildRoad(int playerIndex, EdgeLocation edgeLoc, 
 			boolean setupMode) throws ServerException {
-		try {			
+		try {
 			JSONObject json = new JSONObject();
 			
 			json.put("type", "buildRoad");
@@ -441,7 +450,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map buildSettlement(int playerIndex, VertexLocation vertLoc, 
+	public JSONObject buildSettlement(int playerIndex, VertexLocation vertLoc, 
 			boolean setupMode) throws ServerException {
 		try {
 			JSONObject json = new JSONObject();
@@ -458,7 +467,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map buildCity(int playerIndex, VertexLocation vertLoc) 
+	public JSONObject buildCity(int playerIndex, VertexLocation vertLoc) 
 			throws ServerException {
 		try {
 			JSONObject json = new JSONObject();
@@ -474,7 +483,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map offerTrade(int playerIndex, Map<ResourceType, Integer> offer,
+	public JSONObject offerTrade(int playerIndex, Map<ResourceType, Integer> offer,
 			int receiver) throws ServerException {
 		try {
 			JSONObject resList = new JSONObject();
@@ -497,7 +506,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map acceptTrade(int playerIndex, boolean willAccept) 
+	public JSONObject acceptTrade(int playerIndex, boolean willAccept) 
 			throws ServerException {
 		try {
 			/*String content = "{type: \"acceptTrade\", " +
@@ -516,7 +525,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map maritimeTrade(int playerIndex, int ratio,
+	public JSONObject maritimeTrade(int playerIndex, int ratio,
 			ResourceType inputResource, ResourceType outputResource) 
 			throws ServerException {
 		try {
@@ -533,7 +542,7 @@ public class ServerFacade {
 		}
 	}
 
-	public Map discard(int playerIndex, Map<ResourceType, Integer> discardedCards)
+	public JSONObject discard(int playerIndex, Map<ResourceType, Integer> discardedCards)
 			throws ServerException {
 		try {
 			/*StringBuilder resList = new StringBuilder();
@@ -591,7 +600,7 @@ public class ServerFacade {
 		Games.sole().getGamesFromServer();
 	}
 
-	public Map getFirstModel() throws ServerException {
+	public JSONObject getFirstModel() throws ServerException {
 		poller.setPollerPlayingState();
 		return getModel(null);
 	}

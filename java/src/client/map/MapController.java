@@ -47,8 +47,13 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	public IRobView getRobView() {
 		return robView;
 	}
+	
 	private void setRobView(IRobView robView) {
 		this.robView = robView;
+	}
+	
+	public void setState(MapState state) {
+		this.state = state;
 	}
 	
 	protected void updateView() {
@@ -77,25 +82,33 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	
 	protected void updateState() {
 		if (GetModelFacade.sole().isStateWaiting()) {
-			state = new WaitingMapState(this);
-			//Log.debug("MapController.state - Waiting");
+			if (!(state instanceof WaitingMapState)) {
+				state = new WaitingMapState(this);
+				//Log.debug("MapController.state - Waiting");
+			}
 		} else if (GetModelFacade.sole().isStateSetupSettlement()) {
-			if (!(state instanceof SetupSettlementMapState))
+			if (!(state instanceof SetupSettlementMapState)) {
 				state = new SetupSettlementMapState(this);
-				state.startMove();
-			//Log.debug("MapController.state - Setup:Settlement");
+				//Log.debug("MapController.state - Setup:Settlement");
+				startMove(PieceType.SETTLEMENT, true, true);
+			}
 		} else if (GetModelFacade.sole().isStateSetupRoad()) {
-			if (!(state instanceof SetupRoadMapState))
+			if (!(state instanceof SetupRoadMapState)) {
 				state = new SetupRoadMapState(this);
-				state.startMove();
-			//Log.debug("MapController.state - Setup:Road");
+				//Log.debug("MapController.state - Setup:Road");
+				startMove(PieceType.ROAD, true, false);
+			}
 		} else if (GetModelFacade.sole().isStateRobbing()) {
-			state = new RobbingMapState(this);
-			state.startMove();
-			//Log.debug("MapController.state - Robbing");
+			if (!(state instanceof RobbingMapState)) {
+				state = new RobbingMapState(this);
+				//Log.debug("MapController.state - Robbing");
+				startMove(PieceType.ROBBER, true, true);
+			}
 		} else if (GetModelFacade.sole().isStatePlaying()) {
-			state = new PlayingMapState(this);
-			//Log.debug("MapController.state - Playing");
+			if (!(state instanceof PlayingMapState)) {
+				state = new PlayingMapState(this);
+				//Log.debug("MapController.state - Playing");
+			}
 		}
 	}
 
@@ -137,20 +150,21 @@ public class MapController extends Controller implements GetModelFacadeListener,
 	
 	
 	public void cancelMove() {
-		
+		state.cancelMove();
 	}
 	
-	/**
-	 * 
-	 */
 	public void playSoldierCard() {
-		state = new SoldierMapState(this);
-		state.playSoldierCard();
+		if (!(state instanceof SoldierMapState)) {
+			state = new SoldierMapState(this);
+			state.playSoldierCard();
+		}
 	}
 	
-	public void playRoadBuildingCard() {	
-		state = new RoadBuildingMapState(this);
-		state.playRoadBuildingCard();
+	public void playRoadBuildingCard() {
+		if (!(state instanceof RoadBuildingMapState)) {
+			state = new RoadBuildingMapState(this);
+			state.playRoadBuildingCard();
+		}
 	}
 	
 	public void robPlayer(RobPlayerInfo victim) {	
