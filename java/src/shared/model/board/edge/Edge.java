@@ -2,7 +2,6 @@ package shared.model.board.edge;
 
 import shared.logger.Log;
 import shared.model.board.hex.Hex;
-import shared.model.board.hex.HexNotLinkedException;
 import shared.model.board.piece.Road;
 import shared.model.board.vertex.Vertex;
 
@@ -25,7 +24,6 @@ public class Edge {
 	/**
 	 * @pre hex is either hex0 or hex1;
 	 * @param hex one of two possible hexes attached to this
-	 * @throws HexNotLinkedException 
 	 * @return hex the Other hex attached to this
 	 */
 	public Hex getOtherHex(Hex hex) {
@@ -112,7 +110,6 @@ public class Edge {
 
 	/**
 	 * @param road the road to set
-	 * @throws PositionTakenException 
 	 */
 	public void setRoad(Road road) {
 		if (this.road != null)

@@ -51,7 +51,6 @@ public abstract class Building {
 	
 	/**
 	 * @param type the resource to generate
-	 * @throws ResourceException 
 	 */
 	public abstract void produce(ResourceType type);
 	

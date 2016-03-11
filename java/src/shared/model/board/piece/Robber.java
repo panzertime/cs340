@@ -2,7 +2,6 @@ package shared.model.board.piece;
 
 import org.json.simple.JSONObject;
 
-import shared.logger.Log;
 import shared.model.board.hex.Hex;
 
 public class Robber {
@@ -24,7 +23,7 @@ public class Robber {
 	}
 
 	/**
-	 * @param l The location of the robber
+	 * @param hex The location of the robber
 	 */
 	public Robber(Hex hex)
 	{

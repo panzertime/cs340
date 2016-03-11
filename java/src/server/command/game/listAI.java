@@ -6,11 +6,8 @@ import server.exception.ServerAccessException;
 
 public class listAI extends GameCommand {
 
-	@Override
+	
 	public String execute(JSONObject args, String cookie) throws ServerAccessException {
 		return null;
-		// TODO Auto-generated method stub
-		
 	}
-
 }

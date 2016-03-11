@@ -3,7 +3,6 @@ package shared.model.board.vertex;
 import shared.logger.Log;
 import shared.model.board.edge.Edge;
 import shared.model.board.hex.Hex;
-import shared.model.board.hex.HexNotLinkedException;
 import shared.model.board.hex.tiles.water.PortHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
@@ -33,7 +32,6 @@ public class Vertex {
 	/**
 	 * @pre hex is either hexes[0], hexes[1], or hexes[2];
 	 * @param hex one of three possible hexes attached to this
-	 * @throws HexNotLinkedException 
 	 * @return hex the Left hex attached to this if facing the vertex from param hex
 	 */
 	public Hex getLeftHex(Hex hex){
@@ -52,7 +50,6 @@ public class Vertex {
 	/**
 	 * @pre hex is either hexes[0], hexes[1], or hexes[2];
 	 * @param hex one of three possible hexes attached to this
-	 * @throws HexNotLinkedException 
 	 * @return hex the Right hex attached to this if facing the vertex from param hex
 	 */
 	public Hex getRightHex(Hex hex) {
@@ -96,7 +93,6 @@ public class Vertex {
 
 	/**
 	 * @param building the building to set
-	 * @throws PositionTakenException 
 	 */
 	public void setBuilding(Building building) {
 		if (this.building != null)

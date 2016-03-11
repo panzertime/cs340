@@ -446,9 +446,8 @@ public class Player {
 	}
 
 	/**
-	 * @pre p has > 0 resources
-	 * @param p
-	 *            The player to be stolen from
+	 * @pre p has less than 0 resources
+	 * @param p The player to be stolen from
 	 * @throws NoRemainingResourceException 
 	 * @post Player type++; p type--
 	 */
@@ -457,14 +456,10 @@ public class Player {
 	}
 
 	/**
-	 * @return The number of Victory Points a player has.
+	 * post points holds the number of Victory Points a player has.
 	 */
 	public void calculateVictoryPoints() {
 		int points = 0;
-		/*
-		 * for (DevCard card : hand.getDevCards()) { if (card.getType() ==
-		 * DevCardType.MONUMENT) points++; }
-		 */
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -491,8 +486,7 @@ public class Player {
 	}
 
 	/**
-	 * @param card
-	 *            The card being received from the bank
+	 * @param card The card being received from the bank
 	 * @post The card is added to the corresponding list in the player's hand
 	 */
 	public void receiveDevCard(DevCard card) {
@@ -501,8 +495,7 @@ public class Player {
 
 	/**
 	 * @pre The card is in the player's hand
-	 * @param card
-	 *            The card being returned
+	 * @param card The card being returned
 	 * @throws NoDevCardFoundException
 	 * @post The card has been deleted from the player's hand and added to the
 	 *       bank
@@ -518,11 +511,6 @@ public class Player {
 		throw new NoDevCardFoundException();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -531,11 +519,6 @@ public class Player {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

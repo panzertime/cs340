@@ -9,8 +9,5 @@ public class addAI extends GameCommand {
 	@Override
 	public String execute(JSONObject args, String cookie) throws ServerAccessException {
 		return null;
-		// TODO Auto-generated method stub
-		
 	}
-
 }
