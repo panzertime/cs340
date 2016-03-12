@@ -170,4 +170,6 @@ public abstract class Hex {
     public Vertex[] getVerts() {
     	return verts;
     }
+    
+   
 }

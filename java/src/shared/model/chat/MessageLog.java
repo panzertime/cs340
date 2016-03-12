@@ -58,5 +58,9 @@ public class MessageLog {
 		}
 		return result;
 	}
+
+	public void add(String message, String source) {
+		messageList.add(new Message(message, source));
+	}
 	
 }

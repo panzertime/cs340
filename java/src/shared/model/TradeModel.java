@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
 import shared.model.hand.ResourceType;
 
 public class TradeModel {
@@ -26,6 +27,14 @@ public class TradeModel {
 	}
 
 	private Integer receiverIndex;
+	public void setSenderIndex(Integer senderIndex) {
+		this.senderIndex = senderIndex;
+	}
+
+	public void setReceiverIndex(Integer receiverIndex) {
+		this.receiverIndex = receiverIndex;
+	}
+
 	private Integer wood;
 	private Integer brick;
 	private Integer sheep;
@@ -63,6 +72,9 @@ public class TradeModel {
 	}
 	
 
+
+	public TradeModel() {
+	}
 
 	public boolean equalsJSON(JSONObject tradeOffer) {
 		Long senderIndex = ((Long) tradeOffer.get("sender"));
@@ -187,8 +199,43 @@ public class TradeModel {
 		return resources;
 	}
 
+	public void clear() {
+		this.receiverIndex = null;
+		this.senderIndex = null;
+		this.wood = null;
+		this.brick = null;
+		this.sheep = null;
+		this.wheat = null;
+		this.ore = null;
+	}
 
+	public int getResource(ResourceType type) throws ModelAccessException 
+	{
+		switch(type)
+		{
+		case WOOD: return wood;
+		case BRICK: return brick;
+		case SHEEP: return sheep;
+		case WHEAT: return wheat;
+		case ORE: return ore;
+		}		
+		throw new ModelAccessException();
+	}
 
+	
+	public void setResource(ResourceType type, int amount) throws ModelAccessException 
+	{
+		switch(type)
+		{
+		case WOOD: wood = amount;
+		case BRICK: brick = amount;
+		case SHEEP: sheep = amount;
+		case WHEAT: wheat = amount;
+		case ORE: ore = amount;
+		default: throw new ModelAccessException();
+		}		
+		
+	}
 	
 
 }

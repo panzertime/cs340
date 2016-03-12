@@ -25,6 +25,11 @@ public class Message {
 		
 	}
 
+	public Message(String message, String source) {
+		this.message = message;
+		this.source = source;
+	}
+
 	public boolean equalsJSON(JSONObject messageLine) {
 		if (messageLine == null) return false;
 		String m = (String) messageLine.get("message");

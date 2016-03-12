@@ -123,6 +123,10 @@ public class Vertex {
 	public Edge[] getAllEdges() {
 		return edges;
 	}
+	
+	public Hex[] getAllHexes() {
+		return hexes;
+	}
 
 	public Edge getLeftEdge(Edge edge) {
 		if (edge == edges[0]) {

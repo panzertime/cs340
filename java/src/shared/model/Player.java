@@ -10,6 +10,7 @@ import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import shared.model.board.hex.tiles.water.PortType;
+import shared.model.board.piece.Building;
 import shared.model.board.piece.City;
 import shared.model.board.piece.Road;
 import shared.model.board.piece.Settlement;
@@ -25,6 +26,10 @@ import shared.model.hand.exceptions.NoRemainingResourceException;
 public class Player {
 
 	private Model game;
+	public Model getGame() {
+		return game;
+	}
+
 	private Hand hand;
 	private Settlement[] settlements;
 	private Road[] roads;
@@ -298,63 +303,14 @@ public class Player {
 	 * @post ore = ore - 1
 	 * 
 	 */
-	public void buyDevelopment() throws NoRemainingResourceException {
+	public void buyDevelopment() throws NoRemainingResourceException, NoDevCardFoundException {
 		game.getBank().receiveResource(ResourceType.WHEAT, 1);
 		game.getBank().receiveResource(ResourceType.SHEEP, 1);
 		game.getBank().receiveResource(ResourceType.ORE, 1);
 		sendResource(ResourceType.WHEAT, 1);
 		sendResource(ResourceType.SHEEP, 1);
 		sendResource(ResourceType.ORE, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 4
-	 * @post type received = type + 1
-	 * 
-	 */
-	public void buyResource(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-		game.getBank().receiveResource(given, 4);
-		sendResource(given, 4);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 3
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith3Port(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-
-		game.getBank().receiveResource(given, 3);
-		sendResource(given, 3);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 2
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith2Port(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-		game.getBank().receiveResource(given, 2);
-		sendResource(given, 2);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
+		this.receiveDevCard(game.getBank().takeDevCardFromBank());
 	}
 
 	public Boolean canPlayDevelopmentCard() {
@@ -459,7 +415,7 @@ public class Player {
 	/**
 	 * @return The number of Victory Points a player has.
 	 */
-	public void calculateVictoryPoints() {
+	public int calculateVictoryPoints() {
 		int points = 0;
 		/*
 		 * for (DevCard card : hand.getDevCards()) { if (card.getType() ==
@@ -478,7 +434,7 @@ public class Player {
 				points++;
 		}
 
-		this.points = points;
+		return points;
 	}
 
 	public int getVictoryPointsWithMonuments() {
@@ -513,6 +469,18 @@ public class Player {
 				game.getBank().giveDevCardToBank(card);
 				hand.getDevCards().remove(i);
 				return;
+			}
+		}
+		throw new NoDevCardFoundException();
+	}
+	
+	public DevCard findDevCard(DevCardType type) throws NoDevCardFoundException
+	{
+		for (int i = 0; i < hand.getDevCards().size(); i++) {
+			DevCard card = hand.getDevCards().get(i);
+			if (card.getType() == type && card.isEnabled()) 
+			{
+				return card;
 			}
 		}
 		throw new NoDevCardFoundException();
@@ -559,7 +527,30 @@ public class Player {
 	}
 
 	public int getRoadLength() {
-		// return size of interconnectedRoads
+//		To begin with, separate out the roads into distinct sets, where all the road segments in each set are somehow connected. There's various methods on doing this, but here's one:
+//
+//		1	Pick a random road segment, add it to a set, and mark it
+//		2	Branch out from this segment, ie. follow connected segments in both directions that aren't marked (if they're marked, we've already been here)
+//		3	If found road segment is not already in the set, add it, and mark it
+//		4	Keep going from new segments until you cannot find any more unmarked segments that are connected to those currently in the set
+//		5	If there's unmarked segments left, they're part of a new set, pick a random one and start back at 1 with another set
+//		
+//		Note: As per the official Catan Rules, a road can be broken if another play builds a settlement on a joint between two segments. You need to detect this and not branch past the settlement.
+//
+//		Note, in the above, and following, steps, only consider the current players segments. You can ignore those other segments as though they weren't even on the map.
+//
+//		This gives you one or more sets, each containing one or more road segments.
+//
+//		Ok, for each set, do the following:
+//
+//		1	Pick a random road segment in the set that has only one connected road segment out from it (ie. you pick an endpoint)
+//		2	If you can't do that, then the whole set is looping (one or more), so pick a random segment in this case
+//		
+//		Now, from the segment you picked, do a recursive branching out depth-first search, keeping track of the length of the current road you've found so far. Always mark road segments as well, and don't branch into segments already marked. This will allow the algorithm to stop when it "eats its own tail".
+//
+//		Whenever you need to backtrack, because there are no more branches, take a note of the current length, and if it is longer than the "previous maximum", store the new length as the maximum.
+//
+//		Do this for all the sets, and you should have your longest road.
 		return 0;
 	}
 
@@ -642,6 +633,9 @@ public class Player {
 	
 	public Integer getSettlementsPlaced() {
 		return 5 - getSettlementsFree();
+	}
+	public Integer getCitiesPlaced() {
+		return 4 - getCitiesFree();
 	}
 	
 	public Boolean shouldSetupRoad() {
@@ -756,6 +750,41 @@ public class Player {
 				proads.add(new PseudoRoad(road.getEdge().getEdgeLocation().copy(), userColor));
 		}
 		return proads;
+	}
+
+	public void doMaritimeTrade(int ratio, ResourceType given, ResourceType received) throws NoRemainingResourceException {
+		game.getBank().receiveResource(given, ratio);
+		sendResource(given, ratio);
+		game.getBank().sendResource(received, 1);
+		receiveResource(received, 1);
+		
+	}
+
+	public Building[] getBuildings() {
+		Building[] buildings = new Building[this.getSettlementsPlaced() + this.getCitiesPlaced()];
+		int i = 0;
+		for (City c: cities)
+		{
+			if (c.isPlaced())
+			{
+				buildings[i] = c;
+				i++;	
+			}
+		}
+		for (Settlement s: settlements)
+		{
+			if (s.isPlaced())
+			{
+				buildings[i] = s;
+				i++;	
+			}
+		}
+		
+		return buildings;
+	}
+
+	public void setPoints(int p) {
+		points = p;
 	}
 
 }

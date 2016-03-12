@@ -21,6 +21,7 @@ import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.hex.tiles.water.PortType;
+import shared.model.board.piece.Building;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
 import shared.model.definitions.CatanColor;
@@ -28,8 +29,11 @@ import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
 import shared.model.exceptions.BadTurnStatusException;
+import shared.model.exceptions.ModelAccessException;
+import shared.model.exceptions.NoDevCardFoundException;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
+import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public class Model {
 	
@@ -49,7 +53,7 @@ public class Model {
 	private Bank bank;
 	private Achievements achievements;
 	private Integer activePlayerIndex;
-	private Integer winnerID;
+	private Integer winnerIndex;
 	private Integer version;
 	private String status;
 	private ChatModel chatModel;
@@ -93,19 +97,19 @@ public class Model {
 			throw new BadJSONException();
 		this.version = version.intValue();
 
-		Long winnerID = ((Long) jsonMap.get("winner"));
-		if (winnerID == null)
+		Long winnerIndex = ((Long) jsonMap.get("winner"));
+		if (winnerIndex == null)
 			throw new BadJSONException();
-		this.winnerID = winnerID.intValue();
+		this.winnerIndex = winnerIndex.intValue();
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
 		if (turnTracker == null)
 			throw new BadJSONException();
 
-		Long activePlayerID = ((Long) turnTracker.get("currentTurn"));
-		if (activePlayerID == null)
+		Long activePlayerIndex = ((Long) turnTracker.get("currentTurn"));
+		if (activePlayerIndex == null)
 			throw new BadJSONException();
-		this.activePlayerIndex = activePlayerID.intValue();
+		this.activePlayerIndex = activePlayerIndex.intValue();
 
 		String s = (String) turnTracker.get("status");
 		if (s == null)
@@ -156,7 +160,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			return false;
-		if (winnerID.intValue() != this.winnerID)
+		if (winnerID.intValue() != this.winnerIndex)
 			return false;
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
@@ -279,7 +283,14 @@ public class Model {
 	 * @post turn is set to the Player who has the turn
 	 */
 	public void getNextTurn() {
-
+		if (this.activePlayerIndex == players.size() - 1)
+		{
+			this.activePlayerIndex = 0;
+		}
+		else
+		{
+			this.activePlayerIndex++;
+		}
 	}
 
 	public Player getPlayerFromIndex(Integer playerIndex) {
@@ -316,11 +327,11 @@ public class Model {
 	}
 
 	public Player getWinner() {
-		return players.get(getIndexFromPlayerID(winnerID));
+		return players.get(getIndexFromPlayerID(winnerIndex));
 	}
 
 	public void setWinner(Integer playerID) {
-		this.winnerID = playerID;
+		this.winnerIndex = playerID;
 	}
 
 	public void setVersion(int version) {
@@ -885,7 +896,7 @@ public class Model {
 	}
 
 	public boolean isGameOver() {
-		return this.winnerID != -1;
+		return this.winnerIndex != -1;
 	}
 
 	public String getWinnerName() {
@@ -1002,4 +1013,316 @@ public class Model {
 		}
 		return targets.toArray(new RobPlayerInfo[0]);
 	}
+	
+	
+	//////////////////////////////////MISC
+
+	public ChatModel getChatModel() {
+		return chatModel;
+	}
+	
+	public boolean stillDiscarding()
+	{
+		for (Player p: players.values())
+		{
+			if (p.getHandSize() > 7 && !p.hasDiscarded())
+				return true;
+		}
+		return false;
+	}
+	
+	public void updatePoints()
+	{
+		for (Player p: players.values())
+		{
+			p.setPoints(p.calculateVictoryPoints());
+		}
+	}
+	
+	public void checkWinner(int playerIndex) //maybe move winner to Achievements
+	{
+			if (this.getPlayerFromIndex(playerIndex).getPoints() >= 10)
+				this.winnerIndex = playerIndex;
+	}
+	
+	//////////////////////////////////SERVER SECTION////////////////////////////////////////////////////////////
+	
+	public void doSendChat(String message, int playerIndex)
+	{
+		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
+	}
+	
+
+	public void doAcceptTrade(boolean willAccept)
+	{
+		if (willAccept)
+		{
+			try {
+			for (ResourceType type: ResourceType.values())
+			{
+				int resourceAmount;
+				Player sender = this.getPlayerFromIndex(tradeModel.getSenderIndex());
+				Player receiver = this.getPlayerFromIndex(tradeModel.getReceiverIndex());
+				resourceAmount = this.tradeModel.getResource(type);
+				
+				if (resourceAmount > 0)
+				{
+					receiver.receiveResource(type, resourceAmount);
+					sender.sendResource(type, resourceAmount);
+				}
+				else if (resourceAmount < 0)
+				{
+					sender.receiveResource(type, resourceAmount);
+					receiver.sendResource(type, resourceAmount);
+					
+				}
+			}
+			} catch (ModelAccessException | NoRemainingResourceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.tradeModel = null;
+	}
+	
+	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex)
+	{
+		for (ResourceType type: ResourceType.values())
+		{
+			try {
+				this.getPlayerFromIndex(playerIndex).sendResource(type, discardedCards.get(type));
+				this.getBank().receiveResource(type, discardedCards.get(type));
+			} catch (NoRemainingResourceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (!stillDiscarding())
+			this.status = "Robbing";
+	}
+	
+	public void doRollNumber(int roll, int playerIndex)
+	{
+	if (roll == 7)
+	{
+		if (stillDiscarding())
+			this.status = "Discarding";
+		else
+			this.status = "Robbing";
+	}
+	else
+	{
+		for (Player p: players.values())
+		{
+			for (Building b: p.getBuildings())
+			{
+				try {
+					b.produce(roll);
+				} catch (NoRemainingResourceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+	
+	}
+	
+	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex)
+	{
+		try {
+			if (!free) this.getPlayerFromIndex(playerIndex).buyRoad();
+			this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), roadLocation);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (this.achievements.checkRoads(players))
+		{
+			this.updatePoints();
+			this.checkWinner(playerIndex);
+		}
+	}
+	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex)
+	{
+		try {
+			if (!free) this.getPlayerFromIndex(playerIndex).buySettlement();
+			this.board.buildSettlement(this.getPlayerFromIndex(playerIndex).getFreeSettlement(), vertexLocation);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		updatePoints();
+		checkWinner(playerIndex);
+	}
+	public void doBuildCity(VertexLocation vertexLocation, int playerIndex)
+	{
+		try {
+			this.getPlayerFromIndex(playerIndex).buyCity();
+			this.board.buildCity(this.getPlayerFromIndex(playerIndex).getFreeCity(), vertexLocation);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		updatePoints();
+		checkWinner(playerIndex);
+	}
+	
+	public void doOfferTrade(int receiver, Map<ResourceType, Integer> resourceList, int playerIndex)
+	{
+		this.tradeModel = new TradeModel();
+		this.tradeModel.setSenderIndex(playerIndex);
+		this.tradeModel.setReceiverIndex(receiver);
+		for (ResourceType type: ResourceType.values())
+		{
+			try {
+				this.tradeModel.setResource(type, resourceList.get(type));
+			} catch (ModelAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex)
+	{
+		try {
+			this.getPlayerFromIndex(playerIndex).doMaritimeTrade(ratio, input, output);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex)
+	{
+		this.genericRob(robLocation, victimIndex, playerIndex);
+		this.status = "Playing";
+	}
+	
+	public void genericRob(HexLocation robLocation, int victimIndex, int playerIndex)
+	{
+		this.board.placeRobber(robLocation);
+		try {
+			ResourceType rob = this.getPlayerFromIndex(victimIndex).drawRandomResourceCard();
+			this.getPlayerFromIndex(playerIndex).receiveResource(rob, 1);
+			this.getPlayerFromIndex(victimIndex).sendResource(rob, 1);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void doFinishTurn(int playerIndex)
+	{
+		this.getNextTurn();
+		this.status = "Rolling";
+	}
+	
+	public void doBuyDevCard(int playerIndex)
+	{
+		try {
+			this.getPlayerFromIndex(playerIndex).buyDevelopment();
+		} catch (NoRemainingResourceException | NoDevCardFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex)
+	{
+		this.genericRob(robLocation, victimIndex, playerIndex);
+		Player p = this.getPlayerFromIndex(playerIndex);
+		try {
+			p.returnDevCard(p.findDevCard(DevCardType.MONOPOLY));
+		} catch (NoDevCardFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (this.achievements.checkArmies(players))
+		{
+			this.updatePoints();
+			this.checkWinner(playerIndex);
+		}
+	}
+	
+	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex)
+	{
+		try {
+			this.getBank().sendResource(resource1, 1);
+			this.getBank().sendResource(resource2, 1);
+			this.getPlayerFromIndex(playerIndex).receiveResource(resource1, 1);
+			this.getPlayerFromIndex(playerIndex).receiveResource(resource2, 1);
+		} catch (NoRemainingResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Player p = this.getPlayerFromIndex(playerIndex);
+		try {
+			p.returnDevCard(p.findDevCard(DevCardType.YEAROFPLENTY));
+		} catch (NoDevCardFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex)	
+	{
+		this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), spot1);
+		this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), spot2);
+		Player p = this.getPlayerFromIndex(playerIndex);
+		try {
+			p.returnDevCard(p.findDevCard(DevCardType.ROADBUILDING));
+		} catch (NoDevCardFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (this.achievements.checkRoads(players))
+		{
+			this.updatePoints();
+			this.checkWinner(playerIndex);
+		}
+	}
+	
+	public void doMonopoly(ResourceType resource, int playerIndex)
+	{
+		for (Player p: players.values())
+		{
+			if (p.getPlayerIndex() != playerIndex)
+			{
+				int num = p.getResourceAmount(resource);
+				if (num > 0)
+				{
+					try {
+						p.sendResource(resource, num);
+						this.getPlayerFromIndex(playerIndex).receiveResource(resource, num);
+					} catch (NoRemainingResourceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		Player p = this.getPlayerFromIndex(playerIndex);
+		try {
+			p.returnDevCard(p.findDevCard(DevCardType.KNIGHT));
+		} catch (NoDevCardFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void doMonument(int playerIndex)
+	{
+		Player p = this.getPlayerFromIndex(playerIndex);
+		p.setPoints(p.getVictoryPointsWithMonuments());
+		checkWinner(playerIndex);
+	}
+	
+	
+	
+	
+	
+
 }
