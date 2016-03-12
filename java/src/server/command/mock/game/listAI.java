@@ -1,4 +1,4 @@
-package server.command.game;
+package server.command.mock.game;
 
 import org.json.simple.JSONObject;
 

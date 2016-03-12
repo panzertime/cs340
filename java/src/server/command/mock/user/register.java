@@ -1,13 +1,16 @@
-package server.command.game;
+package server.command.mock.user;
 
 import org.json.simple.JSONObject;
 
 import server.exception.ServerAccessException;
 
-public class listAI extends GameCommand {
+public class register extends UserCommand {
 
-	
+	@Override
 	public String execute(JSONObject args, String cookie) throws ServerAccessException {
 		return null;
+		// TODO Auto-generated method stub
+
 	}
+
 }

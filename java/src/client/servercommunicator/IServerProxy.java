@@ -1,9 +1,7 @@
 package client.servercommunicator;
 
-import org.json.simple.*;
-import org.json.simple.parser.*;
-import java.net.*;
-import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 
@@ -125,7 +123,7 @@ public interface IServerProxy {
 	 * @return the current state of the game or true if the model is current
 	 * @throws ServerProxyException problems with connection or in request
 	 */
-	public JSONObject getModel(Integer currentVersion)
+	public JSONObject getModel(Integer versionNumber)
 		throws ServerProxyException;
 	
 	/**
@@ -189,7 +187,7 @@ public interface IServerProxy {
 	 * Sends a message to chat part of the model
 	 * @pre User is logged in and has joined a game
 	 * @post chat contains new message at the end
-	 * @param sendChat type, playerIndex and content
+	 * @param.json sendChat type, playerIndex and content
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
@@ -200,7 +198,7 @@ public interface IServerProxy {
 	 * @pre User is logged in, has joined a game, it's his turn and the model
 	 * status is 'Rolling'
 	 * @post Model status is now 'discarding', 'robbing' or 'playing'.
-	 * @param rollNumber type(rollNumber), playerIndex and die number(2-12)
+	 * @param.json rollNumber type(rollNumber), playerIndex and die number(2-12)
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
@@ -215,7 +213,7 @@ public interface IServerProxy {
 	 * robbed.
 	 * @post The robber is moved and the robbed resource cards have been 
 	 * changed.
-	 * @param robPlayer type(robPlayer), playerIndex, victimIndex and location
+	 * @param.json robPlayer type(robPlayer), playerIndex, victimIndex and location
 	 * @return An updated game model 
 	 * @throws ServerProxyException Problem with connection or given command
 	 */
@@ -241,7 +239,7 @@ public interface IServerProxy {
      * @post If the user is eligible to buy a dev card, he will receive one at
      * random. If it's a monument card it will be added to the old devcard
      * hand, otherwise it goes to the new hand.
-     * @param buyDevCard and playerIndex
+     * @param.json buyDevCard and playerIndex
      * @return updated Game Model
      * @throws ServerProxyException Problem with connection
      */
@@ -254,7 +252,7 @@ public interface IServerProxy {
      * 'playing', he has not yet used a non-monument dev card, the two
      * specified dev cards are in the bank.
      * @post User gains two specified resources
-     * @param Year_of_Plenty, playerIndex, resource1, resource 2
+     * @param.json Year_of_Plenty, playerIndex, resource1, resource 2
      * @return updated game model
      * @throws ServerProxyException Problem with connection
      */
@@ -267,8 +265,8 @@ public interface IServerProxy {
      * 'playing', the road location is valid, open, connected to another road
      * owned by the player, the location is not on water, the required
      * resources are had, and it has no adjacent road in the setup round
-     * @param Road_Building, playerIndex, (edgeLocation) spot1, spot2
-     * @param 	edgeLocation(x,y, direction)
+     * @param.json Road_Building, playerIndex, (edgeLocation) spot1, spot2
+     * @param.json edgeLocation(x,y, direction)
      * @return updated Game Model
      * @throws ServerProxyException Problem with connection
      */
@@ -284,7 +282,7 @@ public interface IServerProxy {
      * @post robber has new location, robbed player loses cards, current player
      * gains them, largest army is awarded - if applicable, you are no longer
      * able to play more development cards.
-     * @param type, playerIndex, victimIndex, location(x,y)
+     * @param.json type, playerIndex, victimIndex, location(x,y)
      * @return updated game model
      * @throws ServerProxyException Problem with connection
      */

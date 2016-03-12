@@ -1,9 +1,0 @@
-server.command
-server.command.game
-server.command.games
-server.command.moves
-server.command.user
-server.data
-server.exception
-server.handler
-server.main

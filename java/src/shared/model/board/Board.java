@@ -307,7 +307,7 @@ public class Board {
 
 	/**
 	 * 
-	 * @param e
+	 * @param edgeLocation
 	 *            - An edge to be checked
 	 * @return - True if a Road can be built
 	 */

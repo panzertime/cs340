@@ -40,7 +40,6 @@ public abstract class Hex {
 	/**
 	 * @param dir the direction of the edge to set
 	 * @param edge the edge to set
-	 * @throws BadEdgeDirectionException
 	 */
 	public void setEdge(EdgeDirection dir, Edge edge) {
 		switch (dir) {
@@ -69,8 +68,7 @@ public abstract class Hex {
 
 	/**
 	 * @param dir the direction of the edge to get
-	 * @param edge the edge to get
-	 * @throws BadEdgeDirectionException
+	 * @return the edge in dir direction
 	 */
 	public Edge getEdge(EdgeDirection dir) {
 		switch (dir) {
@@ -94,8 +92,7 @@ public abstract class Hex {
 
 	/**
 	 * @param dir the direction of the vertex to set
-	 * @param edge the vertex to set
-	 * @throws BadEdgeDirectionException
+	 * @param vertex the vertex to set
 	 */
 	public void setVertex(VertexDirection dir, Vertex vertex) {
 		switch (dir) {
@@ -124,8 +121,7 @@ public abstract class Hex {
 
 	/**
 	 * @param dir the direction of the vertex to get
-	 * @param edge the vertex to get
-	 * @throws BadEdgeDirectionException
+	 * @return the vertex in dir direction
 	 */
 	public Vertex getVertex(VertexDirection dir) {
 		switch (dir) {

@@ -12,7 +12,6 @@ public class City extends Building{
 	
 	/**
 	 * @param type the resource to generate
-	 * @throws ResourceException 
 	 */
 	@Override
 	public void produce(ResourceType type) {
