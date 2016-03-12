@@ -37,7 +37,7 @@ public class PostHandler extends AbstractHttpHandler {
 	 * @param json the JSON string passed in the body
 	 * @return The translated JSONObject 
 	 */
-	JSONObject makeJSONFromString(String json){
+	private JSONObject makeJSONFromString(String json){
 		return null;
 		
 	}
