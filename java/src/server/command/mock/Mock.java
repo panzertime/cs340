@@ -27,7 +27,7 @@ public abstract class Mock implements ICommand {
 	 */
 	public JSONObject jsonFromFile(String path, String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File(path + file + ".json");
+		File jsonFile = new File(path + file + ".txt");
 		FileInputStream fis;
 		JSONObject jsonModel = null;
 		try {
