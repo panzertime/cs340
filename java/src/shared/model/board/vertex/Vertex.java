@@ -8,6 +8,7 @@ import shared.model.board.hex.tiles.water.PortHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
 import shared.model.hand.ResourceType;
+import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public class Vertex {
 	
@@ -82,7 +83,7 @@ public class Vertex {
 		this.vertexLocation = vertexLocation.getNormalizedLocation();
 	}
 	
-	public void produce(ResourceType type) {
+	public void produce(ResourceType type) throws NoRemainingResourceException {
 		if (building != null)
 			building.produce(type);
 	}
