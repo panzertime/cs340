@@ -1076,10 +1076,14 @@ public class Model {
 	}
 	
 
-	public void doAcceptTrade(boolean willAccept)
+	public void doAcceptTrade(boolean willAccept, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+
 		if (willAccept)
 		{
+			this.chatModel.addGameMessage(source + " accepted the trade", source);
+
 			try {
 			for (ResourceType type: ResourceType.values())
 			{
@@ -1105,6 +1109,11 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
+		else
+		{
+			this.chatModel.addGameMessage(source + " rejected the trade", source);
+
+		}
 		this.tradeModel = null;
 	}
 	
@@ -1126,6 +1135,8 @@ public class Model {
 	
 	public void doRollNumber(int roll, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " rolled a " + roll, source);
 	if (roll == 7)
 	{
 		if (stillDiscarding())
@@ -1154,6 +1165,9 @@ public class Model {
 	
 	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " built a road", source);
+
 		try {
 			if (!free) this.getPlayerFromIndex(playerIndex).buyRoad();
 			this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), roadLocation);
@@ -1169,6 +1183,8 @@ public class Model {
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " built a settlement", source);
 		try {
 			if (!free) this.getPlayerFromIndex(playerIndex).buySettlement();
 			this.board.buildSettlement(this.getPlayerFromIndex(playerIndex).getFreeSettlement(), vertexLocation);
@@ -1181,6 +1197,8 @@ public class Model {
 	}
 	public void doBuildCity(VertexLocation vertexLocation, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " upgraded to a city", source);
 		try {
 			this.getPlayerFromIndex(playerIndex).buyCity();
 			this.board.buildCity(this.getPlayerFromIndex(playerIndex).getFreeCity(), vertexLocation);
@@ -1194,6 +1212,9 @@ public class Model {
 	
 	public void doOfferTrade(int receiver, Map<ResourceType, Integer> resourceList, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiver) + " a trade", source);
+
 		this.tradeModel = new TradeModel();
 		this.tradeModel.setSenderIndex(playerIndex);
 		this.tradeModel.setReceiverIndex(receiver);
@@ -1220,12 +1241,9 @@ public class Model {
 	
 	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex)
 	{
-		this.genericRob(robLocation, victimIndex, playerIndex);
-		this.status = "Playing";
-	}
-	
-	public void genericRob(HexLocation robLocation, int victimIndex, int playerIndex)
-	{
+		
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " moved the robber and robbed " + this.getPlayerName(victimIndex), source);
 		this.board.placeRobber(robLocation);
 		try {
 			ResourceType rob = this.getPlayerFromIndex(victimIndex).drawRandomResourceCard();
@@ -1235,10 +1253,15 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.status = "Playing";
 	}
 	
+	
 	public void doFinishTurn(int playerIndex)
-	{
+	{	
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + "'s turn just ended", source);
+
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
 		this.getNextTurn();
 		this.status = "Rolling";
@@ -1246,6 +1269,9 @@ public class Model {
 	
 	public void doBuyDevCard(int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " bought a Development Card", source);
+
 		try {
 			this.getPlayerFromIndex(playerIndex).buyDevelopment();
 		} catch (NoRemainingResourceException | NoDevCardFoundException e) {
@@ -1256,7 +1282,10 @@ public class Model {
 	
 	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex)
 	{
-		this.genericRob(robLocation, victimIndex, playerIndex);
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " used a soldier", source);
+
+		this.doRobPlayer(robLocation, victimIndex, playerIndex);
 		Player p = this.getPlayerFromIndex(playerIndex);
 		try {
 			p.returnDevCard(p.findDevCard(DevCardType.MONOPOLY));
@@ -1266,6 +1295,7 @@ public class Model {
 		}
 		if (this.achievements.checkArmies(players))
 		{
+//here be largest army game model notify
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
@@ -1273,6 +1303,9 @@ public class Model {
 	
 	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " used Year of Plenty and got a " + resource1.toString().toLowerCase() + " and a " + resource2.toString().toLowerCase(), source);
+
 		try {
 			this.getBank().sendResource(resource1, 1);
 			this.getBank().sendResource(resource2, 1);
@@ -1311,6 +1344,10 @@ public class Model {
 	
 	public void doMonopoly(ResourceType resource, int playerIndex)
 	{
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " used Monopoly and stole everyone's " + resource.toString().toLowerCase(), source);
+
+		
 		for (Player p: players.values())
 		{
 			if (p.getPlayerIndex() != playerIndex)

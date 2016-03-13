@@ -50,6 +50,9 @@ public class ChatModel {
 		this.getChatLog().add(message, source);
 	}
 	
-	
+	public void addGameMessage(String message, String source)
+	{
+		this.gameLog.add(message, source);
+	}
 	
 }
