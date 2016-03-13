@@ -42,6 +42,7 @@ public class Board {
 	private Model game;
 	private Robber robber;
 	private static Map<HexLocation, Hex> hexes;
+	private int radius;
 
 	/**
 	 * @param jsonMap new version of the map as passed by the model
@@ -262,10 +263,30 @@ public class Board {
 
 			buildSettlement(settlement, vertexLoc);
 		}
-
+		Long radius = (Long) jsonMap.get("radius");
+		if (radius != null)
+			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
+	public JSONObject toJSON() {
+
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		
+		jsonMap.put("hexes", null);
+		jsonMap.put("ports", null);
+		jsonMap.put("roads", null);
+		jsonMap.put("settlements", null);
+		jsonMap.put("cities", null);
+		jsonMap.put("radius", this.radius);
+		Map<String, Object> robberLoc = new HashMap<String, Object>();
+		robberLoc.put("x", this.getRobberLocation().getX());
+		robberLoc.put("y", this.getRobberLocation().getY());
+		jsonMap.put("robber", (JSONObject) robberLoc);
+		
+		return (JSONObject) jsonMap;
+	}
+	
 	public static Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
@@ -729,8 +750,5 @@ public class Board {
 		return false;
 	}
 
-	public JSONObject toJSON() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }
