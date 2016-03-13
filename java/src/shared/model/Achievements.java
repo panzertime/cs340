@@ -101,6 +101,22 @@ public class Achievements {
 	public void setLargestArmy(Player p) {
 		
 	}
+	
+	public int getLongestRoad()
+	{
+		if (this.longestRoad == null)
+			return -1;
+		else
+			return longestRoad.getPlayerIndex();
+	}
+	
+	public int getLargestArmy()
+	{
+		if (this.largestArmy == null)
+			return -1;
+		else
+			return largestArmy.getPlayerIndex();		
+	}
 
 	
 	public Boolean isLargestArmy(Player p) {

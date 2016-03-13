@@ -1,5 +1,6 @@
 package shared.model.chat;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -72,6 +73,13 @@ public class Message {
 	public LogEntry toLogEntry() {
 		return new LogEntry(getColor(), message);
 		
+	}
+
+	public JSONObject toJSON() {
+	Map<String, Object> jsonMap = new HashMap<String, Object>();
+	jsonMap.put("message", message);
+	jsonMap.put("source", source);
+	return (JSONObject) jsonMap;
 	}
 	
 	

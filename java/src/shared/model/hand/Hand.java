@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import shared.logger.Log;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.development.DevCard;
+import shared.model.hand.development.DevCardType;
 import shared.model.hand.development.Knight;
 import shared.model.hand.development.Monopoly;
 import shared.model.hand.development.Monument;
@@ -687,5 +688,16 @@ public class Hand {
 			return false;
 		return true;
 	}
-
+	
+	public int getCards(DevCardType type, boolean old)
+	{
+		int i = 0;
+		for (DevCard card: this.getDevCards())
+		{
+			if (card.isEnabled() && old)
+				i++;
+		}
+		return i;
+	}
+	
 }

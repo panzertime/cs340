@@ -1,5 +1,7 @@
 package shared.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.json.simple.JSONObject;
@@ -81,6 +83,7 @@ public class Bank {
 		int r = generator.nextInt(this.getHand().getNumberOfDevCards());
 		
 		DevCard card = this.getHand().getDevCards().get(r);
+		card.setEnabled(false);
 		this.getHand().getDevCards().remove(r);
 		return card;
 		}
@@ -113,6 +116,17 @@ public class Bank {
 	 */
 	public void sendResource(ResourceType type, Integer num) throws NoRemainingResourceException {
 		this.getHand().sendResource(type, num);
+	}
+
+
+	public JSONObject toJSON() {
+		Map<String, Object> resourceList = new HashMap<String, Object>();
+		resourceList.put("wood", this.getHand().getWood());
+		resourceList.put("brick", this.getHand().getBrick());
+		resourceList.put("sheep", this.getHand().getSheep());
+		resourceList.put("wheat", this.getHand().getWheat());
+		resourceList.put("ore", this.getHand().getOre());
+		return (JSONObject) resourceList;
 	}
 
 	

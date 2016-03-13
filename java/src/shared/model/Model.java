@@ -132,6 +132,29 @@ public class Model {
 		else
 			tradeModel = new TradeModel((JSONObject) jsonMap.get("tradeOffer"));
 	}
+	
+	public JSONObject toJSON()
+	{
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("bank", bank.toJSON());
+		jsonMap.put("chat", this.getChatModel().getChatLog().toJSON());
+		jsonMap.put("log", this.getChatModel().getGameLog().toJSON());
+		jsonMap.put("map", this.board.toJSON());
+		JSONArray playersJSON = new JSONArray();
+		for (Player p: players.values())
+			playersJSON.add(p.toJSON());
+		jsonMap.put("players", playersJSON);
+		if (tradeModel != null) jsonMap.put("tradeOffer", this.tradeModel.toJSON());
+		Map<String, Object> turnTracker = new HashMap<String, Object>();
+		turnTracker.put("currentTurn", this.activePlayerIndex);
+		turnTracker.put("status", this.status);
+		turnTracker.put("longestRoad", this.achievements.getLongestRoad());
+		turnTracker.put("largestArmy", this.achievements.getLargestArmy());
+		jsonMap.put("turnTracker", (JSONObject) turnTracker);
+		jsonMap.put("version", 0);
+		jsonMap.put("winner", this.winnerIndex);
+		return (JSONObject) jsonMap;
+	}
 
 	public Boolean equalsJSON(JSONObject jsonMap) {
 		if (jsonMap == null)
@@ -655,7 +678,7 @@ public class Model {
 			return false;
 		if (!isStatePlaying())
 			return false;
-		if (getActivePlayer().getVictoryPointsWithMonuments() < 10)
+		if (getActivePlayer().getVictoryPointsOfMonuments() < 10)
 			return false;
 		return true;
 	}
@@ -1216,6 +1239,7 @@ public class Model {
 	
 	public void doFinishTurn(int playerIndex)
 	{
+		this.getPlayerFromIndex(playerIndex).updateDevCards();
 		this.getNextTurn();
 		this.status = "Rolling";
 	}
@@ -1316,7 +1340,8 @@ public class Model {
 	public void doMonument(int playerIndex)
 	{
 		Player p = this.getPlayerFromIndex(playerIndex);
-		p.setPoints(p.getVictoryPointsWithMonuments());
+		p.setMonuments(p.getVictoryPointsOfMonuments());
+		this.updatePoints();
 		checkWinner(playerIndex);
 	}
 	

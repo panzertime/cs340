@@ -728,4 +728,9 @@ public class Board {
 		}
 		return false;
 	}
+
+	public JSONObject toJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

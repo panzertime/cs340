@@ -1,6 +1,8 @@
 package shared.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import shared.model.board.piece.Building;
 import shared.model.board.piece.City;
 import shared.model.board.piece.Road;
 import shared.model.board.piece.Settlement;
+import shared.model.board.vertex.Vertex;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.NoDevCardFoundException;
@@ -38,7 +41,7 @@ public class Player {
 	private Integer playerIndex;
 	private CatanColor userColor;
 	private Integer armies;
-	private Integer monuments;
+	private Integer monuments = 0;
 	private Integer points;
 	private Boolean playedDevelopmentCard;
 	private Boolean hasDiscarded;
@@ -433,12 +436,12 @@ public class Player {
 			if (s.getVertex() != null)
 				points++;
 		}
-
+		points += this.getMonuments();
 		return points;
 	}
 
-	public int getVictoryPointsWithMonuments() {
-		int points = this.getPoints();
+	public int getVictoryPointsOfMonuments() {
+		int points = 0;
 		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
@@ -525,8 +528,44 @@ public class Player {
 	public Integer getPlayerID() {
 		return playerID;
 	}
+	/*
+	private boolean roadChecked(Road r, HashSet<HashSet<Road>> sets)
+	{
+		for (HashSet<Road> set: sets)
+		{
+			if (set.contains(r));
+				return true;
+		}
+		return false;
+	}
 
+	public void sortRoad(Road r, HashSet<Road> set)
+	{
+		for (Vertex v: r.getEdge().getAllVertices())
+		{
+			if (!(v.hasBuilding() && v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex))
+			{
+				
+			}
+		}
+	}
+	
+	*/
 	public int getRoadLength() {
+		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>(); 
+		for (Road r: roads)
+		{
+			if (r.isPlaced())
+			{
+		//		if (!roadChecked(r, sets))
+				{
+					HashSet<Road> set = new HashSet<Road>();
+					set.add(r);
+				}
+			}
+		}
+		
+		
 //		To begin with, separate out the roads into distinct sets, where all the road segments in each set are somehow connected. There's various methods on doing this, but here's one:
 //
 //		1	Pick a random road segment, add it to a set, and mark it
@@ -553,6 +592,7 @@ public class Player {
 //		Do this for all the sets, and you should have your longest road.
 		return 0;
 	}
+	
 
 	/**
 	 * @return number of played knights
@@ -563,6 +603,10 @@ public class Player {
 
 	public int getMonuments() {
 		return monuments;
+	}
+	
+	public void setMonuments(int m) {
+		monuments = m;
 	}
 
 	public int getPoints() {
@@ -785,6 +829,54 @@ public class Player {
 
 	public void setPoints(int p) {
 		points = p;
+	}
+
+	public JSONObject toJSON() {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		jsonMap.put("cities", this.getCitiesFree());
+		jsonMap.put("color", this.getColor().toString());
+		jsonMap.put("discarded", hasDiscarded);
+		jsonMap.put("monuments", monuments);
+		jsonMap.put("name", this.getUserName());
+		Map<String, Object> newDevCards = new HashMap<String, Object>();
+		Map<String, Object> oldDevCards = new HashMap<String, Object>();
+		newDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, false));
+		oldDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, true));
+		
+		newDevCards.put("monument", hand.getCards(DevCardType.MONUMENT, false));
+		oldDevCards.put("monument", hand.getCards(DevCardType.MONUMENT, true));
+		
+		newDevCards.put("roadBuilding", hand.getCards(DevCardType.ROADBUILDING, false));
+		oldDevCards.put("roadBuilding", hand.getCards(DevCardType.ROADBUILDING, true));
+		
+		newDevCards.put("soldier", hand.getCards(DevCardType.KNIGHT, false));
+		oldDevCards.put("soldier", hand.getCards(DevCardType.KNIGHT, true));
+		
+		newDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, false));
+		oldDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, true));
+		
+		jsonMap.put("newDevCards", (JSONObject)newDevCards);
+		jsonMap.put("oldDevCards", (JSONObject)oldDevCards);
+		jsonMap.put("playerIndex", this.getPlayerIndex());
+		jsonMap.put("playedDevCard", this.playedDevelopmentCard);
+		jsonMap.put("playerID", this.playerID);
+		Map<String, Object> resourceList = new HashMap<String, Object>();
+		resourceList.put("wood", this.hand.getWood());
+		resourceList.put("brick", this.hand.getBrick());
+		resourceList.put("sheep", this.hand.getSheep());
+		resourceList.put("wheat", this.hand.getWheat());
+		resourceList.put("ore", this.hand.getOre());
+		jsonMap.put("resources", (JSONObject) resourceList);
+		jsonMap.put("roads", this.getRoadsFree());
+		jsonMap.put("settlements", this.getSettlementsFree());
+		jsonMap.put("soliders", this.getArmies());
+		jsonMap.put("victoryPoints", this.getPoints());
+		return (JSONObject) jsonMap;
+	}
+
+	public void updateDevCards() {
+		for (DevCard card: this.hand.getDevCards())
+			card.setEnabled(true);
 	}
 
 }
