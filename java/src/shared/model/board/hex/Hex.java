@@ -1,10 +1,13 @@
 package shared.model.board.hex;
 
+import java.util.HashMap;
+
 import org.json.simple.JSONObject;
 
 import shared.logger.Log;
 import shared.model.board.edge.Edge;
 import shared.model.board.edge.EdgeDirection;
+import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
 
@@ -170,6 +173,22 @@ public abstract class Hex {
     public Vertex[] getVerts() {
     	return verts;
     }
+	public JSONObject toJSON() {
+		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
+		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
+		hexLoc.put("x", this.getHexLocation().getX());
+		hexLoc.put("y", this.getHexLocation().getY());
+		
+		jsonHex.put("location", (JSONObject)hexLoc);
+		if (this instanceof ProductionHex)
+		{
+			ProductionHex hex = (ProductionHex) this;
+			jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
+			jsonHex.put("number", hex.getProductionNumber());
+		}
+		
+		return (JSONObject) jsonHex;
+	}
     
    
 }

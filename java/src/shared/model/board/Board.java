@@ -137,6 +137,7 @@ public class Board {
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
+				resource = resource.toLowerCase();
 				switch (resource) {
 				case "wood":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WOOD, edgeDir));
@@ -272,12 +273,20 @@ public class Board {
 	public JSONObject toJSON() {
 
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
-		
-		jsonMap.put("hexes", null);
-		jsonMap.put("ports", null);
-		jsonMap.put("roads", null);
-		jsonMap.put("settlements", null);
-		jsonMap.put("cities", null);
+		JSONArray hexes = new JSONArray();
+		JSONArray ports = new JSONArray();
+		JSONArray roads = new JSONArray();
+		JSONArray settlements = new JSONArray();
+		JSONArray cities = new JSONArray();
+		for (Hex hex: this.hexes.values())
+		{
+			hexes.add(hex.toJSON());
+		}
+		jsonMap.put("hexes", hexes);
+		jsonMap.put("ports", ports);
+		jsonMap.put("roads", roads);
+		jsonMap.put("settlements", settlements);
+		jsonMap.put("cities", cities);
 		jsonMap.put("radius", this.radius);
 		Map<String, Object> robberLoc = new HashMap<String, Object>();
 		robberLoc.put("x", this.getRobberLocation().getX());
