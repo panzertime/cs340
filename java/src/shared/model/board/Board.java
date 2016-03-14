@@ -36,6 +36,7 @@ import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
 
 public class Board {
 
@@ -212,9 +213,9 @@ public class Board {
 			Long ownerIndexLong = (Long) jsonCity.get("owner");
 			if (ownerIndexLong == null)
 				throw new BadJSONException();
-			Integer ownerID = ownerIndexLong.intValue();
+			Integer ownerIndex = ownerIndexLong.intValue();
 
-			Player player = game.getPlayerFromIndex(ownerID);
+			Player player = game.getPlayerFromIndex(ownerIndex);
 			if (player == null)
 				throw new BadJSONException();
 			
@@ -280,8 +281,75 @@ public class Board {
 		JSONArray cities = new JSONArray();
 		for (Hex hex: this.hexes.values())
 		{
-			hexes.add(hex.toJSON());
+			if (hex instanceof LandHex)
+				hexes.add(hex.toJSON(true));
 		}
+		for (Hex hex: this.hexes.values())
+		{
+			if (hex instanceof PortHex)
+				ports.add(hex.toJSON(false));
+		}
+		for (Player p: game.getPlayers())
+		{
+			for (Road r: p.getRoads())
+			{
+				if (r.isPlaced())
+				{
+				Map<String, Object> jsonRoad = new HashMap<String, Object>();
+				Map<String, Object> roadLoc = new HashMap<String, Object>();
+				roadLoc.put("x", r.getEdge().getEdgeLocation().getHexLoc().getX());
+				roadLoc.put("y", r.getEdge().getEdgeLocation().getHexLoc().getY());
+				try {
+					roadLoc.put("direction", EdgeDirection.toAbbreviation(r.getEdge().getEdgeLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonRoad.put("owner", p.getPlayerIndex());
+				jsonRoad.put("location", (JSONObject) roadLoc);
+				roads.add((JSONObject) jsonRoad);
+				}
+			}
+			for (City c: p.getCities())
+			{
+				if (c.isPlaced())
+				{
+				Map<String, Object> jsonCity = new HashMap<String, Object>();
+				Map<String, Object> cityLoc = new HashMap<String, Object>();
+				cityLoc.put("x", c.getVertex().getVertexLocation().getHexLoc().getX());
+				cityLoc.put("y", c.getVertex().getVertexLocation().getHexLoc().getY());
+				try {
+					cityLoc.put("direction", VertexDirection.toAbbreviation(c.getVertex().getVertexLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonCity.put("owner", p.getPlayerIndex());
+				jsonCity.put("location", (JSONObject) cityLoc);
+				roads.add((JSONObject) jsonCity);
+				}
+			}
+			for (Settlement s: p.getSettlements())
+			{
+				if (s.isPlaced())
+				{
+				Map<String, Object> jsonSettlement = new HashMap<String, Object>();
+				Map<String, Object> settlementLoc = new HashMap<String, Object>();
+				settlementLoc.put("x", s.getVertex().getVertexLocation().getHexLoc().getX());
+				settlementLoc.put("y", s.getVertex().getVertexLocation().getHexLoc().getY());
+				try {
+					settlementLoc.put("direction", VertexDirection.toAbbreviation(s.getVertex().getVertexLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonSettlement.put("owner", p.getPlayerIndex());
+				jsonSettlement.put("location", (JSONObject) settlementLoc);
+				roads.add((JSONObject) jsonSettlement);
+				}
+			}
+		}
+
 		jsonMap.put("hexes", hexes);
 		jsonMap.put("ports", ports);
 		jsonMap.put("roads", roads);

@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import shared.model.board.edge.EdgeDirection;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
 
 public enum VertexDirection
 {
@@ -33,6 +34,21 @@ public enum VertexDirection
 		default :
 			throw new BadJSONException();
 		}
+	}
+	
+	public static String toAbbreviation(VertexDirection dir) throws ModelAccessException
+	{
+		switch (dir)
+		{
+		case NorthWest:return "NW";
+		case East:return "E";
+		case NorthEast:return "NE";
+		case SouthEast:return "SE";
+		case West:return "W";
+		case SouthWest:return "SW";
+		}
+		throw new ModelAccessException();
+		
 	}
 	
 	static

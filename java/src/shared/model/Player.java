@@ -878,5 +878,18 @@ public class Player {
 		for (DevCard card: this.hand.getDevCards())
 			card.setEnabled(true);
 	}
+	
+	public Settlement[] getSettlements() {
+		return settlements;
+	}
+
+	public Road[] getRoads() {
+		return roads;
+	}
+
+	public City[] getCities() {
+		return cities;
+	}
+
 
 }

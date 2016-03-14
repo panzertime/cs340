@@ -8,8 +8,11 @@ import shared.logger.Log;
 import shared.model.board.edge.Edge;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.hex.tiles.land.ProductionHex;
+import shared.model.board.hex.tiles.water.PortHex;
+import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
+import shared.model.exceptions.ModelAccessException;
 
 public abstract class Hex {
 	
@@ -173,15 +176,35 @@ public abstract class Hex {
     public Vertex[] getVerts() {
     	return verts;
     }
-	public JSONObject toJSON() {
+	public JSONObject toJSON(boolean land) {
 		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
 		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
 		hexLoc.put("x", this.getHexLocation().getX());
 		hexLoc.put("y", this.getHexLocation().getY());
+		if (!land)
+		{
+			int ratio = 3;
+			PortHex hex = (PortHex) this;
+			if (hex.getPortType() != PortType.THREE)
+			{
+				ratio = 2;
+				jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
+			}	
+			jsonHex.put("location", (JSONObject)hexLoc);
 		
-		jsonHex.put("location", (JSONObject)hexLoc);
+			try {
+				jsonHex.put("direction", EdgeDirection.toAbbreviation(hex.getPortDirection()));
+			} catch (ModelAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			jsonHex.put("ratio", ratio);
+
+		}
+		
 		if (this instanceof ProductionHex)
 		{
+			jsonHex.put("location", (JSONObject)hexLoc);
 			ProductionHex hex = (ProductionHex) this;
 			jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
 			jsonHex.put("number", hex.getProductionNumber());
