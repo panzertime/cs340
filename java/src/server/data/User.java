@@ -129,5 +129,15 @@ public class User {
 
 	public String getUsername() {
 		return this.username;
+	}
+
+	/**
+	 * get User ID
+	 * @pre none
+	 * @post id is returned(can be null)
+	 * @return user ID
+	 */
+	public Integer getID() {
+		return this.id;
 	}	
 }

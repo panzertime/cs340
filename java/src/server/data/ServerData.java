@@ -109,7 +109,7 @@ public class ServerData {
 		JSONArray gamesList = new JSONArray();
 		
 		for(Map.Entry<Integer,Model> model : this.games.entrySet()) {
-			//Missing toGamesListJSON function
+			//TODO add toGamesListJSON function
 			/*JSONObject gameInfo = model.getValue().toGameListJSON();
 			gameInfo.put("id", model.getKey());		
 			gamesList.add(gameInfo);*/
@@ -119,15 +119,24 @@ public class ServerData {
 	
 	/**
 	 * Checks to see if the given user is in the given game
-	 * @pre user is not null, gamelist and userlist have been created already
+	 * @pre user is not null, gamelist and userlist have been created already,
+	 * gameID is for a valid game
 	 * @post true if the user in game already, false if not, game exists
 	 * @param gameID Which game to use in the game list
 	 * @param user User to use when checking if he is inside a game 
 	 * @return true if the user in game already, false if not
 	 */
-	public boolean userIsInGame(int gameID, User user) {
-		return false;
-		
+	public boolean userIsInGame(int gameID, User user) throws 
+		ServerAccessException {
+		boolean result = false;
+		Model game = this.games.get(gameID);
+		if(game == null) {
+			throw new ServerAccessException("Game does not exist");
+		} else {
+			//TODO ADD this functionality
+		//	result = game.isPlayerInGame(user.getUsername(), user.getID());
+		}
+		return result;
 	}
 	
 	/**
