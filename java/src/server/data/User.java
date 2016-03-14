@@ -1,5 +1,7 @@
 package server.data;
 
+import server.exception.UserException;
+
 public class User {
 	
 	private static Integer idToBeAssigned;
@@ -10,7 +12,7 @@ public class User {
 	 * @post the next ID to be assigned has been incremented
 	 * @return id to be assigned to a user
 	 */
-	public static int getNewID() {
+	private static int setID() {
 		if(idToBeAssigned == null) {
 			idToBeAssigned = 0;
 		}
@@ -19,7 +21,7 @@ public class User {
 
 	private String username;
 	private String password;
-	private int id;
+	private Integer id;
 	
 	/**
 	 * Create a user object from a username and password
@@ -29,7 +31,9 @@ public class User {
 	 * @param password users password
 	 */
 	public User(String username, String password) {
-		
+		this.username = username;
+		this.password = password;
+		id = null;
 	}
 	
 	/**
@@ -44,12 +48,17 @@ public class User {
 
 	/**
 	 * Used to assign a user an ID
-	 * @pre id has come from getNewID function
+	 * @pre user should not have an ID
 	 * @post the userID is set
-	 * @param id userID to be changed to
+	 * @throws UserException User already had ID
 	 */
-	public void setUserID(int id) {
-		this.id = id;
+	public void setUserID() throws UserException {
+		if(id == null) {
+			this.id = User.setID();
+		}
+		else {
+			throw new UserException("User already assigned an ID");
+		}
 	}
 
 	/**
@@ -69,12 +78,7 @@ public class User {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
+		return id;
 	}
 
 	/**
@@ -91,13 +95,14 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
+		//We only care about user name
+		/*if (id != other.id)
 			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
-			return false;
+			return false;*/
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -105,6 +110,24 @@ public class User {
 			return false;
 		return true;
 	}
-	
-	
+
+	/**
+	 * Used to make sure the username and password field have been filled
+	 * out and do not contain empty strings. Also
+	 * @pre strings username and password have been created by the constructor
+	 * @post nothing
+	 * @return whether or not username and password were set up with non-empty
+	 * strings
+	 */
+	public boolean hasValidCrendentials() {
+		boolean result = true;
+		if(this.username.isEmpty() || this.password.isEmpty()) {
+			result = false;
+		}
+		return result;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}	
 }

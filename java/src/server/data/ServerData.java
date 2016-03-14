@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import server.exception.ServerAccessException;
+import server.exception.UserException;
 import shared.model.Model;
 
 /**
@@ -41,22 +43,47 @@ public class ServerData {
 	 * accessible
 	 * @return The only instance of server data is accessed
 	 */
-	public ServerData sole() {
-		return null;	
+	public static ServerData sole() {
+		if(_instance == null) {
+			_instance = new ServerData();
+		}
+		
+		return _instance;
 	}
 	
 	/**
 	 * Attempts to add the created user to the list of users on the server
 	 * @pre User is not null and contains all fields filled out except ID
 	 * @post the passed User object will be assigned a valid ID if he does not
-	 * yet exist. Other wise he will be deleted and this fucntion will return 
+	 * yet exist. Otherwise he will be deleted and this function will return 
 	 * false
 	 * @param user User object created from passed in credentials
 	 * @return Whether or not the operation was successful
+	 * @throws UserException user's credentials are invalid
+	 * @throws ServerAccessException username already exists
 	 */
-	public boolean addUser(User user) {
-		return false;
-		
+	public void addUser(User user) throws UserException, 
+		ServerAccessException {
+		/*if(user.hasValidCrendentials()) {
+			String newUserName = user.getUsername();
+			if(this.users.containsKey(newUserName)) {
+				throw new ServerAccessException("Username already exists"
+						+ " on server.");
+			} else {
+				user.setUserID();
+				this.users.put(newUserName, user);
+			}
+		} else {
+			throw new UserException("User is missing username or password"
+					+ "information.");
+		}*/
+		if(userExists(user)) {
+			throw new ServerAccessException("Username already exists"
+					+ " on server.");
+		} else {
+			user.setUserID();
+			this.users.put(user.getUsername(), user);
+		}
 	}
 	
 	/**
@@ -66,10 +93,20 @@ public class ServerData {
 	 * @post result of user check in userlist
 	 * @param user the user to be checked for in the userlist
 	 * @return Whether or not the given user is in the userlist
+	 * @throws UserException user's credentials are invalid
 	 */
-	public boolean userExists(User user) {
-		return false;
+	public boolean userExists(User user) throws UserException {
+		boolean result = false;
+		if(user.hasValidCrendentials()) {
+			if(this.users.containsKey(user.getUsername())) {
+				result = true;
+			}
+		} else {
+			throw new UserException("User is missing username or password"
+					+ "information.");
+		}
 		
+		return result;
 	}
 	
 	/**
