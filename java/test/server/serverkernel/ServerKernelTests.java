@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -27,7 +28,7 @@ public class ServerKernelTests {
 	 */
 	@Test
 	public void testAddUser1() {
-		User user = new User("Joshua", "joshua");
+		User user = new User("Sam", "sam");
 		try {
 			ServerKernel.sole().addUser(user);
 			if(ServerKernel.sole().userExists(user)){
@@ -153,14 +154,9 @@ public class ServerKernelTests {
 			fail(e.getMessage());
 		}
 	}
-
-	@Test
-	public void testUserIsInGame() {
-		fail("Not yet implemented"); // TODO
-	}
 	
-	public Model getDefaultModel() {
-		Model model = null;
+	public JSONObject getDefaultJSONModel() {
+		JSONObject model = null;
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/test/model/jsonMap.txt");
 		FileInputStream fis;
@@ -175,11 +171,21 @@ public class ServerKernelTests {
 			}
 			scanner.close();
 			
-			JSONObject jsonModel = (JSONObject) parser.parse(x);
-			model = new Model(jsonModel);
+			model = (JSONObject) parser.parse(x);
 			
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+		} catch (FileNotFoundException | ParseException e) {
 			fail("Error init. json from file\n" +
+					e.getMessage());
+		}
+		return model;
+	}
+	
+	public Model getDefaultModel() {
+		Model model = null;
+		try {
+			model = new Model(getDefaultJSONModel());
+		} catch (BadJSONException e) {
+			fail("Error model from passed json object\n" +
 					e.getMessage());
 		}
 		return model;
@@ -191,6 +197,17 @@ public class ServerKernelTests {
 			System.out.println("Passed adding zero games test");
 		} else {
 			fail("Failed adding zero games test");
+		}
+	}
+	
+	@Test
+	public void testGetGames0() {
+		if(ServerKernel.sole().getGames().isEmpty()) {
+			System.out.println("Passed get games test when no"
+					+ " games on server");
+		} else {
+			fail("Failed get games test when no"
+					+ " games on server");
 		}
 	}
 	
@@ -213,6 +230,16 @@ public class ServerKernelTests {
 		} else {
 			fail("Failed making sure previously added game could"
 					+ " be accessed test");
+		}
+	}
+	
+	@Test
+	public void testGetGames1() {
+		if(ServerKernel.sole().getGames().equals(getProperGamesList(false))) {
+			System.out.println("Passed getting games list test with one game");
+		} else {
+			fail("Failed getting games list test with one game "
+					+ "(Check that file is correct)");
 		}
 	}
 	
@@ -259,9 +286,97 @@ public class ServerKernelTests {
 			fail("Failed making sure unadded game did not exist test");
 		}
 	}
-
+	
 	@Test
-	public void testGetGames() {
-		fail("Not yet implemented"); // TODO
+	public void testUserIsInGame1() {
+		User sam = new User("Sam", "sam");
+		try {
+			if(ServerKernel.sole().userIsInGame(0, sam)) {
+				System.out.println("Passed user is in game test when user is in "
+						+ "game");
+			} else {
+				fail("Failed user is in game test when user is in "
+						+ "game");
+			}
+		} catch (ServerAccessException e) {
+			fail("Failed user is in game test when user is in "
+					+ "game. User Sam not set up correctly");
+		}
+	}
+	
+	@Test
+	public void testUserIsInGame2() {
+		User sam = new User("Joshua", "joshua");
+		try {
+			if(ServerKernel.sole().userIsInGame(0, sam)) {
+				System.out.println("Passed user is in game test when user is "
+						+ "not in game");
+			} else {
+				fail("Failed user is in game test when user is in "
+						+ "game");
+			}
+		} catch (ServerAccessException e) {
+			fail("Failed user is in game test when user is in "
+					+ "game. User Sam not set up correctly");
+		}
+	}
+	
+	@Test
+	public void testUserIsInGame3() {
+		User sam = new User("Sam", "");
+		try {
+			if(ServerKernel.sole().userIsInGame(0, sam)) {
+				fail("Failed user is in game test when game is "
+					+ "invalid");
+			} else {
+				fail("Failed user is in game test when game is "
+					+ "invalid");
+			}
+		} catch (ServerAccessException e) {
+			System.out.println("Passed user is in game test when game is "
+					+ "invalid");
+		}
+	}
+
+	public JSONArray getProperGamesList(boolean b) {
+		JSONArray gamesList = null;
+		JSONParser parser = new JSONParser();
+		File jsonFile;
+		if(b){
+			jsonFile = new File("java/test/server/serverkernel/"
+					+ "gamesList.txt");
+		} else {
+			jsonFile = new File("java/test/server/serverkernel/"
+					+ "gamesList2.txt");
+		}
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(jsonFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			Scanner scanner = new Scanner(bis);
+			String x = "";
+			while(scanner.hasNextLine()) {
+				x += scanner.nextLine();
+				x += "\n";
+			}
+			scanner.close();
+			
+			gamesList = (JSONArray) parser.parse(x);
+			
+		} catch (FileNotFoundException | ParseException e) {
+			fail("Error init. games list from file\n" +
+					e.getMessage());
+		}
+		return gamesList;
+	}
+	
+	@Test
+	public void testGetGames2() {
+		if(ServerKernel.sole().getGames().equals(getProperGamesList(true))) {
+			System.out.println("Passed getting full games list test");
+		} else {
+			fail("Failed getting full games list test. "
+					+ "(Check that file is correct)");
+		}
 	}
 }
