@@ -27,6 +27,8 @@ public class ServerData {
 	 * Username, User
 	 */
 	private Map<String, User> users;
+
+	private int numOfGames;
 	
 	private static ServerData _instance;
 	
@@ -37,6 +39,7 @@ public class ServerData {
 	private ServerData() {
 		this.games = new HashMap<Integer, Model>();
 		this.users = new HashMap<String, User>();
+		this.numOfGames = 0;
 	}
 	
 	/**
@@ -147,8 +150,7 @@ public class ServerData {
 	 * @return true if the gameID is in the games list, false otherwise
 	 */
 	public boolean gameExists(int gameID) {
-		return false;
-		
+		return this.games.containsKey(gameID);
 	}
 	
 	/**
@@ -156,11 +158,14 @@ public class ServerData {
 	 * @pre user has been validated, games exists and the user is in it
 	 * @post the game is returned and able to be modified
 	 * @param gameID ID of the game to be gotten
-	 * @return the requested game
+	 * @return the requested game(can be null)
 	 */
-	public Model getGame(int gameID) {
-		return null;
-		
+	public Model getGame(int gameID) throws ServerAccessException {
+		Model game = this.games.get(gameID);
+		if(game == null) {
+			throw new ServerAccessException("Game does not exist");
+		}
+		return game;
 	}
 	
 	/**
@@ -168,11 +173,27 @@ public class ServerData {
 	 * when a game has been accessed through the getGame function - The game
 	 * that is modified that way is also modified in the list. This function
 	 * adds a new game to the game list
-	 * @pre game list has been created. Model is a new version of the game
+	 * @pre game list has been created. Model is a valid version of a new game
 	 * @post the given game is added to the gameslist
 	 * @param newModel The new game to be added to the games list
 	 */
 	public void putGame(Model newModel) {
-		
+		this.games.put(newGameID(), newModel);
+	}
+
+	/**
+	 * This function is to be used to create a new ID for every added new game.
+	 * This function should be used when adding a game to assure that a unique
+	 * id is created.
+	 * @pre none
+	 * @post numOfGames is incremented 
+	 * @return an incremented newGameID
+	 */
+	private int newGameID() {
+		return numOfGames++;
+	}
+	
+	public int getNumOfGames() {
+		return this.numOfGames;
 	}
 }
