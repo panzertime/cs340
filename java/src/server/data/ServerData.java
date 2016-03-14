@@ -3,7 +3,10 @@ package server.data;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import com.google.gson.JsonArray;
 
 import server.exception.ServerAccessException;
 import server.exception.UserException;
@@ -64,19 +67,6 @@ public class ServerData {
 	 */
 	public void addUser(User user) throws UserException, 
 		ServerAccessException {
-		/*if(user.hasValidCrendentials()) {
-			String newUserName = user.getUsername();
-			if(this.users.containsKey(newUserName)) {
-				throw new ServerAccessException("Username already exists"
-						+ " on server.");
-			} else {
-				user.setUserID();
-				this.users.put(newUserName, user);
-			}
-		} else {
-			throw new UserException("User is missing username or password"
-					+ "information.");
-		}*/
 		if(userExists(user)) {
 			throw new ServerAccessException("Username already exists"
 					+ " on server.");
@@ -115,9 +105,16 @@ public class ServerData {
 	 * @post none
 	 * @return list of all the games on server
 	 */
-	public JSONObject getGames() {
-		return null;
+	public JSONArray getGames() {
+		JSONArray gamesList = new JSONArray();
 		
+		for(Map.Entry<Integer,Model> model : this.games.entrySet()) {
+			//Missing toGamesListJSON function
+			/*JSONObject gameInfo = model.getValue().toGameListJSON();
+			gameInfo.put("id", model.getKey());		
+			gamesList.add(gameInfo);*/
+		}
+		return gamesList;
 	}
 	
 	/**
