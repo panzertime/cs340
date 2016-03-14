@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
+import shared.model.board.edge.Edge;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
 import shared.model.board.piece.City;
@@ -528,42 +529,65 @@ public class Player {
 	public Integer getPlayerID() {
 		return playerID;
 	}
-	/*
-	private boolean roadChecked(Road r, HashSet<HashSet<Road>> sets)
+	
+	//recursive road add algorithm
+	//add to set - continue left and right until no more
+	
+	public void addRoadsToSet(Road r, HashSet<Road> set)
 	{
-		for (HashSet<Road> set: sets)
-		{
-			if (set.contains(r));
-				return true;
-		}
-		return false;
-	}
+		set.add(r);
+		r.setMarked(true);
 
-	public void sortRoad(Road r, HashSet<Road> set)
-	{
 		for (Vertex v: r.getEdge().getAllVertices())
 		{
-			if (!(v.hasBuilding() && v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex))
+			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex)
 			{
-				
+				for (Edge e: v.getAllEdges())
+				if (e.hasRoad())
+				{
+					Road road = e.getRoad();
+					if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
+						addRoadsToSet(road, set);
+				}
+						
 			}
 		}
 	}
 	
-	*/
+	public void clearMarks()
+	{
+		for (Road r: roads)
+		{
+			r.setMarked(false);
+		}
+	}
+	public int findLongestPathInSet(HashSet<Road> set)
+	{
+		return 0;
+	}
+	
 	public int getRoadLength() {
 		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>(); 
 		for (Road r: roads)
 		{
 			if (r.isPlaced())
 			{
-		//		if (!roadChecked(r, sets))
+				if (!r.isMarked())
 				{
 					HashSet<Road> set = new HashSet<Road>();
-					set.add(r);
+					this.addRoadsToSet(r, set);
+					sets.add(set);
 				}
 			}
 		}
+		int max = 0;
+		for (HashSet<Road> set: sets)
+		{
+			int i = this.findLongestPathInSet(set);
+			if (i > max)
+				max = i;
+		}
+		return max;
 		
 		
 //		To begin with, separate out the roads into distinct sets, where all the road segments in each set are somehow connected. There's various methods on doing this, but here's one:
@@ -585,12 +609,15 @@ public class Player {
 //		1	Pick a random road segment in the set that has only one connected road segment out from it (ie. you pick an endpoint)
 //		2	If you can't do that, then the whole set is looping (one or more), so pick a random segment in this case
 //		
-//		Now, from the segment you picked, do a recursive branching out depth-first search, keeping track of the length of the current road you've found so far. Always mark road segments as well, and don't branch into segments already marked. This will allow the algorithm to stop when it "eats its own tail".
+//		Now, from the segment you picked, do a recursive branching out depth-first search, keeping track of the length of the current 
+//		road you've found so far. Always mark road segments as well, and don't branch into segments already marked. This will allow 
+//		the algorithm to stop when it "eats its own tail".
 //
-//		Whenever you need to backtrack, because there are no more branches, take a note of the current length, and if it is longer than the "previous maximum", store the new length as the maximum.
+//		Whenever you need to backtrack, because there are no more branches, take a note of the current length, and if it is longer 
+//		than the "previous maximum", store the new length as the maximum.
 //
 //		Do this for all the sets, and you should have your longest road.
-		return 0;
+
 	}
 	
 
