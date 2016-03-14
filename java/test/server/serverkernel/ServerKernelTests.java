@@ -13,14 +13,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-import server.data.ServerData;
+import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
 
-public class ServerKernel {
+public class ServerKernelTests {
 
 	/*TODO
 	 * Get these to run in order 
@@ -29,8 +29,8 @@ public class ServerKernel {
 	public void testAddUser1() {
 		User user = new User("Joshua", "joshua");
 		try {
-			ServerData.sole().addUser(user);
-			if(ServerData.sole().userExists(user)){
+			ServerKernel.sole().addUser(user);
+			if(ServerKernel.sole().userExists(user)){
 				System.out.println("Passed adding a valid user test");
 				return;
 			} else {
@@ -48,8 +48,8 @@ public class ServerKernel {
 		User user = new User("Joshua", "joshua");
 		User user2 = new User("Joshua", "elephant");
 		try {
-			ServerData.sole().addUser(user);
-			ServerData.sole().addUser(user2);
+			ServerKernel.sole().addUser(user);
+			ServerKernel.sole().addUser(user2);
 		} catch (UserException e) {
 			e.printStackTrace();
 		} catch (ServerAccessException e) {
@@ -63,7 +63,7 @@ public class ServerKernel {
 	public void testAddUser3() {
 		User user = new User("", "joshua");
 		try {
-			ServerData.sole().addUser(user);
+			ServerKernel.sole().addUser(user);
 		} catch (UserException e) {
 			System.out.println("Passed adding an invalid user test");
 			return;
@@ -78,10 +78,10 @@ public class ServerKernel {
 		User user = new User("Daniel", "daniel");
 		User user2 = new User("Jacob", "jacob");
 		try {
-			ServerData.sole().addUser(user);
-			ServerData.sole().addUser(user2);
-			if(ServerData.sole().userExists(user)
-					&& ServerData.sole().userExists(user2)){
+			ServerKernel.sole().addUser(user);
+			ServerKernel.sole().addUser(user2);
+			if(ServerKernel.sole().userExists(user)
+					&& ServerKernel.sole().userExists(user2)){
 				System.out.println("Passed adding two valid users test");
 				return;
 			} else {
@@ -99,8 +99,8 @@ public class ServerKernel {
 		User userAdded = new User("Shadrack", "daniel");
 		User userNotAdded = new User("Jacob", "jacob");
 		try {
-			ServerData.sole().addUser(userAdded);
-			if(ServerData.sole().userExists(userAdded)){
+			ServerKernel.sole().addUser(userAdded);
+			if(ServerKernel.sole().userExists(userAdded)){
 				System.out.println("Passed checking one user exists test");
 				return;
 			} else {
@@ -118,10 +118,10 @@ public class ServerKernel {
 		User user = new User("Belthi", "daniel");
 		User user2 = new User("Samantha", "jacob");
 		try {
-			ServerData.sole().addUser(user);
-			ServerData.sole().addUser(user2);
-			if(ServerData.sole().userExists(user)
-					&& ServerData.sole().userExists(user2)){
+			ServerKernel.sole().addUser(user);
+			ServerKernel.sole().addUser(user2);
+			if(ServerKernel.sole().userExists(user)
+					&& ServerKernel.sole().userExists(user2)){
 				System.out.println("Passed checking two users exists test");
 				return;
 			} else {
@@ -139,8 +139,8 @@ public class ServerKernel {
 		User userToBeAdded = new User("Noe", "daniel");
 		User userToBeCheckedFor = new User("Moises", "jacob");
 		try {
-			ServerData.sole().addUser(userToBeAdded);
-			if(ServerData.sole().userExists(userToBeCheckedFor)){
+			ServerKernel.sole().addUser(userToBeAdded);
+			if(ServerKernel.sole().userExists(userToBeCheckedFor)){
 				fail("Fail - says users exists when it shouldn't");
 			} else {
 				System.out.println("Passed checking for user who does not "
@@ -187,7 +187,7 @@ public class ServerKernel {
 
 	@Test
 	public void testPutGame0() {
-		if(ServerData.sole().getNumOfGames() == 0) {
+		if(ServerKernel.sole().getNumOfGames() == 0) {
 			System.out.println("Passed adding zero games test");
 		} else {
 			fail("Failed adding zero games test");
@@ -197,8 +197,8 @@ public class ServerKernel {
 	@Test
 	public void testPutGame1() {
 		Model model = getDefaultModel();
-		ServerData.sole().putGame(model);
-		if(ServerData.sole().getNumOfGames() == 1) {
+		ServerKernel.sole().putGame(model);
+		if(ServerKernel.sole().getNumOfGames() == 1) {
 			System.out.println("Passed adding one game test");
 		} else {
 			fail("Failed adding a game test");
@@ -207,7 +207,7 @@ public class ServerKernel {
 	
 	@Test
 	public void testGameExists1() {
-		if(ServerData.sole().gameExists(0)) {
+		if(ServerKernel.sole().gameExists(0)) {
 			System.out.println("Passed making sure previously added"
 					+ " game could be accessed test");
 		} else {
@@ -219,9 +219,9 @@ public class ServerKernel {
 	@Test
 	public void testPutGame2() {
 		Model model = getDefaultModel();
-		ServerData.sole().putGame(model);
-		ServerData.sole().putGame(model);
-		if(ServerData.sole().getNumOfGames() == 3) {
+		ServerKernel.sole().putGame(model);
+		ServerKernel.sole().putGame(model);
+		if(ServerKernel.sole().getNumOfGames() == 3) {
 			System.out.println("Passed adding two games test");
 		} else {
 			fail("Failed adding two games test");
@@ -231,7 +231,7 @@ public class ServerKernel {
 	@Test
 	public void testPutGame3() {
 		Model model = getDefaultModel();
-		if(ServerData.sole().getNumOfGames() == 3) {
+		if(ServerKernel.sole().getNumOfGames() == 3) {
 			System.out.println("Passed second adding zero games test");
 		} else {
 			fail("Failed adding zero games test second time around");
@@ -240,9 +240,9 @@ public class ServerKernel {
 	
 	@Test
 	public void testGameExists2() {
-		if(ServerData.sole().gameExists(0)
-				&& ServerData.sole().gameExists(1)
-				&& ServerData.sole().gameExists(2)) {
+		if(ServerKernel.sole().gameExists(0)
+				&& ServerKernel.sole().gameExists(1)
+				&& ServerKernel.sole().gameExists(2)) {
 			System.out.println("Passed making sure all three previously added"
 					+ " games could be accessed test");
 		} else {
@@ -252,7 +252,7 @@ public class ServerKernel {
 	}
 	@Test
 	public void testGameExists3() {
-		if(!ServerData.sole().gameExists(3)) {
+		if(!ServerKernel.sole().gameExists(3)) {
 			System.out.println("Passed making sure unadded game is does not "
 					+ "return added test");
 		} else {

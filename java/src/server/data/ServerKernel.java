@@ -17,7 +17,7 @@ import shared.model.Model;
  * All other functions in ServerData should be private.
  *
  */
-public class ServerData {
+public class ServerKernel {
 
 	/**
 	 * GameID, Model
@@ -30,13 +30,13 @@ public class ServerData {
 
 	private int numOfGames;
 	
-	private static ServerData _instance;
+	private static ServerKernel _instance;
 	
 	/**Initializes the database for the server instance
 	 * @pre none
 	 * @post games and users are setup as hashmaps
 	 */
-	private ServerData() {
+	private ServerKernel() {
 		this.games = new HashMap<Integer, Model>();
 		this.users = new HashMap<String, User>();
 		this.numOfGames = 0;
@@ -49,9 +49,9 @@ public class ServerData {
 	 * accessible
 	 * @return The only instance of server data is accessed
 	 */
-	public static ServerData sole() {
+	public static ServerKernel sole() {
 		if(_instance == null) {
-			_instance = new ServerData();
+			_instance = new ServerKernel();
 		}
 		
 		return _instance;
