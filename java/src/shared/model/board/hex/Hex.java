@@ -173,8 +173,8 @@ public abstract class Hex {
     	return verts;
     }
 	public JSONObject toJSON(boolean land) {
-		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
-		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
+		JSONObject jsonHex = new JSONObject();
+		JSONObject hexLoc = new JSONObject();
 		hexLoc.put("x", this.getHexLocation().getX());
 		hexLoc.put("y", this.getHexLocation().getY());
 		if (!land)
@@ -186,7 +186,7 @@ public abstract class Hex {
 				ratio = 2;
 				jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
 			}	
-			jsonHex.put("location", (JSONObject)hexLoc);
+			jsonHex.put("location", hexLoc);
 		
 			try {
 				jsonHex.put("direction", EdgeDirection.toAbbreviation(hex.getPortDirection()));
@@ -200,13 +200,13 @@ public abstract class Hex {
 		
 		if (this instanceof ProductionHex)
 		{
-			jsonHex.put("location", (JSONObject)hexLoc);
+			jsonHex.put("location", hexLoc);
 			ProductionHex hex = (ProductionHex) this;
 			jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
 			jsonHex.put("number", hex.getProductionNumber());
 		}
 		
-		return (JSONObject) jsonHex;
+		return jsonHex;
 	}
     
    

@@ -123,7 +123,7 @@ public class Model {
 	
 	public JSONObject toJSON()
 	{
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		JSONObject jsonMap = new JSONObject();
 		jsonMap.put("bank", bank.toJSON());
 		jsonMap.put("chat", this.getChatModel().getChatLog().toJSON());
 		jsonMap.put("log", this.getChatModel().getGameLog().toJSON());
@@ -138,10 +138,10 @@ public class Model {
 		turnTracker.put("status", this.status);
 		turnTracker.put("longestRoad", this.achievements.getLongestRoad());
 		turnTracker.put("largestArmy", this.achievements.getLargestArmy());
-		jsonMap.put("turnTracker", (JSONObject) turnTracker);
+		jsonMap.put("turnTracker", turnTracker);
 		jsonMap.put("version", 0);
 		jsonMap.put("winner", this.winnerIndex);
-		return (JSONObject) jsonMap;
+		return jsonMap;
 	}
 
 	public Boolean equalsJSON(JSONObject jsonMap) {
@@ -1368,10 +1368,4 @@ public class Model {
 		this.updatePoints();
 		checkWinner(playerIndex);
 	}
-	
-	
-	
-	
-	
-
 }

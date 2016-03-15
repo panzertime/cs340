@@ -273,7 +273,7 @@ public class Board {
 
 	public JSONObject toJSON() {
 
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		JSONObject jsonMap = new JSONObject();
 		JSONArray hexes = new JSONArray();
 		JSONArray ports = new JSONArray();
 		JSONArray roads = new JSONArray();
@@ -295,10 +295,10 @@ public class Board {
 			{
 				if (r.isPlaced())
 				{
-				Map<String, Object> jsonRoad = new HashMap<String, Object>();
-				Map<String, Object> roadLoc = new HashMap<String, Object>();
-				roadLoc.put("x", r.getEdge().getEdgeLocation().getHexLoc().getX());
-				roadLoc.put("y", r.getEdge().getEdgeLocation().getHexLoc().getY());
+					JSONObject jsonRoad = new JSONObject();
+					JSONObject roadLoc = new JSONObject();
+					roadLoc.put("x", r.getEdge().getEdgeLocation().getHexLoc().getX());
+					roadLoc.put("y", r.getEdge().getEdgeLocation().getHexLoc().getY());
 				try {
 					roadLoc.put("direction", EdgeDirection.toAbbreviation(r.getEdge().getEdgeLocation().getDir()));
 				} catch (ModelAccessException e) {
@@ -306,18 +306,18 @@ public class Board {
 					e.printStackTrace();
 				}
 				jsonRoad.put("owner", p.getPlayerIndex());
-				jsonRoad.put("location", (JSONObject) roadLoc);
-				roads.add((JSONObject) jsonRoad);
+				jsonRoad.put("location", roadLoc);
+				roads.add(jsonRoad);
 				}
 			}
 			for (City c: p.getCities())
 			{
 				if (c.isPlaced())
 				{
-				Map<String, Object> jsonCity = new HashMap<String, Object>();
-				Map<String, Object> cityLoc = new HashMap<String, Object>();
-				cityLoc.put("x", c.getVertex().getVertexLocation().getHexLoc().getX());
-				cityLoc.put("y", c.getVertex().getVertexLocation().getHexLoc().getY());
+					JSONObject jsonCity = new JSONObject();
+					JSONObject cityLoc = new JSONObject();
+					cityLoc.put("x", c.getVertex().getVertexLocation().getHexLoc().getX());
+					cityLoc.put("y", c.getVertex().getVertexLocation().getHexLoc().getY());
 				try {
 					cityLoc.put("direction", VertexDirection.toAbbreviation(c.getVertex().getVertexLocation().getDir()));
 				} catch (ModelAccessException e) {
@@ -325,18 +325,18 @@ public class Board {
 					e.printStackTrace();
 				}
 				jsonCity.put("owner", p.getPlayerIndex());
-				jsonCity.put("location", (JSONObject) cityLoc);
-				roads.add((JSONObject) jsonCity);
+				jsonCity.put("location", cityLoc);
+				roads.add(jsonCity);
 				}
 			}
 			for (Settlement s: p.getSettlements())
 			{
 				if (s.isPlaced())
 				{
-				Map<String, Object> jsonSettlement = new HashMap<String, Object>();
-				Map<String, Object> settlementLoc = new HashMap<String, Object>();
-				settlementLoc.put("x", s.getVertex().getVertexLocation().getHexLoc().getX());
-				settlementLoc.put("y", s.getVertex().getVertexLocation().getHexLoc().getY());
+					JSONObject jsonSettlement = new JSONObject();
+					JSONObject settlementLoc = new JSONObject();
+					settlementLoc.put("x", s.getVertex().getVertexLocation().getHexLoc().getX());
+					settlementLoc.put("y", s.getVertex().getVertexLocation().getHexLoc().getY());
 				try {
 					settlementLoc.put("direction", VertexDirection.toAbbreviation(s.getVertex().getVertexLocation().getDir()));
 				} catch (ModelAccessException e) {
@@ -344,8 +344,8 @@ public class Board {
 					e.printStackTrace();
 				}
 				jsonSettlement.put("owner", p.getPlayerIndex());
-				jsonSettlement.put("location", (JSONObject) settlementLoc);
-				roads.add((JSONObject) jsonSettlement);
+				jsonSettlement.put("location", settlementLoc);
+				roads.add(jsonSettlement);
 				}
 			}
 		}
@@ -356,12 +356,12 @@ public class Board {
 		jsonMap.put("settlements", settlements);
 		jsonMap.put("cities", cities);
 		jsonMap.put("radius", this.radius);
-		Map<String, Object> robberLoc = new HashMap<String, Object>();
+		JSONObject robberLoc = new JSONObject();
 		robberLoc.put("x", this.getRobberLocation().getX());
 		robberLoc.put("y", this.getRobberLocation().getY());
-		jsonMap.put("robber", (JSONObject) robberLoc);
+		jsonMap.put("robber", robberLoc);
 		
-		return (JSONObject) jsonMap;
+		return jsonMap;
 	}
 	
 	public static Hex getHexAt(HexLocation hexLocation) {

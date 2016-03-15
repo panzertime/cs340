@@ -842,14 +842,14 @@ public class Player {
 	}
 
 	public JSONObject toJSON() {
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		JSONObject jsonMap = new JSONObject();
 		jsonMap.put("cities", this.getCitiesFree());
-		jsonMap.put("color", this.getColor().toString());
+		jsonMap.put("color", this.getColor().toString().toLowerCase());
 		jsonMap.put("discarded", hasDiscarded);
 		jsonMap.put("monuments", monuments);
 		jsonMap.put("name", this.getUserName());
-		Map<String, Object> newDevCards = new HashMap<String, Object>();
-		Map<String, Object> oldDevCards = new HashMap<String, Object>();
+		JSONObject newDevCards = new JSONObject();
+		JSONObject oldDevCards = new JSONObject();
 		newDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, false));
 		oldDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, true));
 		
@@ -865,23 +865,23 @@ public class Player {
 		newDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, false));
 		oldDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, true));
 		
-		jsonMap.put("newDevCards", (JSONObject)newDevCards);
-		jsonMap.put("oldDevCards", (JSONObject)oldDevCards);
+		jsonMap.put("newDevCards", newDevCards);
+		jsonMap.put("oldDevCards", oldDevCards);
 		jsonMap.put("playerIndex", this.getPlayerIndex());
 		jsonMap.put("playedDevCard", this.playedDevelopmentCard);
 		jsonMap.put("playerID", this.playerID);
-		Map<String, Object> resourceList = new HashMap<String, Object>();
+		JSONObject resourceList = new JSONObject();
 		resourceList.put("wood", this.hand.getWood());
 		resourceList.put("brick", this.hand.getBrick());
 		resourceList.put("sheep", this.hand.getSheep());
 		resourceList.put("wheat", this.hand.getWheat());
 		resourceList.put("ore", this.hand.getOre());
-		jsonMap.put("resources", (JSONObject) resourceList);
+		jsonMap.put("resources", resourceList);
 		jsonMap.put("roads", this.getRoadsFree());
 		jsonMap.put("settlements", this.getSettlementsFree());
 		jsonMap.put("soliders", this.getArmies());
 		jsonMap.put("victoryPoints", this.getPoints());
-		return (JSONObject) jsonMap;
+		return jsonMap;
 	}
 
 	public void updateDevCards() {

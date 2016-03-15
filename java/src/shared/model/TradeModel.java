@@ -238,17 +238,17 @@ public class TradeModel {
 	}
 
 	public JSONObject toJSON() {
-		Map<String, Object> tradeOffer = new HashMap<String, Object>();
+		JSONObject tradeOffer = new JSONObject();
 		tradeOffer.put("sender", this.getSenderIndex());
 		tradeOffer.put("receiver", this.getReceiverIndex());
-		Map<String, Object> resourceList = new HashMap<String, Object>();
+		JSONObject resourceList = new JSONObject();
 		resourceList.put("wood", wood);
 		resourceList.put("brick", brick);
 		resourceList.put("sheep", sheep);
 		resourceList.put("wheat", wheat);
 		resourceList.put("ore", ore);
-		tradeOffer.put("offer", (JSONObject) resourceList);
-		return (JSONObject) tradeOffer;
+		tradeOffer.put("offer", resourceList);
+		return tradeOffer;
 	}
 	
 

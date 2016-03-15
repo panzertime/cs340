@@ -91,13 +91,13 @@ public class Bank {
 
 
 	public JSONObject toJSON() {
-		Map<String, Object> resourceList = new HashMap<String, Object>();
+		JSONObject resourceList = new JSONObject();
 		resourceList.put("wood", this.getHand().getWood());
 		resourceList.put("brick", this.getHand().getBrick());
 		resourceList.put("sheep", this.getHand().getSheep());
 		resourceList.put("wheat", this.getHand().getWheat());
 		resourceList.put("ore", this.getHand().getOre());
-		return (JSONObject) resourceList;
+		return resourceList;
 	}
 
 	

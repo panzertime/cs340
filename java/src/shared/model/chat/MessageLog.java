@@ -65,14 +65,14 @@ public class MessageLog {
 	}
 
 	public JSONObject toJSON() {
-		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		JSONObject jsonMap = new JSONObject();
 		JSONArray lines = new JSONArray();
 		for (Message m: this.getMessageList())
 		{
 			lines.add(m.toJSON());
 		}
 		jsonMap.put("lines", lines);
-		return (JSONObject) jsonMap;
+		return jsonMap;
 	}
 	
 }

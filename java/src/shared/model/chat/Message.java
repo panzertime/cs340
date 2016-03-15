@@ -76,10 +76,10 @@ public class Message {
 	}
 
 	public JSONObject toJSON() {
-	Map<String, Object> jsonMap = new HashMap<String, Object>();
-	jsonMap.put("message", message);
-	jsonMap.put("source", source);
-	return (JSONObject) jsonMap;
+		JSONObject jsonMap = new JSONObject();
+		jsonMap.put("message", message);
+		jsonMap.put("source", source);
+		return jsonMap;
 	}
 	
 	
