@@ -281,13 +281,11 @@ public class Board {
 		JSONArray cities = new JSONArray();
 		for (Hex hex: this.hexes.values())
 		{
-			if (hex instanceof LandHex)
+			if (hex instanceof LandHex) {
 				hexes.add(hex.toJSON(true));
-		}
-		for (Hex hex: this.hexes.values())
-		{
-			if (hex instanceof PortHex)
+			} else if (hex instanceof PortHex) {
 				ports.add(hex.toJSON(false));
+			}
 		}
 		for (Player p: game.getPlayers())
 		{

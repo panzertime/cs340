@@ -184,7 +184,7 @@ public abstract class Hex {
 			if (hex.getPortType() != PortType.THREE)
 			{
 				ratio = 2;
-				jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
+				jsonHex.put("resource", hex.getPortType().toString().toLowerCase());
 			}	
 			jsonHex.put("location", hexLoc);
 		
@@ -195,7 +195,6 @@ public abstract class Hex {
 				e.printStackTrace();
 			}
 			jsonHex.put("ratio", ratio);
-
 		}
 		
 		if (this instanceof ProductionHex)
