@@ -124,7 +124,8 @@ public class Model {
 	public JSONObject toJSON()
 	{
 		JSONObject jsonMap = new JSONObject();
-		jsonMap.put("bank", bank.toJSON());
+		jsonMap.put("bank", bank.bankToJSON());
+		jsonMap.put("deck", bank.deckToJSON());
 		jsonMap.put("chat", this.getChatModel().getChatLog().toJSON());
 		jsonMap.put("log", this.getChatModel().getGameLog().toJSON());
 		jsonMap.put("map", this.board.toJSON());

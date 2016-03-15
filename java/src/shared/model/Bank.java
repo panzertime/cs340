@@ -90,7 +90,7 @@ public class Bank {
 	}
 
 
-	public JSONObject toJSON() {
+	public JSONObject bankToJSON() {
 		JSONObject resourceList = new JSONObject();
 		resourceList.put("wood", this.getHand().getWood());
 		resourceList.put("brick", this.getHand().getBrick());
@@ -98,5 +98,10 @@ public class Bank {
 		resourceList.put("wheat", this.getHand().getWheat());
 		resourceList.put("ore", this.getHand().getOre());
 		return resourceList;
+	}
+
+	public JSONObject deckToJSON() {
+		JSONObject deck = this.hand.deckToJSON();
+		return deck;
 	}
 }
