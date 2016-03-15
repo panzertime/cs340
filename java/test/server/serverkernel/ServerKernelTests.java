@@ -344,10 +344,10 @@ public class ServerKernelTests {
 		File jsonFile;
 		if(b){
 			jsonFile = new File("java/test/server/serverkernel/"
-					+ "gamesList.txt");
+					+ "gamesList2.txt");
 		} else {
 			jsonFile = new File("java/test/server/serverkernel/"
-					+ "gamesList2.txt");
+					+ "gamesList.txt");
 		}
 		FileInputStream fis;
 		try {
@@ -360,8 +360,9 @@ public class ServerKernelTests {
 				x += "\n";
 			}
 			scanner.close();
+			Object obj = parser.parse(x);
 			
-			gamesList = (JSONArray) parser.parse(x);
+			gamesList = (JSONArray) obj;
 			
 		} catch (FileNotFoundException | ParseException e) {
 			fail("Error init. games list from file\n" +
