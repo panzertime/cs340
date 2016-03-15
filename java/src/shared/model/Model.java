@@ -51,7 +51,7 @@ public class Model {
 	private Bank bank;
 	private Achievements achievements;
 	private Integer activePlayerIndex;
-	private Integer winnerIndex;
+	private Integer winnerID;
 	private Integer version;
 	private String status;
 	private ChatModel chatModel;
@@ -85,10 +85,10 @@ public class Model {
 			throw new BadJSONException();
 		this.version = version.intValue();
 
-		Long winnerIndex = ((Long) jsonMap.get("winner"));
-		if (winnerIndex == null)
+		Long winnerID = ((Long) jsonMap.get("winner"));
+		if (winnerID == null)
 			throw new BadJSONException();
-		this.winnerIndex = winnerIndex.intValue();
+		this.winnerID = winnerID.intValue();
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
 		if (turnTracker == null)
@@ -141,7 +141,7 @@ public class Model {
 		turnTracker.put("largestArmy", this.achievements.getLargestArmy());
 		jsonMap.put("turnTracker", turnTracker);
 		jsonMap.put("version", this.version);
-		jsonMap.put("winner", this.winnerIndex);
+		jsonMap.put("winner", this.winnerID);
 		return jsonMap;
 	}
 
@@ -172,7 +172,7 @@ public class Model {
 		Long winnerID = ((Long) jsonMap.get("winner"));
 		if (winnerID == null)
 			return false;
-		if (winnerID.intValue() != this.winnerIndex)
+		if (winnerID.intValue() != this.winnerID)
 			return false;
 
 		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
@@ -339,11 +339,11 @@ public class Model {
 	}
 
 	public Player getWinner() {
-		return players.get(getIndexFromPlayerID(winnerIndex));
+		return players.get(getIndexFromPlayerID(winnerID));
 	}
 
 	public void setWinner(Integer playerID) {
-		this.winnerIndex = playerID;
+		this.winnerID = playerID;
 	}
 
 	public void setVersion(int version) {
@@ -907,7 +907,7 @@ public class Model {
 	}
 
 	public boolean isGameOver() {
-		return this.winnerIndex != -1;
+		return this.winnerID != -1;
 	}
 
 	public String getWinnerName() {
@@ -1053,7 +1053,8 @@ public class Model {
 	public void checkWinner(int playerIndex) //maybe move winner to Achievements
 	{
 			if (this.getPlayerFromIndex(playerIndex).getPoints() >= 10)
-				this.winnerIndex = playerIndex;
+				this.winnerID = 
+						this.getPlayerFromIndex(playerIndex).getPlayerID();
 	}
 	
 	//////////////////////////////////SERVER SECTION////////////////////////////////////////////////////////////
