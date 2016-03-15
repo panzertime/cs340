@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.Vertex;
+import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public abstract class ProductionHex extends LandHex {
 
@@ -18,7 +19,7 @@ public abstract class ProductionHex extends LandHex {
 		this.productionNumber = productionNumber;
 	}
 
-	public void produce() {
+	public void produce() throws NoRemainingResourceException {
 		for (Vertex vert : verts)
 			vert.produce(hexType.getResourceType());
 	}

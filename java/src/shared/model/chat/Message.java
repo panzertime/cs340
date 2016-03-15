@@ -1,5 +1,6 @@
 package shared.model.chat;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -23,6 +24,11 @@ public class Message {
 		if (s == null)  throw new BadJSONException();
 		this.source = s; //Static method to change this to PLAYER class
 		
+	}
+
+	public Message(String message, String source) {
+		this.message = message;
+		this.source = source;
 	}
 
 	public boolean equalsJSON(JSONObject messageLine) {
@@ -67,6 +73,13 @@ public class Message {
 	public LogEntry toLogEntry() {
 		return new LogEntry(getColor(), message);
 		
+	}
+
+	public JSONObject toJSON() {
+		JSONObject jsonMap = new JSONObject();
+		jsonMap.put("message", message);
+		jsonMap.put("source", source);
+		return jsonMap;
 	}
 	
 	

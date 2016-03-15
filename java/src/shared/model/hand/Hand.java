@@ -2,6 +2,7 @@
 package shared.model.hand;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import org.json.simple.JSONObject;
 import shared.logger.Log;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.development.DevCard;
+import shared.model.hand.development.DevCardType;
 import shared.model.hand.development.Knight;
 import shared.model.hand.development.Monopoly;
 import shared.model.hand.development.Monument;
@@ -670,5 +672,64 @@ public class Hand {
 			return false;
 		return true;
 	}
+	
+	public int getCards(DevCardType type, boolean old)
+	{
+		int i = 0;
+		for (DevCard card: this.getDevCards())
+		{
+			if (card.isEnabled() && old)
+				i++;
+		}
+		return i;
+	}
 
+	//JOSHUA
+	//TODO Maybe make this a map from the get-go?
+	public JSONObject deckToJSON() {
+		Map deckMap = devCardToMap();
+		JSONObject deck = new JSONObject(deckMap);
+		return deck;
+	}
+
+	/**
+	 * Converts the list of Dev cards into a map
+	 * @pre assume no bad Dev card was ever made(Risky assumption now that
+	 * we are making the server and not taking something in from a JSON)
+	 * @post nothing is changed, value is returned
+	 * @return Map of the Dev Cards with their values
+	 */
+	private Map devCardToMap() {
+		Map<String, Integer> devCardMap = new HashMap<String, Integer>();
+		int yearOfPlenty  = 0, soldier = 0, monopoly = 0, monument = 0; 
+		int roadBuilding  = 0;
+		for(DevCard devCard : this.devCards) {
+			switch(devCard.getClass().getSimpleName()) {
+			case "YearOfPlenty":
+				yearOfPlenty++;
+				break;
+			case "Knight":
+				soldier++;
+				break;
+			case "Monopoly":
+				monopoly++;
+				break;
+			case "Monument":
+				monument++;
+				break;
+			case "RoadBuilding":
+				roadBuilding++;
+				break;
+			}
+		}
+		
+		devCardMap.put("yearOfPlenty", yearOfPlenty);
+		devCardMap.put("soldier", soldier);
+		devCardMap.put("monopoly", monopoly);
+		devCardMap.put("monument", monument);
+		devCardMap.put("roadBuilding", roadBuilding);
+		return devCardMap;
+	}
+	//END JOSHUA
+	
 }

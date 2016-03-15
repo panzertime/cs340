@@ -45,7 +45,14 @@ public class ChatModel {
 	public void setGameLog(MessageLog gameLog) {
 		this.gameLog = gameLog;
 	}
+
+	public void doSendChat(String message, String source) {
+		this.getChatLog().add(message, source);
+	}
 	
-	
+	public void addGameMessage(String message, String source)
+	{
+		this.gameLog.add(message, source);
+	}
 	
 }

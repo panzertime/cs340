@@ -1,6 +1,7 @@
 package shared.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class Achievements {
 
@@ -30,10 +31,10 @@ public class Achievements {
 	 * @pre A Road has been built on the board by every player
 	 * @post The Player with the Longest Road is set as longestRoad and their haslongestRoad is set to true
 	 */
-	public boolean checkRoads(List<Player> players) {
+	public boolean checkRoads(Map<Integer, Player> players) {
 		if (longestRoad == null)
 		{
-			for (Player p: players)
+			for (Player p: players.values())
 			{
 				if (p.getRoadLength() >= 5)
 				longestRoad = p;
@@ -43,7 +44,7 @@ public class Achievements {
 		else
 		{
 			int max = longestRoad.getRoadLength();
-			for (Player p: players)
+			for (Player p: players.values())
 			{
 				if (p.getRoadLength() > max)
 					longestRoad = p;
@@ -57,22 +58,22 @@ public class Achievements {
 	/**
 	  * @post The Player with the Largest Army is set as largestArmy and their haslargestArmy is set to true
 	  */
-	public boolean checkArmies(List<Player> players) {
+	public boolean checkArmies(Map<Integer, Player> players) {
 		if (largestArmy == null)
 		{
-			for (Player p: players)
+			for (Player p: players.values())
 			{
-				if (p.getRoadLength() >= 3)
+				if (p.getArmies() >= 3)
 					largestArmy = p;
 				return true;
 			}			
 		}
 		else
 		{
-			int max = longestRoad.getRoadLength();
-			for (Player p: players)
+			int max = largestArmy.getArmies();
+			for (Player p: players.values())
 			{
-				if (p.getRoadLength() > max)
+				if (p.getArmies() > max)
 					largestArmy = p;
 				return true;
 			}
@@ -99,6 +100,22 @@ public class Achievements {
 	 */
 	public void setLargestArmy(Player p) {
 		
+	}
+	
+	public int getLongestRoad()
+	{
+		if (this.longestRoad == null)
+			return -1;
+		else
+			return longestRoad.getPlayerIndex();
+	}
+	
+	public int getLargestArmy()
+	{
+		if (this.largestArmy == null)
+			return -1;
+		else
+			return largestArmy.getPlayerIndex();		
 	}
 
 	

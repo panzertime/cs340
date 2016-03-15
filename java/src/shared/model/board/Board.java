@@ -36,12 +36,14 @@ import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ModelAccessException;
 
 public class Board {
 
 	private Model game;
 	private Robber robber;
 	private static Map<HexLocation, Hex> hexes;
+	private int radius;
 
 	/**
 	 * @param jsonMap new version of the map as passed by the model
@@ -136,6 +138,7 @@ public class Board {
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
+				resource = resource.toLowerCase();
 				switch (resource) {
 				case "wood":
 					this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.WOOD, edgeDir));
@@ -210,9 +213,9 @@ public class Board {
 			Long ownerIndexLong = (Long) jsonCity.get("owner");
 			if (ownerIndexLong == null)
 				throw new BadJSONException();
-			Integer ownerID = ownerIndexLong.intValue();
+			Integer ownerIndex = ownerIndexLong.intValue();
 
-			Player player = game.getPlayerFromIndex(ownerID);
+			Player player = game.getPlayerFromIndex(ownerIndex);
 			if (player == null)
 				throw new BadJSONException();
 			
@@ -262,10 +265,103 @@ public class Board {
 
 			buildSettlement(settlement, vertexLoc);
 		}
-
+		Long radius = (Long) jsonMap.get("radius");
+		if (radius != null)
+			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
+	public JSONObject toJSON() {
+
+		JSONObject jsonMap = new JSONObject();
+		JSONArray hexes = new JSONArray();
+		JSONArray ports = new JSONArray();
+		JSONArray roads = new JSONArray();
+		JSONArray settlements = new JSONArray();
+		JSONArray cities = new JSONArray();
+		for (Hex hex: this.hexes.values())
+		{
+			if (hex instanceof LandHex) {
+				hexes.add(hex.toJSON(true));
+			} else if (hex instanceof PortHex) {
+				ports.add(hex.toJSON(false));
+			}
+		}
+		for (Player p: game.getPlayers())
+		{
+			for (Road r: p.getRoads())
+			{
+				if (r.isPlaced())
+				{
+					JSONObject jsonRoad = new JSONObject();
+					JSONObject roadLoc = new JSONObject();
+					roadLoc.put("x", r.getEdge().getEdgeLocation().getHexLoc().getX());
+					roadLoc.put("y", r.getEdge().getEdgeLocation().getHexLoc().getY());
+				try {
+					roadLoc.put("direction", EdgeDirection.toAbbreviation(r.getEdge().getEdgeLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonRoad.put("owner", p.getPlayerIndex());
+				jsonRoad.put("location", roadLoc);
+				roads.add(jsonRoad);
+				}
+			}
+			for (City c: p.getCities())
+			{
+				if (c.isPlaced())
+				{
+					JSONObject jsonCity = new JSONObject();
+					JSONObject cityLoc = new JSONObject();
+					cityLoc.put("x", c.getVertex().getVertexLocation().getHexLoc().getX());
+					cityLoc.put("y", c.getVertex().getVertexLocation().getHexLoc().getY());
+				try {
+					cityLoc.put("direction", VertexDirection.toAbbreviation(c.getVertex().getVertexLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonCity.put("owner", p.getPlayerIndex());
+				jsonCity.put("location", cityLoc);
+				cities.add(jsonCity);
+				}
+			}
+			for (Settlement s: p.getSettlements())
+			{
+				if (s.isPlaced())
+				{
+					JSONObject jsonSettlement = new JSONObject();
+					JSONObject settlementLoc = new JSONObject();
+					settlementLoc.put("x", s.getVertex().getVertexLocation().getHexLoc().getX());
+					settlementLoc.put("y", s.getVertex().getVertexLocation().getHexLoc().getY());
+				try {
+					settlementLoc.put("direction", VertexDirection.toAbbreviation(s.getVertex().getVertexLocation().getDir()));
+				} catch (ModelAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				jsonSettlement.put("owner", p.getPlayerIndex());
+				jsonSettlement.put("location", settlementLoc);
+				settlements.add(jsonSettlement);
+				}
+			}
+		}
+
+		jsonMap.put("hexes", hexes);
+		jsonMap.put("ports", ports);
+		jsonMap.put("roads", roads);
+		jsonMap.put("settlements", settlements);
+		jsonMap.put("cities", cities);
+		jsonMap.put("radius", this.radius);
+		JSONObject robberLoc = new JSONObject();
+		robberLoc.put("x", this.getRobberLocation().getX());
+		robberLoc.put("y", this.getRobberLocation().getY());
+		jsonMap.put("robber", robberLoc);
+		
+		return jsonMap;
+	}
+	
 	public static Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
@@ -728,4 +824,6 @@ public class Board {
 		}
 		return false;
 	}
+
+	
 }
