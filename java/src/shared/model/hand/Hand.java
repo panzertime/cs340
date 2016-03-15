@@ -71,11 +71,8 @@ public class Hand {
 
 	/**
 	 * 
-	 * @param wood
-	 * @param brick
-	 * @param sheep
-	 * @param wheat
-	 * @param ore
+	 * @param resourceList
+	 * @param deckList
 	 * @throws BadJSONException
 	 */
 
@@ -417,7 +414,6 @@ public class Hand {
 	 *            the type of resource to add
 	 * @param num
 	 *            the number of resource to be added
-	 * @throws ResourceException
 	 * @post hand now has addition resources of type and num
 	 */
 	public void receiveResource(ResourceType type, Integer num) {
@@ -498,7 +494,6 @@ public class Hand {
 	 *            the number of resource to be checked
 	 * @return Boolean Indicating if the player has the resources of type and
 	 *         nun
-	 * @throws BadResourceTypeException
 	 */
 	public Boolean hasResource(ResourceType type, Integer num) {
 		switch (type) {
@@ -630,7 +625,7 @@ public class Hand {
 	}
 
 	/**
-	 * @return true if bank hand has >=1 Dev cards
+	 * @return true if bank hand has more than 1 Dev card
 	 */
 	public Boolean hasDevCard() {
 		return (devCards.size() > 0);
@@ -640,18 +635,6 @@ public class Hand {
 		return devCards.size();
 	}
 
-	// public void shuffleDevCards()
-	// {
-	// Random generator = new Random();
-	// ArrayList<DevCard> shuffledList = new ArrayList<DevCard>();
-	// while (devCards.size() > 0)
-	// {
-	// int r = generator.nextInt(devCards.size());
-	// shuffledList.add(devCards.get(r));
-	// devCards.remove(r);
-	// }
-	// devCards = shuffledList;
-	// }
 
 	/**
 	 * @return the devCards

@@ -55,7 +55,6 @@ public abstract class Building {
 	/**
 	 * @param type the resource to generate
 	 * @throws NoRemainingResourceException 
-	 * @throws ResourceException 
 	 */
 	public abstract void produce(ResourceType type) throws NoRemainingResourceException;
 	

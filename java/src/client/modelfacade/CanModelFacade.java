@@ -28,9 +28,8 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canRollDice() throws NullPointerException {
+	public boolean canRollDice() {
 		return this.gameModel.canRollNumber(ClientPlayer.sole().getUserIndex());
 	}
 
@@ -39,16 +38,15 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre hexLoc is valid, game is in state to move robber
 	 * @post Robbers ability to move on the map is shown
 	 * @param hexLoc Location of hex to place robber
-	 * @param playerIndex 
 	 * @return Whether or not a robber can move there
-	 * @throws NullPointerException Pre-condition violation
+	 * @pre-condition violation
 	 */
-	public boolean canPlaceRobber(HexLocation hexLoc) throws NullPointerException {
+	public boolean canPlaceRobber(HexLocation hexLoc) {
 		return this.gameModel.canPlaceRobber(ClientPlayer.sole().getUserIndex(), hexLoc);
 	}
 	
 	
-	public boolean canRobPlayerFrom(HexLocation robberLoc, Integer playerIndex) throws NullPointerException {
+	public boolean canRobPlayerFrom(HexLocation robberLoc, Integer playerIndex) {
 		return this.gameModel.canRobPlayerFrom(robberLoc, ClientPlayer.sole().getUserIndex(), playerIndex);
 	}
 
@@ -57,22 +55,21 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canBuyDevCard() throws NullPointerException {
+	public boolean canBuyDevCard() {
 		return this.gameModel.canBuyDevCard(ClientPlayer.sole().getUserIndex());
 	}
-	public boolean canSeePlayDevCard() throws NullPointerException {
+	public boolean canSeePlayDevCard() {
 		return this.gameModel.isTurn(ClientPlayer.sole().getUserIndex());
 	}
 	
-	public boolean canBuyRoad() throws NullPointerException {
+	public boolean canBuyRoad() {
 		return this.gameModel.canBuyRoad(ClientPlayer.sole().getUserIndex());
 	}
-	public boolean canBuySettlement() throws NullPointerException {
+	public boolean canBuySettlement() {
 		return this.gameModel.canBuySettlement(ClientPlayer.sole().getUserIndex());
 	}
-	public boolean canBuyCity() throws NullPointerException {
+	public boolean canBuyCity() {
 		return this.gameModel.canBuyCity(ClientPlayer.sole().getUserIndex());
 	}
 
@@ -83,9 +80,8 @@ public class CanModelFacade extends ModelFacade {
 	 * @param one first resource
 	 * @param two second resource
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) throws NullPointerException {
+	public boolean canUseYearOfPlenty(ResourceType one, ResourceType two) {
 		return this.gameModel.canUseYearOfPlenty(ClientPlayer.sole().getUserIndex(), one, two);
 	}
 
@@ -96,13 +92,12 @@ public class CanModelFacade extends ModelFacade {
 	 * @param one Edge to build on
 	 * @param two Edge to build on
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two) throws NullPointerException {
+	public boolean canUseRoadBuilding(EdgeLocation one, EdgeLocation two) {
 		return this.gameModel.canUseRoadBuilding(ClientPlayer.sole().getUserIndex(), one, two);
 	}
 	
-	public Boolean canUseRoadBuildingSingle(EdgeLocation one) throws NullPointerException {
+	public Boolean canUseRoadBuildingSingle(EdgeLocation one) {
 		return this.gameModel.canUseRoadBuildingSingle(ClientPlayer.sole().getUserIndex(), one);
 	}
 
@@ -111,11 +106,10 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @param newRobberLocation Change Robber Hex
-	 * @param playerIndex Player to Rob
+	 * @param victimIndex Player to Rob
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canUseSoldier(HexLocation newRobberLocation, int victimIndex) throws NullPointerException {
+	public boolean canUseSoldier(HexLocation newRobberLocation, int victimIndex) {
 		return this.gameModel.canUseSoldier(ClientPlayer.sole().getUserIndex(), newRobberLocation, victimIndex);
 	}
 
@@ -125,9 +119,8 @@ public class CanModelFacade extends ModelFacade {
 	 * @post whether or not this operation is valid
 	 * @param type Resource to Monopolize
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canUseMonopoly(ResourceType type) throws NullPointerException {
+	public boolean canUseMonopoly(ResourceType type) {
 		return this.gameModel.canUseMonopoly(ClientPlayer.sole().getUserIndex(), type);
 	}
 
@@ -136,9 +129,8 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canUseMonument() throws NullPointerException {
+	public boolean canUseMonument() {
 		return this.gameModel.canUseMonument(ClientPlayer.sole().getUserIndex());
 	}
 
@@ -148,13 +140,13 @@ public class CanModelFacade extends ModelFacade {
 	 * @post Map reflects valid result
 	 * @param edgeLoc location of edge to place road
 	 * @return Whether or not a user may place a road
-	 * @throws NullPointerException Pre condition violated
+	 * @pre condition violated
 	 */
-	public boolean canBuildRoad(EdgeLocation edgeLoc) throws NullPointerException {
+	public boolean canBuildRoad(EdgeLocation edgeLoc) {
 		return this.gameModel.canBuildRoad(ClientPlayer.sole().getUserIndex(), edgeLoc);
 	}
 
-	public boolean canSetupRoad(EdgeLocation edgeLoc) throws NullPointerException {
+	public boolean canSetupRoad(EdgeLocation edgeLoc) {
 		return this.gameModel.canSetupRoad(ClientPlayer.sole().getUserIndex(), edgeLoc);
 	}
 
@@ -165,13 +157,13 @@ public class CanModelFacade extends ModelFacade {
 	 * @post Screen will reflect result
 	 * @param vertLoc Location to put the user
 	 * @return Whether or not a user may build a settlement there
-	 * @throws NullPointerException Pre-Conditions violated
+	 * @pre-Conditions violated
 	 */
-	public boolean canBuildSettlement(VertexLocation vertLoc) throws NullPointerException {
+	public boolean canBuildSettlement(VertexLocation vertLoc) {
 		return this.gameModel.canBuildSettlement(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 	
-	public boolean canSetupSettlement(VertexLocation vertLoc) throws NullPointerException {
+	public boolean canSetupSettlement(VertexLocation vertLoc) {
 		return this.gameModel.canSetupSettlement(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 
@@ -182,14 +174,14 @@ public class CanModelFacade extends ModelFacade {
 	 * @post Map shows if a city may be placed there
 	 * @param vertLoc City Location
 	 * @return True if user may place city there, false otherwise
-	 * @throws NullPointerException Pre conditions violated
+	 * @pre conditions violated
 	 */
-	public boolean canBuildCity(VertexLocation vertLoc) throws NullPointerException {
+	public boolean canBuildCity(VertexLocation vertLoc) {
 		return this.gameModel.canBuildCity(ClientPlayer.sole().getUserIndex(), vertLoc);
 	}
 	
 
-	public boolean canDomesticTrade() throws NullPointerException {
+	public boolean canDomesticTrade() {
 		return gameModel.canDomesticTrade(ClientPlayer.sole().getUserID());
 	}
 	
@@ -197,12 +189,12 @@ public class CanModelFacade extends ModelFacade {
 	 * Checks the model through the inspector to see if a user can trade
 	 * @pre User is logged in, in a game, in his turn
 	 * @post nothing
-	 * @param resource Resource to trade
-	 * @param amount Amount of resource
+	 * @param resources Resource to trade
+	 * @param receiverIndex the destination player
 	 * @return Whether or not the user can trade
-	 * @throws NullPointerException Pre condtion violation
+	 * @pre condtion violation
 	 */
-	public boolean canOfferTrade(Map<ResourceType, Integer> resources, Integer receiverIndex) throws NullPointerException {
+	public boolean canOfferTrade(Map<ResourceType, Integer> resources, Integer receiverIndex) {
 		return gameModel.canOfferTrade(ClientPlayer.sole().getUserIndex(), resources, receiverIndex);
 	}
 	
@@ -211,13 +203,12 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canAcceptTrade() throws NullPointerException {
+	public boolean canAcceptTrade() {
 		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserID());
 	}
 	
-	public boolean canViewTrade() throws NullPointerException {
+	public boolean canViewTrade() {
 		return gameModel.canViewTrade(ClientPlayer.sole().getUserIndex());
 	}
 
@@ -227,13 +218,12 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @param ratio Port
-	 * @param input Resource
-	 * @param output Resource
+	 * @param inputType Resource
+	 * @param outputType Resource
 	 * @return post
-	 * @throws NullPointerException
 	 */
 	public boolean canMaritimeTrade(int ratio, ResourceType inputType, ResourceType outputType)
-			throws NullPointerException {
+			{
 		return this.gameModel.canMaritimeTrade(ClientPlayer.sole().getUserIndex(), ratio, inputType, outputType);
 	}
 	
@@ -243,10 +233,9 @@ public class CanModelFacade extends ModelFacade {
 	 * @post the highest valid ratio
 	 * @param inputType the type we are considering offering for trade
 	 * @return the highest valid trading ratio for that resource type
-	 * @throws NullPointerException
 	 */
 	public int canOfferMaritime (ResourceType inputType)
-			throws NullPointerException {
+			{
 		return this.gameModel.canOfferMaritime(ClientPlayer.sole().getUserIndex(), inputType);
 	}
 
@@ -256,10 +245,9 @@ public class CanModelFacade extends ModelFacade {
 	 * @post the bank tells you whether or not it's ready to trade a given resource
 	 * @param outputType the type we want to get back from trade
 	 * @return TRUE if this trade is available, FALSE if not
-	 * @throws
 	 */
 	public boolean canReceiveMaritime (ResourceType outputType)
-			throws NullPointerException {
+			{
 		return this.gameModel.canReceiveMaritime(ClientPlayer.sole().getUserIndex(), outputType);
 	}	
 
@@ -268,16 +256,14 @@ public class CanModelFacade extends ModelFacade {
 	 * Checks the model to see if the current player can DiscardCards
 	 * @pre none
 	 * @post whether or not this operation is valid
-	 * @param resourceList resources they have
+	 * @param resources resources they have
 	 * @return whether or not this operation is valid
-	 * @throws NullPointerException
-	 * @throws BadResourceTypeException
 	 */
-	public boolean canDiscardCards(Map<ResourceType, Integer> resources) throws NullPointerException {
+	public boolean canDiscardCards(Map<ResourceType, Integer> resources) {
 		return this.gameModel.canDiscardCard(ClientPlayer.sole().getUserIndex(), resources);
 	}
 	
-	public boolean shouldDiscard() throws NullPointerException {
+	public boolean shouldDiscard() {
 		return this.gameModel.shouldDiscard(ClientPlayer.sole().getUserIndex());
 	}
 
@@ -286,13 +272,12 @@ public class CanModelFacade extends ModelFacade {
 	 * @pre none
 	 * @post whether or not this operation is valid
 	 * @return post
-	 * @throws NullPointerException
 	 */
-	public boolean canEndTurn() throws NullPointerException {
+	public boolean canEndTurn() {
 		return this.gameModel.canFinishTurn(ClientPlayer.sole().getUserIndex());
 	}
 
-	public boolean canSendChat() throws NullPointerException {
+	public boolean canSendChat() {
 		return this.gameModel.canSendChat(ClientPlayer.sole().getUserIndex());
 	}
 

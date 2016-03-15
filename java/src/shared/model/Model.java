@@ -26,9 +26,7 @@ import shared.model.board.vertex.VertexLocation;
 import shared.model.chat.ChatModel;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
-import shared.model.exceptions.BadPlayerIndexException;
 import shared.model.exceptions.BadStatusException;
-import shared.model.exceptions.BadTurnStatusException;
 import shared.model.exceptions.ModelAccessException;
 import shared.model.exceptions.NoDevCardFoundException;
 import shared.model.hand.ResourceType;
@@ -60,18 +58,8 @@ public class Model {
 	private TradeModel tradeModel;
 
 	/**
-	 * @param board
-	 *            the board to initialize
-	 * @param players
-	 *            the players to initialize
-	 * @param bank
-	 *            the bank to initialize
-	 * @param achievements
-	 *            the achievements to initialize
-	 * @throws BadPlayerIndexException
-	 * @throws BadTurnStatusException
-	 * @throws BadStatusException
-	 * @throws Exception
+	 * @param jsonMap
+	 * @throws BadJSONException
 	 */
 
 	public Model(JSONObject jsonMap) throws BadJSONException {
@@ -342,7 +330,7 @@ public class Model {
 	}
 
 	/**
-	 * @param turn
+	 * @param playerId
 	 *            - the player who has the current turn
 	 */
 	public void setActivePlayer(Integer playerId) {
@@ -795,7 +783,6 @@ public class Model {
 	 * @pre none
 	 * @post game will run
 	 * @return if a given trade can be made
-	 * @throws BadJSONException
 	 */
 	public Boolean canAcceptTrade(Integer playerIndex) {
 		if (tradeModel == null)
