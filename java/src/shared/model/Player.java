@@ -879,7 +879,7 @@ public class Player {
 		jsonMap.put("resources", resourceList);
 		jsonMap.put("roads", this.getRoadsFree());
 		jsonMap.put("settlements", this.getSettlementsFree());
-		jsonMap.put("soliders", this.getArmies());
+		jsonMap.put("soldiers", this.getArmies());
 		jsonMap.put("victoryPoints", this.getPoints());
 		return jsonMap;
 	}

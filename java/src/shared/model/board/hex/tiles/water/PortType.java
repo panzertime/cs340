@@ -11,7 +11,7 @@ public enum PortType
 	private ResourceType resource;
 	
 	public static PortType fromJSON(String jsonResourceType) throws BadJSONException {
-		System.out.println("JSONResource for each port type" + jsonResourceType);
+		//System.out.println("JSONResource for each port type" + jsonResourceType);
 		
 		switch (jsonResourceType) {
 		case "Wood":

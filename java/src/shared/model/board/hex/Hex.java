@@ -177,6 +177,7 @@ public abstract class Hex {
 		JSONObject hexLoc = new JSONObject();
 		hexLoc.put("x", this.getHexLocation().getX());
 		hexLoc.put("y", this.getHexLocation().getY());
+		jsonHex.put("location", hexLoc);
 		if (!land)
 		{
 			int ratio = 3;
@@ -186,7 +187,6 @@ public abstract class Hex {
 				ratio = 2;
 				jsonHex.put("resource", hex.getPortType().toString().toLowerCase());
 			}	
-			jsonHex.put("location", hexLoc);
 		
 			try {
 				jsonHex.put("direction", EdgeDirection.toAbbreviation(hex.getPortDirection()));
@@ -199,7 +199,6 @@ public abstract class Hex {
 		
 		if (this instanceof ProductionHex)
 		{
-			jsonHex.put("location", hexLoc);
 			ProductionHex hex = (ProductionHex) this;
 			jsonHex.put("resource", hex.getHexType().toString().toLowerCase());
 			jsonHex.put("number", hex.getProductionNumber());

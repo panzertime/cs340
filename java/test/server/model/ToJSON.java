@@ -51,11 +51,11 @@ public class ToJSON {
 		Model model;
 		try {
 			model = new Model(minJSON);
-			JSONObject modelToJSON = model.toJSON();
-			System.out.println(modelToJSON);
-			System.out.println(minJSON);
-			if(minJSON.equals(modelToJSON)) {
-				System.out.println("Passed test modelToJSON with minimal"
+			JSONParser parser = new JSONParser();
+			JSONObject modelToJSON = (JSONObject) parser.parse(
+					model.toJSON().toJSONString());
+			if(model.equalsJSON(modelToJSON)) {
+				System.out.println("Passed test modelToJSON with minimal "
 						+ "information.");
 			} else {
 				fail("Failed test modelToJSON with minimal "
@@ -63,6 +63,8 @@ public class ToJSON {
 			}
 		} catch (BadJSONException e) {
 			fail("Failed minimum toJSON test - bad input file");
+		} catch (ParseException e) {
+			fail("Failed minimum toJSON test - bad toJSON function");
 		}
 	}
 	
@@ -73,8 +75,10 @@ public class ToJSON {
 		Model model;
 		try {
 			model = new Model(maxJSON);
-			JSONObject modelToJSON = model.toJSON();
-			if(maxJSON.equals(modelToJSON)) {
+			JSONParser parser = new JSONParser();
+			JSONObject modelToJSON = (JSONObject) parser.parse(
+					model.toJSON().toJSONString());
+			if(model.equalsJSON(modelToJSON)) {
 				System.out.println("Passed test modelToJSON with maximum "
 						+ "information.");
 			} else {
@@ -83,6 +87,8 @@ public class ToJSON {
 			}
 		} catch (BadJSONException e) {
 			fail("Failed maximum toJSON test - bad input file");
+		} catch (ParseException e) {
+			fail("Failed minimum toJSON test - bad toJSON function");
 		}
 	}
 }
