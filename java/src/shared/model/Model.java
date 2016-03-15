@@ -139,7 +139,7 @@ public class Model {
 		turnTracker.put("longestRoad", this.achievements.getLongestRoad());
 		turnTracker.put("largestArmy", this.achievements.getLargestArmy());
 		jsonMap.put("turnTracker", turnTracker);
-		jsonMap.put("version", 0);
+		jsonMap.put("version", this.version);
 		jsonMap.put("winner", this.winnerIndex);
 		return jsonMap;
 	}

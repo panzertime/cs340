@@ -99,8 +99,4 @@ public class Bank {
 		resourceList.put("ore", this.getHand().getOre());
 		return resourceList;
 	}
-
-	
-	
-	
 }
