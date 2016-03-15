@@ -326,7 +326,7 @@ public class Board {
 				}
 				jsonCity.put("owner", p.getPlayerIndex());
 				jsonCity.put("location", cityLoc);
-				roads.add(jsonCity);
+				cities.add(jsonCity);
 				}
 			}
 			for (Settlement s: p.getSettlements())
@@ -345,7 +345,7 @@ public class Board {
 				}
 				jsonSettlement.put("owner", p.getPlayerIndex());
 				jsonSettlement.put("location", settlementLoc);
-				roads.add(jsonSettlement);
+				settlements.add(jsonSettlement);
 				}
 			}
 		}
