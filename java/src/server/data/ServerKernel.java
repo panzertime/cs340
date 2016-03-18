@@ -3,8 +3,13 @@ package server.data;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.google.gson.JsonArray;
+
+import server.exception.ServerAccessException;
+import server.exception.UserException;
 import shared.model.Model;
 
 /**
@@ -12,7 +17,7 @@ import shared.model.Model;
  * All other functions in ServerData should be private.
  *
  */
-public class ServerData {
+public class ServerKernel {
 
 	/**
 	 * GameID, Model
@@ -22,16 +27,19 @@ public class ServerData {
 	 * Username, User
 	 */
 	private Map<String, User> users;
+
+	private int numOfGames;
 	
-	private static ServerData _instance;
+	private static ServerKernel _instance;
 	
 	/**Initializes the database for the server instance
 	 * @pre none
 	 * @post games and users are setup as hashmaps
 	 */
-	private ServerData() {
+	private ServerKernel() {
 		this.games = new HashMap<Integer, Model>();
 		this.users = new HashMap<String, User>();
+		this.numOfGames = 0;
 	}
 	
 	/**
@@ -41,22 +49,34 @@ public class ServerData {
 	 * accessible
 	 * @return The only instance of server data is accessed
 	 */
-	public ServerData sole() {
-		return null;	
+	public static ServerKernel sole() {
+		if(_instance == null) {
+			_instance = new ServerKernel();
+		}
+		
+		return _instance;
 	}
 	
 	/**
 	 * Attempts to add the created user to the list of users on the server
 	 * @pre User is not null and contains all fields filled out except ID
 	 * @post the passed User object will be assigned a valid ID if he does not
-	 * yet exist. Other wise he will be deleted and this fucntion will return 
+	 * yet exist. Otherwise he will be deleted and this function will return 
 	 * false
 	 * @param user User object created from passed in credentials
 	 * @return Whether or not the operation was successful
+	 * @throws UserException user's credentials are invalid
+	 * @throws ServerAccessException username already exists
 	 */
-	public boolean addUser(User user) {
-		return false;
-		
+	public void addUser(User user) throws UserException, 
+		ServerAccessException {
+		if(userExists(user)) {
+			throw new ServerAccessException("Username already exists"
+					+ " on server.");
+		} else {
+			user.setUserID();
+			this.users.put(user.getUsername(), user);
+		}
 	}
 	
 	/**
@@ -66,10 +86,20 @@ public class ServerData {
 	 * @post result of user check in userlist
 	 * @param user the user to be checked for in the userlist
 	 * @return Whether or not the given user is in the userlist
+	 * @throws UserException user's credentials are invalid
 	 */
-	public boolean userExists(User user) {
-		return false;
+	public boolean userExists(User user) throws UserException {
+		boolean result = false;
+		if(user.hasValidCrendentials()) {
+			if(this.users.containsKey(user.getUsername())) {
+				result = true;
+			}
+		} else {
+			throw new UserException("User is missing username or password"
+					+ "information.");
+		}
 		
+		return result;
 	}
 	
 	/**
@@ -78,22 +108,38 @@ public class ServerData {
 	 * @post none
 	 * @return list of all the games on server
 	 */
-	public JSONObject getGames() {
-		return null;
+	public JSONArray getGames() {
+		JSONArray gamesList = new JSONArray();
 		
+		for(Map.Entry<Integer,Model> model : this.games.entrySet()) {
+			//TODO add toGamesListJSON function
+			/*JSONObject gameInfo = model.getValue().toGameListJSON();
+			gameInfo.put("id", model.getKey());		
+			gamesList.add(gameInfo);*/
+		}
+		return gamesList;
 	}
 	
 	/**
 	 * Checks to see if the given user is in the given game
-	 * @pre user is not null, gamelist and userlist have been created already
+	 * @pre user is not null, gamelist and userlist have been created already,
+	 * gameID is for a valid game
 	 * @post true if the user in game already, false if not, game exists
 	 * @param gameID Which game to use in the game list
 	 * @param user User to use when checking if he is inside a game 
 	 * @return true if the user in game already, false if not
 	 */
-	public boolean userIsInGame(int gameID, User user) {
-		return false;
-		
+	public boolean userIsInGame(int gameID, User user) throws 
+		ServerAccessException {
+		boolean result = false;
+		Model game = this.games.get(gameID);
+		if(game == null) {
+			throw new ServerAccessException("Game does not exist");
+		} else {
+			//TODO ADD this functionality
+		//	result = game.isPlayerInGame(user.getUsername(), user.getID());
+		}
+		return result;
 	}
 	
 	/**
@@ -104,8 +150,7 @@ public class ServerData {
 	 * @return true if the gameID is in the games list, false otherwise
 	 */
 	public boolean gameExists(int gameID) {
-		return false;
-		
+		return this.games.containsKey(gameID);
 	}
 	
 	/**
@@ -113,11 +158,14 @@ public class ServerData {
 	 * @pre user has been validated, games exists and the user is in it
 	 * @post the game is returned and able to be modified
 	 * @param gameID ID of the game to be gotten
-	 * @return the requested game
+	 * @return the requested game(can be null)
 	 */
-	public Model getGame(int gameID) {
-		return null;
-		
+	public Model getGame(int gameID) throws ServerAccessException {
+		Model game = this.games.get(gameID);
+		if(game == null) {
+			throw new ServerAccessException("Game does not exist");
+		}
+		return game;
 	}
 	
 	/**
@@ -125,11 +173,27 @@ public class ServerData {
 	 * when a game has been accessed through the getGame function - The game
 	 * that is modified that way is also modified in the list. This function
 	 * adds a new game to the game list
-	 * @pre game list has been created. Model is a new version of the game
+	 * @pre game list has been created. Model is a valid version of a new game
 	 * @post the given game is added to the gameslist
 	 * @param newModel The new game to be added to the games list
 	 */
 	public void putGame(Model newModel) {
-		
+		this.games.put(newGameID(), newModel);
+	}
+
+	/**
+	 * This function is to be used to create a new ID for every added new game.
+	 * This function should be used when adding a game to assure that a unique
+	 * id is created.
+	 * @pre none
+	 * @post numOfGames is incremented 
+	 * @return an incremented newGameID
+	 */
+	private int newGameID() {
+		return numOfGames++;
+	}
+	
+	public int getNumOfGames() {
+		return this.numOfGames;
 	}
 }

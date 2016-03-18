@@ -1,23 +1,19 @@
 package server.command.mock.moves;
 
-import server.command.ICommand;
+import org.json.simple.JSONObject;
+
+import server.command.mock.Mock;
 
 /**
  * Class for keeping common move command functionality in the same place
  *
  */
-public abstract class MovesCommand implements ICommand {
+public abstract class MovesCommand extends Mock {
 
-	/**
-	 * Uses the passed string to check the database to see if the cookie
-	 * parameters are valid
-	 * @pre none
-	 * @post the cookie is determined to be legitimate or not
-	 * @param cookie the cookie string passed in the request
-	 * @return whether or not the username, password, ID and gameID are valid
-	 */
-	public boolean validCookie(String cookie) {
-		return false;
-		
+	private static final String filePath = "moves/";
+	
+	@Override
+	public JSONObject jsonFromFile(String file) {
+		return jsonFromFile(filePath, file);
 	}
 }
