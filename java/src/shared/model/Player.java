@@ -58,7 +58,7 @@ public class Player {
 		this.points = 0;
 		this.playedDevelopmentCard = false;
 		this.hasDiscarded = false;
-		this.hand = new Hand();
+		this.hand = new Hand(false);
 		
 		initPieces(); 
 		

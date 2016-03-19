@@ -271,6 +271,10 @@ public class Board {
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
+	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public JSONObject toJSON() {
 
 		JSONObject jsonMap = new JSONObject();

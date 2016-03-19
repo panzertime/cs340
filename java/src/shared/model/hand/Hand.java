@@ -297,13 +297,36 @@ public class Hand {
 
 	}
 
-	public Hand() {
-		this.wood = 0;
-		this.brick = 0;
-		this.sheep = 0;
-		this.wheat = 0;
-		this.ore = 0;
+
+	public Hand(boolean bank) {
 		this.devCards = new ArrayList<DevCard>();
+
+		if (bank)
+		{
+			for (ResourceType type: ResourceType.values())
+				this.receiveResource(type, 19);
+			for (int i = 0; i < 12; i++)
+			{
+				DevCard e = new Knight();
+				this.devCards.add(e);
+			}
+			for (int i = 0; i < 5; i++)
+			{
+				DevCard e = new Monument();
+				this.devCards.add(e);
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				DevCard e = new YearOfPlenty();
+				this.devCards.add(e);
+				e = new RoadBuilding();
+				this.devCards.add(e);
+				e = new Monopoly();
+				this.devCards.add(e);
+			}
+			
+			
+		}
 	}
 
 	public boolean equalsJSON(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) {

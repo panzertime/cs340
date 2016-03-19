@@ -33,6 +33,11 @@ public class Bank {
 		hand = new Hand(resourceList, deckList);
 	}
 	
+	public Bank() {
+		this.hand = new Hand(true);
+
+	}
+
 	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
 		if (resourceList == null || deckList == null) return false; 
 		return hand.equalsJSON(resourceList, deckList);

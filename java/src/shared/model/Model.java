@@ -79,14 +79,18 @@ public class Model {
 
 	public Model(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String gameName)
 	{
-		//init bank
+		this.bank = new Bank();
 		//init board
-		//tradeModel null
-		//Achievements init
-		//init chat and log
-		//new playermap
-		//set winner, initial turn, etc;
-	
+		this.tradeModel = null;
+		this.achievements = new Achievements();
+		this.chatModel = new ChatModel();
+		this.players = new HashMap<Integer, Player>();
+		this.winnerID = -1;
+		this.activePlayerIndex = 0;
+		this.status = "FirstRound";
+		this.gameName = gameName;
+		this.version = 0;
+		
 	}
 	
 	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
