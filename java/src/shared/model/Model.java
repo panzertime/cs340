@@ -80,7 +80,7 @@ public class Model {
 	public Model(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String gameName)
 	{
 		this.bank = new Bank();
-		//init board
+		this.board = new Board(randomTiles, randomNumbers, randomPorts, this);
 		this.tradeModel = null;
 		this.achievements = new Achievements();
 		this.chatModel = new ChatModel();

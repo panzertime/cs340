@@ -42,8 +42,15 @@ public class Board {
 
 	private Model game;
 	private Robber robber;
-	private static Map<HexLocation, Hex> hexes;
+	private Map<HexLocation, Hex> hexes;
 	private int radius;
+	
+	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts, Model game) {
+		this.game = game;
+		this.robber = new Robber();
+		this.hexes = new HashMap<HexLocation, Hex>();
+		
+	}
 
 	/**
 	 * @param jsonMap new version of the map as passed by the model
@@ -271,9 +278,6 @@ public class Board {
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
-	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts) {
-		// TODO Auto-generated constructor stub
-	}
 
 	public JSONObject toJSON() {
 
@@ -366,11 +370,11 @@ public class Board {
 		return jsonMap;
 	}
 	
-	public static Hex getHexAt(HexLocation hexLocation) {
+	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
 
-	public static Vertex getVertexAt(VertexLocation vertexLoc) {
+	public Vertex getVertexAt(VertexLocation vertexLoc) {
 		VertexDirection vertDir = vertexLoc.getDir();
 		HexLocation hexLoc = vertexLoc.getHexLoc();
 		Hex hex = getHexAt(hexLoc);
