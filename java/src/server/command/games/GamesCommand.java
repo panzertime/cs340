@@ -1,6 +1,9 @@
 package server.command.games;
 
 import server.command.ICommand;
+import server.data.ServerKernel;
+import server.data.User;
+import server.exception.UserException;
 
 /**
  * Class for keeping common Games command functionality in the same place
@@ -8,6 +11,7 @@ import server.command.ICommand;
  */
 public abstract class GamesCommand implements ICommand {
 
+	//TODO Fix code duplication in GameCommand
 	/**
 	 * Uses the passed string to check the database to see if the cookie
 	 * parameters are valid
@@ -17,6 +21,14 @@ public abstract class GamesCommand implements ICommand {
 	 * @return whether or not the username, password, and ID are valid
 	 */
 	public boolean validCookie(String cookie) {
-		return false;
+		boolean result = false;
+		try {
+			User user = new User(cookie);
+			result = ServerKernel.sole().userExists(user);
+		} catch (UserException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		return result;
 	}
 }

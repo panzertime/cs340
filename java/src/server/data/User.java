@@ -1,5 +1,9 @@
 package server.data;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import server.exception.UserException;
 
 public class User {
@@ -38,12 +42,44 @@ public class User {
 	
 	/**
 	 * Creates a user form a handed cookie
-	 * @pre cookie is valid, nonempty string
+	 * @pre cookie is valid, nonempty string, already decoded URL
 	 * @post user object is created with the given parameters
 	 * @param cookie cookie handed to the server by the client
+	 * @throws UserException Cookie passed in is invalid
 	 */
-	public User(String cookie) {
-		
+	public User(String cookie) throws UserException {
+		if(cookie.startsWith("catan.user=")
+				|| cookie.endsWith(";Path=/;") 
+				|| !cookie.isEmpty()) {
+			int startIndex = cookie.indexOf("{");
+			int endIndex = cookie.indexOf("}");
+			String toJSON = cookie.substring(startIndex, endIndex);
+			JSONParser parser = new JSONParser();
+			try {
+				JSONObject userJSONCredentials = 
+						(JSONObject) parser.parse(toJSON);
+				
+				String name = (String) userJSONCredentials.get("name");
+				String password = (String) userJSONCredentials.get("password");
+				Long id = (Long) userJSONCredentials.get("playerID");
+				
+				if(name == null
+						|| password == null
+						|| id == null) {
+					throw new UserException("Cookie has null JSON params");
+				} else {
+					this.id = id.intValue();
+					this.username = name;
+					this.password = password;
+				}
+			} catch (ParseException e) {
+				throw new UserException("Cookie passed in has malformed JSON");
+			}
+			
+		} else {
+			throw new UserException("Cookie passed in is not in the required"
+					+ "format.");
+		}
 	}
 
 	/**
@@ -60,15 +96,34 @@ public class User {
 			throw new UserException("User already assigned an ID");
 		}
 	}
+	
 
+	//TODO This may need to be refactored to be used with a UTILS class
+	//in order to keep the HTML cookie encoding out of it.
 	/**
 	 * Converts the given user to a cookie
-	 * @pre all fields in user are non-null
+	 * @pre all fields in user are valid(non-empty string and has ID)
 	 * @post none
-	 * @return Cookie String to be used by the server to return to the client
+	 * @return String to be used by the URL Encoder on the server to return to
+	 * the client.
+	 * @throws UserException User fields are incomplete or invalid
 	 */
-	public String toCookie() {
-		return password;
+	public String toCookie() throws UserException {
+		if(this.username.isEmpty()
+				|| this.password.isEmpty()
+				|| this.id == null) {
+			throw new UserException("User is missing required data");
+		}
+		JSONObject cookie = new JSONObject();
+		cookie.put("name", this.username);
+		cookie.put("password", this.password);
+		cookie.put("playerID", this.id);
+		
+		StringBuilder result = new StringBuilder("catan.user=");
+		result.append(cookie.toJSONString());
+		result.append(";Path=/;");
+		
+		return result.toString();
 	}
 
 	/**
