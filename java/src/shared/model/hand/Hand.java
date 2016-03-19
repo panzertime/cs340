@@ -297,6 +297,15 @@ public class Hand {
 
 	}
 
+	public Hand() {
+		this.wood = 0;
+		this.brick = 0;
+		this.sheep = 0;
+		this.wheat = 0;
+		this.ore = 0;
+		this.devCards = new ArrayList<DevCard>();
+	}
+
 	public boolean equalsJSON(JSONObject resourceList, JSONObject oldDevList, JSONObject newDevList) {
 		if (resourceList == null || oldDevList == null || newDevList == null)
 			return false;

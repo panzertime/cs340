@@ -8,4 +8,8 @@ public class JoinGameException extends Exception {
 		super(e);
 	}
 
+	public JoinGameException() {
+		// TODO Auto-generated constructor stub
+	}
+
 }
