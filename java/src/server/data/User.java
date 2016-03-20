@@ -45,6 +45,11 @@ public class User {
 	public User(String cookie) {
 		
 	}
+	
+	public User()
+	{
+		
+	}
 
 	/**
 	 * Used to assign a user an ID
