@@ -3,7 +3,10 @@ package server.command.moves;
 import server.command.ICommand;
 import server.data.ServerKernel;
 import server.data.User;
+import server.exception.ServerAccessException;
 import server.exception.UserException;
+import server.utils.CatanCookie;
+import server.utils.CookieException;
 
 /**
  * Class for keeping common move command functionality in the same place
@@ -20,15 +23,23 @@ public abstract class MovesCommand implements ICommand {
 	 * @return whether or not the username, password, ID and gameID are valid
 	 */
 	public boolean validCookie(String cookie) {
-		boolean result = false;
+		boolean userExists = false;
+		boolean userInGame = false; 
 		try {
-			User user = new User(cookie);
-			result = ServerKernel.sole().userExists(user);
-		} catch (UserException e) {
-			System.err.println(e.getMessage());
+			CatanCookie catanCookie = new CatanCookie(cookie, false);
+			User user = new User(catanCookie.getName(), 
+					catanCookie.getPassword(), catanCookie.getUserID());
+			userExists = ServerKernel.sole().userExists(user);
+			int gameID = catanCookie.getGameID();
+			if(ServerKernel.sole().gameExists(gameID)) {
+				userInGame = ServerKernel.sole().userIsInGame(gameID, user);
+			}
+		} catch (UserException | CookieException | ServerAccessException e) {
+			//FOR DEBUG ONLY
+			//System.err.println(e.getMessage());
 		}
 		
-		return result;
+		return userExists && userInGame;
 	}
 	
 }

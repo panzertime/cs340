@@ -4,6 +4,8 @@ import server.command.ICommand;
 import server.data.ServerKernel;
 import server.data.User;
 import server.exception.UserException;
+import server.utils.CatanCookie;
+import server.utils.CookieException;
 
 /**
  * Class for keeping common Games command functionality in the same place
@@ -23,10 +25,13 @@ public abstract class GamesCommand implements ICommand {
 	public boolean validCookie(String cookie) {
 		boolean result = false;
 		try {
-			User user = new User(cookie);
+			CatanCookie catanCookie = new CatanCookie(cookie, true);
+			User user = new User(catanCookie.getName(), 
+					catanCookie.getPassword(), catanCookie.getUserID());
 			result = ServerKernel.sole().userExists(user);
-		} catch (UserException e) {
-			System.err.println(e.getMessage());
+		} catch (UserException | CookieException e) {
+			//DEBUG ONLY 
+			//System.err.println(e.getMessage());
 		}
 		
 		return result;

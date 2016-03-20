@@ -39,47 +39,20 @@ public class User {
 		this.password = password;
 		id = null;
 	}
-	
+
 	/**
-	 * Creates a user form a handed cookie
-	 * @pre cookie is valid, nonempty string, already decoded URL
-	 * @post user object is created with the given parameters
-	 * @param cookie cookie handed to the server by the client
-	 * @throws UserException Cookie passed in is invalid
+	 * This constructor should only be used to create a user from a valid 
+	 * cookie
+	 * @pre all attributes are valid
+	 * @post a new user with the given params is created
+	 * @param name username
+	 * @param password password
+	 * @param id ID
 	 */
-	public User(String cookie) throws UserException {
-		if(cookie.startsWith("catan.user=")
-				|| cookie.endsWith(";Path=/;") 
-				|| !cookie.isEmpty()) {
-			int startIndex = cookie.indexOf("{");
-			int endIndex = cookie.indexOf("}");
-			String toJSON = cookie.substring(startIndex, endIndex);
-			JSONParser parser = new JSONParser();
-			try {
-				JSONObject userJSONCredentials = 
-						(JSONObject) parser.parse(toJSON);
-				
-				String name = (String) userJSONCredentials.get("name");
-				String password = (String) userJSONCredentials.get("password");
-				Long id = (Long) userJSONCredentials.get("playerID");
-				
-				if(name == null
-						|| password == null
-						|| id == null) {
-					throw new UserException("Cookie has null JSON params");
-				} else {
-					this.id = id.intValue();
-					this.username = name;
-					this.password = password;
-				}
-			} catch (ParseException e) {
-				throw new UserException("Cookie passed in has malformed JSON");
-			}
-			
-		} else {
-			throw new UserException("Cookie passed in is not in the required"
-					+ "format.");
-		}
+	public User(String name, String password, Integer id) {
+		this.username = name;
+		this.password = password;
+		this.id = id;
 	}
 
 	/**
