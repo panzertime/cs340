@@ -36,4 +36,19 @@ public abstract class GamesCommand implements ICommand {
 		
 		return result;
 	}
+	
+
+	public User getUserFromCookie(String cookie) {
+		User user = null;
+		try {
+			CatanCookie catanCookie = new CatanCookie(cookie, true);
+			user = new User(catanCookie.getName(), 
+					catanCookie.getPassword(), catanCookie.getUserID());
+		} catch (CookieException e) {
+			System.err.println("Tried to create a user from an invalid cookie."
+					+ " Check pre-conditions.");
+		}
+		return user;
+	}
+
 }

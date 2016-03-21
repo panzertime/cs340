@@ -172,5 +172,28 @@ public class User {
 	 */
 	public Integer getID() {
 		return this.id;
-	}	
+	}
+	
+	//DEBUG AND TESTING SECTION
+
+	/**
+	 * TESTING AND DEBUGGING ONLY: This is to be used for tests to make sure 
+	 * that a newly created user matches an already existing game
+	 * @pre none
+	 * @post id is set
+	 * @param id ID
+	 */
+	public void setUserID(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * TESING AND DEBUGGING ONLY:
+	 * Used to reset static ID value to initial value of 0
+	 * @pre none
+	 * @post ids to be assigned will be reset to 0
+	 */
+	public void resetIDs() {
+		this.id = 0;
+	}
 }
