@@ -258,8 +258,9 @@ public class Model {
 		if ((JSONObject) jsonMap.get("tradeOffer") == null) {
 			if (tradeModel != null)
 				return false;
-		} else if (!tradeModel.equalsJSON((JSONObject) jsonMap.get("tradeOffer")))
+		} else if (!tradeModel.equalsJSON((JSONObject) jsonMap.get("tradeOffer"))) {
 			return false;
+		}
 
 		return true;
 	}
@@ -844,11 +845,13 @@ public class Model {
 	 * @post game will run
 	 * @return if a given trade can be made
 	 */
-	public Boolean canAcceptTrade(Integer playerIndex) {
+	public Boolean canAcceptTrade(Boolean willAccept, Integer playerIndex) {
 		if (tradeModel == null)
 			return false;
 		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerIndex))
 			return false;
+		if (!willAccept)
+			return true;	// Pay attention, breaking the norm here
 		if (!getPlayerFromIndex(tradeModel.getReceiverIndex()).hasCards(this.tradeModel.getResourcesToGive()))
 			return false;
 		return true;
@@ -1126,6 +1129,8 @@ public class Model {
 
 	public void doAcceptTrade(boolean willAccept, int playerIndex)
 	{
+		if (!this.canAcceptTrade(willAccept, playerIndex))
+			return;
 		String source = this.getPlayerName(playerIndex);
 
 		if (willAccept)
@@ -1140,17 +1145,8 @@ public class Model {
 				Player receiver = this.getPlayerFromIndex(tradeModel.getReceiverIndex());
 				resourceAmount = this.tradeModel.getResource(type);
 				
-				if (resourceAmount > 0)
-				{
-					receiver.receiveResource(type, resourceAmount);
-					sender.sendResource(type, resourceAmount);
-				}
-				else if (resourceAmount < 0)
-				{
-					sender.receiveResource(type, resourceAmount);
-					receiver.sendResource(type, resourceAmount);
-					
-				}
+				receiver.receiveResource(type, resourceAmount);
+				sender.sendResource(type, resourceAmount);
 			}
 			} catch (ModelAccessException | NoRemainingResourceException e) {
 				// TODO Auto-generated catch block
