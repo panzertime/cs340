@@ -1,10 +1,12 @@
-package tests;
-public class PhaseOneTest {
+package test;
+public class Test {
 	
 	public static void main(String[] args) {
 		
 		
 		String[] tests = {
+				
+			// Phase One tests
 				"poller.PollerTest",
 				
 				"proxy.GamesTest",
@@ -33,7 +35,31 @@ public class PhaseOneTest {
 				
 				"model.can.build.road.CanBuildRoadTest",
 				"model.can.build.settlement.CanBuildSettlementTest",
-				"model.can.build.city.CanBuildCityTest"
+				"model.can.build.city.CanBuildCityTest",
+				
+			// Phase Three tests
+				"model.execute.send.DoSendChatTest",
+				"model.execute.DoBuyDevCardTest",
+				
+				"model.execute.roll.DoRollNumberTest",
+				"model.execute.placerobber.DoPlaceRobberTest",
+				"model.execute.finishturn.DoFinishTurnTest",
+				"model.execute.discardcards.DoDiscardCardsTest",
+				
+				"model.execute.trade.offer.DoOfferTradeTest",
+				"model.execute.trade.accept.DoAcceptTradeTest",
+				"model.execute.trade.maritime.DoMaritimeTradeTest",
+				
+				"model.execute.use.yearofplenty.DoUseYearOfPlentyTest",
+				"model.execute.use.roadbuilding.DoUseRoadBuildingTest",
+				"model.execute.use.soldier.DoUseSoldierTest",
+				"model.execute.use.monopoly.DoUseMonopolyTest",
+				"model.execute.use.monument.DoUseMonumentTest",
+				
+				"model.execute.build.road.DoBuildRoadTest",
+				"model.execute.build.settlement.DoBuildSettlementTest",
+				"model.execute.build.city.DoBuildCityTest"
+				
 		};
 		
 		org.junit.runner.JUnitCore.main(tests);
