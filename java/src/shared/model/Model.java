@@ -27,6 +27,7 @@ import shared.model.chat.ChatModel;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.BadStatusException;
+import shared.model.exceptions.JoinGameException;
 import shared.model.exceptions.ModelAccessException;
 import shared.model.exceptions.NoDevCardFoundException;
 import shared.model.hand.ResourceType;
@@ -56,7 +57,66 @@ public class Model {
 	private String status;
 	private ChatModel chatModel;
 	private TradeModel tradeModel;
+	private String gameName;
+	
+	
+	public JSONObject getGamesList() {
+		HashMap<String, Object> jsonList = new HashMap<String, Object>();
+		jsonList.put("title", gameName);
+		JSONArray jsonPlayers = new JSONArray();
+		for (Player p: players.values())
+		{
+			HashMap<String, Object> jsonPlayer = new HashMap<String, Object>();
+			jsonPlayer.put("color", p.getColor().toString().toLowerCase());
+			jsonPlayer.put("name", p.getUserName());
+			jsonPlayer.put("id", p.getPlayerID());
+			jsonPlayers.add(new JSONObject(jsonPlayer));
+		}
+		jsonList.put("players", jsonPlayers);
+		return new JSONObject(jsonList);
+		
+	}
 
+	public Model(boolean randomTiles, boolean randomNumbers, boolean randomPorts, String gameName)
+	{
+		this.bank = new Bank();
+		this.board = new Board(randomTiles, randomNumbers, randomPorts, this);
+		this.tradeModel = null;
+		this.achievements = new Achievements();
+		this.chatModel = new ChatModel();
+		this.players = new HashMap<Integer, Player>();
+		this.winnerID = -1;
+		this.activePlayerIndex = 0;
+		this.status = "FirstRound";
+		this.gameName = gameName;
+		this.version = 0;
+		
+	}
+	
+	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
+	{
+	Integer i = this.getIndexFromPlayerID(playerID);
+	if (i == null)
+	{
+		this.getPlayerFromIndex(i).setUserColor(color);
+	}
+	else
+	{
+		int index = players.size();
+		if (index >= 4)
+			throw new JoinGameException();
+		players.put(index, new Player(playerID, index, playerName, color));
+	}
+	
+	}
+	
+
+	public boolean isPlayerInGame(String username, Integer ID)
+	{
+		return (this.getIndexFromPlayerID(ID) != null); 
+	}
+	
+	
 	/**
 	 * @param jsonMap
 	 * @throws BadJSONException

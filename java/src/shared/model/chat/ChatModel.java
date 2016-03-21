@@ -22,6 +22,11 @@ public class ChatModel {
 			gameLog = new MessageLog((JSONArray)gameList.get("lines"));
 	}
 	
+	public ChatModel() {
+		this.chatLog = new MessageLog();
+		this.gameLog = new MessageLog();
+	}
+
 	public boolean equalsJSON(JSONObject chatList, JSONObject gameList) {
 
 		if (chatList == null && chatLog.getSize() != 0) return false;

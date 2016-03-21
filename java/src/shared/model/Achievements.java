@@ -16,6 +16,12 @@ public class Achievements {
 	}
 	
 	
+	public Achievements() {
+		this.largestArmy = null;
+		this.longestRoad = null;
+	}
+
+
 	public boolean equalsJSON(Integer longestRoad, Integer largestArmy) {
 		if(!(this.longestRoad == null &&
 				longestRoad == -1)) {

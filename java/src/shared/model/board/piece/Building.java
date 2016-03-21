@@ -78,7 +78,7 @@ public abstract class Building {
 	public Boolean hasPort(PortType portType) {
 		if (!isPlaced())
 			return false;
-	return (vertex.hasPort(portType) || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
+	return (vertex.hasPort(portType));//I commented this out Mar 19 - don't think we need this but if we notice problems with the Maritime we can put it back in || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
 	}
 	
 	public boolean equals(JSONObject jsonHex) {

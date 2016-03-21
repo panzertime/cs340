@@ -48,6 +48,22 @@ public class Player {
 	private Boolean hasDiscarded;
 	private Integer playerID;
 
+	public Player(int playerID, int playerIndex, String name, CatanColor color)
+	{
+		this.playerIndex = playerIndex;
+		this.playerID = playerID;
+		this.userName = name;
+		this.userColor = color;
+		this.armies = 0;
+		this.points = 0;
+		this.playedDevelopmentCard = false;
+		this.hasDiscarded = false;
+		this.hand = new Hand(false);
+		
+		initPieces(); 
+		
+	}
+	
 	public Player(JSONObject player, Model game) throws BadJSONException {
 		this.game = game;
 		if (player == null)
@@ -90,9 +106,7 @@ public class Player {
 		if (playerID == null)
 			throw new BadJSONException();
 		this.playerID = playerID.intValue();
-		settlements = new Settlement[5];
-		cities = new City[4];
-		roads = new Road[15];
+		
 
 		initPieces();   
 	}
@@ -180,6 +194,9 @@ public class Player {
 	
 
 	private void initPieces() {
+		settlements = new Settlement[5];
+		cities = new City[4];
+		roads = new Road[15];
 		for (int i = 0; i < 5; i++)
 			settlements[i] = new Settlement(this);
 		for (int i = 0; i < 4; i++)
@@ -899,6 +916,10 @@ public class Player {
 
 	public City[] getCities() {
 		return cities;
+	}
+
+	public void setUserColor(CatanColor userColor) {
+		this.userColor = userColor;
 	}
 
 
