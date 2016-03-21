@@ -183,19 +183,19 @@ public class GetModelFacade  extends ModelFacade {
 	//client only
 	public int getFreeRoads()
 	{
-		return gameModel.getFreeRoads(ClientPlayer.sole().getUserID());
+		return gameModel.getFreeRoads(ClientPlayer.sole().getUserIndex());
 	}
 	
 	//client only
 	public int getFreeSettlements()
 	{
-		return gameModel.getFreeSettlements(ClientPlayer.sole().getUserID());
+		return gameModel.getFreeSettlements(ClientPlayer.sole().getUserIndex());
 	}
 	
 	//client only
 	public int getFreeCities()
 	{
-		return gameModel.getFreeCities(ClientPlayer.sole().getUserID());
+		return gameModel.getFreeCities(ClientPlayer.sole().getUserIndex());
 	}
 	
 	//client only
