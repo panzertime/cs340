@@ -873,9 +873,10 @@ public class Model {
 	 * @return true
 	 */
 	public Boolean canSendChat(Integer playerIndex) {
-		if (playerIndex == null) {
+		if (playerIndex == null)
 			return false;
-		}
+		if (getPlayerFromIndex(playerIndex) == null)
+			return false;
 		return true;
 	}
 
@@ -1123,6 +1124,8 @@ public class Model {
 	
 	public void doSendChat(String message, int playerIndex)
 	{
+		if (!this.canSendChat(playerIndex))
+			return;
 		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
 	}
 	

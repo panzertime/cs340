@@ -18,11 +18,13 @@ public class Message {
 		this.message = m;
 		String s = (String) messageLine.get("source");
 		if (s == null)  throw new BadJSONException();
-		this.source = s; //Static method to change this to PLAYER class
+		this.source = s;
 		
 	}
 
 	public Message(String message, String source) {
+		if (message == null)
+			throw new NullPointerException();
 		this.message = message;
 		this.source = source;
 	}
