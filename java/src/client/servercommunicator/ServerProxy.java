@@ -1,9 +1,19 @@
 package client.servercommunicator;
 
-import org.json.simple.*;
-import org.json.simple.parser.*;
-import java.net.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 
 /**
@@ -539,7 +549,7 @@ public class ServerProxy implements IServerProxy{
 	 * number is included, it must be a valid integer.
 	 * @post It will either return an updated game model or true. If an error
 	 * occurs it will throw an exception. 
-	 * @param versionNumber optional check to see if model version is current
+	 * @param currentVersion optional check to see if model version is current
 	 * @return the current state of the game or true if the model is current
 	 * @throws ServerProxyException problems with connection or in request
 	 */

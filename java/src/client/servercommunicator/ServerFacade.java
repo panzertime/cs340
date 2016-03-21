@@ -354,12 +354,14 @@ public class ServerFacade {
 	public JSONObject yearOfPlenty(int playerIndex, ResourceType resource1, 
 			ResourceType resource2) throws ServerException {
 		try {
-			String content = "{\"type\":\"Year_of_Plenty\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"resource1\":\"" + resource1.toString().toLowerCase() + "\", " +
-						"\"resource2\":\"" + resource2.toString().toLowerCase() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.yearOfPlenty(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Year_of_Plenty");
+			json.put("playerIndex", playerIndex);
+			json.put("resource1", resource1.toString().toLowerCase());
+			json.put("resource2", resource2.toString().toLowerCase());
+			
+			return proxy.yearOfPlenty(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -369,12 +371,14 @@ public class ServerFacade {
 	public JSONObject roadBuilding(int playerIndex, EdgeLocation spot1, 
 			EdgeLocation spot2) throws ServerException {
 		try {
-			String content = "{\"type\": \"Road_Building\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"spot1\":\"" + spot1.toJSON() + "\", " +
-						"\"spot2\":\"" + spot2.toJSON() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.roadBuilding(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Road_Building");
+			json.put("playerIndex", playerIndex);
+			json.put("spot1", spot1.toJSON());
+			json.put("spot2", spot1.toJSON());
+			
+			return proxy.roadBuilding(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -385,12 +389,14 @@ public class ServerFacade {
 	public JSONObject soldier(int playerIndex, int victimIndex, 
 			HexLocation location) throws ServerException {
 		try {
-			String content = "{\"type\":\"Soldier\", " +
-						"\"playerIndex\":" + playerIndex + ", " +
-						"\"victimIndex\":" + victimIndex + ", " +
-						"\"location\":\"" + location.toJSON() + "\"}";
-			JSONObject args = makeJSON(content);
-			return proxy.soldier(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Soldier");
+			json.put("playerIndex", playerIndex);
+			json.put("victimIndex", victimIndex);
+			json.put("location", location.toJSON());
+
+			return proxy.soldier(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -400,11 +406,13 @@ public class ServerFacade {
 	public JSONObject monopoly(ResourceType resource, int playerIndex) 
 			throws ServerException {
 		try {
-			String content = "{\"type\":\"Monopoly\", " +
-						"\"resource\":\"" + resource.toString().toLowerCase() + "\", " +
-						"\"playerIndex\":" + playerIndex + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.monopoly(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Monopoly");
+			json.put("playerIndex", playerIndex);
+			json.put("resource", resource.toString().toLowerCase());
+			
+			return proxy.monopoly(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -413,10 +421,12 @@ public class ServerFacade {
 
 	public JSONObject monument(int playerIndex) throws ServerException {
 		try {
-			String content = "{\"type\":\"Monument\", " +
-						"\"playerIndex\":" + playerIndex + "}";
-			JSONObject args = makeJSON(content);
-			return proxy.monument(args);
+			JSONObject json = new JSONObject();
+			
+			json.put("type", "Monument");
+			json.put("playerIndex", playerIndex);
+			
+			return proxy.monument(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
@@ -425,7 +435,7 @@ public class ServerFacade {
 
 	public JSONObject buildRoad(int playerIndex, EdgeLocation edgeLoc, 
 			boolean setupMode) throws ServerException {
-		try {			
+		try {
 			JSONObject json = new JSONObject();
 			
 			json.put("type", "buildRoad");

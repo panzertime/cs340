@@ -1,15 +1,20 @@
 package client.map;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import java.util.*;
-
-import client.base.*;
-import client.data.*;
+import client.base.OverlayView;
+import client.data.RobPlayerInfo;
 
 
 /**
@@ -71,6 +76,7 @@ public class RobView extends OverlayView implements IRobView {
 			
 			if (e.getSource() == defaultButton) {
 				closeModal();
+				getController().robPlayer(new RobPlayerInfo());
 			}
 			else{
 				
@@ -126,6 +132,29 @@ public class RobView extends OverlayView implements IRobView {
 				this.add(buttonPanel, BorderLayout.CENTER);
 				revalidate();
 			}
+		} else {
+			this.remove(buttonPanel);
+			buttonPanel = new JPanel();
+			buttonPanel.setBorder(BorderFactory.createEmptyBorder(25,0,25,0));
+			
+			victimButtons = new ArrayList<JButton>();
+			defaultButton = new JButton("<html>"
+					+ "<body style=\"text-align:center\">"
+					+ "<p style=\"font-size:" + TOP_SIZE + "%\">None</p>"
+					+ "<p></p>"
+					+ "<p style=\"font-size:" + BOTTOM_SIZE + "%\">OK</p>"
+					+ "</body>"
+					+ "</html>");
+			defaultButton.addActionListener(actionListener);
+			defaultButton.setPreferredSize(ITEM_SIZE);
+			defaultButton.setContentAreaFilled(false);
+			defaultButton.setOpaque(true);
+			defaultButton.setAlignmentY(0);
+			defaultButton.setBackground(Color.LIGHT_GRAY);
+			
+			buttonPanel.add(defaultButton);
+			this.add(buttonPanel, BorderLayout.CENTER);
+			revalidate();
 		}
 	}
 

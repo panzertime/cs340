@@ -2,6 +2,7 @@ package shared.model.board.piece;
 
 import shared.model.Player;
 import shared.model.hand.ResourceType;
+import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public class City extends Building{
 
@@ -12,11 +13,12 @@ public class City extends Building{
 	
 	/**
 	 * @param type the resource to generate
-	 * @throws ResourceException 
+	 * @throws NoRemainingResourceException 
 	 */
 	@Override
-	public void produce(ResourceType type) {
+	public void produce(ResourceType type) throws NoRemainingResourceException {
 		owner.receiveResource(type, 2);
+		owner.getGame().getBank().sendResource(type, 2);
 	}
 
 }

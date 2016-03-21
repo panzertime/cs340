@@ -1,5 +1,7 @@
 package shared.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.json.simple.JSONObject;
@@ -31,39 +33,17 @@ public class Bank {
 		hand = new Hand(resourceList, deckList);
 	}
 	
+	public Bank() {
+		this.hand = new Hand(true);
+
+	}
+
 	public boolean equalsJSON(JSONObject resourceList, JSONObject deckList) {
 		if (resourceList == null || deckList == null) return false; 
 		return hand.equalsJSON(resourceList, deckList);
 	}
-
 	/**
-	 * @pre New game
-	 * @post Bank hand has the amount of cards and resources specified by game rules
-	 */
-/*	public void initializeBank() {
-//		hand = new Hand(19, 19, 19, 19, 19);
-		for (int i = 0; i < 14; i++)
-		{
-			this.giveDevCardToBank(new Knight());
-		}
-		for (int i = 0; i < 5; i++)
-		{
-			this.giveDevCardToBank(new Monument());
-		}
-		for (int i = 0; i < 2; i++)
-		{
-			this.giveDevCardToBank(new Monopoly());
-			this.giveDevCardToBank(new RoadBuilding());
-			this.giveDevCardToBank(new YearOfPlenty());
-		}
-		
-		
-	}*/
-	
-	//public Boolean hasResources(ResourceType type, Integer num) throws ResourceException {}
-
-	/**
-	 * @return true if bank hand has >=1 Dev cards 
+	 * @return true if bank hand has more than 1 Dev card 
 	 */
 	public Boolean hasDevCard() {
 		
@@ -81,6 +61,7 @@ public class Bank {
 		int r = generator.nextInt(this.getHand().getNumberOfDevCards());
 		
 		DevCard card = this.getHand().getDevCards().get(r);
+		card.setEnabled(false);
 		this.getHand().getDevCards().remove(r);
 		return card;
 		}
@@ -97,7 +78,6 @@ public class Bank {
 	/**
 	 * @param type the type of resource to add
 	 * @param num the number of resource to be added
-	 * @throws ResourceException
 	 * @post bank now has addition resources of type and num 
 	 */
 	public void receiveResource(ResourceType type, Integer num) {
@@ -107,15 +87,26 @@ public class Bank {
 	/**
 	 * @param type the type of resource to take
 	 * @param num the number of resource to be taken
-	 * @throws NoRemainingResourceException 
-	 * @throws ResourceException
+	 * @throws NoRemainingResourceException
 	 * @post bank now has less resources of type and num 
 	 */
 	public void sendResource(ResourceType type, Integer num) throws NoRemainingResourceException {
 		this.getHand().sendResource(type, num);
 	}
 
-	
-	
-	
+
+	public JSONObject bankToJSON() {
+		JSONObject resourceList = new JSONObject();
+		resourceList.put("wood", this.getHand().getWood());
+		resourceList.put("brick", this.getHand().getBrick());
+		resourceList.put("sheep", this.getHand().getSheep());
+		resourceList.put("wheat", this.getHand().getWheat());
+		resourceList.put("ore", this.getHand().getOre());
+		return resourceList;
+	}
+
+	public JSONObject deckToJSON() {
+		JSONObject deck = this.hand.deckToJSON();
+		return deck;
+	}
 }

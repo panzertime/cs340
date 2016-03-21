@@ -1,6 +1,8 @@
 package shared.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +11,13 @@ import org.json.simple.JSONObject;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
+import shared.model.board.edge.Edge;
 import shared.model.board.hex.tiles.water.PortType;
+import shared.model.board.piece.Building;
 import shared.model.board.piece.City;
 import shared.model.board.piece.Road;
 import shared.model.board.piece.Settlement;
+import shared.model.board.vertex.Vertex;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 import shared.model.exceptions.NoDevCardFoundException;
@@ -25,6 +30,10 @@ import shared.model.hand.exceptions.NoRemainingResourceException;
 public class Player {
 
 	private Model game;
+	public Model getGame() {
+		return game;
+	}
+
 	private Hand hand;
 	private Settlement[] settlements;
 	private Road[] roads;
@@ -33,12 +42,28 @@ public class Player {
 	private Integer playerIndex;
 	private CatanColor userColor;
 	private Integer armies;
-	private Integer monuments;
+	private Integer monuments = 0;
 	private Integer points;
 	private Boolean playedDevelopmentCard;
 	private Boolean hasDiscarded;
 	private Integer playerID;
 
+	public Player(int playerID, int playerIndex, String name, CatanColor color)
+	{
+		this.playerIndex = playerIndex;
+		this.playerID = playerID;
+		this.userName = name;
+		this.userColor = color;
+		this.armies = 0;
+		this.points = 0;
+		this.playedDevelopmentCard = false;
+		this.hasDiscarded = false;
+		this.hand = new Hand(false);
+		
+		initPieces(); 
+		
+	}
+	
 	public Player(JSONObject player, Model game) throws BadJSONException {
 		this.game = game;
 		if (player == null)
@@ -81,9 +106,7 @@ public class Player {
 		if (playerID == null)
 			throw new BadJSONException();
 		this.playerID = playerID.intValue();
-		settlements = new Settlement[5];
-		cities = new City[4];
-		roads = new Road[15];
+		
 
 		initPieces();   
 	}
@@ -171,6 +194,9 @@ public class Player {
 	
 
 	private void initPieces() {
+		settlements = new Settlement[5];
+		cities = new City[4];
+		roads = new Road[15];
 		for (int i = 0; i < 5; i++)
 			settlements[i] = new Settlement(this);
 		for (int i = 0; i < 4; i++)
@@ -298,63 +324,14 @@ public class Player {
 	 * @post ore = ore - 1
 	 * 
 	 */
-	public void buyDevelopment() throws NoRemainingResourceException {
+	public void buyDevelopment() throws NoRemainingResourceException, NoDevCardFoundException {
 		game.getBank().receiveResource(ResourceType.WHEAT, 1);
 		game.getBank().receiveResource(ResourceType.SHEEP, 1);
 		game.getBank().receiveResource(ResourceType.ORE, 1);
 		sendResource(ResourceType.WHEAT, 1);
 		sendResource(ResourceType.SHEEP, 1);
 		sendResource(ResourceType.ORE, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 4
-	 * @post type received = type + 1
-	 * 
-	 */
-	public void buyResource(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-		game.getBank().receiveResource(given, 4);
-		sendResource(given, 4);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 3
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith3Port(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-
-		game.getBank().receiveResource(given, 3);
-		sendResource(given, 3);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
-	}
-
-	/**
-	 * @param given
-	 *            The type of card being given by the player
-	 * @param received
-	 *            The type of card being received by the player
-	 * @throws NoRemainingResourceException 
-	 * @post type given = type - 2
-	 * @post type received = type + 1
-	 */
-	public void buyResourceWith2Port(ResourceType given, ResourceType received) throws NoRemainingResourceException {
-		game.getBank().receiveResource(given, 2);
-		sendResource(given, 2);
-		game.getBank().sendResource(received, 1);
-		receiveResource(received, 1);
+		this.receiveDevCard(game.getBank().takeDevCardFromBank());
 	}
 
 	public Boolean canPlayDevelopmentCard() {
@@ -446,9 +423,8 @@ public class Player {
 	}
 
 	/**
-	 * @pre p has > 0 resources
-	 * @param p
-	 *            The player to be stolen from
+	 * @pre p has less than 0 resources
+	 * @param p The player to be stolen from
 	 * @throws NoRemainingResourceException 
 	 * @post Player type++; p type--
 	 */
@@ -457,14 +433,10 @@ public class Player {
 	}
 
 	/**
-	 * @return The number of Victory Points a player has.
+	 * post points holds the number of Victory Points a player has.
 	 */
-	public void calculateVictoryPoints() {
+	public int calculateVictoryPoints() {
 		int points = 0;
-		/*
-		 * for (DevCard card : hand.getDevCards()) { if (card.getType() ==
-		 * DevCardType.MONUMENT) points++; }
-		 */
 		if (game.getAchievements().isLargestArmy(this))
 			points += 2;
 		if (game.getAchievements().isLongestRoad(this))
@@ -477,12 +449,12 @@ public class Player {
 			if (s.getVertex() != null)
 				points++;
 		}
-
-		this.points = points;
+		points += this.getMonuments();
+		return points;
 	}
 
-	public int getVictoryPointsWithMonuments() {
-		int points = this.getPoints();
+	public int getVictoryPointsOfMonuments() {
+		int points = 0;
 		for (DevCard card : hand.getDevCards()) {
 			if (card.getType() == DevCardType.MONUMENT)
 				points++;
@@ -491,8 +463,7 @@ public class Player {
 	}
 
 	/**
-	 * @param card
-	 *            The card being received from the bank
+	 * @param card The card being received from the bank
 	 * @post The card is added to the corresponding list in the player's hand
 	 */
 	public void receiveDevCard(DevCard card) {
@@ -501,8 +472,7 @@ public class Player {
 
 	/**
 	 * @pre The card is in the player's hand
-	 * @param card
-	 *            The card being returned
+	 * @param card The card being returned
 	 * @throws NoDevCardFoundException
 	 * @post The card has been deleted from the player's hand and added to the
 	 *       bank
@@ -517,12 +487,19 @@ public class Player {
 		}
 		throw new NoDevCardFoundException();
 	}
+	
+	public DevCard findDevCard(DevCardType type) throws NoDevCardFoundException
+	{
+		for (int i = 0; i < hand.getDevCards().size(); i++) {
+			DevCard card = hand.getDevCards().get(i);
+			if (card.getType() == type && card.isEnabled()) 
+			{
+				return card;
+			}
+		}
+		throw new NoDevCardFoundException();
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -531,11 +508,6 @@ public class Player {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -557,11 +529,97 @@ public class Player {
 	public Integer getPlayerID() {
 		return playerID;
 	}
+	
+	//recursive road add algorithm
+	//add to set - continue left and right until no more
+	
+	public void addRoadsToSet(Road r, HashSet<Road> set)
+	{
+		set.add(r);
+		r.setMarked(true);
 
-	public int getRoadLength() {
-		// return size of interconnectedRoads
+		for (Vertex v: r.getEdge().getAllVertices())
+		{
+			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex)
+			{
+				for (Edge e: v.getAllEdges())
+				if (e.hasRoad())
+				{
+					Road road = e.getRoad();
+					if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
+						addRoadsToSet(road, set);
+				}
+						
+			}
+		}
+	}
+	
+	public void clearMarks()
+	{
+		for (Road r: roads)
+		{
+			r.setMarked(false);
+		}
+	}
+	public int findLongestPathInSet(HashSet<Road> set)
+	{
 		return 0;
 	}
+	
+	public int getRoadLength() {
+		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>(); 
+		for (Road r: roads)
+		{
+			if (r.isPlaced())
+			{
+				if (!r.isMarked())
+				{
+					HashSet<Road> set = new HashSet<Road>();
+					this.addRoadsToSet(r, set);
+					sets.add(set);
+				}
+			}
+		}
+		int max = 0;
+		for (HashSet<Road> set: sets)
+		{
+			int i = this.findLongestPathInSet(set);
+			if (i > max)
+				max = i;
+		}
+		return max;
+		
+		
+//		To begin with, separate out the roads into distinct sets, where all the road segments in each set are somehow connected. There's various methods on doing this, but here's one:
+//
+//		1	Pick a random road segment, add it to a set, and mark it
+//		2	Branch out from this segment, ie. follow connected segments in both directions that aren't marked (if they're marked, we've already been here)
+//		3	If found road segment is not already in the set, add it, and mark it
+//		4	Keep going from new segments until you cannot find any more unmarked segments that are connected to those currently in the set
+//		5	If there's unmarked segments left, they're part of a new set, pick a random one and start back at 1 with another set
+//		
+//		Note: As per the official Catan Rules, a road can be broken if another play builds a settlement on a joint between two segments. You need to detect this and not branch past the settlement.
+//
+//		Note, in the above, and following, steps, only consider the current players segments. You can ignore those other segments as though they weren't even on the map.
+//
+//		This gives you one or more sets, each containing one or more road segments.
+//
+//		Ok, for each set, do the following:
+//
+//		1	Pick a random road segment in the set that has only one connected road segment out from it (ie. you pick an endpoint)
+//		2	If you can't do that, then the whole set is looping (one or more), so pick a random segment in this case
+//		
+//		Now, from the segment you picked, do a recursive branching out depth-first search, keeping track of the length of the current 
+//		road you've found so far. Always mark road segments as well, and don't branch into segments already marked. This will allow 
+//		the algorithm to stop when it "eats its own tail".
+//
+//		Whenever you need to backtrack, because there are no more branches, take a note of the current length, and if it is longer 
+//		than the "previous maximum", store the new length as the maximum.
+//
+//		Do this for all the sets, and you should have your longest road.
+
+	}
+	
 
 	/**
 	 * @return number of played knights
@@ -572,6 +630,10 @@ public class Player {
 
 	public int getMonuments() {
 		return monuments;
+	}
+	
+	public void setMonuments(int m) {
+		monuments = m;
 	}
 
 	public int getPoints() {
@@ -642,6 +704,9 @@ public class Player {
 	
 	public Integer getSettlementsPlaced() {
 		return 5 - getSettlementsFree();
+	}
+	public Integer getCitiesPlaced() {
+		return 4 - getCitiesFree();
 	}
 	
 	public Boolean shouldSetupRoad() {
@@ -757,5 +822,105 @@ public class Player {
 		}
 		return proads;
 	}
+
+	public void doMaritimeTrade(int ratio, ResourceType given, ResourceType received) throws NoRemainingResourceException {
+		game.getBank().receiveResource(given, ratio);
+		sendResource(given, ratio);
+		game.getBank().sendResource(received, 1);
+		receiveResource(received, 1);
+		
+	}
+
+	public Building[] getBuildings() {
+		Building[] buildings = new Building[this.getSettlementsPlaced() + this.getCitiesPlaced()];
+		int i = 0;
+		for (City c: cities)
+		{
+			if (c.isPlaced())
+			{
+				buildings[i] = c;
+				i++;	
+			}
+		}
+		for (Settlement s: settlements)
+		{
+			if (s.isPlaced())
+			{
+				buildings[i] = s;
+				i++;	
+			}
+		}
+		
+		return buildings;
+	}
+
+	public void setPoints(int p) {
+		points = p;
+	}
+
+	public JSONObject toJSON() {
+		JSONObject jsonMap = new JSONObject();
+		jsonMap.put("cities", this.getCitiesFree());
+		jsonMap.put("color", this.getColor().toString().toLowerCase());
+		jsonMap.put("discarded", hasDiscarded);
+		jsonMap.put("monuments", monuments);
+		jsonMap.put("name", this.getUserName());
+		JSONObject newDevCards = new JSONObject();
+		JSONObject oldDevCards = new JSONObject();
+		newDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, false));
+		oldDevCards.put("monopoly", hand.getCards(DevCardType.MONOPOLY, true));
+		
+		newDevCards.put("monument", hand.getCards(DevCardType.MONUMENT, false));
+		oldDevCards.put("monument", hand.getCards(DevCardType.MONUMENT, true));
+		
+		newDevCards.put("roadBuilding", hand.getCards(DevCardType.ROADBUILDING, false));
+		oldDevCards.put("roadBuilding", hand.getCards(DevCardType.ROADBUILDING, true));
+		
+		newDevCards.put("soldier", hand.getCards(DevCardType.KNIGHT, false));
+		oldDevCards.put("soldier", hand.getCards(DevCardType.KNIGHT, true));
+		
+		newDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, false));
+		oldDevCards.put("yearOfPlenty", hand.getCards(DevCardType.YEAROFPLENTY, true));
+		
+		jsonMap.put("newDevCards", newDevCards);
+		jsonMap.put("oldDevCards", oldDevCards);
+		jsonMap.put("playerIndex", this.getPlayerIndex());
+		jsonMap.put("playedDevCard", this.playedDevelopmentCard);
+		jsonMap.put("playerID", this.playerID);
+		JSONObject resourceList = new JSONObject();
+		resourceList.put("wood", this.hand.getWood());
+		resourceList.put("brick", this.hand.getBrick());
+		resourceList.put("sheep", this.hand.getSheep());
+		resourceList.put("wheat", this.hand.getWheat());
+		resourceList.put("ore", this.hand.getOre());
+		jsonMap.put("resources", resourceList);
+		jsonMap.put("roads", this.getRoadsFree());
+		jsonMap.put("settlements", this.getSettlementsFree());
+		jsonMap.put("soldiers", this.getArmies());
+		jsonMap.put("victoryPoints", this.getPoints());
+		return jsonMap;
+	}
+
+	public void updateDevCards() {
+		for (DevCard card: this.hand.getDevCards())
+			card.setEnabled(true);
+	}
+	
+	public Settlement[] getSettlements() {
+		return settlements;
+	}
+
+	public Road[] getRoads() {
+		return roads;
+	}
+
+	public City[] getCities() {
+		return cities;
+	}
+
+	public void setUserColor(CatanColor userColor) {
+		this.userColor = userColor;
+	}
+
 
 }

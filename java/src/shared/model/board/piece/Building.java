@@ -4,12 +4,15 @@ import org.json.simple.JSONObject;
 
 import shared.model.Player;
 import shared.model.board.Board;
+import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.exceptions.BadJSONException;
 import shared.model.hand.ResourceType;
+import shared.model.hand.exceptions.NoRemainingResourceException;
 
 public abstract class Building {
 	
@@ -51,14 +54,31 @@ public abstract class Building {
 	
 	/**
 	 * @param type the resource to generate
-	 * @throws ResourceException 
+	 * @throws NoRemainingResourceException 
 	 */
-	public abstract void produce(ResourceType type);
+	public abstract void produce(ResourceType type) throws NoRemainingResourceException;
+	
+	public void produce(int roll) throws NoRemainingResourceException
+	{
+		Hex[] hexes = this.getVertex().getAllHexes();
+		for (Hex hex: hexes)
+		{
+			int productionNum;
+			if (hex instanceof ProductionHex)
+			{
+				productionNum = ((ProductionHex) hex).getProductionNumber();
+				if (productionNum == roll)
+				{
+					this.produce(hex.getHexType().getResourceType());
+				}
+			}
+		}
+	}
 	
 	public Boolean hasPort(PortType portType) {
 		if (!isPlaced())
 			return false;
-	return (vertex.hasPort(portType) || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
+	return (vertex.hasPort(portType));//I commented this out Mar 19 - don't think we need this but if we notice problems with the Maritime we can put it back in || Board.getVertexAt(vertex.getVertexLocation()).hasPort(portType));
 	}
 	
 	public boolean equals(JSONObject jsonHex) {

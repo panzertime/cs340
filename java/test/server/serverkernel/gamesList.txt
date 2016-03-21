@@ -1,0 +1,28 @@
+[
+  {
+    "title": "Default Game",
+    "id": 0,
+    "players": [
+      {
+        "color": "orange",
+        "name": "Sam",
+        "id": 0
+      },
+      {
+        "color": "blue",
+        "name": "Brooke",
+        "id": 1
+      },
+      {
+        "color": "red",
+        "name": "Pete",
+        "id": 10
+      },
+      {
+        "color": "green",
+        "name": "Mark",
+        "id": 11
+      }
+    ]
+  }
+]

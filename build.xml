@@ -71,9 +71,11 @@
 			<packageset dir="${java.src}">
 				<include name="client/**"/>
 				<include name="shared/**"/>
+				<include name="server/**"/>
 			</packageset>
 			<tag name="pre" description="Precondition" />
 			<tag name="post" description="Postcondition" />
+			<tag name="param.json" description="Parameters (JSON)"/>
 		</javadoc>
 	</target>
  
@@ -88,6 +90,7 @@
 	<target name="clean" description="clean build files" >
 		<delete dir="${java.bin}"/>
 		<delete dir="${java.dist}"/>
+		<delete dir="${java.doc}"/>
 	</target>
     
 	<target name="compileSrc" depends="init" description="compile the source " >

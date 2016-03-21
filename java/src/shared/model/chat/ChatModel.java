@@ -22,6 +22,11 @@ public class ChatModel {
 			gameLog = new MessageLog((JSONArray)gameList.get("lines"));
 	}
 	
+	public ChatModel() {
+		this.chatLog = new MessageLog();
+		this.gameLog = new MessageLog();
+	}
+
 	public boolean equalsJSON(JSONObject chatList, JSONObject gameList) {
 
 		if (chatList == null && chatLog.getSize() != 0) return false;
@@ -45,7 +50,14 @@ public class ChatModel {
 	public void setGameLog(MessageLog gameLog) {
 		this.gameLog = gameLog;
 	}
+
+	public void doSendChat(String message, String source) {
+		this.getChatLog().add(message, source);
+	}
 	
-	
+	public void addGameMessage(String message, String source)
+	{
+		this.gameLog.add(message, source);
+	}
 	
 }

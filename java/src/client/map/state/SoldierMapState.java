@@ -52,13 +52,11 @@ public class SoldierMapState extends MapState {
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {
-		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex())
-		DoModelFacade.sole().doUseSoldier(robberLoc, victim.getPlayerIndex());
-		else
-		{
+		if (victim.getPlayerIndex() != ClientPlayer.sole().getUserIndex()) {
+			DoModelFacade.sole().doUseSoldier(robberLoc, victim.getPlayerIndex());
+		} else {
 			DoModelFacade.sole().doUseSoldier(robberLoc, -1);
 		}
-		mapController.getRobView().closeModal();
 		mapController.getRobView().setPlayers(null);
 	}
 	

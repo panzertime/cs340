@@ -68,4 +68,15 @@ public class Road {
 		}
 		return true;
 	}
+	
+	public boolean marked = false;
+	
+	public boolean isMarked()
+	{
+		return marked;
+	}
+	public void setMarked(boolean mark)
+	{
+		this.marked = mark;
+	}
 }

@@ -236,17 +236,8 @@
         }
       }
     ],
-    "cities": [],
-    "settlements": [
-      {
-        "owner": 3,
-        "location": {
-          "direction": "SW",
-          "x": -1,
-          "y": 1
-        }
-      },
-      {
+    "cities": [
+          {
         "owner": 3,
         "location": {
           "direction": "SE",
@@ -260,6 +251,16 @@
           "direction": "SW",
           "x": 0,
           "y": 0
+        }
+      }
+    ],
+    "settlements": [
+      {
+        "owner": 3,
+        "location": {
+          "direction": "SW",
+          "x": -1,
+          "y": 1
         }
       },
       {
