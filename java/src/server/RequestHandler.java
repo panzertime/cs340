@@ -5,10 +5,11 @@ import java.net.HttpURLConnection;
 import java.util.logging.*;
 
 import com.sun.net.httpserver.*;
-import org.JSONSimple.*;
-import org.JSONSimple.parser.*;
+import org.json.simple.*;
+import org.json.simple.parser.*;
 import shared.model.*;
 import server.*;
+import server.exception.*;
 
 public class RequestHandler implements HttpHandler {
 
@@ -41,34 +42,11 @@ public class RequestHandler implements HttpHandler {
 			logger.log(Level.INFO, "Incorrect HTTP verb in request: " + verb_;
 		}
 			
-
-		/* 
-
-			this was a post request: extract body, submit thru facade.
-
-		Object[] o = (Object[])xmlStream.fromXML(exchange.getRequestBody());
-		userToken t = (userToken)o[0];
-		batchProposal bp = (batchProposal)o[1];
-		boolean b;
-		
-		
-		try {
-			b = facade.submitBatch(t, bp);
-		}
-		catch (ServerException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-			exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, -1);
-			return;
-		}
-		
-		exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-		xmlStream.toXML(b, exchange.getResponseBody());
-		exchange.getResponseBody().close();
-		*/
+		exchange.close();
 		
 	}
 
-	private void handleGet(HttpExchange exchange) throws IOException {
+	private void handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException {
 		// do the normal thing for a get request
 		//	make command
 		//	execute command
@@ -77,23 +55,24 @@ public class RequestHandler implements HttpHandler {
 		// use getPathInfo to get URI, trim the /, change to .
 	}
 
-	private void handlePost(HttpExchange exchange) throws IOException {
-		// do the normal thing for a post request
-		//	make command
-		//	execute command
-		//	pack request (i.e. exchange.getResponseBody();
+	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException {
 
 		String URI = exchange.getPathInfo();
 		logger.log(Level.INFO, "POST request to URI: " + URI);
-		// transform URI somehow
-		// respect fakeFlag
 
 		String endpoint = endpointToClassName(URI);
 
 		Class proto_command = Class.forName(endpoint);
 		Command command = proto_command.newInstance();
 
-		command.execute(cookie, json);
+		String cookie = exchange.getRequestHeader("Cookie");
+		String body = readBody(exchange.getRequestBody());
+
+		JSONObject json = makeJSON(body);
+
+		String reply = command.execute(json, cookie);
+
+		packBody(exchange.getResponseBody(), reply);
 
 
 	}
@@ -111,5 +90,45 @@ public class RequestHandler implements HttpHandler {
 		return URI;
 	}
 
+	private String readBody(InputStream I){
+		DataInputStream body = 
+				new DataInputStream(new BufferedInputStream(I));
+
+		StringBuilder JSONBuilder = new StringBuilder();
+		InputStreamReader JSONReader = new InputStreamReader(body);
+		int letter = JSONReader.read();
+			
+		letter = JSONReader.read();
+		while(letter >= 0){
+			JSONBuilder.append((char) letter);
+			letter = JSONReader.read();
+		}
+		JSONReader.close();
+
+		return JSONBuilder.toString():
+	}
+
+	private void packBody(OutputStream O, String data){
+		OutputStream body = 
+			new DataOutputStream(new BufferedOutputStream(O));
+		body.write(data.getBytes());
+		body.flush();
+		body.close();
+	}	
+
+	private JSONObject makeJSON(String stringJSON)
+			throws ServerProxyException{
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject json = (JSONObject) parser.parse(stringJSON);
+	
+			return json;
+		}
+		catch(Exception e){
+			// System.out.println("Problem parsing JSON: " + stringJSON);
+			e.printStackTrace();
+			throw new UserException("JSON probably invalid", e);
+		}
+	}
 	
 }
