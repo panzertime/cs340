@@ -61,13 +61,11 @@ public class CatanCookie {
 	}
 
 	private boolean validStart(String cookieString) {
-		return cookieString.startsWith("catan.user=")
-				&& !cookieString.isEmpty();
+		return cookieString.startsWith("catan.user=");
 	}
 
 	private void preGameConstructor(String cookieString) throws CookieException {
-		if(validStart(cookieString)
-				&& cookieString.contains("Path=/")) {
+		if(validStart(cookieString)) {
 			setUserAttributes(cookieString);
 			
 		} else {
@@ -112,20 +110,39 @@ public class CatanCookie {
 	}
 	
 	/**
-	 * Constructor for CatanCookie when only a user exists
+	 * Constructor for outputting a user CatanCookie when only a user exists
 	 * @pre User has username, password and id assigned
 	 * @post Creates a CatanCookie with all the user attributes filled out
 	 * @param user
+	 * @throws CookieException user values not valid
 	 */
-	public CatanCookie(User user) {
-		this.name = user.getUsername();
-		this.password = user.getPassword();
-		this.userID = user.getID();
+	public CatanCookie(User user)  throws CookieException{
+		try {
+			this.name = user.getUsername();
+			this.password = user.getPassword();
+			this.userID = user.getID();
+		} catch (Exception e) {
+			//Need only be null pointer - but left as general for unexpected 
+			//corner cases
+			throw new CookieException(e.getClass().getSimpleName());
+		}
 	}
 	
-	
-	private CatanCookie(Model game) {
-		this.gameID = game.getID();
+	/**
+	 * Constructor for outputting a game CatanCookie
+	 * @pre GameID has been assigned
+	 * @post Creates a CatanCookie with the game attributes filled out
+	 * @param game Model passed in
+	 * @throws CookieException game values not valid
+	 */
+	public CatanCookie(Model game) throws CookieException {
+		try {
+			this.gameID = game.getID();
+		} catch (Exception e) {
+			//Need only be null pointer - but left as general for unexpected
+			//corner cases
+			throw new CookieException(e.getClass().getSimpleName());
+		} 
 	}
 	
 	/**
