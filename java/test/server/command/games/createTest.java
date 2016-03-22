@@ -19,11 +19,6 @@ import shared.model.Model;
 
 public class createTest {
 	
-	//TODO uncomment or delete
-	/*public expectedGamesList(String file) {
-		
-	}*/
-	
 	private JSONArray blankPlayerList() {
 		JSONArray result = new JSONArray();
 		result.add(new JSONObject());
@@ -170,10 +165,10 @@ public class createTest {
 		try {
 			createCommand.execute(args, cookie);
 			fail("Passed create command test when passed "
-					+ "invalid game name");
+					+ "invalid game name - empty String");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed create command test when passed "
-					+ "invalid game name");
+					+ "invalid game name - empty String");
 		}
 	}
 	

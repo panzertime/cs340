@@ -24,7 +24,7 @@ import shared.model.exceptions.BadJSONException;
 public class ServerKernelTests {
 
 	/*TODO
-	 * Get these to run in order 
+	 * Get these to run independently
 	 */
 	@Test
 	public void testAddUser1() {
