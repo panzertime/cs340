@@ -1,4 +1,4 @@
-package server;
+package server.main;
 
 import java.io.*;
 import java.net.*;
@@ -7,6 +7,7 @@ import java.util.logging.*;
 import com.sun.net.httpserver.*;
 
 import server.*;
+import server.handler.*;
 
 public class Server {
 
@@ -81,6 +82,7 @@ public class Server {
 
 		hserver.setExecutor(null); // use the default executor
 		
+		HttpHandler hhandler = (HttpHandler) handler;
 		hserver.createContext("/", handler);
 		
 		logger.info("Starting HTTP Server");
@@ -88,7 +90,7 @@ public class Server {
 		hserver.start();
 	}
 
-	private HttpHandler handler = new RequestHandler();
+	private static AbstractHttpHandler handler = new RequestHandler();
 	
 	public static void main(String[] args) {
 	//	new server(Integer.parseInt(args[0])).run();
