@@ -1,5 +1,9 @@
 package server.data;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import server.exception.UserException;
 
 public class User {
@@ -35,15 +39,20 @@ public class User {
 		this.password = password;
 		id = null;
 	}
-	
+
 	/**
-	 * Creates a user form a handed cookie
-	 * @pre cookie is valid, nonempty string
-	 * @post user object is created with the given parameters
-	 * @param cookie cookie handed to the server by the client
+	 * This constructor should only be used to create a user from a valid 
+	 * cookie
+	 * @pre all attributes are valid
+	 * @post a new user with the given params is created
+	 * @param name username
+	 * @param password password
+	 * @param id ID
 	 */
-	public User(String cookie) {
-		
+	public User(String name, String password, Integer id) {
+		this.username = name;
+		this.password = password;
+		this.id = id;
 	}
 	
 	public User()
@@ -65,15 +74,34 @@ public class User {
 			throw new UserException("User already assigned an ID");
 		}
 	}
+	
 
+	//TODO This may need to be refactored to be used with a UTILS class
+	//in order to keep the HTML cookie encoding out of it.
 	/**
 	 * Converts the given user to a cookie
-	 * @pre all fields in user are non-null
+	 * @pre all fields in user are valid(non-empty string and has ID)
 	 * @post none
-	 * @return Cookie String to be used by the server to return to the client
+	 * @return String to be used by the URL Encoder on the server to return to
+	 * the client.
+	 * @throws UserException User fields are incomplete or invalid
 	 */
-	public String toCookie() {
-		return password;
+	public String toCookie() throws UserException {
+		if(this.username.isEmpty()
+				|| this.password.isEmpty()
+				|| this.id == null) {
+			throw new UserException("User is missing required data");
+		}
+		JSONObject cookie = new JSONObject();
+		cookie.put("name", this.username);
+		cookie.put("password", this.password);
+		cookie.put("playerID", this.id);
+		
+		StringBuilder result = new StringBuilder("catan.user=");
+		result.append(cookie.toJSONString());
+		result.append(";Path=/;");
+		
+		return result.toString();
 	}
 
 	/**
