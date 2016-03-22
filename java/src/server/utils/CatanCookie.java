@@ -4,7 +4,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import server.exception.UserException;
+import server.data.User;
+import shared.model.Model;
 
 /**
  * Handles Cookie Conversion
@@ -60,13 +61,11 @@ public class CatanCookie {
 	}
 
 	private boolean validStart(String cookieString) {
-		return cookieString.startsWith("catan.user=")
-				&& !cookieString.isEmpty();
+		return cookieString.startsWith("catan.user=");
 	}
 
 	private void preGameConstructor(String cookieString) throws CookieException {
-		if(validStart(cookieString)
-				&& cookieString.contains("Path=/")) {
+		if(validStart(cookieString)) {
 			setUserAttributes(cookieString);
 			
 		} else {
@@ -109,7 +108,98 @@ public class CatanCookie {
 					+ "JSON");
 		}
 	}
+	
+	/**
+	 * Constructor for outputting a user CatanCookie when only a user exists
+	 * @pre User has username, password and id assigned
+	 * @post Creates a CatanCookie with all the user attributes filled out
+	 * @param user
+	 * @throws CookieException user values not valid
+	 */
+	public CatanCookie(User user)  throws CookieException{
+		try {
+			this.name = user.getUsername();
+			this.password = user.getPassword();
+			this.userID = user.getID();
+		} catch (Exception e) {
+			//Need only be null pointer - but left as general for unexpected 
+			//corner cases
+			throw new CookieException(e.getClass().getSimpleName());
+		}
+	}
+	
+	/**
+	 * Constructor for outputting a game CatanCookie
+	 * @pre GameID has been assigned
+	 * @post Creates a CatanCookie with the game attributes filled out
+	 * @param game Model passed in
+	 * @throws CookieException game values not valid
+	 */
+	public CatanCookie(Model game) throws CookieException {
+		try {
+			this.gameID = game.getID();
+		} catch (Exception e) {
+			//Need only be null pointer - but left as general for unexpected
+			//corner cases
+			throw new CookieException(e.getClass().getSimpleName());
+		} 
+	}
+	
+	/**
+	 * Creates a cookie using the parameters in the constructors (User) or 
+	 * (Model)
+	 * @pre all the necessary CatanCookie attributes are assigned and valid
+	 * (Either the three user fields or the one game ID - both done through
+	 * proper constructor and passing in valid parameters)
+	 * @post none
+	 * @return String representing the unicode value to be parsed and sent to
+	 * the end user (Not URL encoded)
+	 * @throws CookieException Not all user fields were set
+	 */
+	public String toCookie() throws CookieException {
+		StringBuilder cookie = new StringBuilder("catan.");
+		if(this.gameID != null) {
+			cookie.append("game=");
+			cookie.append(this.gameID);
+		} else if(validUserParams()) {
+			JSONObject user = userToJSON();
+			cookie.append("user=");
+			cookie.append(user.toJSONString());
+		} else {
+			throw new CookieException("Not all attributes were "
+					+ "initialized correctly");
+		}
+		
+		cookie.append(";Path=/;");
+		
+		return cookie.toString();
+	}
 
+	/**
+	 * @pre all params are valid
+	 * @post none
+	 * @return JSONObject representing the necessary attributes in a cookie
+	 */
+	private JSONObject userToJSON() {
+		JSONObject user = new JSONObject();
+		user.put("name", this.name);
+		user.put("password", this.password);
+		user.put("playerID", this.userID);
+		return user;
+	}
+
+	/**
+	 * Checks for valid user params
+	 * @pre none
+	 * @post none
+	 * @return User params are non-null and actual values
+	 */
+	private boolean validUserParams() {
+		return this.name != null && !this.name.isEmpty() &&
+				this.password != null && !this.password.isEmpty() &&
+				this.userID != null;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -122,5 +212,5 @@ public class CatanCookie {
 
 	public int getGameID() {
 		return gameID;
-	}		
+	}
 }

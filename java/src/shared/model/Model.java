@@ -59,18 +59,22 @@ public class Model {
 	private ChatModel chatModel;
 	private TradeModel tradeModel;
 	private String gameName;
+	private int gameID;
 	
 	
 	public JSONObject getGamesList() {
 		HashMap<String, Object> jsonList = new HashMap<String, Object>();
 		jsonList.put("title", gameName);
+		jsonList.put("id", this.gameID);
 		JSONArray jsonPlayers = new JSONArray();
-		for (Player p: players.values())
-		{
+		for(int i = 0; i < 4; i++) {
 			HashMap<String, Object> jsonPlayer = new HashMap<String, Object>();
-			jsonPlayer.put("color", p.getColor().toString().toLowerCase());
-			jsonPlayer.put("name", p.getUserName());
-			jsonPlayer.put("id", p.getPlayerID());
+			if(players.containsKey(i)) {
+				Player p = players.get(i);
+				jsonPlayer.put("color", p.getColor().toString().toLowerCase());
+				jsonPlayer.put("name", p.getUserName());
+				jsonPlayer.put("id", p.getPlayerID());
+			}
 			jsonPlayers.add(new JSONObject(jsonPlayer));
 		}
 		jsonList.put("players", jsonPlayers);
@@ -1458,5 +1462,13 @@ public class Model {
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();
 		checkWinner(playerIndex);
+	}
+
+	public void setID(int gameID) {
+		this.gameID = gameID;
+	}
+	
+	public int getID() {
+		return this.gameID;
 	}
 }
