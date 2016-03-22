@@ -1,4 +1,4 @@
-package server.command.moves.finishTurnTests;
+package server.command.moves;
 
 import static org.junit.Assert.*;
 

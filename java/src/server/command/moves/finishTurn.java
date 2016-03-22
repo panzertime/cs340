@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
+import shared.model.exceptions.ViolatedPreconditionException;
 
 public class finishTurn extends MovesCommand {
 
@@ -17,13 +18,14 @@ public class finishTurn extends MovesCommand {
 				Model game = getGameFromCookie(cookie);
 				User user = getUserFromCookie(cookie);
 				int playerIndex = game.getIndexFromPlayerID(user.getID());
-				if(game.canFinishTurn(playerIndex)) {
+				try {
 					game.doFinishTurn(playerIndex);
 					JSONObject jsonResult = game.toJSON();
 					result = jsonResult.toJSONString();
-				} else {
-					throw new ServerAccessException("Player cannot end turn");
-				}
+				} catch (ViolatedPreconditionException e) {
+					throw new ServerAccessException("Player cannot end "
+							+ "turn");
+				}					
 			} else {
 				throw new ServerAccessException("Invalid Parameters");
 			}
