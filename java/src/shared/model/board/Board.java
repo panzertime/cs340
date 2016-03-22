@@ -42,8 +42,29 @@ public class Board {
 
 	private Model game;
 	private Robber robber;
-	private static Map<HexLocation, Hex> hexes;
+	private Map<HexLocation, Hex> hexes;
 	private int radius;
+	
+	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts, Model game) {
+		this.game = game;
+		this.robber = new Robber();
+		this.hexes = new HashMap<HexLocation, Hex>();
+
+		//idea - tiles, numbers, ports in arrayList. If random, shuffle the list
+			
+	}
+	
+	ArrayList<HexType> tiles;
+	ArrayList<Integer> productionNumbers;
+	ArrayList<PortType> portTiles;
+	
+	public void createLandHex(HexLocation location)
+	{
+		//pops from HexType arrayList
+		//switch - builds hex by popping from prod number arrayList
+		
+	}
+	
 
 	/**
 	 * @param jsonMap new version of the map as passed by the model
@@ -271,6 +292,7 @@ public class Board {
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
 	}
 
+
 	public JSONObject toJSON() {
 
 		JSONObject jsonMap = new JSONObject();
@@ -362,11 +384,11 @@ public class Board {
 		return jsonMap;
 	}
 	
-	public static Hex getHexAt(HexLocation hexLocation) {
+	public Hex getHexAt(HexLocation hexLocation) {
 		return hexes.get(hexLocation);
 	}
 
-	public static Vertex getVertexAt(VertexLocation vertexLoc) {
+	public Vertex getVertexAt(VertexLocation vertexLoc) {
 		VertexDirection vertDir = vertexLoc.getDir();
 		HexLocation hexLoc = vertexLoc.getHexLoc();
 		Hex hex = getHexAt(hexLoc);

@@ -54,6 +54,11 @@ public class User {
 		this.password = password;
 		this.id = id;
 	}
+	
+	public User()
+	{
+		
+	}
 
 	/**
 	 * Used to assign a user an ID
