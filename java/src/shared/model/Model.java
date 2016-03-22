@@ -1437,4 +1437,8 @@ public class Model {
 	public void setID(int gameID) {
 		this.gameID = gameID;
 	}
+	
+	public int getID() {
+		return this.gameID;
+	}
 }

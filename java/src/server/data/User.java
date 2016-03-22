@@ -74,35 +74,6 @@ public class User {
 			throw new UserException("User already assigned an ID");
 		}
 	}
-	
-
-	//TODO This may need to be refactored to be used with a UTILS class
-	//in order to keep the HTML cookie encoding out of it.
-	/**
-	 * Converts the given user to a cookie
-	 * @pre all fields in user are valid(non-empty string and has ID)
-	 * @post none
-	 * @return String to be used by the URL Encoder on the server to return to
-	 * the client.
-	 * @throws UserException User fields are incomplete or invalid
-	 */
-	public String toCookie() throws UserException {
-		if(this.username.isEmpty()
-				|| this.password.isEmpty()
-				|| this.id == null) {
-			throw new UserException("User is missing required data");
-		}
-		JSONObject cookie = new JSONObject();
-		cookie.put("name", this.username);
-		cookie.put("password", this.password);
-		cookie.put("playerID", this.id);
-		
-		StringBuilder result = new StringBuilder("catan.user=");
-		result.append(cookie.toJSONString());
-		result.append(";Path=/;");
-		
-		return result.toString();
-	}
 
 	/**
 	 * Generates a hashcode for each user
@@ -172,6 +143,10 @@ public class User {
 	 */
 	public Integer getID() {
 		return this.id;
+	}
+	
+	public String getPassword() {
+		return this.password;
 	}
 	
 	//DEBUG AND TESTING SECTION

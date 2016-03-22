@@ -4,7 +4,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import server.data.User;
 import server.exception.UserException;
+import shared.model.Model;
 
 /**
  * Handles Cookie Conversion
@@ -109,7 +111,79 @@ public class CatanCookie {
 					+ "JSON");
 		}
 	}
+	
+	/**
+	 * Constructor for CatanCookie when only a user exists
+	 * @pre User has username, password and id assigned
+	 * @post Creates a CatanCookie with all the user attributes filled out
+	 * @param user
+	 */
+	public CatanCookie(User user) {
+		this.name = user.getUsername();
+		this.password = user.getPassword();
+		this.userID = user.getID();
+	}
+	
+	
+	private CatanCookie(Model game) {
+		this.gameID = game.getID();
+	}
+	
+	/**
+	 * Creates a cookie using the parameters in the constructors (User) or 
+	 * (Model)
+	 * @pre all the necessary CatanCookie attributes are assigned and valid
+	 * (Either the three user fields or the one game ID - both done through
+	 * proper constructor and passing in valid parameters)
+	 * @post none
+	 * @return String representing the unicode value to be parsed and sent to
+	 * the end user (Not URL encoded)
+	 * @throws CookieException Not all user fields were set
+	 */
+	public String toCookie() throws CookieException {
+		StringBuilder cookie = new StringBuilder("catan.");
+		if(this.gameID != null) {
+			cookie.append("game=");
+			cookie.append(this.gameID);
+		} else if(validUserParams()) {
+			JSONObject user = userToJSON();
+			cookie.append("user=");
+			cookie.append(user.toJSONString());
+		} else {
+			throw new CookieException("Not all attributes were "
+					+ "initialized correctly");
+		}
+		
+		cookie.append(";Path=/;");
+		
+		return cookie.toString();
+	}
 
+	/**
+	 * @pre all params are valid
+	 * @post none
+	 * @return JSONObject representing the necessary attributes in a cookie
+	 */
+	private JSONObject userToJSON() {
+		JSONObject user = new JSONObject();
+		user.put("name", this.name);
+		user.put("password", this.password);
+		user.put("playerID", this.userID);
+		return user;
+	}
+
+	/**
+	 * Checks for valid user params
+	 * @pre none
+	 * @post none
+	 * @return User params are non-null and actual values
+	 */
+	private boolean validUserParams() {
+		return this.name != null && !this.name.isEmpty() &&
+				this.password != null && !this.password.isEmpty() &&
+				this.userID != null;
+	}
+	
 	public String getName() {
 		return name;
 	}
