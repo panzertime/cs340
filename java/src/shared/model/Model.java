@@ -94,7 +94,6 @@ public class Model {
 		this.status = "FirstRound";
 		this.gameName = gameName;
 		this.version = 0;
-		
 	}
 	
 	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
