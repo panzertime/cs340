@@ -17,6 +17,7 @@ import shared.model.Model;
  */
 public abstract class MovesCommand implements ICommand {
 
+	//TODO fix duplication in GameCommand
 	/**
 	 * Uses the passed string to check the database to see if the cookie
 	 * parameters are valid

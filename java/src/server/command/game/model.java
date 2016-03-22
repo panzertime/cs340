@@ -8,6 +8,10 @@ public class model extends GameCommand {
 
 	@Override
  	public String execute(JSONObject args, String cookie) throws ServerAccessException {
-		return null;
+		String result = null;
+		if(validCookie(cookie)) {
+			
+		}
+		return result;
 	}
 }

@@ -13,7 +13,6 @@ import server.utils.CookieException;
  */
 public abstract class GamesCommand implements ICommand {
 
-	//TODO Fix code duplication in GameCommand
 	/**
 	 * Uses the passed string to check the database to see if the cookie
 	 * parameters are valid
