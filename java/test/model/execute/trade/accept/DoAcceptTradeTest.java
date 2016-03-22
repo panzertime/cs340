@@ -11,21 +11,13 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import client.main.ClientPlayer;
-import client.modelfacade.testing.TestingModelFacade;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ViolatedPreconditionException;
 
 public class DoAcceptTradeTest {
-	
-	@Before
-	public void initFacades() {
-		ClientPlayer.sole().setUserIndex(0);
-		TestingModelFacade.sole().emptyModel();
-	}
 
 	public JSONObject getJSONFrom(String file) {
 		JSONParser parser = new JSONParser();
@@ -55,10 +47,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer.json"));
+			model.doAcceptTrade(true, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with acceptance and valid index");
 		}
-		model.doAcceptTrade(true, 0);
 		if (model.equalsJSON(getJSONFrom("offerAccepted.json"))) {
 			System.out.println("passed testDoAcceptTrade with acceptance and valid index");
 		} else {
@@ -71,10 +65,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer.json"));
+			model.doAcceptTrade(false, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with no acceptance and valid index");
 		}
-		model.doAcceptTrade(false, 0);
 		if (model.equalsJSON(getJSONFrom("offerDeclined.json"))) {
 			System.out.println("passed testDoAcceptTrade with no acceptance and valid index");
 		} else {
@@ -87,10 +83,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer-notPlaying.json"));
+			model.doAcceptTrade(true, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with acceptance and valid index while model isn't playing");
 		}
-		model.doAcceptTrade(true, 0);
 		if (model.equalsJSON(getJSONFrom("offerAccepted-notPlaying.json"))) {
 			System.out.println("passed testDoAcceptTrade with acceptance and valid index while model isn't playing");
 		} else {
@@ -103,10 +101,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer-notPlaying.json"));
+			model.doAcceptTrade(false, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with no acceptance and valid index while model isn't playing");
 		}
-		model.doAcceptTrade(false, 0);
 		if (model.equalsJSON(getJSONFrom("offerDeclined-notPlaying.json"))) {
 			System.out.println("passed testDoAcceptTrade with no acceptance and valid index while model isn't playing");
 		} else {
@@ -119,10 +119,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer-notYourTurn.json"));
+			model.doAcceptTrade(true, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with acceptance and valid index while not your turn");
 		}
-		model.doAcceptTrade(true, 0);
 		if (model.equalsJSON(getJSONFrom("offerAccepted-notYourTurn.json"))) {
 			System.out.println("passed testDoAcceptTrade with acceptance and valid index while not your turn");
 		} else {
@@ -135,10 +137,12 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("offer-notYourTurn.json"));
+			model.doAcceptTrade(false, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed testDoAcceptTrade with no acceptance and valid index while not your turn");
 		}
-		model.doAcceptTrade(false, 0);
 		if (model.equalsJSON(getJSONFrom("offerDeclined-notYourTurn.json"))) {
 			System.out.println("passed testDoAcceptTrade with no acceptance and valid index while not your turn");
 		} else {
@@ -151,13 +155,13 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("noOffer.json"));
+			model.doAcceptTrade(true, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
-		}
-		model.doAcceptTrade(true, 0);
-		if (model.equalsJSON(getJSONFrom("noOffer.json"))) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed testDoAcceptTrade with acceptance and valid index");
-		} else {
+		}
+		if (!model.equalsJSON(getJSONFrom("noOffer.json"))) {
 			fail("failed testDoAcceptTrade with acceptance and valid index");
 		}
 	}
@@ -167,13 +171,13 @@ public class DoAcceptTradeTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("noOffer.json"));
+			model.doAcceptTrade(false, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doAcceptTrade while initilizing model");
-		}
-		model.doAcceptTrade(false, 0);
-		if (model.equalsJSON(getJSONFrom("noOffer.json"))) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed testDoAcceptTrade with no acceptance and valid index");
-		} else {
+		}
+		if (!model.equalsJSON(getJSONFrom("noOffer.json"))) {
 			fail("failed testDoAcceptTrade with no acceptance and valid index");
 		}
 	}

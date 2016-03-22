@@ -11,21 +11,14 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import client.main.ClientPlayer;
-import client.modelfacade.testing.TestingModelFacade;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ViolatedPreconditionException;
 
 public class DoSendChatTest {
-	
-	@Before
-	public void initFacades() {
-		ClientPlayer.sole().setUserIndex(0);
-		TestingModelFacade.sole().emptyModel();
-	}
+
 	
 	public JSONObject getJSONFrom(String file) {
 		JSONParser parser = new JSONParser();
@@ -55,10 +48,12 @@ public class DoSendChatTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("beforeMessage.json"));
+			model.doSendChat("message", 0);
 		} catch (BadJSONException e) {
 			fail("Failed doSendChat while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("Failed doSendChat with basic message and valid index");
 		}
-		model.doSendChat("message", 0);
 		if(model.equalsJSON(getJSONFrom("afterMessage.json"))) {
 			System.out.println("passed doSendChat with basic message and valid index");
 		} else {
@@ -71,13 +66,13 @@ public class DoSendChatTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("beforeMessage.json"));
+			model.doSendChat("message", 99);
 		} catch (BadJSONException e) {
 			fail("Failed doSendChat while initilizing model");
-		}
-		model.doSendChat("message", 99);
-		if(model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed doSendChat with basic message and invalid index");
-		} else {
+		}
+		if(!model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
 			fail("Failed doSendChat with basic message and invalid index");
 		}
 	}
@@ -87,13 +82,13 @@ public class DoSendChatTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("beforeMessage.json"));
+			model.doSendChat("", 0);
 		} catch (BadJSONException e) {
 			fail("Failed doSendChat while initilizing model");
-		}
-		model.doSendChat("", 0);
-		if(model.equalsJSON(getJSONFrom("afterEmptyMessage.json"))) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed doSendChat with empty message and valid index");
-		} else {
+		}
+		if(!model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
 			fail("Failed doSendChat with empty message and valid index");
 		}
 	}
@@ -106,11 +101,12 @@ public class DoSendChatTest {
 			model.doSendChat(null, 0);
 		} catch (BadJSONException e) {
 			fail("Failed doSendChat while initilizing model");
-		} catch (NullPointerException e) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed doSendChat with null message and valid index");
-			return;
 		}
-		fail("Failed doSendChat with null message and valid index");
+		if(!model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
+			fail("Failed doSendChat with null message and valid index");
+		}
 	}
 	
 	@Test
@@ -118,13 +114,13 @@ public class DoSendChatTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("beforeMessage.json"));
+			model.doSendChat("", 99);
 		} catch (BadJSONException e) {
 			fail("Failed doSendChat while initilizing model");
-		}
-		model.doSendChat("", 99);
-		if(model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
+		} catch (ViolatedPreconditionException e) {
 			System.out.println("passed doSendChat with empty message and invalid index");
-		} else {
+		}
+		if(!model.equalsJSON(getJSONFrom("beforeMessage.json"))) {
 			fail("Failed doSendChat with empty message and invalid index");
 		}
 	}

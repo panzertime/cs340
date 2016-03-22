@@ -30,6 +30,7 @@ import shared.model.exceptions.BadStatusException;
 import shared.model.exceptions.JoinGameException;
 import shared.model.exceptions.ModelAccessException;
 import shared.model.exceptions.NoDevCardFoundException;
+import shared.model.exceptions.ViolatedPreconditionException;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
 import shared.model.hand.exceptions.NoRemainingResourceException;
@@ -872,10 +873,14 @@ public class Model {
 	 * @post true
 	 * @return true
 	 */
-	public Boolean canSendChat(Integer playerIndex) {
+	public Boolean canSendChat(String message, Integer playerIndex) {
 		if (playerIndex == null)
 			return false;
 		if (getPlayerFromIndex(playerIndex) == null)
+			return false;
+		if (message == null)
+			return false;
+		if (message.equals(""))
 			return false;
 		return true;
 	}
@@ -1122,18 +1127,18 @@ public class Model {
 	
 	//////////////////////////////////SERVER SECTION////////////////////////////////////////////////////////////
 	
-	public void doSendChat(String message, int playerIndex)
+	public void doSendChat(String message, int playerIndex) throws ViolatedPreconditionException
 	{
-		if (!this.canSendChat(playerIndex))
-			return;
+		if (!this.canSendChat(message, playerIndex))
+			throw new ViolatedPreconditionException();
 		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
 	}
 	
 
-	public void doAcceptTrade(boolean willAccept, int playerIndex)
+	public void doAcceptTrade(boolean willAccept, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (!this.canAcceptTrade(willAccept, playerIndex))
-			return;
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 
 		if (willAccept)
