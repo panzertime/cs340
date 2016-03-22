@@ -479,7 +479,7 @@ public class Model {
 	// The status of the client model is 'Discarding'
 	// You have over 7 cards
 	// You have the cards you're choosing to discard
-	public Boolean canDiscardCard(Integer playerIndex, Map<ResourceType, Integer> resources) {
+	public Boolean canDiscardCard(Map<ResourceType, Integer> resources, Integer playerIndex) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
 		if (!isActivePlayer(playerIndex))
@@ -503,10 +503,14 @@ public class Model {
 	// Preconditions
 	// It is your turn
 	// The client model�s status is 'Rolling'
-	public Boolean canRollNumber(Integer playerIndex) {
+	public Boolean canRollNumber(Integer numberRolled, Integer playerIndex) {
 		if (!isActivePlayer(playerIndex))
 			return false;
 		if (!isStateRolling())
+			return false;
+		if (numberRolled < 2)
+			return false;
+		if (numberRolled > 12)
 			return false;
 		return true;
 	}
@@ -1169,10 +1173,11 @@ public class Model {
 		this.tradeModel = null;
 	}
 	
-	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex)
+	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex) throws ViolatedPreconditionException
 	{
-		for (ResourceType type: ResourceType.values())
-		{
+		if (!canDiscardCard(discardedCards, playerIndex))
+			throw new ViolatedPreconditionException();
+		for (ResourceType type: ResourceType.values()) {
 			try {
 				this.getPlayerFromIndex(playerIndex).sendResource(type, discardedCards.get(type));
 				this.getBank().receiveResource(type, discardedCards.get(type));
@@ -1185,38 +1190,41 @@ public class Model {
 			this.status = "Robbing";
 	}
 	
-	public void doRollNumber(int roll, int playerIndex)
+	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
 	{
+		if (!canRollNumber(roll, playerIndex))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " rolled a " + roll, source);
-	if (roll == 7)
-	{
-		if (stillDiscarding())
-			this.status = "Discarding";
-		else
-			this.status = "Robbing";
-	}
-	else
-	{
-		for (Player p: players.values())
-		{
-			for (Building b: p.getBuildings())
-			{
-				try {
-					b.produce(roll);
-				} catch (NoRemainingResourceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		if (roll == 7) {
+			if (stillDiscarding())
+				this.status = "Discarding";
+			else
+				this.status = "Robbing";
+		} else {
+			for (Player p: players.values()) {
+				for (Building b: p.getBuildings()) {
+					try {
+						b.produce(roll);
+					} catch (NoRemainingResourceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
-
 	}
 	
-	}
-	
-	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex)
+	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex) throws ViolatedPreconditionException
 	{
+		if (free) {
+			if (!canSetupRoad(playerIndex, roadLocation))
+				throw new ViolatedPreconditionException();
+		} else {
+			if (!canBuildRoad(playerIndex, roadLocation));
+				throw new ViolatedPreconditionException();
+		}
+				
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " built a road", source);
 
@@ -1224,7 +1232,6 @@ public class Model {
 			if (!free) this.getPlayerFromIndex(playerIndex).buyRoad();
 			this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), roadLocation);
 		} catch (NoRemainingResourceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (this.achievements.checkRoads(players))
@@ -1233,8 +1240,15 @@ public class Model {
 			this.checkWinner(playerIndex);
 		}
 	}
-	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex)
+	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
+		if (free) {
+			if (!canSetupSettlement(playerIndex, vertexLocation))
+				throw new ViolatedPreconditionException();
+		} else {
+			if (!canBuildSettlement(playerIndex, vertexLocation));
+				throw new ViolatedPreconditionException();
+		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " built a settlement", source);
 		try {
@@ -1247,8 +1261,10 @@ public class Model {
 		updatePoints();
 		checkWinner(playerIndex);
 	}
-	public void doBuildCity(VertexLocation vertexLocation, int playerIndex)
+	public void doBuildCity(VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
+		if (!canBuildCity(playerIndex, vertexLocation))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " upgraded to a city", source);
 		try {
@@ -1262,14 +1278,16 @@ public class Model {
 		checkWinner(playerIndex);
 	}
 	
-	public void doOfferTrade(int receiver, Map<ResourceType, Integer> resourceList, int playerIndex)
+	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException
 	{
+		if (!canOfferTrade(receiverIndex, resourceList, playerIndex))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiver) + " a trade", source);
+		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiverIndex) + " a trade", source);
 
 		this.tradeModel = new TradeModel();
 		this.tradeModel.setSenderIndex(playerIndex);
-		this.tradeModel.setReceiverIndex(receiver);
+		this.tradeModel.setReceiverIndex(receiverIndex);
 		for (ResourceType type: ResourceType.values())
 		{
 			try {
@@ -1281,19 +1299,23 @@ public class Model {
 		}
 	}
 	
-	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex)
+	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex) throws ViolatedPreconditionException
 	{
+		if(!canMaritimeTrade(ratio, playerIndex, input, output))
+			throw new ViolatedPreconditionException();
 		try {
 			this.getPlayerFromIndex(playerIndex).doMaritimeTrade(ratio, input, output);
 		} catch (NoRemainingResourceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex)
+	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
 	{
-		
+		if(!canPlaceRobber(playerIndex, robLocation))
+			throw new ViolatedPreconditionException();
+		if(!canRobPlayerFrom(robLocation, victimIndex, playerIndex))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " moved the robber and robbed " + this.getPlayerName(victimIndex), source);
 		this.board.placeRobber(robLocation);
@@ -1309,8 +1331,10 @@ public class Model {
 	}
 	
 	
-	public void doFinishTurn(int playerIndex)
+	public void doFinishTurn(int playerIndex) throws ViolatedPreconditionException
 	{	
+		if(!canFinishTurn(playerIndex))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
 
@@ -1319,8 +1343,10 @@ public class Model {
 		this.status = "Rolling";
 	}
 	
-	public void doBuyDevCard(int playerIndex)
+	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
 	{
+		if(canBuyDevCard(playerIndex))
+			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " bought a Development Card", source);
 
@@ -1332,7 +1358,7 @@ public class Model {
 		}
 	}
 	
-	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex)
+	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
 	{
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used a soldier", source);
@@ -1340,7 +1366,7 @@ public class Model {
 		this.doRobPlayer(robLocation, victimIndex, playerIndex);
 		Player p = this.getPlayerFromIndex(playerIndex);
 		try {
-			p.returnDevCard(p.findDevCard(DevCardType.MONOPOLY));
+			p.returnDevCard(p.findDevCard(DevCardType.KNIGHT));
 		} catch (NoDevCardFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
