@@ -4,8 +4,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import server.exception.UserException;
-
 /**
  * Handles Cookie Conversion
  *
@@ -122,5 +120,5 @@ public class CatanCookie {
 
 	public int getGameID() {
 		return gameID;
-	}		
+	}
 }
