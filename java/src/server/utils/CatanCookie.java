@@ -5,7 +5,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import server.data.User;
-import server.exception.UserException;
 import shared.model.Model;
 
 /**
@@ -196,5 +195,5 @@ public class CatanCookie {
 
 	public int getGameID() {
 		return gameID;
-	}		
+	}
 }
