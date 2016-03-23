@@ -1383,8 +1383,11 @@ public class Model {
 		}
 	}
 	
-	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex)
+	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex) throws ViolatedPreconditionException
 	{
+		if(!canUseYearOfPlenty(playerIndex, resource1, resource2)) {
+			throw new ViolatedPreconditionException();
+		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Year of Plenty and got a " + resource1.toString().toLowerCase() + " and a " + resource2.toString().toLowerCase(), source);
 
