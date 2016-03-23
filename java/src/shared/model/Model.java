@@ -1406,8 +1406,19 @@ public class Model {
 		}
 	}
 	
-	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex)	
+	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex) throws ViolatedPreconditionException	
 	{
+		//TODO - verify that this is correct
+		if(spot2 == null) {
+			if(!this.canUseRoadBuildingSingle(playerIndex, spot1)) {
+				throw new ViolatedPreconditionException();
+			}
+		} else {
+			if(!this.canUseRoadBuilding(playerIndex, spot1, spot2)) {
+				throw new ViolatedPreconditionException();
+			}
+		}
+		
 		this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), spot1);
 		this.board.buildRoad(this.getPlayerFromIndex(playerIndex).getFreeRoad(), spot2);
 		Player p = this.getPlayerFromIndex(playerIndex);
