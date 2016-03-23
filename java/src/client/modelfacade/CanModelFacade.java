@@ -30,7 +30,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @return post
 	 */
 	public boolean canRollDice() {
-		return this.gameModel.canRollNumber(ClientPlayer.sole().getUserIndex());
+		return this.gameModel.canRollNumber( 7, ClientPlayer.sole().getUserIndex());
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @return post
 	 */
 	public boolean canAcceptTrade() {
-		return gameModel.canAcceptTrade(ClientPlayer.sole().getUserID());
+		return gameModel.canAcceptTrade(true, ClientPlayer.sole().getUserID());
 	}
 	
 	public boolean canViewTrade() {
@@ -260,7 +260,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @return whether or not this operation is valid
 	 */
 	public boolean canDiscardCards(Map<ResourceType, Integer> resources) {
-		return this.gameModel.canDiscardCard(ClientPlayer.sole().getUserIndex(), resources);
+		return this.gameModel.canDiscardCard(resources, ClientPlayer.sole().getUserIndex());
 	}
 	
 	public boolean shouldDiscard() {
@@ -278,7 +278,7 @@ public class CanModelFacade extends ModelFacade {
 	}
 
 	public boolean canSendChat() {
-		return this.gameModel.canSendChat(ClientPlayer.sole().getUserIndex());
+		return this.gameModel.canSendChat("genaric message", ClientPlayer.sole().getUserIndex());
 	}
 
 }

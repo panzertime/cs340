@@ -1,5 +1,9 @@
 package server.data;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import server.exception.UserException;
 
 public class User {
@@ -35,15 +39,20 @@ public class User {
 		this.password = password;
 		id = null;
 	}
-	
+
 	/**
-	 * Creates a user form a handed cookie
-	 * @pre cookie is valid, nonempty string
-	 * @post user object is created with the given parameters
-	 * @param cookie cookie handed to the server by the client
+	 * This constructor should only be used to create a user from a valid 
+	 * cookie
+	 * @pre all attributes are valid
+	 * @post a new user with the given params is created
+	 * @param name username
+	 * @param password password
+	 * @param id ID
 	 */
-	public User(String cookie) {
-		
+	public User(String name, String password, Integer id) {
+		this.username = name;
+		this.password = password;
+		this.id = id;
 	}
 	
 	public User()
@@ -64,16 +73,6 @@ public class User {
 		else {
 			throw new UserException("User already assigned an ID");
 		}
-	}
-
-	/**
-	 * Converts the given user to a cookie
-	 * @pre all fields in user are non-null
-	 * @post none
-	 * @return Cookie String to be used by the server to return to the client
-	 */
-	public String toCookie() {
-		return password;
 	}
 
 	/**
@@ -144,5 +143,32 @@ public class User {
 	 */
 	public Integer getID() {
 		return this.id;
-	}	
+	}
+	
+	public String getPassword() {
+		return this.password;
+	}
+	
+	//DEBUG AND TESTING SECTION
+
+	/**
+	 * TESTING AND DEBUGGING ONLY: This is to be used for tests to make sure 
+	 * that a newly created user matches an already existing game
+	 * @pre none
+	 * @post id is set
+	 * @param id ID
+	 */
+	public void setUserID(int id) {
+		this.id = id;
+	}
+	
+	/**
+	 * TESING AND DEBUGGING ONLY:
+	 * Used to reset static ID value to initial value of 0
+	 * @pre none
+	 * @post ids to be assigned will be reset to 0
+	 */
+	public void resetIDs() {
+		this.id = 0;
+	}
 }

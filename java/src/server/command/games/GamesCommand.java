@@ -1,6 +1,11 @@
 package server.command.games;
 
 import server.command.ICommand;
+import server.data.ServerKernel;
+import server.data.User;
+import server.exception.UserException;
+import server.utils.CatanCookie;
+import server.utils.CookieException;
 
 /**
  * Class for keeping common Games command functionality in the same place
@@ -17,6 +22,32 @@ public abstract class GamesCommand implements ICommand {
 	 * @return whether or not the username, password, and ID are valid
 	 */
 	public boolean validCookie(String cookie) {
-		return false;
+		boolean result = false;
+		try {
+			CatanCookie catanCookie = new CatanCookie(cookie, true);
+			User user = new User(catanCookie.getName(), 
+					catanCookie.getPassword(), catanCookie.getUserID());
+			result = ServerKernel.sole().userExists(user);
+		} catch (UserException | CookieException e) {
+			//DEBUG ONLY 
+			//System.err.println(e.getMessage());
+		}
+		
+		return result;
 	}
+	
+
+	public User getUserFromCookie(String cookie) {
+		User user = null;
+		try {
+			CatanCookie catanCookie = new CatanCookie(cookie, true);
+			user = new User(catanCookie.getName(), 
+					catanCookie.getPassword(), catanCookie.getUserID());
+		} catch (CookieException e) {
+			System.err.println("Tried to create a user from an invalid cookie."
+					+ " Check pre-conditions.");
+		}
+		return user;
+	}
+
 }

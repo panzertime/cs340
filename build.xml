@@ -166,7 +166,7 @@
     </target>
 	
 	<target name="test" depends="compileTest" description="compiles and runs the JUnit tests " >
-		<java classname="tests.PhaseOneTest" fork="yes">
+		<java classname="test.Test" fork="yes">
 			<classpath>
 				<pathelement path="${java.bin.test}"/>
 				<pathelement path="${java.bin.src}"/>
