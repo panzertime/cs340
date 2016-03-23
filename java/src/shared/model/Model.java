@@ -1250,7 +1250,7 @@ public class Model {
 			if (!canSetupSettlement(playerIndex, vertexLocation))
 				throw new ViolatedPreconditionException();
 		} else {
-			if (!canBuildSettlement(playerIndex, vertexLocation));
+			if (!canBuildSettlement(playerIndex, vertexLocation))
 				throw new ViolatedPreconditionException();
 		}
 		String source = this.getPlayerName(playerIndex);
