@@ -2,7 +2,6 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.exceptions.ViolatedPreconditionException;
@@ -18,13 +17,13 @@ public class acceptTrade extends MovesCommand {
 				try {
 					boolean willAccept = (Boolean) args.get("willAccept");
 					Model game = getGameFromCookie(cookie);
-					User user = getUserFromCookie(cookie);
 					int playerIndex = 
 							((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doAcceptTrade(willAccept, playerIndex);
-					} catch (Exception e) {
-						
+					} catch (ViolatedPreconditionException e) {
+						throw new ServerAccessException("Unable to "
+								+ "perform move");
 					}
 				} catch (Exception e) {
 					throw new ServerAccessException("Invalid Parameters: "
