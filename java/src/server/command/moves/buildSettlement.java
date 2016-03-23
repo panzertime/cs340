@@ -23,6 +23,8 @@ public class buildSettlement extends MovesCommand {
 				try {
 					boolean free = (boolean) args.get("free");
 					game.doBuildSettlement(free, vertexLocation, playerIndex);
+					JSONObject resultJSON = game.toJSON();
+					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {
 					throw new ServerAccessException("Unable to "
 							+ "perform move");

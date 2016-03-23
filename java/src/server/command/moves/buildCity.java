@@ -22,6 +22,8 @@ public class buildCity extends MovesCommand {
 						((JSONObject) args.get("vertexLocation"));
 				try {
 					game.doBuildCity(vertexLocation, playerIndex);
+					JSONObject resultJSON = game.toJSON();
+					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {
 					throw new ServerAccessException("Unable to "
 							+ "perform move");
