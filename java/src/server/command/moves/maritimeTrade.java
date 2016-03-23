@@ -22,7 +22,8 @@ public class maritimeTrade extends MovesCommand {
 				try {
 					ResourceType input = getResourceType
 							((String) args.get("inputResource"));
-					int ratio = 0;
+					Integer ratio = (Integer) args.get("ratio");
+					ratio = (ratio == null) ? 4 : ratio;
 					ResourceType output = getResourceType
 							((String) args.get("outputResource"));
 					game.doMaritimeTrade(ratio, input, output, playerIndex);
