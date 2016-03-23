@@ -1349,13 +1349,13 @@ public class Model {
 	
 	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
 	{
-		if(canBuyDevCard(playerIndex))
+		if(!canBuyDevCard(playerIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + " bought a Development Card", source);
 
 		try {
 			this.getPlayerFromIndex(playerIndex).buyDevelopment();
+			this.chatModel.addGameMessage(source + " bought a Development Card", source);
 		} catch (NoRemainingResourceException | NoDevCardFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
