@@ -1228,7 +1228,7 @@ public class Model {
 			if (!canSetupRoad(playerIndex, roadLocation))
 				throw new ViolatedPreconditionException();
 		} else {
-			if (!canBuildRoad(playerIndex, roadLocation));
+			if (!canBuildRoad(playerIndex, roadLocation))
 				throw new ViolatedPreconditionException();
 		}
 				
@@ -1253,7 +1253,7 @@ public class Model {
 			if (!canSetupSettlement(playerIndex, vertexLocation))
 				throw new ViolatedPreconditionException();
 		} else {
-			if (!canBuildSettlement(playerIndex, vertexLocation));
+			if (!canBuildSettlement(playerIndex, vertexLocation))
 				throw new ViolatedPreconditionException();
 		}
 		String source = this.getPlayerName(playerIndex);
@@ -1352,13 +1352,13 @@ public class Model {
 	
 	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
 	{
-		if(canBuyDevCard(playerIndex))
+		if(!canBuyDevCard(playerIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + " bought a Development Card", source);
 
 		try {
 			this.getPlayerFromIndex(playerIndex).buyDevelopment();
+			this.chatModel.addGameMessage(source + " bought a Development Card", source);
 		} catch (NoRemainingResourceException | NoDevCardFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1427,8 +1427,12 @@ public class Model {
 		}
 	}
 	
-	public void doMonopoly(ResourceType resource, int playerIndex)
+	public void doMonopoly(ResourceType resource, int playerIndex) 
+			throws ViolatedPreconditionException
 	{
+		if(!canUseMonopoly(playerIndex, resource)) {
+			throw new ViolatedPreconditionException();
+		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Monopoly and stole everyone's " + resource.toString().toLowerCase(), source);
 
@@ -1459,8 +1463,11 @@ public class Model {
 		}
 	}
 	
-	public void doMonument(int playerIndex)
+	public void doMonument(int playerIndex) throws ViolatedPreconditionException
 	{
+		if(!this.canUseMonument(playerIndex)) {
+			throw new ViolatedPreconditionException();
+		}
 		Player p = this.getPlayerFromIndex(playerIndex);
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();

@@ -2,7 +2,6 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.exceptions.ViolatedPreconditionException;
@@ -16,8 +15,7 @@ public class finishTurn extends MovesCommand {
 		if(validCookie(cookie)) {
 			if(validMovesArguments(args, getClass().getSimpleName())) {
 				Model game = getGameFromCookie(cookie);
-				User user = getUserFromCookie(cookie);
-				int playerIndex = game.getIndexFromPlayerID(user.getID());
+				int playerIndex = ((Long) args.get("playerIndex")).intValue();
 				try {
 					game.doFinishTurn(playerIndex);
 					JSONObject jsonResult = game.toJSON();
