@@ -1,14 +1,11 @@
 package server.command.moves;
 
-import java.util.Map;
-
 import org.json.simple.JSONObject;
 
 import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
-import shared.model.hand.ResourceType;
 
 public class robPlayer extends MovesCommand {
 
