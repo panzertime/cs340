@@ -112,10 +112,8 @@ public class ServerKernel {
 		JSONArray gamesList = new JSONArray();
 		
 		for(Map.Entry<Integer,Model> model : this.games.entrySet()) {
-			//TODO add toGamesListJSON function
-			/*JSONObject gameInfo = model.getValue().toGameListJSON();
-			gameInfo.put("id", model.getKey());		
-			gamesList.add(gameInfo);*/
+			JSONObject gameInfo = model.getValue().getGamesList();
+			gamesList.add(gameInfo);
 		}
 		return gamesList;
 	}
@@ -136,8 +134,7 @@ public class ServerKernel {
 		if(game == null) {
 			throw new ServerAccessException("Game does not exist");
 		} else {
-			//TODO ADD this functionality
-		//	result = game.isPlayerInGame(user.getUsername(), user.getID());
+			result = game.isPlayerInGame(user.getUsername(), user.getID());
 		}
 		return result;
 	}
@@ -176,9 +173,14 @@ public class ServerKernel {
 	 * @pre game list has been created. Model is a valid version of a new game
 	 * @post the given game is added to the gameslist
 	 * @param newModel The new game to be added to the games list
+	 * @return the new id assigned to the game
 	 */
-	public void putGame(Model newModel) {
-		this.games.put(newGameID(), newModel);
+	public int putGame(Model newModel) {
+		int newGameID = newGameID();
+		this.games.put(newGameID, newModel);
+		newModel.setID(newGameID);
+		
+		return newGameID;
 	}
 
 	/**
@@ -195,5 +197,37 @@ public class ServerKernel {
 	
 	public int getNumOfGames() {
 		return this.numOfGames;
+	}
+	
+	//TESTING AND DEBUGGING SECTION
+	
+	/**
+	 * FOR DEBUGGING AND TESTING ONLY:
+	 * @pre none
+	 * @post will reset all fields to zero
+	 */
+	public void reinitAll() {
+		this.games = new HashMap<Integer, Model>();
+		this.users = new HashMap<String, User>();
+		this.numOfGames = 0;
+	}
+	
+	/**
+	 * FOR DEBUGGING AND TESTING ONLY:
+	 * @pre none
+	 * @post will reset all games related fields to zero
+	 */
+	public void reinitGames() {
+		this.games = new HashMap<Integer, Model>();
+		this.numOfGames = 0;
+	}
+	
+	/**
+	 * FOR DEBUGGING AND TESTING ONLY:
+	 * @pre none
+	 * @post will reset Users to zero
+	 */
+	public void reinitUsers() {
+		this.users = new HashMap<String, User>();
 	}
 }

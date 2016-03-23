@@ -24,7 +24,7 @@ import shared.model.exceptions.BadJSONException;
 public class ServerKernelTests {
 
 	/*TODO
-	 * Get these to run in order 
+	 * Get these to run independently
 	 */
 	@Test
 	public void testAddUser1() {
@@ -290,6 +290,7 @@ public class ServerKernelTests {
 	@Test
 	public void testUserIsInGame1() {
 		User sam = new User("Sam", "sam");
+		sam.setUserID(0);
 		try {
 			if(ServerKernel.sole().userIsInGame(0, sam)) {
 				System.out.println("Passed user is in game test when user is in "
@@ -306,9 +307,10 @@ public class ServerKernelTests {
 	
 	@Test
 	public void testUserIsInGame2() {
-		User sam = new User("Joshua", "joshua");
+		User joshua = new User("Daniel", "daniel");
+		joshua.setUserID(2);
 		try {
-			if(ServerKernel.sole().userIsInGame(0, sam)) {
+			if(!ServerKernel.sole().userIsInGame(0, joshua)) {
 				System.out.println("Passed user is in game test when user is "
 						+ "not in game");
 			} else {
@@ -323,9 +325,10 @@ public class ServerKernelTests {
 	
 	@Test
 	public void testUserIsInGame3() {
-		User sam = new User("Sam", "");
+ 		User sam = new User("Sam", "asm");
+		sam.setUserID(0);
 		try {
-			if(ServerKernel.sole().userIsInGame(0, sam)) {
+			if(ServerKernel.sole().userIsInGame(3, sam)) {
 				fail("Failed user is in game test when game is "
 					+ "invalid");
 			} else {

@@ -1,13 +1,9 @@
 package shared.model.chat;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.simple.JSONObject;
 
 import client.communication.LogEntry;
 import client.modelfacade.get.GetModelFacade;
-import shared.model.Player;
 import shared.model.definitions.CatanColor;
 import shared.model.exceptions.BadJSONException;
 
@@ -22,11 +18,13 @@ public class Message {
 		this.message = m;
 		String s = (String) messageLine.get("source");
 		if (s == null)  throw new BadJSONException();
-		this.source = s; //Static method to change this to PLAYER class
+		this.source = s;
 		
 	}
 
 	public Message(String message, String source) {
+		if (message == null)
+			throw new NullPointerException();
 		this.message = message;
 		this.source = source;
 	}
