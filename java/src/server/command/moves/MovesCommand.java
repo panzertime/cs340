@@ -208,4 +208,23 @@ public abstract class MovesCommand implements ICommand {
 		}
 		return result;
 	}
+	
+	/**
+	 * Takes in a string and turns it into a resource
+	 * @pre string represents a valid Resource
+	 * @post a ResouceType is created
+	 * @param resString value representing a string
+	 * @return corresponding resource
+	 */
+	public ResourceType getResourceType(String resString) 
+			throws ServerAccessException {
+		ResourceType result = null;
+		try {
+			result = ResourceType.valueOf(resString);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameter: Resource");
+		}
+		
+		return result;
+	}
 }

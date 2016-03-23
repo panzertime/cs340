@@ -149,4 +149,28 @@ public class discardCardsTest {
 					+ "type arg is invalid: dne");
 		}
 	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("playerIndex", (long) 0);
+		JSONObject discard = new JSONObject();
+		discard.put("brick", (long) 1);
+		discard.put("ore", (long) 1);
+		discard.put("sheep", (long) 1);
+		discard.put("wheat", (long) 1);
+		args.put("discardedCards", discard);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		discardCards dc = new discardCards();
+		try {
+			dc.execute(args, cookie);
+			fail("Failed discardCards test where wood arg "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "wood arg is invalid: dne");
+		}
+	}
 }
