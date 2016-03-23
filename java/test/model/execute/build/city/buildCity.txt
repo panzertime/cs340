@@ -380,11 +380,11 @@
   "players": [
     {
       "resources": {
-        "brick": 1,
-        "wood": 0,
+        "brick": 0,
+        "wood": 1,
         "sheep": 1,
-        "wheat": 0,
-        "ore": 1
+        "wheat": 2,
+        "ore": 3
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
@@ -401,7 +401,7 @@
         "monument": 0
       },
       "roads": 13,
-      "cities": 4,
+      "cities": 1,
       "settlements": 3,
       "soldiers": 0,
       "victoryPoints": 2,
@@ -415,11 +415,11 @@
     },
     {
       "resources": {
-        "brick": 1,
-        "wood": 2,
+        "brick": 2,
+        "wood": 0,
         "sheep": 1,
-        "wheat": 2,
-        "ore": 0
+        "wheat": 0,
+        "ore": 1
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
@@ -624,10 +624,6 @@
       {
         "source": "Sam",
         "message": "Sam's turn just ended"
-      },
-      {
-        "source": "Sam",
-        "message": "Sam accepted the trade"
       }
     ]
   },
@@ -652,10 +648,10 @@
   },
   "turnTracker": {
     "status": "Playing",
-    "currentTurn": 3,
+    "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },
   "winner": -1,
-  "version": 5
+  "version": 4
 }

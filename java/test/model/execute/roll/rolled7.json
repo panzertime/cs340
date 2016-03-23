@@ -380,11 +380,11 @@
   "players": [
     {
       "resources": {
-        "brick": 1,
-        "wood": 0,
+        "brick": 0,
+        "wood": 1,
         "sheep": 1,
-        "wheat": 0,
-        "ore": 1
+        "wheat": 2,
+        "ore": 0
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
@@ -415,11 +415,11 @@
     },
     {
       "resources": {
-        "brick": 1,
-        "wood": 2,
+        "brick": 2,
+        "wood": 0,
         "sheep": 1,
-        "wheat": 2,
-        "ore": 0
+        "wheat": 0,
+        "ore": 1
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
@@ -627,8 +627,8 @@
       },
       {
         "source": "Sam",
-        "message": "Sam accepted the trade"
-      }
+        "message": "Sam rolled a 7."
+      },
     ]
   },
   "chat": {
@@ -651,8 +651,8 @@
     "ore": 22
   },
   "turnTracker": {
-    "status": "Playing",
-    "currentTurn": 3,
+    "status": "Robbing",
+    "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },

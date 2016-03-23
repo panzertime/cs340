@@ -1,15 +1,4 @@
 {
-  "tradeOffer" : {
-    "sender" : 1,
-    "receiver" : 0,
-    "offer" : {
-      "brick" : 1,
-      "ore" : 1,
-      "sheep" : 0,
-      "wheat" : -2,
-      "wood" : -3
-     }
-  },
   "deck": {
     "yearOfPlenty": 2,
     "monopoly": 2,
@@ -236,8 +225,17 @@
         }
       }
     ],
-    "cities": [
-          {
+    "cities": [],
+    "settlements": [
+      {
+        "owner": 3,
+        "location": {
+          "direction": "SW",
+          "x": -1,
+          "y": 1
+        }
+      },
+      {
         "owner": 3,
         "location": {
           "direction": "SE",
@@ -251,16 +249,6 @@
           "direction": "SW",
           "x": 0,
           "y": 0
-        }
-      }
-    ],
-    "settlements": [
-      {
-        "owner": 3,
-        "location": {
-          "direction": "SW",
-          "x": -1,
-          "y": 1
         }
       },
       {
@@ -395,7 +383,7 @@
         "brick": 0,
         "wood": 1,
         "sheep": 1,
-        "wheat": 2,
+        "wheat": 3,
         "ore": 0
       },
       "oldDevCards": {
@@ -428,7 +416,7 @@
     {
       "resources": {
         "brick": 2,
-        "wood": 0,
+        "wood": 1,
         "sheep": 1,
         "wheat": 0,
         "ore": 1
@@ -498,7 +486,7 @@
     {
       "resources": {
         "brick": 0,
-        "wood": 1,
+        "wood": 2,
         "sheep": 1,
         "wheat": 0,
         "ore": 1
@@ -637,33 +625,37 @@
         "source": "Sam",
         "message": "Sam's turn just ended"
       }
+      {
+        "source": "Sam",
+        "message": "Sam rolled a 6."
+      },
     ]
   },
   "chat": {
     "lines": [
       {
         "source": "Sam",
-        "message": "first message"
+        "message": "gfds"
       },
       {
         "source": "Sam",
-        "message": ""
+        "message": "twer"
       }
     ]
   },
   "bank": {
     "brick": 22,
-    "wood": 21,
+    "wood": 19,
     "sheep": 20,
-    "wheat": 21,
+    "wheat": 20,
     "ore": 22
   },
   "turnTracker": {
-    "status": "Rolling",
-    "currentTurn": 1,
+    "status": "Playing",
+    "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },
   "winner": -1,
-  "version": 4
+  "version": 5
 }

@@ -1140,6 +1140,7 @@ public class Model {
 		if (!this.canSendChat(message, playerIndex))
 			throw new ViolatedPreconditionException();
 		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
+		version++;
 	}
 	
 
@@ -1175,6 +1176,7 @@ public class Model {
 
 		}
 		this.tradeModel = null;
+		version++;
 	}
 	
 	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex) throws ViolatedPreconditionException
@@ -1192,6 +1194,7 @@ public class Model {
 		}
 		if (!stillDiscarding())
 			this.status = "Robbing";
+		version++;
 	}
 	
 	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
