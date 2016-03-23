@@ -29,7 +29,7 @@ public class Server {
 		
 		Level logLevel = Level.FINE;
 		
-		logger = Logger.getLogger("big gay al's catan server"); 
+		logger = Logger.getLogger("catan server"); 
 		logger.setLevel(logLevel);
 		logger.setUseParentHandlers(false);
 		
