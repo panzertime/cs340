@@ -19,7 +19,7 @@ public class buildRoad extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				EdgeLocation roadLocation = makeEdgeLocation
-						((JSONObject) args.get("roadLocation"));
+						(args.get("roadLocation"));
 				try {
 					boolean free = (boolean) args.get("free");
 					game.doBuildRoad(free, roadLocation, playerIndex);

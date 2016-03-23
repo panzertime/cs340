@@ -131,14 +131,15 @@ public abstract class MovesCommand implements ICommand {
 	 * Makes a vertexLocation from the passed in vertexLocation JSONObject
 	 * @pre params are valid VertexLocation params
 	 * @post VertexLocation matching JSON params is created
-	 * @param vertLoc JSONObject
+	 * @param vertLocJSON JSONObject
 	 * @return corresponding JSONObject
 	 * @throws ServerAccessException parameter invalid
 	 */
-	public VertexLocation makeVertexLocation(JSONObject vertLoc) 
+	public VertexLocation makeVertexLocation(Object vertLocJSON) 
 			throws ServerAccessException {
 		VertexLocation result = null;
 		try {
+			JSONObject vertLoc = (JSONObject) vertLocJSON;
 			int x = ((Long) vertLoc.get("x")).intValue();
 			int y = ((Long) vertLoc.get("y")).intValue();
 			String dir = (String) vertLoc.get("direction");
@@ -156,14 +157,15 @@ public abstract class MovesCommand implements ICommand {
 	 * Converts a JSONObject into an EdgeLocation
 	 * @pre all params are valid EdgeLocation params
 	 * @post EdgeLocation is created from values
-	 * @param roadLoc location to build to new road
+	 * @param roadLocJSON location to build to new road
 	 * @return corresponding EdgeLocation
 	 * @throws ServerAccessException invalid EdgeLocation params
 	 */
-	public EdgeLocation makeEdgeLocation(JSONObject roadLoc) 
+	public EdgeLocation makeEdgeLocation(Object roadLocJSON) 
 			throws ServerAccessException{
 		EdgeLocation result = null;
 		try {
+			JSONObject roadLoc = (JSONObject) roadLocJSON;
 			int x = ((Long) roadLoc.get("x")).intValue();
 			int y = ((Long) roadLoc.get("y")).intValue();
 			String dir = (String) roadLoc.get("direction");
@@ -181,16 +183,17 @@ public abstract class MovesCommand implements ICommand {
 	 * Creates a resouceList map from a JSONObject
 	 * @pre JSONObject has all of the correct parameters
 	 * @post a Map of resource types and values is created
-	 * @param resList JSONObject with 5 resources and corresponding values
+	 * @param resListJSON JSONObject with 5 resources and corresponding values
 	 * @return Map of resource types and values
 	 * @throws ServerAccessException JSONObject did not include the correct 
 	 * resources
 	 */
-	public Map<ResourceType, Integer> makeResourceList(JSONObject resList) 
+	public Map<ResourceType, Integer> makeResourceList(Object resListJSON) 
 			throws ServerAccessException {
 		Map<ResourceType, Integer> result = new 
 				HashMap<ResourceType, Integer>();
 		try {
+			JSONObject resList = (JSONObject) resListJSON;
 			int brick = ((Long) resList.get("brick")).intValue();
 			int ore = ((Long) resList.get("ore")).intValue();
 			int sheep = ((Long) resList.get("sheep")).intValue();
@@ -225,6 +228,28 @@ public abstract class MovesCommand implements ICommand {
 			throw new ServerAccessException("Invalid Parameter: Resource");
 		}
 		
+		return result;
+	}
+	
+	/**
+	 * Takes a hexLoc in JSON form and converts it to a HexLocation
+	 * @pre hexLoc is valid Hex Location
+	 * @post HexLocation Object is created
+	 * @param hexLocJSON hexLocation as a JSONObject
+	 * @return HexLocation representing the JSON
+	 * @throws ServerAccessException invalid HexLocation from JSON
+	 */
+	public HexLocation makeHexLocation(Object hexLocJSON) 
+			throws ServerAccessException {
+		HexLocation result = null;
+		try {
+			JSONObject hexLoc = (JSONObject) hexLocJSON;
+			int x = ((Long) hexLoc.get("x")).intValue();
+			int y = ((Long) hexLoc.get("y")).intValue();
+			result = new HexLocation(x, y);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameter: HexLocation");
+		}
 		return result;
 	}
 }

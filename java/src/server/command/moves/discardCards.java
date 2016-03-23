@@ -21,7 +21,7 @@ public class discardCards extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				Map<ResourceType, Integer> discardedCards = makeResourceList
-						((JSONObject) args.get("discardedCards"));
+						(args.get("discardedCards"));
 				try {
 					game.doDiscardCards(discardedCards, playerIndex);
 					JSONObject resultJSON = game.toJSON();

@@ -19,7 +19,7 @@ public class buildSettlement extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				VertexLocation vertexLocation = makeVertexLocation
-						((JSONObject) args.get("vertexLocation"));
+						(args.get("vertexLocation"));
 				try {
 					boolean free = (boolean) args.get("free");
 					game.doBuildSettlement(free, vertexLocation, playerIndex);

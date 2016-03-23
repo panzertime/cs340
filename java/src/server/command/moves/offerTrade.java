@@ -21,7 +21,7 @@ public class offerTrade extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				Map<ResourceType, Integer> resourceList = 
-						this.makeResourceList((JSONObject) args.get("offer"));
+						this.makeResourceList(args.get("offer"));
 				try {
 					int receiverIndex = 
 							((Long) args.get("receiver")).intValue();

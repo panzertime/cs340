@@ -19,9 +19,9 @@ public class Road_Building extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				EdgeLocation spot1 = makeEdgeLocation
-						((JSONObject) args.get("spot1"));
+						(args.get("spot1"));
 				EdgeLocation spot2 = makeEdgeLocation
-						((JSONObject) args.get("spot2"));
+						(args.get("spot2"));
 				try {
 					game.doRoad_Building(spot1, spot2, playerIndex);
 					JSONObject resultJSON = game.toJSON();

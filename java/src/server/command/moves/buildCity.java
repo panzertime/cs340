@@ -19,7 +19,7 @@ public class buildCity extends MovesCommand {
 				int playerIndex = 
 						((Long) args.get("playerIndex")).intValue();
 				VertexLocation vertexLocation = makeVertexLocation
-						((JSONObject) args.get("vertexLocation"));
+						(args.get("vertexLocation"));
 				try {
 					game.doBuildCity(vertexLocation, playerIndex);
 					JSONObject resultJSON = game.toJSON();
