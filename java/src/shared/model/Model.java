@@ -1460,8 +1460,11 @@ public class Model {
 		}
 	}
 	
-	public void doMonument(int playerIndex)
+	public void doMonument(int playerIndex) throws ViolatedPreconditionException
 	{
+		if(!this.canUseMonument(playerIndex)) {
+			throw new ViolatedPreconditionException();
+		}
 		Player p = this.getPlayerFromIndex(playerIndex);
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();
