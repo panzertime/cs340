@@ -10,6 +10,9 @@ import server.exception.UserException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
+import shared.model.board.hex.HexLocation;
+import shared.model.board.vertex.VertexDirection;
+import shared.model.board.vertex.VertexLocation;
 
 /**
  * Class for keeping common move command functionality in the same place
@@ -116,5 +119,30 @@ public abstract class MovesCommand implements ICommand {
 		}
 
 		return result;
-	}	
+	}
+	
+	/**
+	 * Makes a vertexLocation from the passed in vertexLocation JSONObject
+	 * @pre none
+	 * @post none
+	 * @param vertLoc JSONObject
+	 * @return corresponding JSONObject
+	 * @throws ServerAccessException parameter invalid
+	 */
+	public VertexLocation makeVertexLocation(JSONObject vertLoc) 
+			throws ServerAccessException {
+		VertexLocation result = null;
+		try {
+			int x = ((Long) vertLoc.get("x")).intValue();
+			int y = ((Long) vertLoc.get("y")).intValue();
+			String dir = (String) vertLoc.get("direction");
+			HexLocation hexLoc = new HexLocation(x, y);
+			VertexDirection vertDir = VertexDirection.fromJSON(dir);
+			result = new VertexLocation(hexLoc, vertDir);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameters: "
+					+ "vertexLocation");
+		}
+		return result;
+	}
 }
