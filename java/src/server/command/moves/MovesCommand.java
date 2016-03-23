@@ -10,6 +10,8 @@ import server.exception.UserException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
+import shared.model.board.edge.EdgeDirection;
+import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
@@ -123,8 +125,8 @@ public abstract class MovesCommand implements ICommand {
 	
 	/**
 	 * Makes a vertexLocation from the passed in vertexLocation JSONObject
-	 * @pre none
-	 * @post none
+	 * @pre params are valid VertexLocation params
+	 * @post VertexLocation matching JSON params is created
 	 * @param vertLoc JSONObject
 	 * @return corresponding JSONObject
 	 * @throws ServerAccessException parameter invalid
@@ -142,6 +144,31 @@ public abstract class MovesCommand implements ICommand {
 		} catch (Exception e) {
 			throw new ServerAccessException("Invalid Parameters: "
 					+ "vertexLocation");
+		}
+		return result;
+	}
+	
+	/**
+	 * Converts a JSONObject into an EdgeLocation
+	 * @pre all params are valid EdgeLocation params
+	 * @post EdgeLocation is created from values
+	 * @param roadLoc location to build to new road
+	 * @return corresponding EdgeLocation
+	 * @throws ServerAccessException invalid EdgeLocation params
+	 */
+	public EdgeLocation makeEdgeLocation(JSONObject roadLoc) 
+			throws ServerAccessException{
+		EdgeLocation result = null;
+		try {
+			int x = ((Long) roadLoc.get("x")).intValue();
+			int y = ((Long) roadLoc.get("y")).intValue();
+			String dir = (String) roadLoc.get("direction");
+			HexLocation hexLoc = new HexLocation(x, y);
+			EdgeDirection edgeDir = EdgeDirection.fromJSON(dir);
+			result = new EdgeLocation(hexLoc, edgeDir);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameters: "
+					+ "edgeLocation");
 		}
 		return result;
 	}

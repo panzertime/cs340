@@ -1225,7 +1225,7 @@ public class Model {
 			if (!canSetupRoad(playerIndex, roadLocation))
 				throw new ViolatedPreconditionException();
 		} else {
-			if (!canBuildRoad(playerIndex, roadLocation));
+			if (!canBuildRoad(playerIndex, roadLocation))
 				throw new ViolatedPreconditionException();
 		}
 				

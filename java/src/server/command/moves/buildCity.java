@@ -4,8 +4,6 @@ import org.json.simple.JSONObject;
 
 import server.exception.ServerAccessException;
 import shared.model.Model;
-import shared.model.board.hex.HexLocation;
-import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 
