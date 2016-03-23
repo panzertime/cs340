@@ -15,7 +15,7 @@ public class acceptTrade extends MovesCommand {
 		if(validCookie(cookie)) {
 			if(validMovesArguments(args, getClass().getSimpleName())) {
 				try {
-					boolean willAccept = (Boolean) args.get("willAccept");
+					boolean willAccept = (boolean) args.get("willAccept");
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
 							((Long) args.get("playerIndex")).intValue();

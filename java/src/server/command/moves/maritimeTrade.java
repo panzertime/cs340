@@ -21,11 +21,11 @@ public class maritimeTrade extends MovesCommand {
 				
 				try {
 					ResourceType input = getResourceType
-							((String) args.get("inputResource"));
+							(args.get("inputResource"));
 					Integer ratio = (Integer) args.get("ratio");
 					ratio = (ratio == null) ? 4 : ratio;
 					ResourceType output = getResourceType
-							((String) args.get("outputResource"));
+							(args.get("outputResource"));
 					game.doMaritimeTrade(ratio, input, output, playerIndex);
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
@@ -51,10 +51,10 @@ public class maritimeTrade extends MovesCommand {
 	 * @return corresponding resource or null
 	 */
 	@Override
-	public ResourceType getResourceType(String resString) {
+	public ResourceType getResourceType(Object resString) {
 		ResourceType result = null;
 		try {
-			result = ResourceType.valueOf(resString);
+			result = ResourceType.valueOf((String) resString);
 		} catch (Exception e) {
 			
 		}

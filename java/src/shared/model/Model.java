@@ -1424,8 +1424,12 @@ public class Model {
 		}
 	}
 	
-	public void doMonopoly(ResourceType resource, int playerIndex)
+	public void doMonopoly(ResourceType resource, int playerIndex) 
+			throws ViolatedPreconditionException
 	{
+		if(!canUseMonopoly(playerIndex, resource)) {
+			throw new ViolatedPreconditionException();
+		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Monopoly and stole everyone's " + resource.toString().toLowerCase(), source);
 
