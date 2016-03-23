@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 
 import org.json.simple.JSONArray;
@@ -50,10 +51,8 @@ public class Board {
 	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts, Model game) {
 		this.game = game;
 		
-		this.createArrays();
-		if (randomTiles);
-		if (randomNumbers);
-		if (randomPorts);
+		this.createArrays(randomTiles, randomNumbers, randomPorts);
+		
 		JSONArray hexes = new JSONArray();
 		int lower = 0;
 		int higher = 2;
@@ -180,14 +179,17 @@ public class Board {
 		return ports;
 	}
 	
-	private void createArrays()
+	private void createArrays(boolean randomTiles, boolean randomNumbers, boolean randomPorts)
 	{
 		HexType[] tiles = {HexType.ORE,HexType.WHEAT, HexType.WOOD, HexType.BRICK, HexType.SHEEP,HexType.SHEEP,
 				HexType.ORE, HexType.DESERT, HexType.WOOD, HexType.WHEAT, HexType.WOOD, HexType.WHEAT, HexType.BRICK,
 				HexType.ORE, HexType.BRICK, HexType.SHEEP, HexType.WOOD, HexType.SHEEP, HexType.WHEAT};
+		if (randomTiles) shuffleArray(tiles);
 		Integer[] productionNumbers = {5, 2, 6, 8, 10, 9, 3, 3, 11, 4, 8, 4, 6, 5, 10, 11, 12, 9};
+		if (randomNumbers) shuffleArray(productionNumbers);
 		PortType[] portTiles = {PortType.THREE, PortType.WOOD, PortType.THREE, PortType.BRICK, PortType.WHEAT, 
 				PortType.ORE, PortType.THREE, PortType.THREE, PortType.SHEEP};
+		if (randomPorts) shuffleArray(portTiles);
 		for (HexType hex: tiles)
 			tilesArray.add(hex);
 		for (Integer i: productionNumbers)
@@ -196,6 +198,19 @@ public class Board {
 			portTilesArray.add(port);
 	}
 	
+	private static void shuffleArray(Object[] ar)
+	  {
+
+	    Random rnd = new Random();
+	    for (int i = ar.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      // Simple swap
+	      Object a = ar[index];
+	      ar[index] = ar[i];
+	      ar[i] = a;
+	    }
+	  }
 	
 	/**
 	 * @param jsonMap new version of the map as passed by the model
