@@ -116,6 +116,5 @@ public abstract class MovesCommand implements ICommand {
 		}
 
 		return result;
-	}
-	
+	}	
 }

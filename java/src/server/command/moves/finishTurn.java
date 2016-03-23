@@ -17,7 +17,7 @@ public class finishTurn extends MovesCommand {
 			if(validMovesArguments(args, getClass().getSimpleName())) {
 				Model game = getGameFromCookie(cookie);
 				User user = getUserFromCookie(cookie);
-				int playerIndex = game.getIndexFromPlayerID(user.getID());
+				int playerIndex = ((Long) args.get("playerIndex")).intValue();
 				try {
 					game.doFinishTurn(playerIndex);
 					JSONObject jsonResult = game.toJSON();
