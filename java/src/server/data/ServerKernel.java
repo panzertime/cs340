@@ -98,6 +98,7 @@ public class ServerKernel {
 			throw new UserException("User is missing username or password"
 					+ "information.");
 		}
+		
 		return false;
 	}
 	
