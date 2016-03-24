@@ -227,7 +227,7 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		JSONReader.close();
 
-		return JSONBuilder.toString();
+		return matchBrackets(JSONBuilder.toString());
 	}
 
 	private void packBody(OutputStream O, String data) throws IOException {
@@ -252,5 +252,20 @@ public class RequestHandler extends AbstractHttpHandler {
 			throw new UserException("JSON probably invalid");
 		}
 	}
+
+	private String matchBrackets(String matchable){
+		char bracket = matchable.charAt(matchable.length() - 1);
+		String closer;
+		if(bracket == ']'){
+			// System.out.println("Matching a [");		
+			closer = "[";
+		}
+		else {
+			// System.out.println("Matching a {");
+			closer = "{";
+		}
+		return closer + matchable;
+	}
+
 	
 }
