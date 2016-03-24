@@ -77,7 +77,7 @@ public class RequestHandler extends AbstractHttpHandler {
 			e.printStackTrace();
 			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
 			packBody(exchange.getResponseBody(), e.getMessage());
-			exchange.sendResponseHeaders(400, 0);
+			exchange.sendResponseHeaders(400, -1);
 			exchange.close();
 		}
 
