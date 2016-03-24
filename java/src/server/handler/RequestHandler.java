@@ -3,6 +3,7 @@ package server.handler;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.logging.*;
+import java.util.*;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -98,24 +99,27 @@ public class RequestHandler extends AbstractHttpHandler {
 			cookie = headers.get("Cookie").get(0);
 		}
 
-		if (URI.equals("/games/list") {
+		if (URI.equals("/games/list")) {
 			reply = command.execute(null, cookie);
 		}
-		else if (URI.equals("/game/model") {
+		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
 			reply = command.execute(null, cookie);
 		}
-		else if (URI.equals("/game/commands") {
+		else if (URI.equals("/game/commands")) {
 			reply = command.execute(null, cookie);
 		}
-		else if (URI.equals("/game/listAI") {
+		else if (URI.equals("/game/listAI")) {
 			reply = command.execute(null, cookie);
 		}
 		else {
-			throw new UserExcpetion("bad API endpoint");
+			throw new UserException("bad API endpoint");
 		}
 		
-		exchange.getResponseHeaders().put("Content­Type", "application/json");
+		ArrayList<String> head = new ArrayList<String>();
+		head.add("application/json");
+		Headers oheaders = exchange.getResponseHeaders();
+		oheaders.put("Content­Type", head);
 
 		packBody(exchange.getResponseBody(), reply);
 
@@ -144,7 +148,10 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		String reply = command.execute(json, cookie);
 
-		exchange.getResponseHeaders().put("Content­Type", "application/json");		
+		ArrayList<String> head = new ArrayList<String>();
+		head.add("application/json");
+		Headers oheaders = exchange.getResponseHeaders();
+		oheaders.put("Content­Type", head);
 
 		packBody(exchange.getResponseBody(), reply);
 
