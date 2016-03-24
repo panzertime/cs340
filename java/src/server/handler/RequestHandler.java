@@ -57,11 +57,16 @@ public class RequestHandler extends AbstractHttpHandler {
 		
 		String verb = exchange.getRequestMethod();
 		try{	
+			String reply = new String();
 			if (verb.equals("POST")) {
-				handlePost(exchange);
+				reply = handlePost(exchange);
+				packBody(exchange.getResponseBody(), reply);
+				
 			}
 			else if (verb.equals("GET")) {
-				handleGet(exchange);
+				reply = handleGet(exchange);
+				packBody(exchange.getResponseBody(), reply);
+				
 			}
 			else {
 				logger.log(Level.INFO, "Incorrect HTTP verb in request: " + verb);
@@ -76,15 +81,15 @@ public class RequestHandler extends AbstractHttpHandler {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
-			packBody(exchange.getResponseBody(), e.getMessage());
-			exchange.sendResponseHeaders(400, -1);
+			exchange.sendResponseHeaders(400, 0);
+			packBody(exchange.getResponseBody(), e.getMessage());			
 			exchange.close();
 		}
 
 		
 	}
 
-	private void handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
+	private String handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		String URI = exchange.getRequestURI().getPath();
@@ -128,12 +133,13 @@ public class RequestHandler extends AbstractHttpHandler {
 		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
 		oheaders.put("Content­Type", head);
+		
+		return reply;
 
-		packBody(exchange.getResponseBody(), reply);
 
 	}
 
-	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
+	private String handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException, CookieException {
 
 		String URI = exchange.getRequestURI().getPath();
@@ -150,7 +156,7 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(!headers.get("Cookie").isEmpty()){
+		if(headers.containsKey("Cookie") && !headers.get("Cookie").isEmpty()){
 			cookie = headers.get("Cookie").get(0);
 		}
 
@@ -194,8 +200,7 @@ public class RequestHandler extends AbstractHttpHandler {
 			oheaders.put("Set-cookie", head);
 		}
 
-		packBody(exchange.getResponseBody(), reply);
-
+		return reply;
 
 	}
 
@@ -234,8 +239,6 @@ public class RequestHandler extends AbstractHttpHandler {
 		OutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
 		body.write(data.getBytes());
-		body.flush();
-		body.close();
 	}	
 
 	private JSONObject makeJSON(String stringJSON)
