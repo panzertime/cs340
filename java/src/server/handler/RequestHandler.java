@@ -72,6 +72,7 @@ public class RequestHandler extends AbstractHttpHandler {
 				logger.log(Level.INFO, "Body has length " + reply.length());
 			exchange.sendResponseHeaders(200, 0);
 			packBody(exchange.getResponseBody(), reply);	
+			exchange.getResponseBody().close();
 			exchange.close();
 
 		}
@@ -154,12 +155,12 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(headers.containsKey("Cookie")) {
-			if (!headers.get("Cookie").isEmpty()){
+		if(headers.containsKey("Cookie")){
+			if(!headers.get("Cookie").isEmpty()){
 				cookie = headers.get("Cookie").get(0);
 			}
 		}
-
+		
 		String body = readBody(exchange.getRequestBody());
 
 		JSONObject json = makeJSON(body);
