@@ -59,21 +59,19 @@ public class RequestHandler extends AbstractHttpHandler {
 		try{	
 			String reply = new String();
 			if (verb.equals("POST")) {
-				reply = handlePost(exchange);
-				packBody(exchange.getResponseBody(), reply);
-				
+				reply = handlePost(exchange);				
 			}
 			else if (verb.equals("GET")) {
-				reply = handleGet(exchange);
-				packBody(exchange.getResponseBody(), reply);
-				
+				reply = handleGet(exchange);	
 			}
 			else {
 				logger.log(Level.INFO, "Incorrect HTTP verb in request: " + verb);
 				throw new ServerAccessException(verb);
 			}
 				
+				logger.log(Level.INFO, "Body has length " + reply.length());
 			exchange.sendResponseHeaders(200, 0);
+			packBody(exchange.getResponseBody(), reply);	
 			exchange.close();
 
 		}
@@ -156,8 +154,10 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(headers.containsKey("Cookie") && !headers.get("Cookie").isEmpty()){
-			cookie = headers.get("Cookie").get(0);
+		if(headers.containsKey("Cookie")) {
+			if (!headers.get("Cookie").isEmpty()){
+				cookie = headers.get("Cookie").get(0);
+			}
 		}
 
 		String body = readBody(exchange.getRequestBody());
@@ -195,9 +195,9 @@ public class RequestHandler extends AbstractHttpHandler {
 		oheaders.put("Content­Type", head);
 		if (!newCookie.equals("")){
 			// set cookie header
-			head.clear();
-			head.add(newCookie);
-			oheaders.put("Set-cookie", head);
+			ArrayList<String> cook = new ArrayList<String>();
+			cook.add(newCookie);
+			oheaders.put("Set-cookie", cook);
 		}
 
 		return reply;
@@ -236,9 +236,22 @@ public class RequestHandler extends AbstractHttpHandler {
 	}
 
 	private void packBody(OutputStream O, String data) throws IOException {
-		OutputStream body = 
+		logger.log(Level.INFO, "Packing " + data);
+		DataOutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
-		body.write(data.getBytes());
+		//body.write(data.getBytes());
+		body.writeBytes(data);
+
+		logger.log(Level.INFO, "Written: " + body.size());
+		
+	//	body.flush();
+	//	body.close();
+	//	O.flush();
+	//	O.close();
+
+		logger.log(Level.INFO, "Done packing.");
+
+
 	}	
 
 	private JSONObject makeJSON(String stringJSON)
