@@ -102,17 +102,14 @@ public class ServerKernel {
 	}
 	
 	
-	public boolean passwordsMatch(User user) {
-		try {
-			if (userExists(user)) {
-				User storedUser = users.get(user.getUsername());
-				if (user.getPassword().equals(storedUser.getPassword()))
-					return true;
-			}
-		} catch (UserException e) {
-			return false;
-		}
-		return false;
+	public User getUserByPassword(String username, String password) {
+		User user = users.get(username);
+		if (user == null)
+			return null;
+		if (user.getPassword().equals(password))
+			return user;
+		return null;
+		
 	}
 	
 	/**
