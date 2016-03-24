@@ -89,6 +89,8 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Class proto_command = Class.forName(endpoint);
 		ICommand command = (ICommand) proto_command.newInstance();
+
+		String reply = new String();
 		
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
@@ -96,14 +98,30 @@ public class RequestHandler extends AbstractHttpHandler {
 			cookie = headers.get("Cookie").get(0);
 		}
 
-		String body = readBody(exchange.getRequestBody());
+		if (URI.equals("/games/list") {
+			reply = command.execute(null, cookie);
+		}
+		else if (URI.equals("/game/model") {
+			// ...
+		}
+		else if (URI.equals("/game/commands") {
+			reply = command.execute(null, cookie);
+		}
+		else if (URI.equals("/game/listAI") {
+			reply = command.execute(null, cookie);
+		}
+		else {
+			throw new UserExcpetion("bad API endpoint");
+		}
 
-		JSONObject json = makeJSON(body);
-
-		String reply = command.execute(json, cookie);
 
 		packBody(exchange.getResponseBody(), reply);
 //   <><><><> Mulder, this section should be redone, look at Josh's work to see <><><><>
+
+//		/games/list
+//		/game/model
+//		/game/commands
+//		/game/listAI
 	}
 
 	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
