@@ -29,7 +29,7 @@ public class Server {
 		
 		Level logLevel = Level.FINE;
 		
-		logger = Logger.getLogger("big gay al's catan server"); 
+		logger = Logger.getLogger("catan server"); 
 		logger.setLevel(logLevel);
 		logger.setUseParentHandlers(false);
 		
@@ -57,17 +57,6 @@ public class Server {
 	
 	private void run() {
 		
-		/*
-		logger.info("Initializing Model");
-		
-		try {
-			facade.initialize();		
-		}
-		catch (ServerException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			return;
-		}
-		*/
 		
 		logger.info("Initializing HTTP Server");
 		
@@ -84,6 +73,8 @@ public class Server {
 		
 		HttpHandler hhandler = (HttpHandler) handler;
 		hserver.createContext("/", handler);
+		hserver.createContext("/docs/api/data", new fileHandler.JSONAppender(""));
+		hserver.createContext("/docs/api/view", new fileHandler.BasicFile(""));
 		
 		logger.info("Starting HTTP Server");
 
