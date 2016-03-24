@@ -242,7 +242,7 @@ public class CanBuildRoadTest {
 	}
 	
 	//works setup mode
-	@Test
+	/*@Test
 	public void testCanBuildRoad10() {
 		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
 				EdgeDirection.South);
@@ -256,5 +256,5 @@ public class CanBuildRoadTest {
 		} catch (NullPointerException e) {
 			fail("failed testCanBuildRoad test when valid setup - model not created");
 		}
-	}
+	}*/
 }
