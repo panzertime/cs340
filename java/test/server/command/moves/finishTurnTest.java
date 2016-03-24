@@ -111,13 +111,13 @@ public class finishTurnTest {
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
 		finishTurn ft = new finishTurn();
-			try {
-				ft.execute(args, cookie);
-				fail("Failed finishTurn test where type is sendChat");
-			} catch (ServerAccessException e) {
-				System.out.println("Passed finishTurn test where type is "
-						+ "sendChat");
-			}
+		try {
+			ft.execute(args, cookie);
+			fail("Failed finishTurn test where type is sendChat");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed finishTurn test where type is "
+					+ "sendChat");
+		}
 	}
 	
 	//invalid playerIndex
