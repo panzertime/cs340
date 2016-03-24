@@ -150,10 +150,12 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(!headers.get("Cookie").isEmpty()){
-			cookie = headers.get("Cookie").get(0);
+		if(headers.containsKey("Cookie")){
+			if(!headers.get("Cookie").isEmpty()){
+				cookie = headers.get("Cookie").get(0);
+			}
 		}
-
+		
 		String body = readBody(exchange.getRequestBody());
 
 		JSONObject json = makeJSON(body);
