@@ -281,11 +281,14 @@ public class ServerProxy implements IServerProxy{
 
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
-				userCookie = userCookie.substring(11);
-				userCookie = userCookie.substring(0, userCookie.length() - 8);
-				// System.out.println("Setting cookie: " + userCookie);
+				userCookie = URLDecoder.decode(userCookie, "UTF-8");
+				int jsonLeftIndex = userCookie.indexOf('{');
+				int jsonRightIndex = userCookie.indexOf('}') + 1;
+				userCookie = userCookie.substring(jsonLeftIndex, jsonRightIndex);
+				//userCookie = userCookie.substring(0, userCookie.length() - 8);
+				
 
-				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
+				return makeJSON(userCookie);
 			}
 			else {
 				throw new ServerProxyException("Login failed, server says: " + JSONBuilder.toString());
