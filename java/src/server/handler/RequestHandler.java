@@ -103,7 +103,7 @@ public class RequestHandler extends AbstractHttpHandler {
 		String reply = command.execute(json, cookie);
 
 		packBody(exchange.getResponseBody(), reply);
-
+//   <><><><> Mulder, this section should be redone, look at Josh's work to see <><><><>
 	}
 
 	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 

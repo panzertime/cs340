@@ -57,17 +57,6 @@ public class Server {
 	
 	private void run() {
 		
-		/*
-		logger.info("Initializing Model");
-		
-		try {
-			facade.initialize();		
-		}
-		catch (ServerException e) {
-			logger.log(Level.SEVERE, e.getMessage(), e);
-			return;
-		}
-		*/
 		
 		logger.info("Initializing HTTP Server");
 		
