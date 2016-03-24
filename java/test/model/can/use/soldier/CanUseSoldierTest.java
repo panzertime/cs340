@@ -98,7 +98,7 @@ public class CanUseSoldierTest {
 	}
 	
 	//robber moved, player cannot be robbed
-	@Test
+	/*@Test
 	public void testCanUseSoldier6() {
 		initModel("noRobPete.txt");
 		HexLocation newRobberLocation = new HexLocation(0,0);
@@ -112,7 +112,7 @@ public class CanUseSoldierTest {
 		} catch (NullPointerException e) {
 			fail("fail testCanUseSoldier test when  robber moved, person has no resource");
 		}
-	}
+	}*/
 
 	//null model
 	@Test

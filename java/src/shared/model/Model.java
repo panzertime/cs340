@@ -1140,6 +1140,7 @@ public class Model {
 		if (!this.canSendChat(message, playerIndex))
 			throw new ViolatedPreconditionException();
 		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
+		version++;
 	}
 	
 
@@ -1175,6 +1176,7 @@ public class Model {
 
 		}
 		this.tradeModel = null;
+		version++;
 	}
 	
 	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex) throws ViolatedPreconditionException
@@ -1192,6 +1194,7 @@ public class Model {
 		}
 		if (!stillDiscarding())
 			this.status = "Robbing";
+		version++;
 	}
 	
 	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
@@ -1243,6 +1246,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
@@ -1264,6 +1268,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 	public void doBuildCity(VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
@@ -1280,6 +1285,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException

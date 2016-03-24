@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import client.main.ClientPlayer;
-import client.modelfacade.CanModelFacade;
 import client.modelfacade.ModelFacade;
 import client.modelfacade.testing.TestingModelFacade;
 import shared.model.exceptions.BadJSONException;
@@ -24,7 +23,7 @@ public class ModelTest {
 	@Before
 	public void initFacades() {
 		//CanModelFacade.sole().setUserIndex(0);
-		//TestingModelFacade.sole().setUserIndex(0);
+		TestingModelFacade.sole();
 		ClientPlayer.sole().setUserIndex(0);
 	}
     

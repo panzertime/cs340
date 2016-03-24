@@ -6,8 +6,6 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.google.gson.JsonArray;
-
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import shared.model.Model;
@@ -68,14 +66,17 @@ public class ServerKernel {
 	 * @throws UserException user's credentials are invalid
 	 * @throws ServerAccessException username already exists
 	 */
-	public void addUser(User user) throws UserException, 
-		ServerAccessException {
-		if(userExists(user)) {
-			throw new ServerAccessException("Username already exists"
-					+ " on server.");
-		} else {
-			user.setUserID();
-			this.users.put(user.getUsername(), user);
+	public void addUser(User user) throws ServerAccessException {
+		try {
+			if(userExists(user)) {
+				throw new ServerAccessException("Username already exists"
+						+ " on server.");
+			} else {
+				user.setUserID();
+				this.users.put(user.getUsername(), user);
+			}
+		} catch (UserException e) {
+			throw new ServerAccessException("User Already Had and ID");
 		}
 	}
 	
@@ -89,17 +90,29 @@ public class ServerKernel {
 	 * @throws UserException user's credentials are invalid
 	 */
 	public boolean userExists(User user) throws UserException {
-		boolean result = false;
 		if(user.hasValidCrendentials()) {
 			if(this.users.containsKey(user.getUsername())) {
-				result = true;
+				return true;
 			}
 		} else {
 			throw new UserException("User is missing username or password"
 					+ "information.");
 		}
-		
-		return result;
+		return false;
+	}
+	
+	
+	public boolean passwordsMatch(User user) {
+		try {
+			if (userExists(user)) {
+				User storedUser = users.get(user.getUsername());
+				if (user.getPassword().equals(storedUser.getPassword()))
+					return true;
+			}
+		} catch (UserException e) {
+			return false;
+		}
+		return false;
 	}
 	
 	/**

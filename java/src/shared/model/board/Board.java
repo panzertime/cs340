@@ -588,14 +588,13 @@ public class Board {
 
 	public void buildSettlement(Settlement settlement, VertexLocation vertexLoc) {
 		Vertex vertex = getVertexAt(vertexLoc);
-		settlement.setVertex(vertex);
-		vertex.setBuilding(settlement);
+		vertex.placeBuilding(settlement);
 	}
 
 	public void buildCity(City city, VertexLocation vertexLoc) {
 		Vertex vertex = getVertexAt(vertexLoc);
-		city.setVertex(vertex);
-		vertex.setBuilding(city);
+		vertex.removeBuilding();
+		vertex.placeBuilding(city);
 	}
 
 	public void buildRoad(Road road, EdgeLocation edgeLoc) {

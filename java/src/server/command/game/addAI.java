@@ -7,8 +7,7 @@ import server.exception.ServerAccessException;
 public class addAI extends GameCommand {
 
 	@Override
-	public String execute(JSONObject args, String cookie) 
-			throws ServerAccessException {
-		throw new ServerAccessException("Invalid");
+	public String execute(JSONObject args, String cookie) throws ServerAccessException {
+		throw new ServerAccessException("Can't Add AI's");
 	}
 }

@@ -1,6 +1,7 @@
 package server.command.user;
 
 import server.command.ICommand;
+import server.utils.CatanCookie;
 
 /**
  * Class for keeping functions shared by login and register commands 
@@ -9,4 +10,9 @@ import server.command.ICommand;
  */
 public abstract class UserCommand implements ICommand {
 	
+	protected CatanCookie cookie;
+	
+	public CatanCookie getCookie() {
+		return cookie;
+	}
 }

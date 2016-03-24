@@ -1,6 +1,6 @@
 package server.serverkernel;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -51,8 +51,6 @@ public class ServerKernelTests {
 		try {
 			ServerKernel.sole().addUser(user);
 			ServerKernel.sole().addUser(user2);
-		} catch (UserException e) {
-			e.printStackTrace();
 		} catch (ServerAccessException e) {
 			System.out.println("Passed adding the same user twice test");
 			return;
@@ -65,11 +63,9 @@ public class ServerKernelTests {
 		User user = new User("", "joshua");
 		try {
 			ServerKernel.sole().addUser(user);
-		} catch (UserException e) {
+		} catch (ServerAccessException e) {
 			System.out.println("Passed adding an invalid user test");
 			return;
-		} catch (ServerAccessException e) {
-			fail(e.getMessage());
 		}
 		fail("Did not catch error in adding invalid user");
 	}
