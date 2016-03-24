@@ -165,18 +165,18 @@ public class RequestHandler extends AbstractHttpHandler {
 		if (URI.equals("/user/login")) {
 			logger.log(Level.INFO, "Doing the login command");
 			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(null, cookie);
+			reply = uCommand.execute(json, cookie);
 			newCookie = uCommand.getCookie().toCookie();
 		}
 		else if (URI.equals("/user/register")) {
 			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(null, cookie);
+			reply = uCommand.execute(json, cookie);
 			newCookie = uCommand.getCookie().toCookie();
 
 		}
 		else if (URI.equals("/games/join")) {
 		//	GameCommand gCommand = (GameCommand) command;
-			reply = command.execute(null, cookie);
+			reply = command.execute(json, cookie);
 		//	newCookie = gCommand.getCookie().toCookie();
 		}
 		else {
