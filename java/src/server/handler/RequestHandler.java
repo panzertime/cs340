@@ -200,7 +200,12 @@ public class RequestHandler extends AbstractHttpHandler {
 		//oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), "text/html");
 		if (!newCookie.equals("")){
 			// set cookie header
-			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), URLEncoder.encode(newCookie, "UTF-8"));
+			logger.log(Level.INFO, "Unencoded cookie: " + newCookie);
+			String mutatedCookie = newCookie.substring(0, newCookie.length() - 8);
+			mutatedCookie = URLEncoder.encode(mutatedCookie, "UTF-8");
+			mutatedCookie += ";Path=/;";
+			logger.log(Level.INFO, "Encoded cookie: " + mutatedCookie);
+			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), mutatedCookie);
 		}
 
 		return reply;

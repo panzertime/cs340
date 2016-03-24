@@ -358,10 +358,11 @@ public class ServerProxy implements IServerProxy{
 
 			if (JSONBuilder.toString().equals("Success")){
 				userCookie = connection.getHeaderField("Set-cookie");
+				System.out.println("Cookie received: " + userCookie);				
 				userCookie = userCookie.substring(11);
 				userCookie = userCookie.substring(0, userCookie.length() - 8);
 				
-
+				System.out.println("Cookie mutated: " + userCookie);
 				return makeJSON(URLDecoder.decode(userCookie, "UTF-8"));
 			}
 			else {
