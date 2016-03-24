@@ -54,11 +54,11 @@ public class Test {
 				"model.execute.use.roadbuilding.DoUseRoadBuildingTest",
 				"model.execute.use.soldier.DoUseSoldierTest",
 				"model.execute.use.monopoly.DoUseMonopolyTest",
-				"model.execute.use.monument.DoUseMonumentTest",
+				"model.execute.use.monument.DoUseMonumentTest",*/
 				
 				"model.execute.build.road.DoBuildRoadTest",
-				"model.execute.build.settlement.DoBuildSettlementTest",
-				"model.execute.build.city.DoBuildCityTest"*/
+				//"model.execute.build.settlement.DoBuildSettlementTest",
+				//"model.execute.build.city.DoBuildCityTest"
 				
 		};
 		

@@ -1246,6 +1246,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
@@ -1267,6 +1268,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 	public void doBuildCity(VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
@@ -1283,6 +1285,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException

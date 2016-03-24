@@ -11,32 +11,21 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import client.main.ClientPlayer;
-import client.modelfacade.CanModelFacade;
-import client.modelfacade.ModelFacade;
-import client.modelfacade.testing.TestingModelFacade;
+import shared.logger.Log;
+import shared.model.Model;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ViolatedPreconditionException;
 
 public class DoBuildRoadTest {
 	
-	@Before
-	public void initFacades() {
-		//CanModelFacade.sole().setUserIndex(0);
-		//TestingModelFacade.sole().setUserIndex(0);
-		ClientPlayer.sole().setUserIndex(0);
-		TestingModelFacade.sole().emptyModel();
-	}
-
-
-	public void initModel(String file) {
+	public JSONObject getJSONFrom(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/bin/test/model/can/build/road/" + file);
+		File jsonFile = new File("java/bin/test/model/execute/build/road/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,213 +37,206 @@ public class DoBuildRoadTest {
 				x += "\n";
 			}
 			scanner.close();
+			return (JSONObject) parser.parse(x);
 			
-			JSONObject jsonModel = (JSONObject) parser.parse(x);
-			ModelFacade.setModel(jsonModel);
-			
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+		} catch (FileNotFoundException | ParseException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
-
-	//no game in facade
+	
 	@Test
-	public void testCanBuildRoad1() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.SouthWest);
+	public void testDoBuildRoad1() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthWest);
+		Model model = null;
 		try {
-			CanModelFacade.sole().canBuildRoad(edgeLoc);
-			fail("failed testCanBuildRoad test with uninit model");
-		} catch (NullPointerException e) {
-			System.out.println("passed testCanBuildRoad test with uninit model");
+			model = new Model(getJSONFrom("notYourTurn.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when not your turn");
+		}
+		if(!model.equalsJSON(getJSONFrom("notYourTurn.json"))) {
+			fail("failed DoBuildRoad test when not your turn");
 		}
 	}
 	
-	//it is not your turn
 	@Test
-	public void testCanBuildRoad2() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.SouthWest);
-		this.initModel("noTurn.txt");
+	public void testDoBuildRoad2() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthWest);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when not your turn");
-			} else {
-				fail("failed testCanBuildRoad test when not your turn");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when not your turn - model not created");
+			model = new Model(getJSONFrom("robbing.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when robbing");
+		}
+		if(!model.equalsJSON(getJSONFrom("robbing.json"))) {
+			fail("failed DoBuildRoad test when robbing");
 		}
 	}
 	
-	//client status is not playing
 	@Test
-	public void testCanBuildRoad3() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.SouthWest);
-		this.initModel("noPlaying.txt");
+	public void testDoBuildRoad3() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthEast);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when not in playing mode");
-			} else {
-				fail("failed testCanBuildRoad test when not in playing mode");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when not in playing mode - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when location is taken");
+		}
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("failed DoBuildRoad test when location is taken");
 		}
 	}
 	
-	//road location is not open
 	@Test
-	public void testCanBuildRoad4() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0),
-				EdgeDirection.South);
-		this.initModel("goodBuildRoad.txt");
+	public void testDoBuildRoad4() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0), EdgeDirection.North);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when road loc not open");
-			} else {
-				fail("failed testCanBuildRoad test when road loc not open");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when road loc not open - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when location is not connected");
+		}
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("failed DoBuildRoad test when location is not connected");
 		}
 	}
 	
-	//road loaction is not connected to another
-	//road owned by the player - normal map init
 	@Test
-	public void testCanBuildRoad5() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0),
-				EdgeDirection.SouthEast);
-		this.initModel("goodBuildRoad.txt");
+	public void testDoBuildRoad5() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,3), EdgeDirection.SouthEast);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when road loc not connected to player");
-			} else {
-				fail("failed testCanBuildRoad test when road loc not connected to player");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when road loc not connected to player - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when location is on water");
+		}
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("failed DoBuildRoad test when location is on water");
 		}
 	}
 	
-	//road location is on water - normal init
 	@Test
-	public void testCanBuildRoad6() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,3),
-				EdgeDirection.SouthEast);
-		this.initModel("goodBuildRoad.txt");
+	public void testDoBuildRoad6() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthWest);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when road loc on water");
-			} else {
-				fail("failed testCanBuildRoad test when road loc on water");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when road loc on water - model not created");
+			model = new Model(getJSONFrom("notEnoughResources.json"));
+			model.doBuildRoad(false, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when user doesn't have enough resources");
+		}
+		if(!model.equalsJSON(getJSONFrom("notEnoughResources.json"))) {
+			fail("failed DoBuildRoad test when user doesn't have enough resources");
 		}
 	}
 	
-	//user doesn't have the resources
 	@Test
-	public void testCanBuildRoad7() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.SouthWest);
-		this.initModel("noRes.txt");
+	public void testDoBuildRoad7() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.NorthEast);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when user doesn't have res.");
-			} else {
-				fail("failed testCanBuildRoad test when user doesn't have res.");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when user doesn't have res. - model not created");
+			model = new Model(getJSONFrom("setup-secondRoad.json"));
+			model.doBuildRoad(true, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test when in setup and roads touch");
+		}
+		if(!model.equalsJSON(getJSONFrom("setup-secondRoad.json"))) {
+			fail("failed DoBuildRoad test when when in setup and roads touch");
 		}
 	}
 	
-	//setup round - placed right next to road
 	@Test
-	public void testCanBuildRoad8() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(1,0),
-				EdgeDirection.South);
-		this.initModel("goodBuildRoadSetup.txt");
+	public void testDoBuildRoad8() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0), EdgeDirection.South);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when user sets up right next to road");
-			} else {
-				fail("failed testCanBuildRoad test when user sets up right next to road");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when user sets up right next to road - model not created");
+			model = new Model(getJSONFrom("setup-firstRoad.json"));
+			model.doBuildRoad(true, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed DoBuildRoad test when in first setup and location is valid");
+		}
+		if(model.equalsJSON(getJSONFrom("placed-firstRoad.json"))) {
+			System.out.println("passed DoBuildRoad test when in first setup and location is valid");
+		} else {
+			fail("failed DoBuildRoad test when in first setup and location is valid");
 		}
 	}
 	
-	//setup round - not placed near settlement
 	@Test
-	public void testCanBuildRoad8_5() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(1,1),
-				EdgeDirection.South);
-		this.initModel("goodBuildRoadSetup.txt");
+	public void testDoBuildRoad9() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.South);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when user doesn't set up next to settlement");
-			} else {
-				fail("failed testCanBuildRoad test when user doesn't set up next to settlement");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when user doesn't set up next to settlement - model not created");
+			model = new Model(getJSONFrom("setup-secondRoad.json"));
+			model.doBuildRoad(true, edgeLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed DoBuildRoad test when in second setup and location is valid");
+		}
+		if(model.equalsJSON(getJSONFrom("placed-secondRoad.json"))) {
+			System.out.println("passed DoBuildRoad test when in second setup and location is valid");
+		} else {
+			fail("failed DoBuildRoad test when in second setup and location is valid");
 		}
 	}
 	
-	//setup mode - bad near first settlement
 	@Test
-	public void testCanBuildRoad11() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(2,0),
-				EdgeDirection.South);
-		this.initModel("goodBuildRoadSetup.txt");
+	public void testDoBuildRoad10() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1), EdgeDirection.SouthEast);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == false) {
-				System.out.println("passed testCanBuildRoad test when places 2nd road near 1st settlement");
-			} else {
-				fail("failed testCanBuildRoad test when places 2nd road near 1st settlement");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when places 2nd road near 1st settlement - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			Log.debug(model.toJSON().toJSONString());
+			model.doBuildRoad(false, edgeLoc, 0);
+			Log.debug(model.toJSON().toJSONString());
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("failed DoBuildRoad test when playing and location is valid");
+		}
+		if(model.equalsJSON(getJSONFrom("placedRoad.json"))) {
+			System.out.println("passed DoBuildRoad test when playing and location is valid");
+		} else {
+			fail("failed DoBuildRoad test when playing and location is valid");
 		}
 	}
 	
-	//works normal
 	@Test
-	public void testCanBuildRoad9() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.SouthWest);
-		this.initModel("goodBuildRoad.txt");
+	public void testDoBuildRoad11() {
+		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,0), EdgeDirection.SouthEast);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == true) {
-				System.out.println("passed testCanBuildRoad test when valid play");
-			} else {
-				fail("failed testCanBuildRoad test when valid play");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when valid play - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildRoad(false, edgeLoc, 9);
+		} catch (BadJSONException e) {
+			fail("Failed DoBuildRoad test while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed DoBuildRoad test with bad index");
 		}
-	}
-	
-	//works setup mode
-	@Test
-	public void testCanBuildRoad10() {
-		EdgeLocation edgeLoc = new EdgeLocation(new HexLocation(0,1),
-				EdgeDirection.South);
-		this.initModel("goodBuildRoadSetup.txt");
-		try {
-			if(CanModelFacade.sole().canBuildRoad(edgeLoc) == true) {
-				System.out.println("passed testCanBuildRoad test when valid setup");
-			} else {
-				fail("failed testCanBuildRoad test when valid setup");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanBuildRoad test when valid setup - model not created");
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("failed DoBuildRoad test with bad index");
 		}
 	}
 }

@@ -160,56 +160,40 @@
       }
     ],
     "roads": [
-   	  {
+      {
+        "owner": 2,
+        "location": {
+          "direction": "S",
+          "x": -1,
+          "y": 0
+        }
+      },
+      {
         "owner": 0,
         "location": {
-          "direction": "NW",
-          "x": 2,
+          "direction": "S",
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "owner": 2,
+        "location": {
+          "direction": "SE",
+          "x": -2,
           "y": 0
         }
       },
       {
         "owner": 1,
         "location": {
-          "direction": "S",
-          "x": -1,
-          "y": -1
-        }
-      },
-      {
-        "owner": 3,
-        "location": {
           "direction": "SW",
-          "x": -1,
-          "y": 1
-        }
-      },
-      {
-        "owner": 3,
-        "location": {
-          "direction": "SW",
-          "x": 2,
+          "x": 1,
           "y": -2
         }
       },
       {
-        "owner": 2,
-        "location": {
-          "direction": "S",
-          "x": 1,
-          "y": -1
-        }
-      },
-      {
         "owner": 0,
-        "location": {
-          "direction": "S",
-          "x": 0,
-          "y": 1
-        }
-      },
-      {
-        "owner": 2,
         "location": {
           "direction": "S",
           "x": 0,
@@ -217,18 +201,34 @@
         }
       },
       {
-        "owner": 1,
+        "owner": 3,
         "location": {
-          "direction": "SW",
-          "x": -2,
-          "y": 1
+          "direction": "SE",
+          "x": -1,
+          "y": -1
         }
       },
       {
         "owner": 0,
         "location": {
-          "direction": "SW",
-          "x": 2,
+          "direction": "SE",
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "owner": 1,
+        "location": {
+          "direction": "SE",
+          "x": -1,
+          "y": 0
+        }
+      },
+      {
+        "owner": 3,
+        "location": {
+          "direction": "SE",
+          "x": 0,
           "y": 0
         }
       }
@@ -236,23 +236,15 @@
     "cities": [],
     "settlements": [
       {
-        "owner": 3,
+        "owner": 1,
         "location": {
           "direction": "SW",
-          "x": -1,
-          "y": 1
-        }
-      },
-      {
-        "owner": 3,
-        "location": {
-          "direction": "SE",
           "x": 1,
           "y": -2
         }
       },
       {
-        "owner": 2,
+        "owner": 0,
         "location": {
           "direction": "SW",
           "x": 0,
@@ -260,7 +252,15 @@
         }
       },
       {
-        "owner": 2,
+        "owner": 1,
+        "location": {
+          "direction": "SW",
+          "x": 0,
+          "y": -1
+        }
+      },
+      {
+        "owner": 3,
         "location": {
           "direction": "SW",
           "x": 1,
@@ -268,32 +268,48 @@
         }
       },
       {
-        "owner": 1,
-        "location": {
-          "direction": "SW",
-          "x": -2,
-          "y": 1
-        }
-      },
-      {
-        "owner": 1,
+        "owner": 2,
         "location": {
           "direction": "SW",
           "x": -1,
-          "y": -1
+          "y": 0
         }
       },
       {
         "owner": 0,
         "location": {
           "direction": "SW",
-          "x": 2,
-          "y": 0
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "owner": 3,
+        "location": {
+          "direction": "SW",
+          "x": 0,
+          "y": -2
+        }
+      },
+      {
+        "owner": 2,
+        "location": {
+          "direction": "SW",
+          "x": -1,
+          "y": -1
         }
       }
     ],
     "radius": 3,
     "ports": [
+      {
+        "ratio": 3,
+        "direction": "NW",
+        "location": {
+          "x": 2,
+          "y": 1
+        }
+      },
       {
         "ratio": 2,
         "resource": "ore",
@@ -301,22 +317,6 @@
         "location": {
           "x": 1,
           "y": -3
-        }
-      },
-      {
-        "ratio": 3,
-        "direction": "SW",
-        "location": {
-          "x": 3,
-          "y": -3
-        }
-      },
-      {
-        "ratio": 3,
-        "direction": "NW",
-        "location": {
-          "x": 2,
-          "y": 1
         }
       },
       {
@@ -348,10 +348,10 @@
       },
       {
         "ratio": 3,
-        "direction": "SE",
+        "direction": "SW",
         "location": {
-          "x": -3,
-          "y": 0
+          "x": 3,
+          "y": -3
         }
       },
       {
@@ -370,11 +370,19 @@
           "x": 0,
           "y": 3
         }
+      },
+      {
+        "ratio": 3,
+        "direction": "SE",
+        "location": {
+          "x": -3,
+          "y": 0
+        }
       }
     ],
     "robber": {
-      "x": 0,
-      "y": -2
+      "x": -1,
+      "y": -1
     }
   },
   "players": [
@@ -383,8 +391,43 @@
         "brick": 0,
         "wood": 0,
         "sheep": 0,
+        "wheat": 3,
+        "ore": 2
+      },
+      "oldDevCards": {
+        "yearOfPlenty": 0,
+        "monopoly": 0,
+        "soldier": 0,
+        "roadBuilding": 0,
+        "monument": 0
+      },
+      "newDevCards": {
+        "yearOfPlenty": 0,
+        "monopoly": 0,
+        "soldier": 0,
+        "roadBuilding": 0,
+        "monument": 0
+      },
+      "roads": 12,
+      "cities": 4,
+      "settlements": 3,
+      "soldiers": 0,
+      "victoryPoints": 2,
+      "monuments": 0,
+      "playedDevCard": false,
+      "discarded": false,
+      "playerID": 0,
+      "playerIndex": 0,
+      "name": "Sam",
+      "color": "brown"
+    },
+    {
+      "resources": {
+        "brick": 1,
+        "wood": 3,
+        "sheep": 0,
         "wheat": 0,
-        "ore": 0
+        "ore": 1
       },
       "oldDevCards": {
         "yearOfPlenty": 0,
@@ -402,20 +445,20 @@
       },
       "roads": 13,
       "cities": 4,
-      "settlements": 4,
+      "settlements": 3,
       "soldiers": 0,
       "victoryPoints": 2,
       "monuments": 0,
       "playedDevCard": false,
       "discarded": false,
-      "playerID": 0,
-      "playerIndex": 0,
-      "name": "Sam",
-      "color": "orange"
+      "playerID": -2,
+      "playerIndex": 1,
+      "name": "Miguel",
+      "color": "purple"
     },
     {
       "resources": {
-        "brick": 2,
+        "brick": 3,
         "wood": 0,
         "sheep": 1,
         "wheat": 0,
@@ -443,52 +486,17 @@
       "monuments": 0,
       "playedDevCard": false,
       "discarded": false,
-      "playerID": 1,
-      "playerIndex": 1,
-      "name": "Brooke",
-      "color": "blue"
-    },
-    {
-      "resources": {
-        "brick": 0,
-        "wood": 1,
-        "sheep": 1,
-        "wheat": 1,
-        "ore": 0
-      },
-      "oldDevCards": {
-        "yearOfPlenty": 0,
-        "monopoly": 0,
-        "soldier": 0,
-        "roadBuilding": 0,
-        "monument": 0
-      },
-      "newDevCards": {
-        "yearOfPlenty": 0,
-        "monopoly": 0,
-        "soldier": 0,
-        "roadBuilding": 0,
-        "monument": 0
-      },
-      "roads": 13,
-      "cities": 4,
-      "settlements": 3,
-      "soldiers": 0,
-      "victoryPoints": 2,
-      "monuments": 0,
-      "playedDevCard": false,
-      "discarded": false,
-      "playerID": 10,
+      "playerID": -3,
       "playerIndex": 2,
-      "name": "Pete",
-      "color": "red"
+      "name": "Hannah",
+      "color": "puce"
     },
     {
       "resources": {
-        "brick": 0,
+        "brick": 2,
         "wood": 1,
-        "sheep": 1,
-        "wheat": 0,
+        "sheep": 0,
+        "wheat": 1,
         "ore": 1
       },
       "oldDevCards": {
@@ -513,17 +521,77 @@
       "monuments": 0,
       "playedDevCard": false,
       "discarded": false,
-      "playerID": 11,
+      "playerID": -4,
       "playerIndex": 3,
-      "name": "Mark",
-      "color": "green"
+      "name": "Squall",
+      "color": "white"
     }
   ],
   "log": {
     "lines": [
       {
-        "source": "Sam",
-        "message": "Sam built a road"
+        "source": "Miguel",
+        "message": "Miguel's turn just ended"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah built a road"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah built a settlement"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah's turn just ended"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall built a road"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall built a settlement"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall's turn just ended"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall built a road"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall built a settlement"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall's turn just ended"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah built a road"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah built a settlement"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah's turn just ended"
+      },
+      {
+        "source": "Miguel",
+        "message": "Miguel built a road"
+      },
+      {
+        "source": "Miguel",
+        "message": "Miguel built a settlement"
+      },
+      {
+        "source": "Miguel",
+        "message": "Miguel's turn just ended"
       },
       {
         "source": "Sam",
@@ -531,87 +599,7 @@
       },
       {
         "source": "Sam",
-        "message": "Sam's turn just ended"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke built a road"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke built a settlement"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke's turn just ended"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete built a road"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete built a settlement"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete's turn just ended"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark built a road"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark built a settlement"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark's turn just ended"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark built a road"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark built a settlement"
-      },
-      {
-        "source": "Mark",
-        "message": "Mark's turn just ended"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete built a road"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete built a settlement"
-      },
-      {
-        "source": "Pete",
-        "message": "Pete's turn just ended"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke built a road"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke built a settlement"
-      },
-      {
-        "source": "Brooke",
-        "message": "Brooke's turn just ended"
-      },
-      {
-        "source": "Sam",
         "message": "Sam built a road"
-      },
-      {
-        "source": "Sam",
-        "message": "Sam built a settlement"
       },
       {
         "source": "Sam",
@@ -624,34 +612,61 @@
       {
         "source": "Sam",
         "message": "Sam's turn just ended"
+      },
+      {
+        "source": "Miguel",
+        "message": "Miguel rolled a 8."
+      },
+      {
+        "source": "Miguel",
+        "message": "Miguel's turn just ended"
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah rolled a 6."
+      },
+      {
+        "source": "Hannah",
+        "message": "Hannah's turn just ended"
+      },
+      {
+        "source": "Squall",
+        "message": "Squall rolled a 3."
+      },
+      {
+        "source": "Squall",
+        "message": "Squall's turn just ended"
+      },
+      {
+        "source": "Sam",
+        "message": "Sam rolled a 7."
+      },
+      {
+        "source": "Sam",
+        "message": "Sam moved the robber and robbed Squall."
+      },
+      {
+        "source": "Sam",
+        "message": "Sam built a road"
       }
     ]
   },
   "chat": {
-    "lines": [
-      {
-        "source": "Sam",
-        "message": "gfds"
-      },
-      {
-        "source": "Sam",
-        "message": "twer"
-      }
-    ]
+    "lines": []
   },
   "bank": {
-    "brick": 22,
-    "wood": 21,
-    "sheep": 20,
-    "wheat": 21,
-    "ore": 22
+    "brick": 18,
+    "wood": 20,
+    "sheep": 23,
+    "wheat": 20,
+    "ore": 19
   },
   "turnTracker": {
-    "status": "SecondRound",
+    "status": "Playing",
     "currentTurn": 0,
     "longestRoad": -1,
     "largestArmy": -1
   },
   "winner": -1,
-  "version": 4
+  "version": 35
 }
