@@ -195,9 +195,17 @@ public class CatanCookie {
 	 * @return User params are non-null and actual values
 	 */
 	private boolean validUserParams() {
-		return this.name != null && !this.name.isEmpty() &&
-				this.password != null && !this.password.isEmpty() &&
-				this.userID != null;
+		if (name == null) 
+			return false;
+		if (name.isEmpty())
+			return false;
+		if (password == null)
+			return false;
+		if (password.isEmpty())
+			return false;
+		if (userID == null)
+			return false;
+		return true;
 	}
 	
 	public String getName() {
