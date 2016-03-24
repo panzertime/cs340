@@ -8,6 +8,6 @@ public class addAI extends GameCommand {
 
 	@Override
 	public String execute(JSONObject args, String cookie) throws ServerAccessException {
-		return null;
+		throw new ServerAccessException("Can't Add AI's");
 	}
 }

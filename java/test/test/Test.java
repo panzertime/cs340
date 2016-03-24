@@ -7,11 +7,11 @@ public class Test {
 		String[] tests = {
 				
 			// Phase One tests
-				/*"poller.PollerTest",
+				//"poller.PollerTest",
 				
-				"proxy.GamesTest",
-				"proxy.GameTest",
-				"proxy.LoginTest",
+				//"proxy.GamesTest",
+				//"proxy.GameTest",
+				//"proxy.LoginTest",
 
 				"model.ModelTest",
 				
@@ -35,19 +35,19 @@ public class Test {
 				
 				"model.can.build.road.CanBuildRoadTest",
 				"model.can.build.settlement.CanBuildSettlementTest",
-				"model.can.build.city.CanBuildCityTest"*/
+				"model.can.build.city.CanBuildCityTest",
 				
 			// Phase Three tests
-				"model.execute.send.DoSendChatTest",
-				///"model.execute.DoBuyDevCardTest",
+//				"model.execute.send.DoSendChatTest",
+				//"model.execute.DoBuyDevCardTest",
 				
-				"model.execute.roll.DoRollNumberTest",
+//				"model.execute.roll.DoRollNumberTest",
 				/*"model.execute.placerobber.DoPlaceRobberTest",
 				"model.execute.finishturn.DoFinishTurnTest",*/
-				"model.execute.discardcards.DoDiscardCardsTest",
+//				"model.execute.discardcards.DoDiscardCardsTest",
 				
 				//"model.execute.trade.offer.DoOfferTradeTest",
-				"model.execute.trade.accept.DoAcceptTradeTest",
+//				"model.execute.trade.accept.DoAcceptTradeTest",
 				/*"model.execute.trade.maritime.DoMaritimeTradeTest",
 				
 				"model.execute.use.yearofplenty.DoUseYearOfPlentyTest",
@@ -56,9 +56,9 @@ public class Test {
 				"model.execute.use.monopoly.DoUseMonopolyTest",
 				"model.execute.use.monument.DoUseMonumentTest",*/
 				
-				"model.execute.build.road.DoBuildRoadTest",
-				"model.execute.build.settlement.DoBuildSettlementTest",
-				"model.execute.build.city.DoBuildCityTest"
+//				"model.execute.build.road.DoBuildRoadTest",
+//				"model.execute.build.settlement.DoBuildSettlementTest",
+//				"model.execute.build.city.DoBuildCityTest"
 				
 		};
 		
