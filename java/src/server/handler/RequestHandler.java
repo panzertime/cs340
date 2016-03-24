@@ -156,7 +156,7 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(!headers.get("Cookie").isEmpty()){
+		if(headers.containsKey("Cookie") && !headers.get("Cookie").isEmpty()){
 			cookie = headers.get("Cookie").get(0);
 		}
 
