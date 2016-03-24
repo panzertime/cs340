@@ -74,12 +74,6 @@ public class RequestHandler extends AbstractHttpHandler {
 
 	private void handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException {
-		// do the normal thing for a get request
-		//	make command
-		//	execute command
-		//	pack request (i.e. exchange.getResponseBody();
-
-		// use getPathInfo to get URI, trim the /, change to .
 
 		String URI = exchange.getRequestURI().getPath();
 		logger.log(Level.INFO, "POST request to URI: " + URI);
@@ -105,6 +99,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
 			reply = command.execute(null, cookie);
+
+			// we expect this to sometimes just return "true", which is not JSON
 		}
 		else if (URI.equals("/game/commands")) {
 			reply = command.execute(null, cookie);
@@ -145,7 +141,10 @@ public class RequestHandler extends AbstractHttpHandler {
 		String body = readBody(exchange.getRequestBody());
 
 		JSONObject json = makeJSON(body);
+		
 
+		// we'll do another "if" here to check what kind of command and if we 
+		// need to deal with a cookie
 		String reply = command.execute(json, cookie);
 
 		ArrayList<String> head = new ArrayList<String>();
