@@ -13,7 +13,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-import shared.logger.Log;
 import shared.model.Model;
 import shared.model.board.edge.EdgeDirection;
 import shared.model.board.edge.EdgeLocation;
@@ -208,9 +207,7 @@ public class DoBuildRoadTest {
 		Model model = null;
 		try {
 			model = new Model(getJSONFrom("playing.json"));
-			Log.debug(model.toJSON().toJSONString());
 			model.doBuildRoad(false, edgeLoc, 0);
-			Log.debug(model.toJSON().toJSONString());
 		} catch (BadJSONException e) {
 			fail("Failed DoBuildRoad test while initilizing model");
 		} catch (ViolatedPreconditionException e) {

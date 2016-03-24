@@ -95,10 +95,18 @@ public class Vertex {
 	/**
 	 * @param building the building to set
 	 */
-	public void setBuilding(Building building) {
+	public void placeBuilding(Building building) {
 		if (this.building != null)
 			assert false;
 		this.building = building;
+		building.setVertex(this);
+	}
+	
+	public void removeBuilding() {
+		if (building != null) {
+			building.setVertex(null);
+			building = null;
+		}
 	}
 
 	public boolean isBuildable() {

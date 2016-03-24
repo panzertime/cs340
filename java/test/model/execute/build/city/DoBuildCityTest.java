@@ -11,32 +11,20 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 
-import client.main.ClientPlayer;
-import client.modelfacade.CanModelFacade;
-import client.modelfacade.ModelFacade;
-import client.modelfacade.testing.TestingModelFacade;
+import shared.model.Model;
 import shared.model.board.hex.HexLocation;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.BadJSONException;
+import shared.model.exceptions.ViolatedPreconditionException;
 
 public class DoBuildCityTest {
-	
-	@Before
-	public void initFacades() {
-		//CanModelFacade.sole().setUserIndex(0);
-		//TestingModelFacade.sole().setUserIndex(0);
-		ClientPlayer.sole().setUserIndex(0);
-		TestingModelFacade.sole().emptyModel();
-	}
-
-	
-	public void initModel(String file) {
+		
+	public JSONObject getJSONFrom(String file) {
 		JSONParser parser = new JSONParser();
-		File jsonFile = new File("java/bin/test/model/can/build/city/" + file);
+		File jsonFile = new File("java/bin/test/model/execute/build/city/" + file);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -48,111 +36,132 @@ public class DoBuildCityTest {
 				x += "\n";
 			}
 			scanner.close();
+			return (JSONObject) parser.parse(x);
 			
-			JSONObject jsonModel = (JSONObject) parser.parse(x);
-			ModelFacade.setModel(jsonModel);
-			
-		} catch (FileNotFoundException | ParseException | BadJSONException e) {
+		} catch (FileNotFoundException | ParseException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
-	/*
-	 * Working: 
-		1.	initModel()
-		2.	turnIndex = 0
-		3.	status = Playing
-		4.	new Loc(0,1,SE);
-		5.	2 wheat 3 ore 1 city
-	 */
 	@Test
-	public void testCanBuildCity1() {
-		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		initModel("buildCity.txt");
-		try {
-			if(CanModelFacade.sole().canBuildCity(vertLoc) == true) {
-				System.out.println("passed testCanBuildCity test when given good input and should return true");
-			} else {
-				fail("failed testCanUseMonopoly test when given good input and should return true");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when given good input and should return true - model not created");
-		}
-	}
-
-	//1 – no model
-	@Test
-	public void testCanBuildCity2() {
-		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		try {
-			CanModelFacade.sole().canBuildCity(vertLoc);
-			fail("failed testCanUseMonopoly test when no model is present");
-		} catch (NullPointerException e) {
-			System.out.println("passed testCanBuildCity test when no model is present");
-		}
-	}
-	
-	//2 – not your turn - 3
-	@Test
-	public void testCanBuildCity3() {
-		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		initModel("noTurn.txt");
-		try {
-			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
-				System.out.println("passed testCanBuildCity test when not your turn");
-			} else {
-				fail("failed testCanUseMonopoly test when not your turn");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when not your turn - model not created");
-		}
-	}
-	
-	//3 – client model is not playing - SecondRound
-	@Test
-	public void testCanBuildCity4() {
-		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		initModel("noPlay.txt");
-		try {
-			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
-				System.out.println("passed testCanBuildCity test when not playing");
-			} else {
-				fail("failed testCanUseMonopoly test when not playing");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when not playing - model not created");
-		}
-	}
-	
-	//4 – location is not currently a settlement – loc (0,0,SW)(Worse – petes settlement)
-	@Test
-	public void testCanBuildCity5() {
+	public void testDoBuildCity1() {
 		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,0), VertexDirection.SouthWest);
-		initModel("buildCity.txt");
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
-				System.out.println("passed testCanBuildCity test when building on anothers settlement");
-			} else {
-				fail("failed testCanUseMonopoly test when building on anothers settlement");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when building on anothers settlement - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			fail("Failed doBuildCity with valid location");
+		}
+		if(model.equalsJSON(getJSONFrom("placedCity.json"))) {
+			System.out.println("passed doBuildCity with valid location");
+		} else {
+			fail("Failed doBuildCity with valid location");
 		}
 	}
 	
-	//5 – Doesn’t have 2 wheat, 3 ore and 1 city (missing city)
 	@Test
-	public void testCanBuildCity6() {
-		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.SouthEast);
-		initModel("resources.txt");
+	public void testDoBuildCity2() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,-1), VertexDirection.SouthWest);
+		Model model = null;
 		try {
-			if(CanModelFacade.sole().canBuildCity(vertLoc) == false) {
-				System.out.println("passed testCanBuildCity test when user doesn't have resources");
-			} else {
-				fail("failed testCanUseMonopoly test when user doesn't have resources");
-			}
-		} catch (NullPointerException e) {
-			fail("failed testCanUseMonopoly test when user doesn't have resources - model not created");
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity with taken location");
+		}
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("Failed doBuildCity with taken location");
+		}
+	}
+	
+	@Test
+	public void testDoBuildCity3() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.East);
+		Model model = null;
+		try {
+			model = new Model(getJSONFrom("playing.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity with no settlment at location");
+		}
+		if(!model.equalsJSON(getJSONFrom("playing.json"))) {
+			fail("Failed doBuildCity with no settlment at location");
+		}
+	}
+	
+	@Test
+	public void testDoBuildCity4() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.East);
+		Model model = null;
+		try {
+			model = new Model(getJSONFrom("notEnoughResources.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity with not enough resources");
+		}
+		if(!model.equalsJSON(getJSONFrom("notEnoughResources.json"))) {
+			fail("Failed doBuildCity with not enough resources");
+		}
+	}
+	
+	@Test
+	public void testDoBuildCity5() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.East);
+		Model model = null;
+		try {
+			model = new Model(getJSONFrom("setup.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity while in setup");
+		}
+		if(!model.equalsJSON(getJSONFrom("setup.json"))) {
+			fail("Failed doBuildCity while in setup");
+		}
+	}
+	
+	@Test
+	public void testDoBuildCity6() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.East);
+		Model model = null;
+		try {
+			model = new Model(getJSONFrom("robbing.json"));
+			model.doBuildCity(vertLoc, 0);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity while robbing");
+		}
+		if(!model.equalsJSON(getJSONFrom("robbing.json"))) {
+			fail("Failed doBuildCity while robbing");
+		}
+	}
+	
+	@Test
+	public void testDoBuildCity7() {
+		VertexLocation vertLoc = new VertexLocation(new HexLocation(0,1), VertexDirection.East);
+		Model model = null;
+		try {
+			model = new Model(getJSONFrom("robbing.json"));
+			model.doBuildCity(vertLoc, 99);
+		} catch (BadJSONException e) {
+			fail("Failed doBuildCity while initilizing model");
+		} catch (ViolatedPreconditionException e) {
+			System.out.println("passed doBuildCity with invalid index");
+		}
+		if(!model.equalsJSON(getJSONFrom("robbing.json"))) {
+			fail("Failed doBuildCity with invalid index");
 		}
 	}
 }

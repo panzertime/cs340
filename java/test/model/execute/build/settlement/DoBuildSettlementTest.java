@@ -56,7 +56,7 @@ public class DoBuildSettlementTest {
 		} catch (ViolatedPreconditionException e) {
 			fail("Failed doBuildSettlement while in first setup");
 		}
-		if(model.equalsJSON(getJSONFrom("placed-firstSettlemnet.json"))) {
+		if(model.equalsJSON(getJSONFrom("placed-firstSettlement.json"))) {
 			System.out.println("passed doBuildSettlement while in first setup");
 		} else {
 			fail("Failed doBuildSettlement while in first setup");
@@ -75,7 +75,7 @@ public class DoBuildSettlementTest {
 		} catch (ViolatedPreconditionException e) {
 			fail("Failed doBuildSettlement while in second setup");
 		}
-		if(model.equalsJSON(getJSONFrom("placed-secondSettlemnet.json"))) {
+		if(model.equalsJSON(getJSONFrom("placed-secondSettlement.json"))) {
 			System.out.println("passed doBuildSettlement while in second setup");
 		} else {
 			fail("Failed doBuildSettlement while in second setup");
