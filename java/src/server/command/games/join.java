@@ -46,7 +46,7 @@ public class join extends GamesCommand {
 		CatanColor result = null;
 		try{
 			String colorString = (String) jsonColor;
-			result = CatanColor.valueOf(colorString);
+			result = CatanColor.valueOf(colorString.toUpperCase());
 		} catch (Exception e) {
 			throw new ServerAccessException("Invalid Parameter: color");
 		}

@@ -2,6 +2,9 @@ package server.handler;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.logging.*;
 import java.util.*;
 
@@ -70,8 +73,8 @@ public class RequestHandler extends AbstractHttpHandler {
 			}
 				
 				logger.log(Level.INFO, "Body has length " + reply.length());
-			exchange.sendResponseHeaders(200, 0);
-			packBody(exchange.getResponseBody(), reply);	
+			exchange.sendResponseHeaders(200, reply.length());
+			packBody(exchange.getResponseBody(), reply);
 			exchange.getResponseBody().close();
 			exchange.close();
 
@@ -190,15 +193,14 @@ public class RequestHandler extends AbstractHttpHandler {
 			reply = command.execute(json, cookie);
 		}
 
-		ArrayList<String> head = new ArrayList<String>();
-		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
-		oheaders.put("Content­Type", head);
+		//Check if text/html
+		//or applicaton/json
+		oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
+		//oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), "text/html");
 		if (!newCookie.equals("")){
 			// set cookie header
-			ArrayList<String> cook = new ArrayList<String>();
-			cook.add(newCookie);
-			oheaders.put("Set-cookie", cook);
+			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), URLEncoder.encode(newCookie, "UTF-8"));
 		}
 
 		return reply;
@@ -242,6 +244,7 @@ public class RequestHandler extends AbstractHttpHandler {
 			new DataOutputStream(new BufferedOutputStream(O));
 		//body.write(data.getBytes());
 		body.writeBytes(data);
+		body.flush();
 
 		logger.log(Level.INFO, "Written: " + body.size());
 		
