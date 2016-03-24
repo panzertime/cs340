@@ -102,7 +102,8 @@ public class RequestHandler extends AbstractHttpHandler {
 			reply = command.execute(null, cookie);
 		}
 		else if (URI.equals("/game/model") {
-			// ...
+			// we'd have to actually check for a param here and set it
+			reply = command.execute(null, cookie);
 		}
 		else if (URI.equals("/game/commands") {
 			reply = command.execute(null, cookie);
@@ -113,15 +114,11 @@ public class RequestHandler extends AbstractHttpHandler {
 		else {
 			throw new UserExcpetion("bad API endpoint");
 		}
-
+		
+		exchange.getResponseHeaders().put("Content­Type", "application/json");
 
 		packBody(exchange.getResponseBody(), reply);
-//   <><><><> Mulder, this section should be redone, look at Josh's work to see <><><><>
 
-//		/games/list
-//		/game/model
-//		/game/commands
-//		/game/listAI
 	}
 
 	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
@@ -146,6 +143,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		JSONObject json = makeJSON(body);
 
 		String reply = command.execute(json, cookie);
+
+		exchange.getResponseHeaders().put("Content­Type", "application/json");		
 
 		packBody(exchange.getResponseBody(), reply);
 

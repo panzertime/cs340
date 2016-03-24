@@ -73,6 +73,8 @@ public class Server {
 		
 		HttpHandler hhandler = (HttpHandler) handler;
 		hserver.createContext("/", handler);
+		server.createContext("/docs/api/data", new fileHandler.JSONAppender(""));
+		server.createContext("/docs/api/view", new fileHandler.BasicFile(""))
 		
 		logger.info("Starting HTTP Server");
 
