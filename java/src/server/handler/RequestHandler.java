@@ -23,6 +23,16 @@ import shared.model.*;
 import server.*;
 import server.exception.*;
 import server.command.*;
+import server.command.user.*;
+import server.command.game.*;
+import server.command.games.*;
+import server.command.moves.*;
+import server.command.mock.*;
+import server.command.mock.user.*;
+import server.command.mock.game.*;
+import server.command.mock.games.*;
+import server.command.mock.moves.*;
+import server.utils.*;
 
 
 public class RequestHandler extends AbstractHttpHandler {
@@ -64,6 +74,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		
 		catch (Exception e) {
+			e.printStackTrace();
+			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
 			packBody(exchange.getResponseBody(), e.getMessage());
 			exchange.sendResponseHeaders(400, 0);
 			exchange.close();
@@ -74,12 +86,6 @@ public class RequestHandler extends AbstractHttpHandler {
 
 	private void handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException {
-		// do the normal thing for a get request
-		//	make command
-		//	execute command
-		//	pack request (i.e. exchange.getResponseBody();
-
-		// use getPathInfo to get URI, trim the /, change to .
 
 		String URI = exchange.getRequestURI().getPath();
 		logger.log(Level.INFO, "POST request to URI: " + URI);
@@ -105,6 +111,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
 			reply = command.execute(null, cookie);
+
+			// we expect this to sometimes just return "true", which is not JSON
 		}
 		else if (URI.equals("/game/commands")) {
 			reply = command.execute(null, cookie);
@@ -126,16 +134,20 @@ public class RequestHandler extends AbstractHttpHandler {
 	}
 
 	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
-			ClassNotFoundException, InstantiationException, IllegalAccessException {
+			ClassNotFoundException, InstantiationException, IllegalAccessException, CookieException {
 
 		String URI = exchange.getRequestURI().getPath();
 		logger.log(Level.INFO, "POST request to URI: " + URI);
 
 		String endpoint = endpointToClassName(URI);
+		logger.log(Level.INFO, "Endpoint selected: " + endpoint);
 
 		Class proto_command = Class.forName(endpoint);
 		ICommand command = (ICommand) proto_command.newInstance();
 		
+		logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
+
+
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
 		if(!headers.get("Cookie").isEmpty()){
@@ -145,13 +157,42 @@ public class RequestHandler extends AbstractHttpHandler {
 		String body = readBody(exchange.getRequestBody());
 
 		JSONObject json = makeJSON(body);
+		
+		String reply = new String();
+		String newCookie = new String();
+		logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
 
-		String reply = command.execute(json, cookie);
+		if (URI.equals("/user/login")) {
+			logger.log(Level.INFO, "Doing the login command");
+			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
+			reply = uCommand.execute(null, cookie);
+			newCookie = uCommand.getCookie().toCookie();
+		}
+		else if (URI.equals("/user/register")) {
+			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
+			reply = uCommand.execute(null, cookie);
+			newCookie = uCommand.getCookie().toCookie();
+
+		}
+		else if (URI.equals("/games/join")) {
+		//	GameCommand gCommand = (GameCommand) command;
+			reply = command.execute(null, cookie);
+		//	newCookie = gCommand.getCookie().toCookie();
+		}
+		else {
+			reply = command.execute(json, cookie);
+		}
 
 		ArrayList<String> head = new ArrayList<String>();
 		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
 		oheaders.put("Content­Type", head);
+		if (!newCookie.equals("")){
+			// set cookie header
+			head.clear();
+			head.add(newCookie);
+			oheaders.put("Set-cookie", head);
+		}
 
 		packBody(exchange.getResponseBody(), reply);
 
@@ -163,10 +204,10 @@ public class RequestHandler extends AbstractHttpHandler {
 		URI = URI.substring(1);
 		URI = URI.replace('/','.');
 		if (fakeFlag) {
-			URI = "command.mock." + URI;
+			URI = "server.command.mock." + URI;
 		}
 		else {
-			URI = "command." + URI;
+			URI = "server.command." + URI;
 		}
 		return URI;
 	}
