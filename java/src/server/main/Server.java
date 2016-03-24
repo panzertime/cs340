@@ -71,7 +71,6 @@ public class Server {
 
 		hserver.setExecutor(null); // use the default executor
 		
-		HttpHandler hhandler = (HttpHandler) handler;
 		hserver.createContext("/", handler);
 		hserver.createContext("/docs/api/data", new fileHandler.JSONAppender(""));
 		hserver.createContext("/docs/api/view", new fileHandler.BasicFile(""));
