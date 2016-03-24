@@ -57,11 +57,16 @@ public class RequestHandler extends AbstractHttpHandler {
 		
 		String verb = exchange.getRequestMethod();
 		try{	
+			String reply = new String();
 			if (verb.equals("POST")) {
-				handlePost(exchange);
+				reply = handlePost(exchange);
+				packBody(exchange.getResponseBody(), reply);
+				
 			}
 			else if (verb.equals("GET")) {
-				handleGet(exchange);
+				reply = handleGet(exchange);
+				packBody(exchange.getResponseBody(), reply);
+				
 			}
 			else {
 				logger.log(Level.INFO, "Incorrect HTTP verb in request: " + verb);
@@ -76,15 +81,15 @@ public class RequestHandler extends AbstractHttpHandler {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
-			packBody(exchange.getResponseBody(), e.getMessage());
 			exchange.sendResponseHeaders(400, 0);
+			packBody(exchange.getResponseBody(), e.getMessage());			
 			exchange.close();
 		}
 
 		
 	}
 
-	private void handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
+	private String handleGet(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		String URI = exchange.getRequestURI().getPath();
@@ -128,12 +133,13 @@ public class RequestHandler extends AbstractHttpHandler {
 		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
 		oheaders.put("Content­Type", head);
+		
+		return reply;
 
-		packBody(exchange.getResponseBody(), reply);
 
 	}
 
-	private void handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
+	private String handlePost(HttpExchange exchange) throws IOException, ServerAccessException, UserException, 
 			ClassNotFoundException, InstantiationException, IllegalAccessException, CookieException {
 
 		String URI = exchange.getRequestURI().getPath();
@@ -167,18 +173,18 @@ public class RequestHandler extends AbstractHttpHandler {
 		if (URI.equals("/user/login")) {
 			logger.log(Level.INFO, "Doing the login command");
 			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(null, cookie);
+			reply = uCommand.execute(json, cookie);
 			newCookie = uCommand.getCookie().toCookie();
 		}
 		else if (URI.equals("/user/register")) {
 			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(null, cookie);
+			reply = uCommand.execute(json, cookie);
 			newCookie = uCommand.getCookie().toCookie();
 
 		}
 		else if (URI.equals("/games/join")) {
 		//	GameCommand gCommand = (GameCommand) command;
-			reply = command.execute(null, cookie);
+			reply = command.execute(json, cookie);
 		//	newCookie = gCommand.getCookie().toCookie();
 		}
 		else {
@@ -196,8 +202,7 @@ public class RequestHandler extends AbstractHttpHandler {
 			oheaders.put("Set-cookie", head);
 		}
 
-		packBody(exchange.getResponseBody(), reply);
-
+		return reply;
 
 	}
 
@@ -229,15 +234,13 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		JSONReader.close();
 
-		return JSONBuilder.toString();
+		return matchBrackets(JSONBuilder.toString());
 	}
 
 	private void packBody(OutputStream O, String data) throws IOException {
 		OutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
 		body.write(data.getBytes());
-		body.flush();
-		body.close();
 	}	
 
 	private JSONObject makeJSON(String stringJSON)
@@ -254,5 +257,20 @@ public class RequestHandler extends AbstractHttpHandler {
 			throw new UserException("JSON probably invalid");
 		}
 	}
+
+	private String matchBrackets(String matchable){
+		char bracket = matchable.charAt(matchable.length() - 1);
+		String closer;
+		if(bracket == ']'){
+			// System.out.println("Matching a [");		
+			closer = "[";
+		}
+		else {
+			// System.out.println("Matching a {");
+			closer = "{";
+		}
+		return closer + matchable;
+	}
+
 	
 }

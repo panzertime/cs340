@@ -74,6 +74,7 @@ public class Server {
 		hserver.createContext("/", handler);
 		hserver.createContext("/docs/api/data", new fileHandler.JSONAppender(""));
 		hserver.createContext("/docs/api/view", new fileHandler.BasicFile(""));
+		hserver.createContext("/favicon.ico", new NullHandler());
 		
 		logger.info("Starting HTTP Server");
 
