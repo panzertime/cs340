@@ -234,8 +234,6 @@ public class RequestHandler extends AbstractHttpHandler {
 		OutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
 		body.write(data.getBytes());
-		body.flush();
-		body.close();
 	}	
 
 	private JSONObject makeJSON(String stringJSON)
