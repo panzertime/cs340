@@ -133,5 +133,80 @@ public class acceptTradeTest {
 					+ "is invalid: type string");
 		}
 	}
-
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("playerIndex", (long) 0);
+		args.put("willAccept", "true");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		acceptTrade at = new acceptTrade();
+		try {
+			at.execute(args, cookie);
+			fail("Failed acceptTurn test where type arg is invalid"
+					+ ": dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed acceptTurn test where type arg "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "acceptTrade");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		acceptTrade at = new acceptTrade();
+		try {
+			at.execute(args, cookie);
+			fail("Failed acceptTurn test where willAccept arg is invalid"
+					+ ": dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed acceptTurn test where willAccept arg "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "acceptTrade");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		acceptTrade at = new acceptTrade();
+		try {
+			at.execute(args, cookie);
+			fail("Failed acceptTurn test where cookie is invalid"
+					+ ": game dne = 3");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed acceptTurn test where cookie "
+					+ "is invalid: game dne = 3");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "acceptTrade");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		acceptTrade at = new acceptTrade();
+		try {
+			at.execute(args, cookie);
+			fail("Failed acceptTurn test where playerIndex arg is invalid"
+					+ ": 4");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed acceptTurn test where playerIndex arg "
+					+ "is invalid: 4");
+		}
+	}
 }
