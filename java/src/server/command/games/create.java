@@ -6,7 +6,12 @@ import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import shared.model.Model;
 
+import java.util.logging.*;
+
+
 public class create extends GamesCommand {
+	private Logger logger = Logger.getLogger("big server"); 
+	
 
 	@Override
 	public String execute(JSONObject args, String cookie) 
@@ -35,6 +40,8 @@ public class create extends GamesCommand {
 				throw new ServerAccessException("Invalid Cookie");
 			}
 		} catch (Exception e) {
+			logger.log(Level.INFO, "Problem in create game: " + e.getMessage());
+			e.printStackTrace();
 			throw new ServerAccessException(e.getMessage());
 		}
 		return result;

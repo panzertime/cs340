@@ -89,6 +89,8 @@ public class CatanCookie {
 	private void setUserAttributes(String cookieString) throws CookieException {
 		int startIndex = cookieString.indexOf("{");
 		int endIndex = cookieString.indexOf("}") + 1;
+		System.out.println("Cookie string gotten: " + cookieString);
+		System.out.println("{ in cookie: " + startIndex + ", } : " + endIndex);
 		String toJSON = cookieString.substring(startIndex, endIndex);
 		JSONParser parser = new JSONParser();
 		try {
