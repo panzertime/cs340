@@ -122,6 +122,53 @@ public class buildCityTest {
 	
 	//Invalid	
 	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": no y");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: no y");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", "0");
+		vertLoc.put("y", "1");
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": x and y of type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: x and y of type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
 	public void testExecute2() {
 		JSONObject args = new JSONObject();
 		args.put("type", "buildCity");
@@ -141,6 +188,73 @@ public class buildCityTest {
 		} catch (ServerAccessException e) {
 			System.out.println("Passed buildCity test where vertexLocation "
 					+ "arg is invalid: empty direction");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": no vertex location");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: no vertex location");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 1);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 1);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where playerIndex arg is invalid"
+					+ ": wrong number");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where playerIndex "
+					+ "arg is invalid: wrong number");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 1);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where moveType arg is invalid:"
+					+ " buildSettlement");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where moveType "
+					+ "arg is invalid: buildSettlement");
 		}
 	}
 
