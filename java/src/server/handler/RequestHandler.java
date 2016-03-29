@@ -2,6 +2,9 @@ package server.handler;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.logging.*;
 import java.util.*;
 
@@ -59,21 +62,20 @@ public class RequestHandler extends AbstractHttpHandler {
 		try{	
 			String reply = new String();
 			if (verb.equals("POST")) {
-				reply = handlePost(exchange);
-				packBody(exchange.getResponseBody(), reply);
-				
+				reply = handlePost(exchange);				
 			}
 			else if (verb.equals("GET")) {
-				reply = handleGet(exchange);
-				packBody(exchange.getResponseBody(), reply);
-				
+				reply = handleGet(exchange);	
 			}
 			else {
 				logger.log(Level.INFO, "Incorrect HTTP verb in request: " + verb);
 				throw new ServerAccessException(verb);
 			}
 				
-			exchange.sendResponseHeaders(200, 0);
+				logger.log(Level.INFO, "Body has length " + reply.length());
+			exchange.sendResponseHeaders(200, reply.length());
+			packBody(exchange.getResponseBody(), reply);
+			exchange.getResponseBody().close();
 			exchange.close();
 
 		}
@@ -156,10 +158,12 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		Headers headers = exchange.getRequestHeaders();
 		String cookie = new String();
-		if(headers.containsKey("Cookie") && !headers.get("Cookie").isEmpty()){
-			cookie = headers.get("Cookie").get(0);
+		if(headers.containsKey("Cookie")){
+			if(!headers.get("Cookie").isEmpty()){
+				cookie = headers.get("Cookie").get(0);
+			}
 		}
-
+		
 		String body = readBody(exchange.getRequestBody());
 
 		JSONObject json = makeJSON(body);
@@ -189,15 +193,19 @@ public class RequestHandler extends AbstractHttpHandler {
 			reply = command.execute(json, cookie);
 		}
 
-		ArrayList<String> head = new ArrayList<String>();
-		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
-		oheaders.put("Content­Type", head);
+		//Check if text/html
+		//or applicaton/json
+		oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
+		//oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), "text/html");
 		if (!newCookie.equals("")){
 			// set cookie header
-			head.clear();
-			head.add(newCookie);
-			oheaders.put("Set-cookie", head);
+			logger.log(Level.INFO, "Unencoded cookie: " + newCookie);
+			String mutatedCookie = newCookie.substring(0, newCookie.length() - 8);
+			mutatedCookie = URLEncoder.encode(mutatedCookie, "UTF-8");
+			mutatedCookie += ";Path=/;";
+			logger.log(Level.INFO, "Encoded cookie: " + mutatedCookie);
+			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), mutatedCookie);
 		}
 
 		return reply;
@@ -236,9 +244,23 @@ public class RequestHandler extends AbstractHttpHandler {
 	}
 
 	private void packBody(OutputStream O, String data) throws IOException {
-		OutputStream body = 
+		logger.log(Level.INFO, "Packing " + data);
+		DataOutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
-		body.write(data.getBytes());
+		//body.write(data.getBytes());
+		body.writeBytes(data);
+		body.flush();
+
+		logger.log(Level.INFO, "Written: " + body.size());
+		
+	//	body.flush();
+	//	body.close();
+	//	O.flush();
+	//	O.close();
+
+		logger.log(Level.INFO, "Done packing.");
+
+
 	}	
 
 	private JSONObject makeJSON(String stringJSON)

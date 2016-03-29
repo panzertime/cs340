@@ -100,7 +100,7 @@ public class Model {
 	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
 	{
 	Integer i = this.getIndexFromPlayerID(playerID);
-	if (i == null)
+	if (i != null)
 	{
 		this.getPlayerFromIndex(i).setUserColor(color);
 	}
