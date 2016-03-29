@@ -1220,6 +1220,7 @@ public class Model {
 				}
 			}
 		}
+		version++;
 	}
 	
 	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex) throws ViolatedPreconditionException
