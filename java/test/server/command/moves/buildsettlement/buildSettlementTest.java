@@ -147,4 +147,127 @@ public class buildSettlementTest {
 					+ "vertexLocation arg is invalid: empty direction");
 		}
 	}
+	
+	//Invalid - y	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", "2");
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildSettlement bs = new buildSettlement();
+		try {
+			bs.execute(args, cookie);
+			fail("Failed buildSettlement test where vertexLocation arg "
+					+ "is invalid: y is a string");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildSettlement test where "
+					+ "vertexLocation arg is invalid: y is a String");
+		}
+	}
+	
+	//Invalid	- free
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		args.put("free", "false");
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 2);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildSettlement bs = new buildSettlement();
+		try {
+			bs.execute(args, cookie);
+			fail("Failed buildSettlement test where free arg "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildSettlement test where "
+					+ "free arg is invalid: type String");
+		}
+	}
+	
+	//Invalid	- playerIndex
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("free", false);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 2);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildSettlement bs = new buildSettlement();
+		try {
+			bs.execute(args, cookie);
+			fail("Failed buildSettlement test where playerIndex arg "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildSettlement test where "
+					+ "playerIndex arg is invalid: dne");
+		}
+	}
+	
+	//Invalid	type
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 2);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildSettlement bs = new buildSettlement();
+		try {
+			bs.execute(args, cookie);
+			fail("Failed buildSettlement test where type arg "
+					+ "is invalid: buildCity");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildSettlement test where "
+					+ "type arg is invalid: buildCity");
+		}
+	}
+	
+	//Invalid cookie	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 2);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.game=1";
+		buildSettlement bs = new buildSettlement();
+		try {
+			bs.execute(args, cookie);
+			fail("Failed buildSettlement test where cookie "
+					+ "is invalid: no user");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildSettlement test where "
+					+ "cookie is invalid: no user");
+		}
+	}
 }
