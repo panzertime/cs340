@@ -22,8 +22,9 @@ public class maritimeTrade extends MovesCommand {
 				try {
 					ResourceType input = getResourceType
 							(args.get("inputResource"));
-					Integer ratio = (Integer) args.get("ratio");
-					ratio = (ratio == null) ? 4 : ratio;
+					Long longRatio = (Long) args.get("ratio");
+					Integer ratio = 
+							(longRatio == null) ? 4 : longRatio.intValue();
 					ResourceType output = getResourceType
 							(args.get("outputResource"));
 					game.doMaritimeTrade(ratio, input, output, playerIndex);
@@ -54,7 +55,7 @@ public class maritimeTrade extends MovesCommand {
 	public ResourceType getResourceType(Object resString) {
 		ResourceType result = null;
 		try {
-			result = ResourceType.valueOf((String) resString);
+			result = ResourceType.valueOf(((String) resString).toUpperCase());
 		} catch (Exception e) {
 			
 		}

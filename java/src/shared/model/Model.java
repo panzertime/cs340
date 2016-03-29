@@ -1311,7 +1311,7 @@ public class Model {
 	
 	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex) throws ViolatedPreconditionException
 	{
-		if(!canMaritimeTrade(ratio, playerIndex, input, output))
+		if(!canMaritimeTrade(playerIndex, ratio, input, output))
 			throw new ViolatedPreconditionException();
 		try {
 			this.getPlayerFromIndex(playerIndex).doMaritimeTrade(ratio, input, output);
