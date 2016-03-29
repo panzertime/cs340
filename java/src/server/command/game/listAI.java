@@ -6,7 +6,8 @@ import server.exception.ServerAccessException;
 
 public class listAI extends GameCommand {
 
-	public String execute(JSONObject args, String cookie) throws ServerAccessException {
-		return "{}";
+	public String execute(JSONObject args, String cookie) 
+			throws ServerAccessException {
+		return "[]";
 	}
 }
