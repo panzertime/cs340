@@ -128,4 +128,41 @@ public class buyDevCardTest {
 					+ "index arg is invalid: dne");
 		}
 	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "byDevCard");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buyDevCard bdc = new buyDevCard();
+		try {
+			bdc.execute(args, cookie);
+			fail("Failed buyDevCard test where move type arg "
+					+ "is invalid: byDevCard");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buyDevCard test where "
+					+ "move type arg is invalid: byDevCard");
+		}
+	}
+	
+	//Invalid--cookie
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buyDevCard");
+		args.put("playerIndex", (long) 0);
+		buyDevCard bdc = new buyDevCard();
+		String cookie = null;
+		try {
+			bdc.execute(args, cookie);
+			fail("Failed buyDevCard test where cookie "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buyDevCard test where "
+					+ "cookie is invalid: dne");
+		}
+	}
 }

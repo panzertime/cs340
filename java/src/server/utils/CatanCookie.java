@@ -60,11 +60,15 @@ public class CatanCookie {
 		this.gameID = Integer.parseInt(number);
 	}
 
-	private boolean validStart(String cookieString) {
+	private boolean validStart(String cookieString) throws CookieException {
+		if(cookieString == null || cookieString.isEmpty()) {
+			throw new CookieException("Empty or Null Cookie");
+		}
 		return cookieString.startsWith("catan.user=");
 	}
 
-	private void preGameConstructor(String cookieString) throws CookieException {
+	private void preGameConstructor(String cookieString) 
+			throws CookieException {
 		if(validStart(cookieString)) {
 			setUserAttributes(cookieString);
 			
