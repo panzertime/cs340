@@ -30,6 +30,7 @@ public class join extends GamesCommand {
 					Model game = ServerKernel.sole().getGame(gameToJoin);
 					this.cookie = new CatanCookie(game);
 					game.joinGame(user.getID(), user.getUsername(), color);
+					result = "Success";
 				} else {
 					throw new ServerAccessException("Invalid Game");
 				}
