@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.URLDecoder;
 import java.util.logging.*;
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class RequestHandler extends AbstractHttpHandler {
 				throw new ServerAccessException(verb);
 			}
 				
-				logger.log(Level.INFO, "Body has length " + reply.length());
+			logger.log(Level.INFO, "Body has length " + reply.length());
 			exchange.sendResponseHeaders(200, reply.length());
 			packBody(exchange.getResponseBody(), reply);
 			exchange.getResponseBody().close();
@@ -110,6 +111,7 @@ public class RequestHandler extends AbstractHttpHandler {
 		String cookie = new String();
 		if(!headers.get("Cookie").isEmpty()){
 			cookie = headers.get("Cookie").get(0);
+			cookie = URLDecoder.decode(cookie, "UTF-8"); 
 		}
 
 		if (URI.equals("/games/list")) {
@@ -161,6 +163,7 @@ public class RequestHandler extends AbstractHttpHandler {
 		if(headers.containsKey("Cookie")){
 			if(!headers.get("Cookie").isEmpty()){
 				cookie = headers.get("Cookie").get(0);
+				cookie = URLDecoder.decode(cookie, "UTF-8"); 				
 			}
 		}
 		
