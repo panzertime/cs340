@@ -105,6 +105,7 @@ public class buildRoadTest {
 		JSONObject args = new JSONObject();
 		args.put("type", "buildRoad");
 		args.put("playerIndex", (long) 0);
+		args.put("free", false);
 		JSONObject roadLoc = new JSONObject();
 		roadLoc.put("y", (long) 1);
 		roadLoc.put("direction", "SE");
@@ -128,6 +129,7 @@ public class buildRoadTest {
 		JSONObject args = new JSONObject();
 		args.put("type", "buildRoad");
 		args.put("playerIndex", (long) 0);
+		args.put("free", false);
 		JSONObject roadLoc = new JSONObject();
 		roadLoc.put("x", (long) 0);
 		roadLoc.put("y", (long) 1);
@@ -143,6 +145,129 @@ public class buildRoadTest {
 		} catch (ServerAccessException e) {
 			System.out.println("Passed buildRoad test where vertexLocation "
 					+ "arg is invalid: empty direction");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildRoad");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject roadLoc = new JSONObject();
+		roadLoc.put("x", (long) 0);
+		roadLoc.put("direction", "SE");
+		args.put("roadLocation", roadLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildRoad br = new buildRoad();
+		try {
+			br.execute(args, cookie);
+			fail("Failed buildRoad test where vertexLocation arg is invalid"
+					+ ": no y");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildRoad test where vertexLocation "
+					+ "arg is invalid: no y");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildRoad");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject roadLoc = new JSONObject();
+		roadLoc.put("x", "0");
+		roadLoc.put("y", "1");
+		roadLoc.put("direction", "SE");
+		args.put("roadLocation", roadLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildRoad br = new buildRoad();
+		try {
+			br.execute(args, cookie);
+			fail("Failed buildRoad test where vertexLocation arg is invalid"
+					+ ": x and y of type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildRoad test where vertexLocation "
+					+ "arg is invalid: x and y of type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject roadLoc = new JSONObject();
+		roadLoc.put("x", (long) 0);
+		roadLoc.put("y", (long) 1);
+		roadLoc.put("direction", "SE");
+		args.put("roadLocation", roadLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildRoad br = new buildRoad();
+		try {
+			br.execute(args, cookie);
+			fail("Failed buildRoad test where move type arg is invalid"
+					+ ": buildCity");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildRoad test where move type "
+					+ "arg is invalid: buildCity");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildRoad");
+		args.put("free", false);
+		JSONObject roadLoc = new JSONObject();
+		roadLoc.put("x", (long) 0);
+		roadLoc.put("y", (long) 1);
+		roadLoc.put("direction", "SE");
+		args.put("roadLocation", roadLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildRoad br = new buildRoad();
+		try {
+			br.execute(args, cookie);
+			fail("Failed buildRoad test where playerIndex arg is invalid"
+					+ ": dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildRoad test where playerIndex "
+					+ "arg is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildRoad");
+		args.put("playerIndex", (long) 0);
+		args.put("free", false);
+		JSONObject roadLoc = new JSONObject();
+		roadLoc.put("x", (long) 0);
+		roadLoc.put("y", (long) 1);
+		roadLoc.put("direction", "SE");
+		args.put("roadLocation", roadLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0};";
+		buildRoad br = new buildRoad();
+		try {
+			br.execute(args, cookie);
+			fail("Failed buildRoad test where cookie is invalid"
+					+ ": missing game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildRoad test where cookie "
+					+ "is invalid: missing game");
 		}
 	}
 

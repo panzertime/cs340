@@ -257,5 +257,29 @@ public class buildCityTest {
 					+ "arg is invalid: buildSettlement");
 		}
 	}
+	
+	//Invalid	
+	@Test
+	public void testExecute8() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 1);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":1}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where cookie is invalid:"
+					+ " no game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where cookie "
+					+ "is invalid: no game");
+		}
+	}
 
 }
