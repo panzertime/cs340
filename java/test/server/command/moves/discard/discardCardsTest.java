@@ -173,4 +173,29 @@ public class discardCardsTest {
 					+ "wood arg is invalid: dne");
 		}
 	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "discardCards");
+		args.put("playerIndex", (long) 0);
+		JSONObject discard = new JSONObject();
+		discard.put("brick", (long) 1);
+		discard.put("ore", (long) 1);
+		discard.put("sheep", (long) 1);
+		discard.put("wheat", (long) 1);
+		discard.put("wood", (long) 1);
+		args.put("discardedCards", discard);
+		String cookie = "";
+		discardCards dc = new discardCards();
+		try {
+			dc.execute(args, cookie);
+			fail("Failed discardCards test where cookie "
+					+ "is invalid: empty");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "cookie is invalid: empty");
+		}
+	}
 }

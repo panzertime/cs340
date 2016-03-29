@@ -35,7 +35,8 @@ public class CatanCookie {
 		}
 	}
 	
-	private void postGameConstructor(String cookieString) throws CookieException {
+	private void postGameConstructor(String cookieString) 
+			throws CookieException {
 		if(validStart(cookieString)
 				&& cookieString.matches("(.*)catan.game=([0-9]*)(.*)")) {
 			setUserAttributes(cookieString);
