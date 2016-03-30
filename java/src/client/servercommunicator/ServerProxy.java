@@ -570,7 +570,8 @@ public class ServerProxy implements IServerProxy{
 				call= "/game/model?version=" + currentVersion;
 			}
 			String response = submitRequest("GET", call);
-			if(response.equals("{true\"")){
+			System.out.println("Got this response as the model: " + response);
+			if(response.equals("{rue")){
 				return null;
 			}
 			return makeJSON(submitRequest("GET", call));

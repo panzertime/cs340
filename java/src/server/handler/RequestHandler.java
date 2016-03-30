@@ -127,6 +127,7 @@ public class RequestHandler extends AbstractHttpHandler {
 				version = "";
 			}
 			if (!version.equals("")) {
+				version = version.substring(8);
 				server.command.game.model mCommand = (server.command.game.model) command;
 				mCommand.setVersion(Integer.parseInt(version));
 			}

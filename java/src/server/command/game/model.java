@@ -24,7 +24,7 @@ public class model extends GameCommand {
 			Model game = getGameFromCookie(cookie);
 			int gameVersion = game.getVersion();
 			if(gameVersion == version) {
-				result = "\"true\"";
+				result = "true";
 			} else {
 				JSONObject jsonGame = game.toJSON();
 				result = jsonGame.toJSONString();
