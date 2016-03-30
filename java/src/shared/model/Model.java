@@ -19,7 +19,10 @@ import client.modelfacade.ModelFacade;
 import shared.logger.Log;
 import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
+import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.hex.tiles.land.LandHex;
+import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
 import shared.model.board.vertex.VertexLocation;
@@ -212,6 +215,9 @@ public class Model {
 	public Boolean equalsJSON(JSONObject jsonMap) {
 		if (jsonMap == null)
 			return false;
+		System.out.println((JSONObject) jsonMap.get("bank"));
+		System.out.println((JSONObject) jsonMap.get("deck"));
+		System.out.println(bank.bankToJSON());
 		if (bank.equalsJSON((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck")) == false)
 			return false;
 		if (chatModel.equalsJSON((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log")) == false)
@@ -1263,6 +1269,19 @@ public class Model {
 		try {
 			if (!free) this.getPlayerFromIndex(playerIndex).buySettlement();
 			this.board.buildSettlement(this.getPlayerFromIndex(playerIndex).getFreeSettlement(), vertexLocation);
+			if (this.getStatus().equals("SecondRound"))
+			{
+				Hex[] hexes = this.board.getVertexAt(vertexLocation).getAllHexes();
+				for (Hex hex: hexes)
+				{
+					if (hex instanceof ProductionHex)
+					{
+						ResourceType type = ResourceType.valueOf(((ProductionHex) hex).getHexType().toString());
+						this.bank.sendResource(type, 1);
+						this.getPlayerFromIndex(playerIndex).receiveResource(type, 1);
+					}
+				}
+			}
 		} catch (NoRemainingResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
