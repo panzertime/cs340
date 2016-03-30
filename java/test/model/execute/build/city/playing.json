@@ -562,10 +562,6 @@
   "log": {
     "lines": [
       {
-        "source": "Hannah",
-        "message": "Hannah's turn just ended"
-      },
-      {
         "source": "Squall",
         "message": "Squall rolled a 3."
       },
