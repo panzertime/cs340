@@ -366,13 +366,26 @@ public class Model {
 	 * @post turn is set to the Player who has the turn
 	 */
 	public void getNextTurn() {
-		if (this.activePlayerIndex == players.size() - 1)
+		if (!this.getStatus().equals("SecondRound"))
 		{
-			this.activePlayerIndex = 0;
+			if (this.activePlayerIndex == players.size() - 1)
+			{
+				this.activePlayerIndex = 0;
+			}
+			else
+			{
+				this.activePlayerIndex++;
+			}
 		}
-		else
-		{
-			this.activePlayerIndex++;
+		else {
+			if (this.activePlayerIndex == 0 )
+			{
+				this.activePlayerIndex = players.size() - 1;
+			}
+			else
+			{
+				this.activePlayerIndex--;
+			}
 		}
 	}
 
@@ -1370,6 +1383,15 @@ public class Model {
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
 		this.getNextTurn();
+		if (this.status.equals("FirstRound"))
+		{
+			if (activePlayerIndex == 0) this.status = "SecondRound";
+		}
+		else if (this.status.equals("SecondRound"))
+		{
+			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
+		}
+		else
 		this.status = "Rolling";
 	}
 	
