@@ -1,10 +1,10 @@
 package shared.model.board;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 
@@ -66,6 +66,7 @@ public class Board {
 				JSONObject hexLoc = new JSONObject();
 				hexLoc.put("x", x);
 				hexLoc.put("y", y);
+				System.out.println("(x:" + x + ", y:" + y + ")");
 				jsonHex.put("location", new JSONObject(hexLoc));
 				HexType type = tilesArray.remove();
 				if (type != HexType.DESERT)
@@ -108,6 +109,7 @@ public class Board {
 		jsonMap.put("robber", new JSONObject(robberLoc));
 		
 		try {
+			System.out.println("BEGINING of initializeMapFromJSON()");
 			initializeMapFromJSON(new JSONObject(jsonMap));
 		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
@@ -127,32 +129,34 @@ public class Board {
 		JSONObject[] ports = new JSONObject[9];
 		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
 		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
-		hexLoc.put("x", new Long(-2));
-		hexLoc.put("y", new Long(0));
-		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "NW");
-		ports[0] = new JSONObject(jsonHex);
-		
-		hexLoc.put("y", new Long(1));
-		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SW");
-		ports[1] = new JSONObject(jsonHex);
-		
-		hexLoc.put("x", new Long(-1));
-		hexLoc.put("y", new Long(-1));
-		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "N");
-		ports[2] = new JSONObject(jsonHex);
-		
-		hexLoc.put("y", new Long(2));
-		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SW");
-		ports[3] = new JSONObject(jsonHex);
-		
 		hexLoc.put("x", new Long(0));
-		hexLoc.put("y", new Long(2));
+		hexLoc.put("y", new Long(3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "S");
+		ports[0] = new JSONObject(jsonHex);
+
+		hexLoc.put("x", new Long(-2));
+		hexLoc.put("y", new Long(1));
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SE");
+		ports[1] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", new Long(-3));
+		hexLoc.put("y", new Long(-1));
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SE");
+		ports[2] = new JSONObject(jsonHex);
+
+		hexLoc.put("x", new Long(-3));
+		hexLoc.put("y", new Long(-3));
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "NE");
+		ports[3] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", new Long(-1));
+		hexLoc.put("y", new Long(-3));
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "N");
 		ports[4] = new JSONObject(jsonHex);
 		
 		hexLoc.put("x", new Long(1));
@@ -160,19 +164,21 @@ public class Board {
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "N");
 		ports[5] = new JSONObject(jsonHex);
-		
-		hexLoc.put("y", new Long(1));
+
+		hexLoc.put("x", new Long(3));
+		hexLoc.put("y", new Long(0));
 		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SE");
+		jsonHex.put("direction", "NW");
 		ports[6] = new JSONObject(jsonHex);
 		
-		hexLoc.put("x", new Long(2));
-		hexLoc.put("y", new Long(-2));
+		hexLoc.put("x", new Long(3));
+		hexLoc.put("y", new Long(2));
 		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "NE");
+		jsonHex.put("direction", "SW");
 		ports[7] = new JSONObject(jsonHex);
-		
-		hexLoc.put("y", new Long(-1));
+
+		hexLoc.put("x", new Long(2));
+		hexLoc.put("y", new Long(3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[8] = new JSONObject(jsonHex);
@@ -192,9 +198,9 @@ public class Board {
 				PortType.ORE, PortType.THREE, PortType.THREE, PortType.SHEEP};
 		if (randomPorts) shuffleArray(portTiles);
 
-		tilesArray = new PriorityQueue<HexType>();
-		productionNumbersArray = new PriorityQueue<Long>();
-		portTilesArray = new PriorityQueue<PortType>();
+		tilesArray = new ArrayDeque<HexType>();
+		productionNumbersArray = new ArrayDeque<Long>();
+		portTilesArray = new ArrayDeque<PortType>();
 		
 		for (HexType hex: tiles)
 			tilesArray.add(hex);
@@ -260,6 +266,8 @@ public class Board {
 		if (jsonRobber == null)
 			throw new BadJSONException();
 
+		System.out.println("Placing Hexes! ************");
+
 		// add land hexes to the map
 		for (Object hexObject : jsonHexes) {
 			JSONObject jsonHex = (JSONObject) hexObject;
@@ -301,21 +309,29 @@ public class Board {
 				throw new BadJSONException();
 		}
 		
+
+		System.out.println("Placing Ports! ************");
 		//add ports and water hexes to the map
+		Integer count = 0;
 		for (Object portObject : jsonPorts) {
+			System.out.println("port number is:" + count);
+			count++;
 			JSONObject jsonPort = (JSONObject) portObject;
 
 			JSONObject jsonHexLoc = (JSONObject) jsonPort.get("location");
 			if (jsonHexLoc == null)
 				throw new BadJSONException();
+			System.out.println("##### there was a hexLocation");
 			HexLocation hexLoc = new HexLocation(jsonHexLoc);
 
 			String direction = (String) jsonPort.get("direction");
 			EdgeDirection edgeDir = EdgeDirection.fromJSON(direction);
+			System.out.println("##### there was a EdgeDirection");
 
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
+				System.out.println("##### there was a resource");
 				resource = resource.toLowerCase();
 				switch (resource) {
 				case "wood":
@@ -337,10 +353,13 @@ public class Board {
 					throw new BadJSONException();
 				}
 			} else {
+
+				System.out.println("##### there was not a resource");
 				this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.THREE, edgeDir));
 			}
 
 			EdgeDirection sideHexDir = edgeDir.toRight();
+			System.out.println("##### beginging search for land from port");
 			while (this.hexes.get(hexLoc.getNeighborLoc(sideHexDir)) != null)
 				sideHexDir = sideHexDir.toRight();
 			HexLocation sideHexLoc = hexLoc.getNeighborLoc(sideHexDir);
@@ -351,9 +370,12 @@ public class Board {
 		// Recursively link the hexes with edges and vertices
 		Hex centerHex = this.hexes.get(new HexLocation(0, 0));
 
+
+		System.out.println("Recursive Connections! ************");
 		connectHexEdge(centerHex);
 		connectHexVertex(centerHex);
 
+		System.out.println("Placing Roads! ************");
 		// place roads
 		for (Object roadObject : jsonRoads) {
 			JSONObject jsonRoad = (JSONObject) roadObject;
@@ -384,6 +406,7 @@ public class Board {
 			buildRoad(road, edgeLoc);
 		}
 
+		System.out.println("Placing Cities! ************");
 		// place cities
 		for (Object cityObject : jsonCities) {
 			JSONObject jsonCity = (JSONObject) cityObject;
@@ -413,7 +436,7 @@ public class Board {
 
 			buildCity(city, vertexLoc);
 		}
-
+		System.out.println("Placing Settlements! ************");
 		// place settlements
 		for (Object settlementObject : jsonSettlements) {
 			JSONObject jsonSettlement = (JSONObject) settlementObject;
@@ -447,6 +470,7 @@ public class Board {
 		if (radius != null)
 			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
+		System.out.println("finished initializeMapFromJSON()");
 
 	}
 
