@@ -1,12 +1,12 @@
 package server.command.games;
 
+import java.util.logging.Logger;
+
 import org.json.simple.JSONObject;
 
 import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import shared.model.Model;
-
-import java.util.logging.*;
 
 
 public class create extends GamesCommand {
@@ -40,8 +40,8 @@ public class create extends GamesCommand {
 				throw new ServerAccessException("Invalid Cookie");
 			}
 		} catch (Exception e) {
-			logger.log(Level.INFO, "Problem in create game: " + e.getMessage());
-			e.printStackTrace();
+			//logger.log(Level.INFO, "Problem in create game: " + e.getMessage());
+			//e.printStackTrace();
 			throw new ServerAccessException(e.getMessage());
 		}
 		return result;

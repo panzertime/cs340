@@ -1,6 +1,6 @@
-package server.command.moves.buildroad;
+package server.command.moves.build.road;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -11,11 +11,9 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import server.command.moves.buildCity;
 import server.command.moves.buildRoad;
 import server.data.ServerKernel;
 import server.data.User;
@@ -29,7 +27,7 @@ public class buildRoadTest {
 		Model model = null;
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/test/server/command/moves/"
-				+ "buildroad/road.txt");
+				+ "build/road/road.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);

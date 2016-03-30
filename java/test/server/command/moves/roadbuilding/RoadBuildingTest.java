@@ -22,7 +22,7 @@ import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
 
-public class Road_BuildingTest {
+public class RoadBuildingTest {
 
 	private static Model modelFromFile() {
 		Model model = null;

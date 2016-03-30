@@ -1,4 +1,4 @@
-package server.command.moves.monopoly;
+package server.command.moves.yearofplenty;
 
 import static org.junit.Assert.*;
 
@@ -15,20 +15,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import server.command.moves.Monopoly;
-import server.command.moves.discardCards;
+import server.command.moves.Year_of_Plenty;
 import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
 
-public class MonopoloyTest {
-	
+public class YearOfPlentyTest {
+
 	private static Model modelFromFile() {
 		Model model = null;
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/test/server/command/moves/"
-				+ "monopoly/monopoly.txt");
+				+ "yearofplenty/yearofplenty.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -78,18 +78,19 @@ public class MonopoloyTest {
 	@Test
 	public void testExecute() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Monopoly");
+		args.put("type", "Year_of_Plenty");
 		args.put("playerIndex", (long) 0);
-		args.put("resource", "wheat");
+		args.put("resource1", "wheat");
+		args.put("resource2", "sheep");
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
-		Monopoly m = new Monopoly();
+		Year_of_Plenty yop = new Year_of_Plenty();
 		try {
-			m.execute(args, cookie);
-			System.out.println("Passed Monopoly test where everything "
+			yop.execute(args, cookie);
+			System.out.println("Passed Year_of_Plenty test where everything "
 					+ "is valid");
 		} catch (ServerAccessException e) {
-			fail("Failed Monopoly test where everything is valid");
+			fail("Failed Year_of_Plenty test where everything is valid");
 		}
 	}
 	
@@ -97,18 +98,19 @@ public class MonopoloyTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Monopoly");
+		args.put("type", "Year_of_Plenty");
 		args.put("playerIndex", (long) 0);
-		args.put("resource", "wheat");
+		args.put("resource1", "wheat");
+		args.put("resource2", "sheep");
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
-		Monopoly m = new Monopoly();
+		Year_of_Plenty yop = new Year_of_Plenty();
 		try {
-			m.execute(args, cookie);
-			fail("Failed Monopoly test where - "
+			yop.execute(args, cookie);
+			fail("Failed Year_of_Plenty test where - "
 					+ "is invalid: ");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Monopoly test where - "
+			System.out.println("Passed Year_of_Plenty test where - "
 					+ "is invalid: ");
 		}
 	}

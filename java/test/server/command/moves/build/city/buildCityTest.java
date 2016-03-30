@@ -1,6 +1,6 @@
-package server.command.moves.buildsettlement;
+package server.command.moves.build.city;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -11,25 +11,23 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import server.command.moves.buildCity;
-import server.command.moves.buildSettlement;
 import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
 
-public class buildSettlementTest {
+public class buildCityTest {
 
 	private static Model modelFromFile() {
 		Model model = null;
 		JSONParser parser = new JSONParser();
 		File jsonFile = new File("java/test/server/command/moves/"
-				+ "buildsettlement/settlement.txt");
+				+ "build/city/city.txt");
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(jsonFile);
@@ -79,23 +77,22 @@ public class buildSettlementTest {
 	@Test
 	public void testExecute() {
 		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
+		args.put("type", "buildCity");
 		args.put("playerIndex", (long) 0);
-		args.put("free", false);
 		JSONObject vertLoc = new JSONObject();
 		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
+		vertLoc.put("y", (long) 1);
 		vertLoc.put("direction", "SE");
 		args.put("vertexLocation", vertLoc);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
-		buildSettlement bs = new buildSettlement();
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			System.out.println("Passed buildSettlement test where everything "
+			bt.execute(args, cookie);
+			System.out.println("Passed buildCity test where everything "
 					+ "is valid");
 		} catch (ServerAccessException e) {
-			fail("Failed buildSettlement test where everything is valid");
+			fail("Failed acceptTurn test where everything is valid");
 		}
 	}
 	
@@ -103,23 +100,69 @@ public class buildSettlementTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
+		args.put("type", "buildCity");
 		args.put("playerIndex", (long) 0);
-		args.put("free", false);
 		JSONObject vertLoc = new JSONObject();
-		vertLoc.put("y", (long) 2);
+		vertLoc.put("y", (long) 1);
 		vertLoc.put("direction", "SE");
 		args.put("vertexLocation", vertLoc);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where vertexLocation arg "
-					+ "is invalid: no x");
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": no x");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "vertexLocation arg is invalid: no x");
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: no x");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": no y");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: no y");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildCity");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", "0");
+		vertLoc.put("y", "1");
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": x and y of type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: x and y of type String");
 		}
 	}
 	
@@ -127,147 +170,115 @@ public class buildSettlementTest {
 	@Test
 	public void testExecute2() {
 		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
+		args.put("type", "buildCity");
 		args.put("playerIndex", (long) 0);
-		args.put("free", false);
 		JSONObject vertLoc = new JSONObject();
 		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
+		vertLoc.put("y", (long) 1);
 		vertLoc.put("diretection", "");
 		args.put("vertexLocation", vertLoc);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where vertexLocation arg "
-					+ "is invalid: empty direction");
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": empty direction");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "vertexLocation arg is invalid: empty direction");
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: empty direction");
 		}
 	}
 	
-	//Invalid - y	
+	//Invalid	
 	@Test
 	public void testExecute3() {
 		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
+		args.put("type", "buildCity");
 		args.put("playerIndex", (long) 0);
-		args.put("free", false);
-		JSONObject vertLoc = new JSONObject();
-		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", "2");
-		vertLoc.put("direction", "SE");
-		args.put("vertexLocation", vertLoc);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where vertexLocation arg "
-					+ "is invalid: y is a string");
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where vertexLocation arg is invalid"
+					+ ": no vertex location");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "vertexLocation arg is invalid: y is a String");
+			System.out.println("Passed buildCity test where vertexLocation "
+					+ "arg is invalid: no vertex location");
 		}
 	}
 	
-	//Invalid	- free
-	@Test
-	public void testExecute4() {
-		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
-		args.put("playerIndex", (long) 0);
-		args.put("free", "false");
-		JSONObject vertLoc = new JSONObject();
-		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
-		vertLoc.put("direction", "SE");
-		args.put("vertexLocation", vertLoc);
-		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
-		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where free arg "
-					+ "is invalid: type String");
-		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "free arg is invalid: type String");
-		}
-	}
-	
-	//Invalid	- playerIndex
-	@Test
-	public void testExecute5() {
-		JSONObject args = new JSONObject();
-		args.put("type", "buildSettlement");
-		args.put("free", false);
-		JSONObject vertLoc = new JSONObject();
-		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
-		vertLoc.put("direction", "SE");
-		args.put("vertexLocation", vertLoc);
-		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
-		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where playerIndex arg "
-					+ "is invalid: dne");
-		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "playerIndex arg is invalid: dne");
-		}
-	}
-	
-	//Invalid	type
+	//Invalid	
 	@Test
 	public void testExecute6() {
 		JSONObject args = new JSONObject();
 		args.put("type", "buildCity");
-		args.put("playerIndex", (long) 0);
-		args.put("free", false);
+		args.put("playerIndex", (long) 1);
 		JSONObject vertLoc = new JSONObject();
 		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
+		vertLoc.put("y", (long) 1);
 		vertLoc.put("direction", "SE");
 		args.put("vertexLocation", vertLoc);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
-		buildSettlement bs = new buildSettlement();
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where type arg "
-					+ "is invalid: buildCity");
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where playerIndex arg is invalid"
+					+ ": wrong number");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "type arg is invalid: buildCity");
+			System.out.println("Passed buildCity test where playerIndex "
+					+ "arg is invalid: wrong number");
 		}
 	}
 	
-	//Invalid cookie	
+	//Invalid	
 	@Test
 	public void testExecute7() {
 		JSONObject args = new JSONObject();
 		args.put("type", "buildSettlement");
 		args.put("playerIndex", (long) 0);
-		args.put("free", false);
 		JSONObject vertLoc = new JSONObject();
 		vertLoc.put("x", (long) 0);
-		vertLoc.put("y", (long) 2);
+		vertLoc.put("y", (long) 1);
 		vertLoc.put("direction", "SE");
 		args.put("vertexLocation", vertLoc);
-		String cookie = "catan.game=1";
-		buildSettlement bs = new buildSettlement();
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		buildCity bt = new buildCity();
 		try {
-			bs.execute(args, cookie);
-			fail("Failed buildSettlement test where cookie "
-					+ "is invalid: no user");
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where moveType arg is invalid:"
+					+ " buildSettlement");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed buildSettlement test where "
-					+ "cookie is invalid: no user");
+			System.out.println("Passed buildCity test where moveType "
+					+ "arg is invalid: buildSettlement");
 		}
 	}
+	
+	//Invalid	
+	@Test
+	public void testExecute8() {
+		JSONObject args = new JSONObject();
+		args.put("type", "buildSettlement");
+		args.put("playerIndex", (long) 0);
+		JSONObject vertLoc = new JSONObject();
+		vertLoc.put("x", (long) 0);
+		vertLoc.put("y", (long) 1);
+		vertLoc.put("direction", "SE");
+		args.put("vertexLocation", vertLoc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":1}; catan.game=1";
+		buildCity bt = new buildCity();
+		try {
+			bt.execute(args, cookie);
+			fail("Failed buildCity test where cookie is invalid:"
+					+ " no game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed buildCity test where cookie "
+					+ "is invalid: no game");
+		}
+	}
+
 }

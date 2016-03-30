@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Stack;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,25 +50,168 @@ public class Board {
 	
 	public Board(boolean randomTiles, boolean randomNumbers, boolean randomPorts, Model game) {
 		this.game = game;
-		this.robber = new Robber();
-		this.hexes = new HashMap<HexLocation, Hex>();
+		
+		this.createArrays(randomTiles, randomNumbers, randomPorts);
+		
+		JSONArray hexes = new JSONArray();
+		int lower = 0;
+		int higher = 2;
+		for (int x = -2; x <=2; x++)
+		{
+			for (int y = lower; y <= higher; y++)
+			{
+				HashMap<String, Object> jsonHex = new HashMap<String, Object>();
+				HashMap<String, Object> hexLoc = new HashMap<String, Object>();
+				hexLoc.put("x", x);
+				hexLoc.put("y", y);
+				jsonHex.put("location", new JSONObject(hexLoc));
+				HexType type = tilesArray.remove();
+				if (type != HexType.DESERT)
+				{
+					jsonHex.put("resource", type.toString().toLowerCase());
+					jsonHex.put("number", productionNumbersArray.remove());
+				}
+				hexes.add(new JSONObject(jsonHex));
 
-		//idea - tiles, numbers, ports in arrayList. If random, shuffle the list
+			}
+			if (lower == -2) higher--;
+			else lower--;
+		}
+		JSONArray ports = new JSONArray();
+		for (JSONObject jsonObject: createPorts())
+		{
+			PortType type = portTilesArray.remove();
+			int ratio = 3;
+			if (type != PortType.THREE)
+			{
+				ratio = 2;
+				jsonObject.put("resource", type.toString().toLowerCase());
+			}
+			jsonObject.put("ratio", ratio);
+			ports.add(jsonObject);
+		}
+
+
+		HashMap<String, Object> jsonMap = new HashMap<String, Object>();
 			
-	}
-	
-	ArrayList<HexType> tiles;
-	ArrayList<Integer> productionNumbers;
-	ArrayList<PortType> portTiles;
-	
-	public void createLandHex(HexLocation location)
-	{
-		//pops from HexType arrayList
-		//switch - builds hex by popping from prod number arrayList
+		jsonMap.put("hexes", hexes);
+		jsonMap.put("ports", ports);
+		
+		jsonMap.put("roads", new JSONArray());
+		jsonMap.put("settlements", new JSONArray());
+		jsonMap.put("cities", new JSONArray());
+		jsonMap.put("radius", 2);
+		HashMap<String, Object> robberLoc = new HashMap<String, Object>();
+		robberLoc.put("x", 0);
+		robberLoc.put("y", -2);
+		jsonMap.put("robber", new JSONObject(robberLoc));
+		
+		try {
+			initializeMapFromJSON(new JSONObject(jsonMap));
+		} catch (BadJSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(); //SHOUlDN'T EVER HAPPEN BECAUSE JSON IS BUILT HERE
+		}
 		
 	}
 	
+	
+	Queue<HexType> tilesArray;
+	Queue<Integer> productionNumbersArray;
+	Queue<PortType> portTilesArray;
+	
+	//(-2,0) NW (-2,1) SW  (-1,-1) N (-1,2) SW (0,2) S (1,-2) N (1,1) SE (2,-2) NE (2,-1) SE  
+	private JSONObject[] createPorts() 
+	{
+		JSONObject[] ports = new JSONObject[9];
+		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
+		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
+		hexLoc.put("x", -2);
+		hexLoc.put("y", 0);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "NW");
+		ports[0] = new JSONObject(jsonHex);
+		
+		hexLoc.put("y", 1);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SW");
+		ports[1] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", -1);
+		hexLoc.put("y", -1);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "N");
+		ports[2] = new JSONObject(jsonHex);
+		
+		hexLoc.put("y", 2);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SW");
+		ports[3] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", 0);
+		hexLoc.put("y", 2);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "S");
+		ports[4] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", 1);
+		hexLoc.put("y", -2);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "N");
+		ports[5] = new JSONObject(jsonHex);
+		
+		hexLoc.put("y", 1);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SE");
+		ports[6] = new JSONObject(jsonHex);
+		
+		hexLoc.put("x", 2);
+		hexLoc.put("y", -2);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "NE");
+		ports[7] = new JSONObject(jsonHex);
+		
+		hexLoc.put("y", -1);
+		jsonHex.put("location", new JSONObject(hexLoc));
+		jsonHex.put("direction", "SE");
+		ports[8] = new JSONObject(jsonHex);
+		
+		return ports;
+	}
+	
+	private void createArrays(boolean randomTiles, boolean randomNumbers, boolean randomPorts)
+	{
+		HexType[] tiles = {HexType.ORE,HexType.WHEAT, HexType.WOOD, HexType.BRICK, HexType.SHEEP,HexType.SHEEP,
+				HexType.ORE, HexType.DESERT, HexType.WOOD, HexType.WHEAT, HexType.WOOD, HexType.WHEAT, HexType.BRICK,
+				HexType.ORE, HexType.BRICK, HexType.SHEEP, HexType.WOOD, HexType.SHEEP, HexType.WHEAT};
+		if (randomTiles) shuffleArray(tiles);
+		Integer[] productionNumbers = {5, 2, 6, 8, 10, 9, 3, 3, 11, 4, 8, 4, 6, 5, 10, 11, 12, 9};
+		if (randomNumbers) shuffleArray(productionNumbers);
+		PortType[] portTiles = {PortType.THREE, PortType.WOOD, PortType.THREE, PortType.BRICK, PortType.WHEAT, 
+				PortType.ORE, PortType.THREE, PortType.THREE, PortType.SHEEP};
+		if (randomPorts) shuffleArray(portTiles);
+		for (HexType hex: tiles)
+			tilesArray.add(hex);
+		for (Integer i: productionNumbers)
+			productionNumbersArray.add(i);
+		for (PortType port: portTiles)
+			portTilesArray.add(port);
+	}
+	
+	private static void shuffleArray(Object[] ar)
+	  {
 
+	    Random rnd = new Random();
+	    for (int i = ar.length - 1; i > 0; i--)
+	    {
+	      int index = rnd.nextInt(i + 1);
+	      // Simple swap
+	      Object a = ar[index];
+	      ar[index] = ar[i];
+	      ar[i] = a;
+	    }
+	  }
+	
 	/**
 	 * @param jsonMap new version of the map as passed by the model
 	 * @param game reference to the model
@@ -73,7 +219,11 @@ public class Board {
 	 */
 	public Board(JSONObject jsonMap, Model game) throws BadJSONException {
 		this.game = game;
+		initializeMapFromJSON(jsonMap);
+	}
 
+	
+	public void initializeMapFromJSON(JSONObject jsonMap) throws BadJSONException {
 		hexes = new HashMap<HexLocation, Hex>();
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
@@ -290,8 +440,8 @@ public class Board {
 		if (radius != null)
 			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
-	}
 
+	}
 
 	public JSONObject toJSON() {
 
