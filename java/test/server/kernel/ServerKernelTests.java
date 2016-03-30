@@ -1,4 +1,4 @@
-package server.serverkernel;
+package server.kernel;
 
 import static org.junit.Assert.fail;
 
