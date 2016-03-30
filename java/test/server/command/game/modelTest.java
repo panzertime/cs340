@@ -13,6 +13,8 @@ import shared.model.Model;
 import shared.model.definitions.CatanColor;
 
 public class modelTest {
+	
+	static User user1 = new User("Sam", "sam");
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -24,7 +26,7 @@ public class modelTest {
 		ServerKernel.sole().putGame(game1);
 		ServerKernel.sole().putGame(game2);
 		
-		User user1 = new User("Sam", "sam");
+		
 		ServerKernel.sole().addUser(user1);
 		User user2 = new User("Brooke", "brooke");
 		ServerKernel.sole().addUser(user2);
@@ -124,6 +126,7 @@ public class modelTest {
 						+ "is valid: returns \"true\" - Joshua");
 			}
 		} catch (ServerAccessException e) {
+			System.out.println("HERE!" + e.getMessage());
 			fail("Failed model test where everything "
 						+ "is valid: returns \"true\" - Joshua");
 		}

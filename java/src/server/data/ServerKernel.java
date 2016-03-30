@@ -219,9 +219,8 @@ public class ServerKernel {
 	 * @post will reset all fields to zero
 	 */
 	public void reinitAll() {
-		this.games = new HashMap<Integer, Model>();
-		this.users = new HashMap<String, User>();
-		this.numOfGames = 0;
+		reinitGames();
+		reinitUsers();
 	}
 	
 	/**
@@ -241,5 +240,6 @@ public class ServerKernel {
 	 */
 	public void reinitUsers() {
 		this.users = new HashMap<String, User>();
+		User.resetIDs();
 	}
 }

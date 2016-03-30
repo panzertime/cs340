@@ -167,7 +167,7 @@ public class User {
 	 * @pre none
 	 * @post ids to be assigned will be reset to 0
 	 */
-	public void resetIDs() {
-		this.id = 0;
+	static public void resetIDs() {
+		idToBeAssigned = 0;
 	}
 }
