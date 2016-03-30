@@ -97,7 +97,7 @@ public class MonopolyTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Monopoly");
+		args.put("type", "Monopoloy");
 		args.put("playerIndex", (long) 0);
 		args.put("resource", "wheat");
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
@@ -105,11 +105,91 @@ public class MonopolyTest {
 		Monopoly m = new Monopoly();
 		try {
 			m.execute(args, cookie);
-			fail("Failed Monopoly test where - "
-					+ "is invalid: ");
+			fail("Failed Monopoly test where type "
+					+ "is invalid: Monopoloy");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Monopoly test where - "
-					+ "is invalid: ");
+			System.out.println("Passed Monopoly test where type "
+					+ "is invalid: Monopoloy");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monopoly");
+		args.put("playerIndex", null);
+		args.put("resource", "wheat");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Monopoly m = new Monopoly();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monopoly test where playerIndex "
+					+ "is invalid: null");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monopoly test where playerIndex "
+					+ "is invalid: null");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monopoly");
+		args.put("playerIndex", (long) 0);
+		args.put("resource", new JSONObject());
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Monopoly m = new Monopoly();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monopoly test where resource "
+					+ "is invalid: {}");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monopoly test where resource "
+					+ "is invalid: {}");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monopoly");
+		args.put("playerIndex", (long) 0);
+		args.put("resource", "wheat");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0};";
+		Monopoly m = new Monopoly();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monopoly test where cookie "
+					+ "is invalid: no game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monopoly test where cookie "
+					+ "is invalid: no game");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monopoly");
+		args.put("playerIndex", (long) 0);
+		args.put("resource", "wheat");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=54";
+		Monopoly m = new Monopoly();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monopoly test where cookie "
+					+ "is invalid: game dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monopoly test where cookie "
+					+ "is invalid: game dne");
 		}
 	}
 
