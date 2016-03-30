@@ -2,6 +2,7 @@ package shared.model.board;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -54,8 +55,8 @@ public class Board {
 		this.createArrays(randomTiles, randomNumbers, randomPorts);
 		Integer count = 0;
 		JSONArray hexes = new JSONArray();
-		Long upperLimit = new Long(0);
-		Long lowerLimit = new Long(-2);
+		Long upperLimit = new Long(2);
+		Long lowerLimit = new Long(0);
 		for (Long x = new Long(-2); x <=2; x++)
 		{
 			for (Long y = lowerLimit; y <= upperLimit; y++)
@@ -192,9 +193,9 @@ public class Board {
 				PortType.ORE, PortType.THREE, PortType.THREE, PortType.SHEEP};
 		if (randomPorts) shuffleArray(portTiles);
 
-		tilesArray = new PriorityQueue<HexType>();
-		productionNumbersArray = new PriorityQueue<Long>();
-		portTilesArray = new PriorityQueue<PortType>();
+		tilesArray = new LinkedList<HexType>();
+		productionNumbersArray = new LinkedList<Long>();
+		portTilesArray = new LinkedList<PortType>();
 		
 		for (HexType hex: tiles)
 			tilesArray.add(hex);
