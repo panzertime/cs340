@@ -106,7 +106,6 @@ public class RoadBuildingTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Road_Building");
 		args.put("playerIndex", (long) 0);
 		JSONObject spot1 = new JSONObject();
 		spot1.put("x", (long) 0);
@@ -123,11 +122,268 @@ public class RoadBuildingTest {
 		Road_Building r_b = new Road_Building();
 		try {
 			r_b.execute(args, cookie);
-			fail("Failed Road_Building test where - "
-					+ "is invalid: ");
+			fail("Failed Road_Building test where type "
+					+ "is invalid: dne");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Road_Building test where - "
-					+ "is invalid: ");
+			System.out.println("Passed Road_Building test where type "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("payerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where playerIndex "
+					+ "is invalid: p(l)ayerIndex");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where playerIndex "
+					+ "is invalid: p(l)ayerIndex");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where spot1 "
+					+ "is invalid: spot(1)");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where spot1 "
+					+ "is invalid: spot(1)");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where spot2 "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where spot2 "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where x1 "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where x1 "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", "2");
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where y2 "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where y2 "
+					+ "is invalid: type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NESW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where dir1 "
+					+ "is invalid: NESW");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where dir1 "
+					+ "is invalid: NESW");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute8() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where dir2 "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where dir2 "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute9() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("stop1", spot1);
+		args.put("stop2", spot2);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where spots "
+					+ "is invalid: spelled stop");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where spots "
+					+ "is invalid: spelled stop");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute10() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Road_Building");
+		args.put("playerIndex", (long) 0);
+		JSONObject spot1 = new JSONObject();
+		spot1.put("x", (long) 0);
+		spot1.put("y", (long) 2);
+		spot1.put("direction", "NW");
+		JSONObject spot2 = new JSONObject();
+		spot2.put("x", (long) 0);
+		spot2.put("y", (long) 2);
+		spot2.put("direction", "SW");
+		args.put("spot1", spot1);
+		args.put("spot2", spot2);
+		String cookie = "";
+		Road_Building r_b = new Road_Building();
+		try {
+			r_b.execute(args, cookie);
+			fail("Failed Road_Building test where cookie "
+					+ "is invalid: empty");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Road_Building test where cookie "
+					+ "is invalid: empty");
 		}
 	}
 
