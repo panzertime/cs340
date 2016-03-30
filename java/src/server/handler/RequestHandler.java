@@ -84,6 +84,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
+			Headers oheaders = exchange.getResponseHeaders();
+			oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
 			exchange.sendResponseHeaders(400, e.getMessage().length());
 			packBody(exchange.getResponseBody(), e.getMessage());			
 			exchange.close();
@@ -119,6 +121,15 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
+			String version = new String();
+			version = exchange.getRequestURI().getQuery();
+			if (version == null) {
+				version = "";
+			}
+			if (!version.equals("")) {
+				server.command.game.model mCommand = (server.command.game.model) command;
+				mCommand.setVersion(Integer.parseInt(version));
+			}
 			reply = command.execute(null, cookie);
 
 			// we expect this to sometimes just return "true", which is not JSON
@@ -193,10 +204,6 @@ public class RequestHandler extends AbstractHttpHandler {
 			server.command.games.join gCommand = (server.command.games.join) command;
 			reply = command.execute(json, cookie);
 			gameCookie = gCommand.getCookie().toCookie();
-			// game cookie looks like:
-			//	Set­cookie: catan.game=NN;Path=/;
-			// is appended to end of other cookie, plaintext
-		//	newCookie = gcookie; // the original cookie we pulled from req
 			newCookie = "";
 			
 		}
