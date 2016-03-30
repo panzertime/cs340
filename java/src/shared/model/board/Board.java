@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,11 +54,11 @@ public class Board {
 		this.createArrays(randomTiles, randomNumbers, randomPorts);
 		
 		JSONArray hexes = new JSONArray();
-		int lower = 0;
-		int higher = 2;
-		for (int x = -2; x <=2; x++)
+		Long lower = new Long(0);
+		Long higher = new Long(2);
+		for (Long x = new Long(-2); x <=2; x++)
 		{
-			for (int y = lower; y <= higher; y++)
+			for (Long y = lower; y <= higher; y++)
 			{
 				HashMap<String, Object> jsonHex = new HashMap<String, Object>();
 				HashMap<String, Object> hexLoc = new HashMap<String, Object>();
@@ -100,10 +100,10 @@ public class Board {
 		jsonMap.put("roads", new JSONArray());
 		jsonMap.put("settlements", new JSONArray());
 		jsonMap.put("cities", new JSONArray());
-		jsonMap.put("radius", 2);
+		jsonMap.put("radius", new Long(2));
 		HashMap<String, Object> robberLoc = new HashMap<String, Object>();
-		robberLoc.put("x", 0);
-		robberLoc.put("y", -2);
+		robberLoc.put("x", new Long(0));
+		robberLoc.put("y", new Long(-2));
 		jsonMap.put("robber", new JSONObject(robberLoc));
 		
 		try {
@@ -117,7 +117,7 @@ public class Board {
 	
 	
 	Queue<HexType> tilesArray;
-	Queue<Integer> productionNumbersArray;
+	Queue<Long> productionNumbersArray;
 	Queue<PortType> portTilesArray;
 	
 	//(-2,0) NW (-2,1) SW  (-1,-1) N (-1,2) SW (0,2) S (1,-2) N (1,1) SE (2,-2) NE (2,-1) SE  
@@ -126,52 +126,52 @@ public class Board {
 		JSONObject[] ports = new JSONObject[9];
 		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
 		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
-		hexLoc.put("x", -2);
-		hexLoc.put("y", 0);
+		hexLoc.put("x", new Long(-2));
+		hexLoc.put("y", new Long(0));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "NW");
 		ports[0] = new JSONObject(jsonHex);
 		
-		hexLoc.put("y", 1);
+		hexLoc.put("y", new Long(1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SW");
 		ports[1] = new JSONObject(jsonHex);
 		
-		hexLoc.put("x", -1);
-		hexLoc.put("y", -1);
+		hexLoc.put("x", new Long(-1));
+		hexLoc.put("y", new Long(-1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "N");
 		ports[2] = new JSONObject(jsonHex);
 		
-		hexLoc.put("y", 2);
+		hexLoc.put("y", new Long(2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SW");
 		ports[3] = new JSONObject(jsonHex);
 		
-		hexLoc.put("x", 0);
-		hexLoc.put("y", 2);
+		hexLoc.put("x", new Long(0));
+		hexLoc.put("y", new Long(2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "S");
 		ports[4] = new JSONObject(jsonHex);
 		
-		hexLoc.put("x", 1);
-		hexLoc.put("y", -2);
+		hexLoc.put("x", new Long(1));
+		hexLoc.put("y", new Long(-2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "N");
 		ports[5] = new JSONObject(jsonHex);
 		
-		hexLoc.put("y", 1);
+		hexLoc.put("y", new Long(1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[6] = new JSONObject(jsonHex);
 		
-		hexLoc.put("x", 2);
-		hexLoc.put("y", -2);
+		hexLoc.put("x", new Long(2));
+		hexLoc.put("y", new Long(-2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "NE");
 		ports[7] = new JSONObject(jsonHex);
 		
-		hexLoc.put("y", -1);
+		hexLoc.put("y", new Long(-1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[8] = new JSONObject(jsonHex);
@@ -190,10 +190,15 @@ public class Board {
 		PortType[] portTiles = {PortType.THREE, PortType.WOOD, PortType.THREE, PortType.BRICK, PortType.WHEAT, 
 				PortType.ORE, PortType.THREE, PortType.THREE, PortType.SHEEP};
 		if (randomPorts) shuffleArray(portTiles);
+
+		tilesArray = new PriorityQueue<HexType>();
+		productionNumbersArray = new PriorityQueue<Long>();
+		portTilesArray = new PriorityQueue<PortType>();
+		
 		for (HexType hex: tiles)
 			tilesArray.add(hex);
 		for (Integer i: productionNumbers)
-			productionNumbersArray.add(i);
+			productionNumbersArray.add(new Long(i));
 		for (PortType port: portTiles)
 			portTilesArray.add(port);
 	}
@@ -525,7 +530,7 @@ public class Board {
 		jsonMap.put("roads", roads);
 		jsonMap.put("settlements", settlements);
 		jsonMap.put("cities", cities);
-		jsonMap.put("radius", this.radius);
+		jsonMap.put("radius", new Long(this.radius));
 		JSONObject robberLoc = new JSONObject();
 		robberLoc.put("x", this.getRobberLocation().getX());
 		robberLoc.put("y", this.getRobberLocation().getY());

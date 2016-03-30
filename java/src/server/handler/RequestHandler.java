@@ -21,9 +21,11 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 import server.command.ICommand;
+import server.command.game.model;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import server.utils.CookieException;
+import shared.logger.Log;
 
 
 public class RequestHandler extends AbstractHttpHandler {
@@ -106,6 +108,17 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
+			if(!headers.get("version").isEmpty()) {
+				Log.debug("version is availible through the headers");
+				Integer version = -1;
+				try {
+					version = Integer.parseInt(headers.get("version").get(0));
+				} catch (Exception e) {
+					
+				}
+				((model)command).setVersion(version);
+			} else 
+				Log.debug("version was unavailible");
 			reply = command.execute(null, cookie);
 
 			// we expect this to sometimes just return "true", which is not JSON

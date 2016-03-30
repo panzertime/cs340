@@ -1,5 +1,6 @@
 package server.command.games;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
@@ -40,8 +41,8 @@ public class create extends GamesCommand {
 				throw new ServerAccessException("Invalid Cookie");
 			}
 		} catch (Exception e) {
-			//logger.log(Level.INFO, "Problem in create game: " + e.getMessage());
-			//e.printStackTrace();
+			logger.log(Level.INFO, "Problem in create game: " + e.getMessage());
+			e.printStackTrace();
 			throw new ServerAccessException(e.getMessage());
 		}
 		return result;
