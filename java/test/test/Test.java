@@ -62,6 +62,12 @@ public class Test {
 				
 				// server tests
 				"server.command.games.createTest",
+				"server.command.games.joinTest",
+				"server.command.games.listTest",
+				
+				"server.command.game.addAITest",
+				"server.command.game.listAITest",
+				"server.command.game.modelTest",
 
 				"server.command.moves.build.city.buildCityTest",
 				"server.command.moves.build.road.buildRoadTest",
@@ -71,14 +77,26 @@ public class Test {
 				"server.command.moves.buydevcard.buyDevCardTest",
 				"server.command.moves.discard.discardCardsTest",
 				"server.command.moves.maritimetrade.maritimeTradeTest",
-				"server.command.moves.finishTrunTest",
+				"server.command.moves.monopoly.MonopolyTest",
+				"server.command.moves.monument.MonumentTest",
+				"server.command.moves.roadbuilding.RoadBuildingTest",
+				"server.command.moves.robplayer.robPlayerTest",
+				"server.command.moves.roll.rollNumberTest",
+				"server.command.moves.soldier.SoldierTest",
+				"server.command.moves.yearofplenty.YearOfPlentyTest",
+				"server.command.moves.offerTradeTest",
+				"server.command.moves.sendChatTest",
+				"server.command.moves.finishTurnTest",
+				
+				"server.command.user.loginTest",
+				"server.command.user.registerTest",
 				
 				
 				// model tests
 				"server.model.ToJSONTest",
 				
 				// server kernal tests
-				"server.kernal.ServerKernalTests",
+				"server.kernel.ServerKernelTests",
 				"server.utils.CatanCookieTest"
 				
 				

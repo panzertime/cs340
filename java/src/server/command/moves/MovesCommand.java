@@ -223,7 +223,7 @@ public abstract class MovesCommand implements ICommand {
 			throws ServerAccessException {
 		ResourceType result = null;
 		try {
-			result = ResourceType.valueOf((String) resString);
+			result = ResourceType.valueOf(((String) resString).toUpperCase());
 		} catch (Exception e) {
 			throw new ServerAccessException("Invalid Parameter: Resource");
 		}

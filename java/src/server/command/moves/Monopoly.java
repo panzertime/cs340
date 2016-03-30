@@ -7,7 +7,7 @@ import shared.model.Model;
 import shared.model.exceptions.ViolatedPreconditionException;
 import shared.model.hand.ResourceType;
 
-public class Monopoloy extends MovesCommand {
+public class Monopoly extends MovesCommand {
 
 	@Override
 	public String execute(JSONObject args, String cookie) 

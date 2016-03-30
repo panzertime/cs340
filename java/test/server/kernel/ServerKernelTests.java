@@ -342,10 +342,10 @@ public class ServerKernelTests {
 		JSONParser parser = new JSONParser();
 		File jsonFile;
 		if(b){
-			jsonFile = new File("java/test/server/serverkernel/"
+			jsonFile = new File("java/test/server/kernel/"
 					+ "gamesList2.txt");
 		} else {
-			jsonFile = new File("java/test/server/serverkernel/"
+			jsonFile = new File("java/test/server/kernel/"
 					+ "gamesList.txt");
 		}
 		FileInputStream fis;
