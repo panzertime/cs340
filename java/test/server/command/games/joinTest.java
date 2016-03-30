@@ -155,16 +155,16 @@ public class joinTest {
 		JSONObject args = new JSONObject();
 		args.put("id", (long) 1);
 		args.put("color", "PUCE");
-		String cookie = "catan.user={\"name\":\"Joshua\",\"password\":\"joshua\","
-				+ "\"playerID\":16};";
+		String cookie = "catan.user={\"name\":\"Jushua\",\"password\":\"joshua\","
+				+ "\"playerID\":4};";
 		join j = new join();
 		try {
 			j.execute(args, cookie);
 			fail("Failed join test where cookie "
-					+ "is invalid: ID wrong");
+					+ "is invalid: name mispelled");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed join test where cookie "
-					+ "is invalid: ID wrong");
+					+ "is invalid: name mispelled");
 		}
 	}
 

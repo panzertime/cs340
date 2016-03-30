@@ -96,8 +96,8 @@ public class Test {
 				"server.model.ToJSONTest",
 				
 				// server kernal tests
-				"server.kernel.ServerKernelTests",
-				"server.utils.CatanCookieTest",
+				//"server.kernel.ServerKernelTests",
+				//"server.utils.CatanCookieTest",
 				
 				//mock commands
 				"server.command.mock.game.addAITest"
