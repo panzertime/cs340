@@ -1332,7 +1332,7 @@ public class Model {
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException
 	{
-		if (!canOfferTrade(receiverIndex, resourceList, playerIndex))
+		if (!canOfferTrade(playerIndex, resourceList, receiverIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiverIndex) + " a trade", source);
