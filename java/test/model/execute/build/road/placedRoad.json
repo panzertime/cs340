@@ -531,6 +531,10 @@
     "lines": [
       {
         "source": "Miguel",
+        "message": "Miguel built a settlement"
+      },
+      {
+        "source": "Miguel",
         "message": "Miguel's turn just ended"
       },
       {

@@ -381,7 +381,7 @@ public class Model {
 		else {
 			if (this.activePlayerIndex == 0 )
 			{
-				this.activePlayerIndex = players.size() - 1;
+				//this.activePlayerIndex = players.size() - 1;
 			}
 			else
 			{
