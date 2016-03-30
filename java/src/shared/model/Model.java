@@ -766,7 +766,7 @@ public class Model {
 			return false;
 		if (!isStatePlaying())
 			return false;
-		if (getActivePlayer().getVictoryPointsOfMonuments() < 10)
+		if (getActivePlayer().getPoints() + getActivePlayer().getVictoryPointsOfMonuments() < 10)
 			return false;
 		return true;
 	}
