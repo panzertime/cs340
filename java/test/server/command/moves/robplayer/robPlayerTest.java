@@ -101,7 +101,7 @@ public class robPlayerTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "robPlayer");
+		args.put("type", "discard");
 		args.put("playerIndex", (long) 0);
 		args.put("victimIndex", (long) 1);
 		JSONObject loc = new JSONObject();
@@ -113,11 +113,178 @@ public class robPlayerTest {
 		robPlayer rp = new robPlayer();
 		try {
 			rp.execute(args, cookie);
-			fail("Failed robPlayer test where - "
-					+ "is invalid: ");
+			fail("Failed robPlayer test where type "
+					+ "is invalid: discard");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed robPlayer test where - "
-					+ "is invalid: ");
+			System.out.println("Passed robPlayer test where type "
+					+ "is invalid: discard");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("index", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where playerIndex "
+					+ "is invalid: (playerI)index");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where playerIndex "
+					+ "is invalid: (playerI)index");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) -1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where victimIndex "
+					+ "is invalid: out of bounds");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where victimIndex "
+					+ "is invalid: out of bounds");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where x "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where x "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", "-1");
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where y "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where y "
+					+ "is invalid: type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("loctaion", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where location "
+					+ "is invalid: loctaion");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where location "
+					+ "is invalid: loctaion");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Miguel\",\"password\":\"miguel\","
+				+ "\"playerID\":6}; catan.game=1";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where cookie "
+					+ "is invalid: user not in system");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where cookie "
+					+ "is invalid: user not in system");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute8() {
+		JSONObject args = new JSONObject();
+		args.put("type", "robPlayer");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=15";
+		robPlayer rp = new robPlayer();
+		try {
+			rp.execute(args, cookie);
+			fail("Failed robPlayer test where cookie "
+					+ "is invalid: invalid game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed robPlayer test where cookie "
+					+ "is invalid: invalid game");
 		}
 	}
 
