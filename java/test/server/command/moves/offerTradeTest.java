@@ -79,8 +79,8 @@ public class offerTradeTest {
 		args.put("playerIndex", (long) 0);
 		args.put("receiver", (long) 1);
 		JSONObject offer = new JSONObject();
-		offer.put("wheat", (long) -2);
-		offer.put("brick", (long) 2);
+		offer.put("wheat", (long) 2);
+		offer.put("brick", (long) -2);
 		offer.put("ore", (long) 0);
 		offer.put("sheep", (long) 0);
 		offer.put("wood", (long) 0);
@@ -105,8 +105,8 @@ public class offerTradeTest {
 		args.put("playerIndex", (long) 0);
 		args.put("receiver", (long) 1);
 		JSONObject offer = new JSONObject();
-		offer.put("wheat", (long) -2);
-		offer.put("brick", (long) 2);
+		offer.put("wheat", (long) 2);
+		offer.put("brick", (long) -2);
 		offer.put("ore", (long) 0);
 		offer.put("sheep", (long) 0);
 		offer.put("wood", (long) 0);

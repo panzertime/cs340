@@ -362,7 +362,10 @@ public class Model {
 	/**
 	 * @post turn is set to the Player who has the turn
 	 */
-	public void getNextTurn() {
+	public void getNextTurn(int playerIndex) {
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + "'s turn just ended", source);
+
 		if (!this.getStatus().equals("SecondRound"))
 		{
 			
@@ -378,7 +381,7 @@ public class Model {
 		else {
 			if (this.activePlayerIndex == 0 )
 			{
-				this.activePlayerIndex = players.size() - 1;
+				//this.activePlayerIndex = players.size() - 1;
 			}
 			else
 			{
@@ -763,7 +766,7 @@ public class Model {
 			return false;
 		if (!isStatePlaying())
 			return false;
-		if (getActivePlayer().getVictoryPointsOfMonuments() < 10)
+		if (getActivePlayer().getPoints() + getActivePlayer().getVictoryPointsOfMonuments() < 10)
 			return false;
 		return true;
 	}
@@ -1274,7 +1277,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) getNextTurn();
+		if (this.isStateSetup()) getNextTurn(playerIndex);
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1332,7 +1335,7 @@ public class Model {
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException
 	{
-		if (!canOfferTrade(receiverIndex, resourceList, playerIndex))
+		if (!canOfferTrade(playerIndex, resourceList, receiverIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiverIndex) + " a trade", source);
@@ -1387,11 +1390,9 @@ public class Model {
 	{	
 		if(!canFinishTurn(playerIndex))
 			throw new ViolatedPreconditionException();
-		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + "'s turn just ended", source);
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
-		this.getNextTurn();
+		this.getNextTurn(playerIndex);
 		
 		version++;
 	}
