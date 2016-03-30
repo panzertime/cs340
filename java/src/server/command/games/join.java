@@ -35,8 +35,10 @@ public class join extends GamesCommand {
 					throw new ServerAccessException("Invalid Game");
 				}
 			} catch (Exception e) {
-				throw new ServerAccessException("Invalid Cookie");
+				throw new ServerAccessException("Invalid ID");
 			}
+		} else {
+			throw new ServerAccessException("Invalid Cookie");
 		}
 		
 		return result;

@@ -582,7 +582,8 @@ public class Player {
 		int max = 0;
 		for (HashSet<Road> set: sets)
 		{
-			int i = this.findLongestPathInSet(set);
+			int i = set.size();
+			//int i = this.findLongestPathInSet(set);
 			if (i > max)
 				max = i;
 		}

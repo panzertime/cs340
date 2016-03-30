@@ -16,7 +16,7 @@ import org.junit.Test;
 import shared.model.Model;
 import shared.model.exceptions.BadJSONException;
 
-public class ToJSON {
+public class ToJSONTest {
 	
 	public JSONObject getJSONFromFile(String filename) {
 		JSONObject result = null;

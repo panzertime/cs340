@@ -120,7 +120,14 @@ public class Model {
 
 	public boolean isPlayerInGame(String username, Integer ID)
 	{
-		return (this.getIndexFromPlayerID(ID) != null); 
+		boolean result = false;
+		Integer playerIndex = this.getIndexFromPlayerID(ID);
+		if(playerIndex != null) {
+			String name = this.getPlayerName(playerIndex);
+			result = name.equals(username);
+		}
+		
+		return result;
 	}
 	
 	
@@ -215,9 +222,6 @@ public class Model {
 	public Boolean equalsJSON(JSONObject jsonMap) {
 		if (jsonMap == null)
 			return false;
-		System.out.println((JSONObject) jsonMap.get("bank"));
-		System.out.println((JSONObject) jsonMap.get("deck"));
-		System.out.println(bank.bankToJSON());
 		if (bank.equalsJSON((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck")) == false)
 			return false;
 		if (chatModel.equalsJSON((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log")) == false)
@@ -365,9 +369,13 @@ public class Model {
 	/**
 	 * @post turn is set to the Player who has the turn
 	 */
-	public void getNextTurn() {
+	public void getNextTurn(int playerIndex) {
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + "'s turn just ended", source);
+
 		if (!this.getStatus().equals("SecondRound"))
 		{
+			
 			if (this.activePlayerIndex == players.size() - 1)
 			{
 				this.activePlayerIndex = 0;
@@ -380,13 +388,23 @@ public class Model {
 		else {
 			if (this.activePlayerIndex == 0 )
 			{
-				this.activePlayerIndex = players.size() - 1;
+				//this.activePlayerIndex = players.size() - 1;
 			}
 			else
 			{
 				this.activePlayerIndex--;
 			}
 		}
+		if (this.status.equals("FirstRound"))
+		{
+			if (activePlayerIndex == 0) this.status = "SecondRound";
+		}
+		else if (this.status.equals("SecondRound"))
+		{
+			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
+		}
+		else
+			this.status = "Rolling";
 	}
 
 	public Player getPlayerFromIndex(Integer playerIndex) {
@@ -755,7 +773,7 @@ public class Model {
 			return false;
 		if (!isStatePlaying())
 			return false;
-		if (getActivePlayer().getVictoryPointsOfMonuments() < 10)
+		if (getActivePlayer().getPoints() + getActivePlayer().getVictoryPointsOfMonuments() < 10)
 			return false;
 		return true;
 	}
@@ -1017,20 +1035,20 @@ public class Model {
 	}
 
 	//client only
-	public int getFreeRoads(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeRoads(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getRoadsFree();
 	}
 
 	//client only
-	public int getFreeSettlements(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeSettlements(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getSettlementsFree();
 	}
 
 	//client only
-	public int getFreeCities(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeCities(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getCitiesFree();
 	}
 
@@ -1266,6 +1284,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		if (this.isStateSetup()) getNextTurn(playerIndex);
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1323,7 +1342,7 @@ public class Model {
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException
 	{
-		if (!canOfferTrade(receiverIndex, resourceList, playerIndex))
+		if (!canOfferTrade(playerIndex, resourceList, receiverIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " offered " + this.getPlayerName(receiverIndex) + " a trade", source);
@@ -1357,7 +1376,7 @@ public class Model {
 	{
 		if(!canPlaceRobber(playerIndex, robLocation))
 			throw new ViolatedPreconditionException();
-		if(!canRobPlayerFrom(robLocation, victimIndex, playerIndex))
+		if(!canRobPlayerFrom(robLocation, playerIndex, victimIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " moved the robber and robbed " + this.getPlayerName(victimIndex), source);
@@ -1378,21 +1397,11 @@ public class Model {
 	{	
 		if(!canFinishTurn(playerIndex))
 			throw new ViolatedPreconditionException();
-		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + "'s turn just ended", source);
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
-		this.getNextTurn();
-		if (this.status.equals("FirstRound"))
-		{
-			if (activePlayerIndex == 0) this.status = "SecondRound";
-		}
-		else if (this.status.equals("SecondRound"))
-		{
-			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
-		}
-		else
-		this.status = "Rolling";
+		this.getNextTurn(playerIndex);
+		
+		version++;
 	}
 	
 	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
@@ -1515,7 +1524,7 @@ public class Model {
 		}
 		Player p = this.getPlayerFromIndex(playerIndex);
 		try {
-			p.returnDevCard(p.findDevCard(DevCardType.KNIGHT));
+			p.returnDevCard(p.findDevCard(DevCardType.MONOPOLY));
 		} catch (NoDevCardFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
