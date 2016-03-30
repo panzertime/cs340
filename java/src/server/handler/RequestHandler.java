@@ -136,7 +136,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		ArrayList<String> head = new ArrayList<String>();
 		head.add("application/json");
 		Headers oheaders = exchange.getResponseHeaders();
-		oheaders.put("Content­Type", head);
+		oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
+
 		
 		return reply;
 
@@ -173,6 +174,7 @@ public class RequestHandler extends AbstractHttpHandler {
 		
 		String reply = new String();
 		String newCookie = new String();
+		String gameCookie = new String();
 		logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
 
 		if (URI.equals("/user/login")) {
@@ -188,9 +190,15 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		}
 		else if (URI.equals("/games/join")) {
-		//	GameCommand gCommand = (GameCommand) command;
+			server.command.games.join gCommand = (server.command.games.join) command;
 			reply = command.execute(json, cookie);
-		//	newCookie = gCommand.getCookie().toCookie();
+			gameCookie = gCommand.getCookie().toCookie();
+			// game cookie looks like:
+			//	Set­cookie: catan.game=NN;Path=/;
+			// is appended to end of other cookie, plaintext
+		//	newCookie = gcookie; // the original cookie we pulled from req
+			newCookie = "";
+			
 		}
 		else {
 			reply = command.execute(json, cookie);
@@ -201,14 +209,18 @@ public class RequestHandler extends AbstractHttpHandler {
 		//or applicaton/json
 		oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
 		//oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), "text/html");
-		if (!newCookie.equals("")){
+		if (!newCookie.equals("")) {
 			// set cookie header
 			logger.log(Level.INFO, "Unencoded cookie: " + newCookie);
 			String mutatedCookie = newCookie.substring(0, newCookie.length() - 8);
 			mutatedCookie = URLEncoder.encode(mutatedCookie, "UTF-8");
-			mutatedCookie += ";Path=/;";
+		 	mutatedCookie += ";Path=/;"; 
 			logger.log(Level.INFO, "Encoded cookie: " + mutatedCookie);
 			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), mutatedCookie);
+		}
+		else if (!gameCookie.equals("")) { 
+			logger.log(Level.INFO, "Game cookie: " + gameCookie);
+			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), gameCookie);
 		}
 
 		return reply;
