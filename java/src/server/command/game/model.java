@@ -13,7 +13,7 @@ public class model extends GameCommand {
 	private int version;
 	
 	public model() {
-		version = 0;
+		version = -1;
 	}
 	
 	@Override
