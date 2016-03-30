@@ -101,7 +101,7 @@ public class SoldierTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Soldier");
+		args.put("type", "robPlayer");
 		args.put("playerIndex", (long) 0);
 		args.put("victimIndex", (long) 1);
 		JSONObject loc = new JSONObject();
@@ -113,11 +113,153 @@ public class SoldierTest {
 		Soldier s = new Soldier();
 		try {
 			s.execute(args, cookie);
-			fail("Failed Soldier test where - "
-					+ "is invalid: ");
+			fail("Failed Soldier test where type "
+					+ "is invalid: robPlayer");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Soldier test where - "
-					+ "is invalid: ");
+			System.out.println("Passed Soldier test where type "
+					+ "is invalid: robPlayer");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("index", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where playerIndex "
+					+ "is invalid: (playerI)index");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where playerIndex "
+					+ "is invalid: (playerI)index");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("playerIndex", (long) 0);
+		args.put("victim", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where victimIndex "
+					+ "is invalid: victim(Index)");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where victimIndex "
+					+ "is invalid: victim(Index)");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", "-1");
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where x "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where x "
+					+ "is invalid: type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where y "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where y "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where loc "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where loc "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute7() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Soldier");
+		args.put("playerIndex", (long) 0);
+		args.put("victimIndex", (long) 1);
+		JSONObject loc = new JSONObject();
+		loc.put("x", (long) -1);
+		loc.put("y", (long) -1);
+		args.put("location", loc);
+		String cookie = "catan.user={\"name\":\"Joshua\",\"password\":\"joshua\","
+				+ "\"playerID\":4}; catan.game=1";
+		Soldier s = new Soldier();
+		try {
+			s.execute(args, cookie);
+			fail("Failed Soldier test where cookie "
+					+ "is invalid: User not in game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Soldier test where cookie "
+					+ "is invalid: User not in game");
 		}
 	}
 
