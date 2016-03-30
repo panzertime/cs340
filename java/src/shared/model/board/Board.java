@@ -52,16 +52,18 @@ public class Board {
 		this.game = game;
 		
 		this.createArrays(randomTiles, randomNumbers, randomPorts);
-		
+		Integer count = 0;
 		JSONArray hexes = new JSONArray();
-		Long lower = new Long(0);
-		Long higher = new Long(2);
+		Long upperLimit = new Long(0);
+		Long lowerLimit = new Long(-2);
 		for (Long x = new Long(-2); x <=2; x++)
 		{
-			for (Long y = lower; y <= higher; y++)
+			for (Long y = lowerLimit; y <= upperLimit; y++)
 			{
-				HashMap<String, Object> jsonHex = new HashMap<String, Object>();
-				HashMap<String, Object> hexLoc = new HashMap<String, Object>();
+				System.out.println("Loop running! count: " + count);
+				count++;
+				JSONObject jsonHex = new JSONObject();
+				JSONObject hexLoc = new JSONObject();
 				hexLoc.put("x", x);
 				hexLoc.put("y", y);
 				jsonHex.put("location", new JSONObject(hexLoc));
@@ -72,10 +74,9 @@ public class Board {
 					jsonHex.put("number", productionNumbersArray.remove());
 				}
 				hexes.add(new JSONObject(jsonHex));
-
 			}
-			if (lower == -2) higher--;
-			else lower--;
+			if (x < 0) upperLimit++;
+			if (x >= 0) lowerLimit++;
 		}
 		JSONArray ports = new JSONArray();
 		for (JSONObject jsonObject: createPorts())
@@ -233,6 +234,7 @@ public class Board {
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
 			throw new BadJSONException();
+		System.out.println(jsonHexes.size() + "");
 		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
@@ -988,7 +990,9 @@ public class Board {
 	}
 	
 	public HexLocation getRobberLocation() {
-		return robber.getHex().getHexLocation().copy();
+		Hex hex = robber.getHex();
+		HexLocation hexLoc = hex.getHexLocation();
+		return hexLoc.copy();
 	}
 
 	public boolean couldBeRobbedFrom(HexLocation robberLoc, Integer targetPlayerIndex) {

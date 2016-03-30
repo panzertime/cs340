@@ -37,7 +37,7 @@ public class create extends GamesCommand {
 				throw new ServerAccessException("Invalid Cookie");
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			throw new ServerAccessException(e.getMessage());
 		}
 		return result;
