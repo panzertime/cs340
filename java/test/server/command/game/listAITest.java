@@ -45,13 +45,13 @@ public class listAITest {
 		JSONObject args = null;
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
-		addAI aAI = new addAI();
+		listAI lAI = new listAI();
 		try {
-			aAI.execute(args, cookie);
-			fail("Failed listAI test where everything is valid");
-		} catch (ServerAccessException e) {
+			lAI.execute(args, cookie);
 			System.out.println("Passed listAI test where everything "
 					+ "is valid");
+		} catch (ServerAccessException e) {
+			fail("Failed listAI test where everything is valid");
 		}
 	}
 	
@@ -61,9 +61,9 @@ public class listAITest {
 		JSONObject args = null;
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0};";
-		addAI aAI = new addAI();
+		listAI lAI = new listAI();
 		try {
-			aAI.execute(args, cookie);
+			lAI.execute(args, cookie);
 			fail("Failed listAI test where everything is valid");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed listAI test where cookie "
@@ -77,13 +77,13 @@ public class listAITest {
 		JSONObject args = new JSONObject();
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
-		addAI aAI = new addAI();
+		listAI lAI = new listAI();
 		try {
-			aAI.execute(args, cookie);
-			fail("Failed listAI test where args are empty");
-		} catch (ServerAccessException e) {
+			lAI.execute(args, cookie);
 			System.out.println("Passed listAI test where args "
 					+ "are empty");
+		} catch (ServerAccessException e) {
+			fail("Failed listAI test where args are empty");
 		}
 	}
 
