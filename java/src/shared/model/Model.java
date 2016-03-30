@@ -1515,7 +1515,7 @@ public class Model {
 		}
 		Player p = this.getPlayerFromIndex(playerIndex);
 		try {
-			p.returnDevCard(p.findDevCard(DevCardType.KNIGHT));
+			p.returnDevCard(p.findDevCard(DevCardType.MONOPOLY));
 		} catch (NoDevCardFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
