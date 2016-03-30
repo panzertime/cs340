@@ -1357,7 +1357,7 @@ public class Model {
 	{
 		if(!canPlaceRobber(playerIndex, robLocation))
 			throw new ViolatedPreconditionException();
-		if(!canRobPlayerFrom(robLocation, victimIndex, playerIndex))
+		if(!canRobPlayerFrom(robLocation, playerIndex, victimIndex))
 			throw new ViolatedPreconditionException();
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " moved the robber and robbed " + this.getPlayerName(victimIndex), source);
