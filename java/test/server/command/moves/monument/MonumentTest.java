@@ -96,18 +96,75 @@ public class MonumentTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Monument");
+		args.put("type", "rollNumber");
 		args.put("playerIndex", (long) 0);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=1";
 		Monument m = new Monument();
 		try {
 			m.execute(args, cookie);
-			fail("Failed Monument test where - "
-					+ "is invalid: ");
+			fail("Failed Monument test where type "
+					+ "is invalid: rollNumber");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Monument test where - "
-					+ "is invalid: ");
+			System.out.println("Passed Monument test where type "
+					+ "is invalid: rollNumber");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monument");
+		args.put("playerIndex", "0");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Monument m = new Monument();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monument test where playerIndex "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monument test where playerIndex "
+					+ "is invalid: type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monument");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Joshua\",\"password\":\"joshua\","
+				+ "\"playerID\":1}; catan.game=1";
+		Monument m = new Monument();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monument test where cookie "
+					+ "is invalid: wrong user");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monument test where cookie "
+					+ "is invalid: wrong user");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Monument");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0};";
+		Monument m = new Monument();
+		try {
+			m.execute(args, cookie);
+			fail("Failed Monument test where cookie "
+					+ "is invalid: no game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Monument test where cookie "
+					+ "is invalid: no game");
 		}
 	}
 }

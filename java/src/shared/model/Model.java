@@ -120,7 +120,14 @@ public class Model {
 
 	public boolean isPlayerInGame(String username, Integer ID)
 	{
-		return (this.getIndexFromPlayerID(ID) != null); 
+		boolean result = false;
+		Integer playerIndex = this.getIndexFromPlayerID(ID);
+		if(playerIndex != null) {
+			String name = this.getPlayerName(playerIndex);
+			result = name.equals(username);
+		}
+		
+		return result;
 	}
 	
 	
