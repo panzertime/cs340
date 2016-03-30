@@ -101,7 +101,6 @@ public class offerTradeTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "offerTrade");
 		args.put("playerIndex", (long) 0);
 		args.put("receiver", (long) 1);
 		JSONObject offer = new JSONObject();
@@ -116,11 +115,119 @@ public class offerTradeTest {
 		offerTrade ot = new offerTrade();
 		try {
 			ot.execute(args, cookie);
-			fail("Failed offerTrade test where - "
-					+ "is invalid: ");
+			fail("Failed offerTrade test where type "
+					+ "is invalid: dne");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed offerTrade test where - "
-					+ "is invalid: ");
+			System.out.println("Passed offerTrade test where type "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "offerTrade");
+		args.put("playerIndex", (long) 4);
+		args.put("receiver", (long) 1);
+		JSONObject offer = new JSONObject();
+		offer.put("wheat", (long) 2);
+		offer.put("brick", (long) -2);
+		offer.put("ore", (long) 0);
+		offer.put("sheep", (long) 0);
+		offer.put("wood", (long) 0);
+		args.put("offer", offer);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		offerTrade ot = new offerTrade();
+		try {
+			ot.execute(args, cookie);
+			fail("Failed offerTrade test where playerIndex "
+					+ "is invalid: out of bounds");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed offerTrade test where playerIndex "
+					+ "is invalid: out of bounds");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "offerTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("receiver", (long) 4);
+		JSONObject offer = new JSONObject();
+		offer.put("wheat", (long) 2);
+		offer.put("brick", (long) -2);
+		offer.put("ore", (long) 0);
+		offer.put("sheep", (long) 0);
+		offer.put("wood", (long) 0);
+		args.put("offer", offer);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		offerTrade ot = new offerTrade();
+		try {
+			ot.execute(args, cookie);
+			fail("Failed offerTrade test where receiver "
+					+ "is invalid: out of bounds");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed offerTrade test where receiver "
+					+ "is invalid: out of bounds");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "offerTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("receiver", (long) 1);
+		JSONObject offer = new JSONObject();
+		offer.put("wheat", "2");
+		offer.put("brick", (long) -2);
+		offer.put("ore", (long) 0);
+		offer.put("sheep", (long) 0);
+		offer.put("wood", (long) 0);
+		args.put("offer", offer);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		offerTrade ot = new offerTrade();
+		try {
+			ot.execute(args, cookie);
+			fail("Failed offerTrade test where offer "
+					+ "is invalid: wheat type string");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed offerTrade test where offer "
+					+ "is invalid: wheat type string");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "offerTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("receiver", (long) 1);
+		JSONObject offer = new JSONObject();
+		offer.put("wheat", (long) 2);
+		offer.put("brick", (long) -2);
+		offer.put("ore", (long) 0);
+		offer.put("sheep", (long) 0);
+		offer.put("wood", (long) 0);
+		args.put("offer", offer);
+		String cookie = "catan.user={\"name\":\"Joshua\",\"password\":\"joshua\","
+				+ "\"playerID\":5}; catan.game=1";
+		offerTrade ot = new offerTrade();
+		try {
+			ot.execute(args, cookie);
+			fail("Failed offerTrade test where cookie "
+					+ "is invalid: user info");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed offerTrade test where cookie "
+					+ "is invalid: user info");
 		}
 	}
 
