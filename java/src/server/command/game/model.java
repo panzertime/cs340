@@ -29,6 +29,8 @@ public class model extends GameCommand {
 				JSONObject jsonGame = game.toJSON();
 				result = jsonGame.toJSONString();
 			}
+		} else {
+			throw new ServerAccessException("Invalid Cookie");
 		}
 		return result;
 	}
