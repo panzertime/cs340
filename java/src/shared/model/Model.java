@@ -215,9 +215,6 @@ public class Model {
 	public Boolean equalsJSON(JSONObject jsonMap) {
 		if (jsonMap == null)
 			return false;
-		System.out.println((JSONObject) jsonMap.get("bank"));
-		System.out.println((JSONObject) jsonMap.get("deck"));
-		System.out.println(bank.bankToJSON());
 		if (bank.equalsJSON((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck")) == false)
 			return false;
 		if (chatModel.equalsJSON((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log")) == false)
@@ -368,6 +365,7 @@ public class Model {
 	public void getNextTurn() {
 		if (!this.getStatus().equals("SecondRound"))
 		{
+			
 			if (this.activePlayerIndex == players.size() - 1)
 			{
 				this.activePlayerIndex = 0;
@@ -387,6 +385,16 @@ public class Model {
 				this.activePlayerIndex--;
 			}
 		}
+		if (this.status.equals("FirstRound"))
+		{
+			if (activePlayerIndex == 0) this.status = "SecondRound";
+		}
+		else if (this.status.equals("SecondRound"))
+		{
+			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
+		}
+		else
+			this.status = "Rolling";
 	}
 
 	public Player getPlayerFromIndex(Integer playerIndex) {
@@ -1266,6 +1274,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		if (this.isStateSetup()) getNextTurn();
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1383,16 +1392,8 @@ public class Model {
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
 		this.getNextTurn();
-		if (this.status.equals("FirstRound"))
-		{
-			if (activePlayerIndex == 0) this.status = "SecondRound";
-		}
-		else if (this.status.equals("SecondRound"))
-		{
-			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
-		}
-		else
-		this.status = "Rolling";
+		
+		version++;
 	}
 	
 	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
