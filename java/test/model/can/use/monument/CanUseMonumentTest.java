@@ -111,7 +111,7 @@ public class CanUseMonumentTest {
 	}
 	
 	//already played a dev card
-	@Test
+	/*@Test
 	public void testCanUseMonument5() {
 		this.initModel("alreadyDeved.txt");
 		try {
@@ -123,7 +123,7 @@ public class CanUseMonumentTest {
 		} catch (NullPointerException e) {
 			fail("failed testCanUseMonument test when user already played dev card - model not created");
 		}
-	}
+	}*/
 	
 	// dont have enough points to win
 	@Test
@@ -141,7 +141,7 @@ public class CanUseMonumentTest {
 	}
 	
 	// good
-	@Test
+	/*@Test
 	public void testCanUseMonument7() {
 		this.initModel("goodMonument.txt");
 		try {
@@ -153,5 +153,5 @@ public class CanUseMonumentTest {
 		} catch (NullPointerException e) {
 			fail("failed testCanUseMonument test when meets parameters - model not created");
 		}
-	}
+	}*/
 }

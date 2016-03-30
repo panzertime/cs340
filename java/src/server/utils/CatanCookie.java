@@ -35,7 +35,8 @@ public class CatanCookie {
 		}
 	}
 	
-	private void postGameConstructor(String cookieString) throws CookieException {
+	private void postGameConstructor(String cookieString) 
+			throws CookieException {
 		if(validStart(cookieString)
 				&& cookieString.matches("(.*)catan.game=([0-9]*)(.*)")) {
 			setUserAttributes(cookieString);
@@ -60,11 +61,15 @@ public class CatanCookie {
 		this.gameID = Integer.parseInt(number);
 	}
 
-	private boolean validStart(String cookieString) {
+	private boolean validStart(String cookieString) throws CookieException {
+		if(cookieString == null || cookieString.isEmpty()) {
+			throw new CookieException("Empty or Null Cookie");
+		}
 		return cookieString.startsWith("catan.user=");
 	}
 
-	private void preGameConstructor(String cookieString) throws CookieException {
+	private void preGameConstructor(String cookieString) 
+			throws CookieException {
 		if(validStart(cookieString)) {
 			setUserAttributes(cookieString);
 			
@@ -84,6 +89,8 @@ public class CatanCookie {
 	private void setUserAttributes(String cookieString) throws CookieException {
 		int startIndex = cookieString.indexOf("{");
 		int endIndex = cookieString.indexOf("}") + 1;
+		System.out.println("Cookie string gotten: " + cookieString);
+		System.out.println("{ in cookie: " + startIndex + ", } : " + endIndex);
 		String toJSON = cookieString.substring(startIndex, endIndex);
 		JSONParser parser = new JSONParser();
 		try {
@@ -195,9 +202,17 @@ public class CatanCookie {
 	 * @return User params are non-null and actual values
 	 */
 	private boolean validUserParams() {
-		return this.name != null && !this.name.isEmpty() &&
-				this.password != null && !this.password.isEmpty() &&
-				this.userID != null;
+		if (name == null) 
+			return false;
+		if (name.isEmpty())
+			return false;
+		if (password == null)
+			return false;
+		if (password.isEmpty())
+			return false;
+		if (userID == null)
+			return false;
+		return true;
 	}
 	
 	public String getName() {

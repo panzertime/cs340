@@ -95,10 +95,18 @@ public class Vertex {
 	/**
 	 * @param building the building to set
 	 */
-	public void setBuilding(Building building) {
+	public void placeBuilding(Building building) {
 		if (this.building != null)
 			assert false;
 		this.building = building;
+		building.setVertex(this);
+	}
+	
+	public void removeBuilding() {
+		if (building != null) {
+			building.setVertex(null);
+			building = null;
+		}
 	}
 
 	public boolean isBuildable() {
@@ -158,7 +166,7 @@ public class Vertex {
 
 
 				if (hexLeft instanceof PortHex && ((PortHex) hexLeft).getPortType() == portType) {
-					System.out.println("Hex has port type " + portType);
+					//System.out.println("Hex has port type " + portType); -- JOSHUA 3/29/6 - getting in way of tests
 				//	if (hexLeft.getEdge(((PortHex) hexLeft).getPortDirection()) == edge) {
 				//	System.out.println("Hex has port direction left");
 						return true;

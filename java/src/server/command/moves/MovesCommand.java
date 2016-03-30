@@ -1,5 +1,8 @@
 package server.command.moves;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.simple.JSONObject;
 
 import server.command.ICommand;
@@ -10,6 +13,12 @@ import server.exception.UserException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
+import shared.model.board.edge.EdgeDirection;
+import shared.model.board.edge.EdgeLocation;
+import shared.model.board.hex.HexLocation;
+import shared.model.board.vertex.VertexDirection;
+import shared.model.board.vertex.VertexLocation;
+import shared.model.hand.ResourceType;
 
 /**
  * Class for keeping common move command functionality in the same place
@@ -118,4 +127,129 @@ public abstract class MovesCommand implements ICommand {
 		return result;
 	}
 	
+	/**
+	 * Makes a vertexLocation from the passed in vertexLocation JSONObject
+	 * @pre params are valid VertexLocation params
+	 * @post VertexLocation matching JSON params is created
+	 * @param vertLocJSON JSONObject
+	 * @return corresponding JSONObject
+	 * @throws ServerAccessException parameter invalid
+	 */
+	public VertexLocation makeVertexLocation(Object vertLocJSON) 
+			throws ServerAccessException {
+		VertexLocation result = null;
+		try {
+			JSONObject vertLoc = (JSONObject) vertLocJSON;
+			int x = ((Long) vertLoc.get("x")).intValue();
+			int y = ((Long) vertLoc.get("y")).intValue();
+			String dir = (String) vertLoc.get("direction");
+			HexLocation hexLoc = new HexLocation(x, y);
+			VertexDirection vertDir = VertexDirection.fromJSON(dir);
+			result = new VertexLocation(hexLoc, vertDir);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameters: "
+					+ "vertexLocation");
+		}
+		return result;
+	}
+	
+	/**
+	 * Converts a JSONObject into an EdgeLocation
+	 * @pre all params are valid EdgeLocation params
+	 * @post EdgeLocation is created from values
+	 * @param roadLocJSON location to build to new road
+	 * @return corresponding EdgeLocation
+	 * @throws ServerAccessException invalid EdgeLocation params
+	 */
+	public EdgeLocation makeEdgeLocation(Object roadLocJSON) 
+			throws ServerAccessException{
+		EdgeLocation result = null;
+		try {
+			JSONObject roadLoc = (JSONObject) roadLocJSON;
+			int x = ((Long) roadLoc.get("x")).intValue();
+			int y = ((Long) roadLoc.get("y")).intValue();
+			String dir = (String) roadLoc.get("direction");
+			HexLocation hexLoc = new HexLocation(x, y);
+			EdgeDirection edgeDir = EdgeDirection.fromJSON(dir);
+			result = new EdgeLocation(hexLoc, edgeDir);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameters: "
+					+ "edgeLocation");
+		}
+		return result;
+	}
+	
+	/**
+	 * Creates a resouceList map from a JSONObject
+	 * @pre JSONObject has all of the correct parameters
+	 * @post a Map of resource types and values is created
+	 * @param resListJSON JSONObject with 5 resources and corresponding values
+	 * @return Map of resource types and values
+	 * @throws ServerAccessException JSONObject did not include the correct 
+	 * resources
+	 */
+	public Map<ResourceType, Integer> makeResourceList(Object resListJSON) 
+			throws ServerAccessException {
+		Map<ResourceType, Integer> result = new 
+				HashMap<ResourceType, Integer>();
+		try {
+			JSONObject resList = (JSONObject) resListJSON;
+			int brick = ((Long) resList.get("brick")).intValue();
+			int ore = ((Long) resList.get("ore")).intValue();
+			int sheep = ((Long) resList.get("sheep")).intValue();
+			int wheat = ((Long) resList.get("wheat")).intValue();
+			int wood = ((Long) resList.get("wood")).intValue();
+			
+			result.put(ResourceType.BRICK, brick);
+			result.put(ResourceType.ORE, ore);
+			result.put(ResourceType.SHEEP, sheep);
+			result.put(ResourceType.WHEAT, wheat);
+			result.put(ResourceType.WOOD, wood);
+		} catch(Exception e) {
+			throw new ServerAccessException("Invalid Parameters: "
+					+ "Resource List");
+		}
+		return result;
+	}
+	
+	/**
+	 * Takes in a string and turns it into a resource
+	 * @pre string represents a valid Resource
+	 * @post a ResouceType is created
+	 * @param object value representing a string
+	 * @return corresponding resource
+	 */
+	public ResourceType getResourceType(Object resString) 
+			throws ServerAccessException {
+		ResourceType result = null;
+		try {
+			result = ResourceType.valueOf((String) resString);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameter: Resource");
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Takes a hexLoc in JSON form and converts it to a HexLocation
+	 * @pre hexLoc is valid Hex Location
+	 * @post HexLocation Object is created
+	 * @param hexLocJSON hexLocation as a JSONObject
+	 * @return HexLocation representing the JSON
+	 * @throws ServerAccessException invalid HexLocation from JSON
+	 */
+	public HexLocation makeHexLocation(Object hexLocJSON) 
+			throws ServerAccessException {
+		HexLocation result = null;
+		try {
+			JSONObject hexLoc = (JSONObject) hexLocJSON;
+			int x = ((Long) hexLoc.get("x")).intValue();
+			int y = ((Long) hexLoc.get("y")).intValue();
+			result = new HexLocation(x, y);
+		} catch (Exception e) {
+			throw new ServerAccessException("Invalid Parameter: HexLocation");
+		}
+		return result;
+	}
 }
