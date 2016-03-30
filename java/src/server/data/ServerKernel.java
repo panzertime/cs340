@@ -76,7 +76,7 @@ public class ServerKernel {
 				this.users.put(user.getUsername(), user);
 			}
 		} catch (UserException e) {
-			throw new ServerAccessException("User Already Had and ID");
+			throw new ServerAccessException("User Already Had an ID");
 		}
 	}
 	

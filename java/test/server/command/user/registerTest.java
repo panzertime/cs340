@@ -23,17 +23,16 @@ public class registerTest {
 	//valid
 	@Test
 	public void testExecute() {
-		User user = new User("Joshua","Joshua");
+		JSONObject args = new JSONObject();
+		args.put("username", "Joshua");
+		args.put("password", "joshua");
+		String cookie = null;
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
-			if(ServerKernel.sole().userExists(user)) {
-				System.out.println("Passed register test where "
-						+ "1 user added");
-			} else {
-				fail("Failed register test where "
-						+ "1 user added");
-			}
-		} catch (ServerAccessException | UserException e) {
+			r.execute(args, cookie);
+			System.out.println("Passed register test where "
+					+ "1 user added");
+		} catch (ServerAccessException e) {
 			fail("Failed register test where "
 					+ "1 user added");
 		}
@@ -42,20 +41,21 @@ public class registerTest {
 	//valid
 	@Test
 	public void testExecute1() {
-		User user = new User("Joshua","andrea");
-		User user2 = new User("Andrea","andrea");
+		JSONObject args = new JSONObject();
+		args.put("username", "Joshua");
+		args.put("password", "joshua");
+		
+		JSONObject args2 = new JSONObject();
+		args2.put("username", "Andrea");
+		args2.put("password", "andrea");
+		String cookie = "";
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
-			ServerKernel.sole().addUser(user2);
-			if(ServerKernel.sole().userExists(user) &&
-					ServerKernel.sole().userExists(user2)) {
-				System.out.println("Passed register test where "
-						+ "2 users added");
-			} else {
-				fail("Failed register test where "
-						+ "2 users added");
-			}
-		} catch (ServerAccessException | UserException e) {
+			r.execute(args, cookie);
+			r.execute(args2, cookie);
+			System.out.println("Passed register test where "
+					+ "2 users added");
+		} catch (ServerAccessException e) {
 			fail("Failed register test where "
 					+ "2 users added");
 		}
@@ -64,18 +64,21 @@ public class registerTest {
 	//valid
 	@Test
 	public void testExecute5() {
-		User user = new User("Joshua","joshua");
-		User user2 = new User("joshua","joshua");
+		JSONObject args = new JSONObject();
+		args.put("username", "Joshua");
+		args.put("password", "joshua");
+		
+		JSONObject args2 = new JSONObject();
+		args2.put("username", "joshua");
+		args2.put("password", "joshua");
+		String cookie = "";
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
-			if(ServerKernel.sole().userExists(user)) {
-				System.out.println("Passed register test where "
-						+ "2 users added with same name but different cases");
-			} else {
-				fail("Failed register test where "
-						+ "2 users added with same name but different cases");
-			}
-		} catch (ServerAccessException | UserException e) {
+			r.execute(args, cookie);
+			r.execute(args2, cookie);
+			System.out.println("Passed register test where "
+					+ "2 users added with same name but different cases");
+		} catch (ServerAccessException e) {
 			fail("Failed register test where "
 					+ "2 users added with same name but different cases");
 		}
@@ -85,9 +88,12 @@ public class registerTest {
 	//invalid
 	@Test
 	public void testExecute2() {
-		User user = new User("joshua","");
+		JSONObject args = new JSONObject();
+		args.put("username", "Joshua");
+		String cookie = null;
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
+			r.execute(args, cookie);
 			fail("Failed register test where "
 					+ "user has no password");
 		} catch (ServerAccessException e) {
@@ -99,30 +105,41 @@ public class registerTest {
 	//invalid
 	@Test
 	public void testExecute3() {
-		User user = new User("","joshua");
+		JSONObject args = new JSONObject();
+		args.put("username", "");
+		args.put("password", "joshua");
+		String cookie = null;
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
+			r.execute(args, cookie);
 			fail("Failed register test where "
-					+ "user has no username");
+					+ "username is null");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed register test where "
-					+ "user has no username");
+					+ "username is null");
 		}
 	}
 	
 	//invalid
 	@Test
 	public void testExecute4() {
-		User user = new User("Joshua","Joshua");
-		User user2 = new User("Joshua","Joshua");
+		JSONObject args = new JSONObject();
+		args.put("username", "Joshua");
+		args.put("password", "joshua");
+		
+		JSONObject args2 = new JSONObject();
+		args2.put("username", "Joshua");
+		args2.put("password", "andrea");
+		String cookie = "";
+		register r = new register();
 		try {
-			ServerKernel.sole().addUser(user);
-			ServerKernel.sole().addUser(user2);
-			fail("Failed register test where "
-					+ "same user added twice");
+			r.execute(args, cookie);
+			r.execute(args2, cookie);
+			fail("Passed register test where "
+					+ "Same username used twice with different password");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed register test where "
-					+ "same user added twice");
+					+ "Same username used twice with different password");		
 		}
 	}
 }
