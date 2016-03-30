@@ -54,8 +54,8 @@ public class Board {
 		this.createArrays(randomTiles, randomNumbers, randomPorts);
 		Integer count = 0;
 		JSONArray hexes = new JSONArray();
-		Long upperLimit = new Long(0);
-		Long lowerLimit = new Long(-2);
+		Long upperLimit = new Long(2);
+		Long lowerLimit = new Long(0);
 		for (Long x = new Long(-2); x <=2; x++)
 		{
 			for (Long y = lowerLimit; y <= upperLimit; y++)
@@ -76,8 +76,8 @@ public class Board {
 				}
 				hexes.add(new JSONObject(jsonHex));
 			}
-			if (x < 0) upperLimit++;
-			if (x >= 0) lowerLimit++;
+			if (x < 0) lowerLimit--;
+			if (x >= 0) upperLimit--;
 		}
 		JSONArray ports = new JSONArray();
 		for (JSONObject jsonObject: createPorts())
@@ -123,44 +123,43 @@ public class Board {
 	Queue<Long> productionNumbersArray;
 	Queue<PortType> portTilesArray;
 	
-	//(-2,0) NW (-2,1) SW  (-1,-1) N (-1,2) SW (0,2) S (1,-2) N (1,1) SE (2,-2) NE (2,-1) SE  
 	private JSONObject[] createPorts() 
 	{
 		JSONObject[] ports = new JSONObject[9];
 		HashMap<String, Object> jsonHex = new HashMap<String, Object>();
 		HashMap<String, Object> hexLoc = new HashMap<String, Object>();
 		hexLoc.put("x", new Long(0));
-		hexLoc.put("y", new Long(3));
+		hexLoc.put("y", new Long(-3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "S");
 		ports[0] = new JSONObject(jsonHex);
 
 		hexLoc.put("x", new Long(-2));
-		hexLoc.put("y", new Long(1));
+		hexLoc.put("y", new Long(-1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[1] = new JSONObject(jsonHex);
 		
 		hexLoc.put("x", new Long(-3));
-		hexLoc.put("y", new Long(-1));
+		hexLoc.put("y", new Long(1));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[2] = new JSONObject(jsonHex);
 
 		hexLoc.put("x", new Long(-3));
-		hexLoc.put("y", new Long(-3));
+		hexLoc.put("y", new Long(3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "NE");
 		ports[3] = new JSONObject(jsonHex);
 		
 		hexLoc.put("x", new Long(-1));
-		hexLoc.put("y", new Long(-3));
+		hexLoc.put("y", new Long(3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "N");
 		ports[4] = new JSONObject(jsonHex);
 		
 		hexLoc.put("x", new Long(1));
-		hexLoc.put("y", new Long(-2));
+		hexLoc.put("y", new Long(2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "N");
 		ports[5] = new JSONObject(jsonHex);
@@ -172,13 +171,13 @@ public class Board {
 		ports[6] = new JSONObject(jsonHex);
 		
 		hexLoc.put("x", new Long(3));
-		hexLoc.put("y", new Long(2));
+		hexLoc.put("y", new Long(-2));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SW");
 		ports[7] = new JSONObject(jsonHex);
 
 		hexLoc.put("x", new Long(2));
-		hexLoc.put("y", new Long(3));
+		hexLoc.put("y", new Long(-3));
 		jsonHex.put("location", new JSONObject(hexLoc));
 		jsonHex.put("direction", "SE");
 		ports[8] = new JSONObject(jsonHex);
@@ -369,6 +368,9 @@ public class Board {
 
 		// Recursively link the hexes with edges and vertices
 		Hex centerHex = this.hexes.get(new HexLocation(0, 0));
+		for (HexLocation hexLoc : hexes.keySet()) {
+			System.out.println(hexLoc.toString());
+		}
 
 
 		System.out.println("Recursive Connections! ************");

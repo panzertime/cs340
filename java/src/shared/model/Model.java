@@ -21,7 +21,6 @@ import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
-import shared.model.board.hex.tiles.land.LandHex;
 import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
@@ -112,7 +111,7 @@ public class Model {
 		int index = players.size();
 		if (index >= 4)
 			throw new JoinGameException();
-		players.put(index, new Player(playerID, index, playerName, color));
+		players.put(index, new Player(playerID, index, playerName, color, this));
 	}
 	
 	}
