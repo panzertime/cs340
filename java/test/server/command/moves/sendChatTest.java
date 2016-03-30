@@ -94,7 +94,7 @@ public class sendChatTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "sendChat");
+		args.put("type", "rollNumber");
 		args.put("playerIndex", (long) 0);
 		args.put("content", "dead beef");
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
@@ -102,11 +102,70 @@ public class sendChatTest {
 		sendChat sc = new sendChat();
 		try {
 			sc.execute(args, cookie);
-			fail("Failed sendChat test where - "
-					+ "is invalid: ");
+			fail("Failed sendChat test where type arg "
+					+ "is invalid: rollNumber");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed sendChat test where - "
-					+ "is invalid: ");
+			System.out.println("Passed sendChat test where type arg "
+					+ "is invalid: rollNumber");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "sendChat");
+		args.put("playerIndex", "0");
+		args.put("content", "dead beef");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		sendChat sc = new sendChat();
+		try {
+			sc.execute(args, cookie);
+			fail("Failed sendChat test where playerIndex "
+					+ "is invalid: type String");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed sendChat test where playerIndex "
+					+ "is invalid: type String");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "sendChat");
+		args.put("playerIndex", (long) 0);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		sendChat sc = new sendChat();
+		try {
+			sc.execute(args, cookie);
+			fail("Failed sendChat test where content "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed sendChat test where content "
+					+ "is invalid: dne");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "sendChat");
+		args.put("playerIndex", (long) 0);
+		args.put("content", "dead beef");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0};";
+		sendChat sc = new sendChat();
+		try {
+			sc.execute(args, cookie);
+			fail("Failed sendChat test where cookie "
+					+ "is invalid: no game");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed sendChat test where cookie "
+					+ "is invalid: no game");
 		}
 	}
 

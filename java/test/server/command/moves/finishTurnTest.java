@@ -164,7 +164,7 @@ public class finishTurnTest {
 		args.put("type", "finishTurn");
 		args.put("playerIndex", (long) 0);
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=0";
+				+ "\"playerID\":}; catan.game=0";
 		finishTurn ft = new finishTurn();
 		try {
 			ft.execute(args, cookie);
@@ -181,8 +181,8 @@ public class finishTurnTest {
 		JSONObject args = new JSONObject();
 		args.put("type", "finishTurn");
 		args.put("playerIndex", (long) 0);
-		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=0";
+		String cookie = "catan.user={\"name\":\"Joshua\",\"password\":\"joshua\","
+				+ "\"playerID\":4}; catan.game=0";
 		finishTurn ft = new finishTurn();
 		try {
 			ft.execute(args, cookie);

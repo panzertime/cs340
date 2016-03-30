@@ -135,7 +135,7 @@ public class registerTest {
 		try {
 			r.execute(args, cookie);
 			r.execute(args2, cookie);
-			fail("Passed register test where "
+			fail("Failed register test where "
 					+ "Same username used twice with different password");
 		} catch (ServerAccessException e) {
 			System.out.println("Passed register test where "
