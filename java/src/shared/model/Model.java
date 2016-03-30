@@ -1025,20 +1025,20 @@ public class Model {
 	}
 
 	//client only
-	public int getFreeRoads(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeRoads(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getRoadsFree();
 	}
 
 	//client only
-	public int getFreeSettlements(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeSettlements(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getSettlementsFree();
 	}
 
 	//client only
-	public int getFreeCities(int userID) {
-		Player client = getPlayerFromIndex(this.getIndexFromPlayerID(userID));
+	public int getFreeCities(int userIndex) {
+		Player client = getPlayerFromIndex(userIndex);
 		return client.getCitiesFree();
 	}
 
