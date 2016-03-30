@@ -39,7 +39,7 @@ public class listAITest {
 		game.joinGame(user5.getID(), user5.getUsername(), CatanColor.BLUE);
 	}
 
-	//invalid - good cookie
+	//valid - good cookie
 	@Test
 	public void testExecute() {
 		JSONObject args = null;

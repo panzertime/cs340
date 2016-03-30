@@ -99,14 +99,13 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		//We only care about user name
-		/*if (id != other.id)
+		if (id != other.id)
 			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
-			return false;*/
+			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;

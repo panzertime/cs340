@@ -91,7 +91,7 @@ public class ServerKernel {
 	 */
 	public boolean userExists(User user) throws UserException {
 		if(user.hasValidCrendentials()) {
-			if(this.users.containsKey(user.getUsername())) {
+			if(this.users.containsValue(user)) {
 				return true;
 			}
 		} else {
