@@ -2,24 +2,16 @@ package server.command.game;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import server.command.moves.Monument;
 import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import shared.model.Model;
-import shared.model.exceptions.BadJSONException;
+import shared.model.definitions.CatanColor;
 
 public class addAITest {
 
@@ -45,25 +37,55 @@ public class addAITest {
 		User user5 = new User("Joshua", "joshua");
 		ServerKernel.sole().addUser(user5);
 		
-		
+		game.joinGame(user1.getID(), user1.getUsername(), CatanColor.RED);
+		game.joinGame(user5.getID(), user5.getUsername(), CatanColor.BLUE);
 	}
 
-	//Good - true
+	//invalid - good cookie
 	@Test
 	public void testExecute() {
-		/*JSONObject args = new JSONObject();
-		args.put("type", "Monument");
-		args.put("playerIndex", (long) 0);
+		JSONObject args = null;
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 				+ "\"playerID\":0}; catan.game=0";
-		Monument m = new Monument();
+		addAI aAI = new addAI();
 		try {
-			m.execute(args, cookie);
-			System.out.println("Passed Monument test where everything "
-					+ "is valid");
+			aAI.execute(args, cookie);
+			fail("Failed addAI test where everything is valid");
 		} catch (ServerAccessException e) {
-			fail("Failed Monument test where everything is valid");
-		}*/
+			System.out.println("Passed addAI test where everything "
+					+ "is valid");
+		}
 	}
-
+	
+	//invalid - bad cookie
+	@Test
+	public void testExecute1() {
+		JSONObject args = null;
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0};";
+		addAI aAI = new addAI();
+		try {
+			aAI.execute(args, cookie);
+			fail("Failed addAI test where everything is valid");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed addAI test where cookie "
+					+ "is bad");
+		}
+	}
+	
+	//invalid - empty args
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=0";
+		addAI aAI = new addAI();
+		try {
+			aAI.execute(args, cookie);
+			fail("Failed addAI test where args are empty");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed addAI test where args "
+					+ "are empty");
+		}
+	}
 }

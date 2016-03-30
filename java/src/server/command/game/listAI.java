@@ -8,6 +8,13 @@ public class listAI extends GameCommand {
 
 	public String execute(JSONObject args, String cookie) 
 			throws ServerAccessException {
-		return "[]";
+		String result = null;
+		if(validCookie(cookie)) {
+			result = "[]";
+		} else {
+			throw new ServerAccessException("Invalid Cookie");
+		}
+		
+		return result;
 	}
 }
