@@ -98,7 +98,7 @@ public class YearOfPlentyTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
-		args.put("type", "Year_of_Plenty");
+		args.put("type", "year_of_plenty");
 		args.put("playerIndex", (long) 0);
 		args.put("resource1", "wheat");
 		args.put("resource2", "sheep");
@@ -107,11 +107,95 @@ public class YearOfPlentyTest {
 		Year_of_Plenty yop = new Year_of_Plenty();
 		try {
 			yop.execute(args, cookie);
-			fail("Failed Year_of_Plenty test where - "
-					+ "is invalid: ");
+			fail("Failed Year_of_Plenty test where type "
+					+ "is invalid: wrong case");
 		} catch (ServerAccessException e) {
-			System.out.println("Passed Year_of_Plenty test where - "
-					+ "is invalid: ");
+			System.out.println("Passed Year_of_Plenty test where type "
+					+ "is invalid: wrong case");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Year_of_Plenty");
+		args.put("layerIndex", (long) 0);
+		args.put("resource1", "wheat");
+		args.put("resource2", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Year_of_Plenty yop = new Year_of_Plenty();
+		try {
+			yop.execute(args, cookie);
+			fail("Failed Year_of_Plenty test where playerIndex "
+					+ "is invalid: (p)layerIndex");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Year_of_Plenty test where playerIndex "
+					+ "is invalid: (p)layerIndex");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Year_of_Plenty");
+		args.put("playerIndex", (long) 0);
+		args.put("resource1", "wheet");
+		args.put("resource2", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Year_of_Plenty yop = new Year_of_Plenty();
+		try {
+			yop.execute(args, cookie);
+			fail("Failed Year_of_Plenty test where resource1 "
+					+ "is invalid: wheet");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Year_of_Plenty test where resource1 "
+					+ "is invalid: wheet");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Year_of_Plenty");
+		args.put("playerIndex", (long) 0);
+		args.put("resource1", "wheat");
+		args.put("resource", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		Year_of_Plenty yop = new Year_of_Plenty();
+		try {
+			yop.execute(args, cookie);
+			fail("Failed Year_of_Plenty test where resource2 "
+					+ "is invalid: resource");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Year_of_Plenty test where resource2 "
+					+ "is invalid: resource");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "Year_of_Plenty");
+		args.put("playerIndex", (long) 0);
+		args.put("resource1", "wheat");
+		args.put("resource2", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=3";
+		Year_of_Plenty yop = new Year_of_Plenty();
+		try {
+			yop.execute(args, cookie);
+			fail("Failed Year_of_Plenty test where cookie "
+					+ "is invalid: game dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed Year_of_Plenty test where cookie "
+					+ "is invalid: game dne");
 		}
 	}
 
