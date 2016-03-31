@@ -1380,8 +1380,7 @@ public class Model {
 			this.getPlayerFromIndex(playerIndex).receiveResource(rob, 1);
 			this.getPlayerFromIndex(victimIndex).sendResource(rob, 1);
 		} catch (NoRemainingResourceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		}
 		this.status = "Playing";
