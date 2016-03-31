@@ -103,7 +103,7 @@ public class maritimeTradeTest {
 			args.put("type", "maritimeTrade");
 			args.put("playerIndex", (long) 0);
 			args.put("ratio", (long) 4);
-			args.put("inputResource", "wheat");
+			args.put("inputResource", "sheep");
 			args.put("outputResource", "brick");
 			String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
 					+ "\"playerID\":0}; catan.game=0";
@@ -166,7 +166,7 @@ public class maritimeTradeTest {
 	public void testExecute3() {
 		JSONObject args = new JSONObject();
 		args.put("type", "maritimeTrade");
-		args.put("playerIndex", (long) 0);
+		args.put("playerIndex", (long) 1);
 		args.put("inputResource", "sheep");
 		args.put("outputResource", "sheep");
 		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","

@@ -580,8 +580,11 @@ public class Model {
 		else
 			return false;
 		
-		if (portType != null && !getActivePlayer().hasPort(portType))
-			return false;
+		if(portType != null) {
+            if(!getActivePlayer().hasPort(portType)) {
+                return false;
+            }
+        }
 		return true;
 	}
 	
