@@ -52,7 +52,6 @@ public class Board {
 		this.game = game;
 		
 		this.createArrays(randomTiles, randomNumbers, randomPorts);
-		Integer count = 0;
 		JSONArray hexes = new JSONArray();
 		Long upperLimit = new Long(2);
 		Long lowerLimit = new Long(0);
@@ -60,13 +59,10 @@ public class Board {
 		{
 			for (Long y = lowerLimit; y <= upperLimit; y++)
 			{
-				System.out.println("Loop running! count: " + count);
-				count++;
 				JSONObject jsonHex = new JSONObject();
 				JSONObject hexLoc = new JSONObject();
 				hexLoc.put("x", x);
 				hexLoc.put("y", y);
-				System.out.println("(x:" + x + ", y:" + y + ")");
 				jsonHex.put("location", new JSONObject(hexLoc));
 				HexType type = tilesArray.remove();
 				if (type != HexType.DESERT)
@@ -109,7 +105,6 @@ public class Board {
 		jsonMap.put("robber", new JSONObject(robberLoc));
 		
 		try {
-			System.out.println("BEGINING of initializeMapFromJSON()");
 			initializeMapFromJSON(new JSONObject(jsonMap));
 		} catch (BadJSONException e) {
 			// TODO Auto-generated catch block
@@ -265,7 +260,6 @@ public class Board {
 		if (jsonRobber == null)
 			throw new BadJSONException();
 
-		System.out.println("Placing Hexes! ************");
 
 		// add land hexes to the map
 		for (Object hexObject : jsonHexes) {
@@ -309,28 +303,21 @@ public class Board {
 		}
 		
 
-		System.out.println("Placing Ports! ************");
 		//add ports and water hexes to the map
-		Integer count = 0;
 		for (Object portObject : jsonPorts) {
-			System.out.println("port number is:" + count);
-			count++;
 			JSONObject jsonPort = (JSONObject) portObject;
 
 			JSONObject jsonHexLoc = (JSONObject) jsonPort.get("location");
 			if (jsonHexLoc == null)
 				throw new BadJSONException();
-			System.out.println("##### there was a hexLocation");
 			HexLocation hexLoc = new HexLocation(jsonHexLoc);
 
 			String direction = (String) jsonPort.get("direction");
 			EdgeDirection edgeDir = EdgeDirection.fromJSON(direction);
-			System.out.println("##### there was a EdgeDirection");
 
 			String resource = (String) jsonPort.get("resource");
 
 			if (resource != null) {
-				System.out.println("##### there was a resource");
 				resource = resource.toLowerCase();
 				switch (resource) {
 				case "wood":
@@ -353,12 +340,10 @@ public class Board {
 				}
 			} else {
 
-				System.out.println("##### there was not a resource");
 				this.hexes.put(hexLoc, new PortHex(hexLoc, PortType.THREE, edgeDir));
 			}
 
 			EdgeDirection sideHexDir = edgeDir.toRight();
-			System.out.println("##### beginging search for land from port");
 			while (this.hexes.get(hexLoc.getNeighborLoc(sideHexDir)) != null)
 				sideHexDir = sideHexDir.toRight();
 			HexLocation sideHexLoc = hexLoc.getNeighborLoc(sideHexDir);
@@ -373,11 +358,9 @@ public class Board {
 		}
 
 
-		System.out.println("Recursive Connections! ************");
 		connectHexEdge(centerHex);
 		connectHexVertex(centerHex);
 
-		System.out.println("Placing Roads! ************");
 		// place roads
 		for (Object roadObject : jsonRoads) {
 			JSONObject jsonRoad = (JSONObject) roadObject;
@@ -408,7 +391,6 @@ public class Board {
 			buildRoad(road, edgeLoc);
 		}
 
-		System.out.println("Placing Cities! ************");
 		// place cities
 		for (Object cityObject : jsonCities) {
 			JSONObject jsonCity = (JSONObject) cityObject;
@@ -438,7 +420,6 @@ public class Board {
 
 			buildCity(city, vertexLoc);
 		}
-		System.out.println("Placing Settlements! ************");
 		// place settlements
 		for (Object settlementObject : jsonSettlements) {
 			JSONObject jsonSettlement = (JSONObject) settlementObject;
@@ -472,7 +453,6 @@ public class Board {
 		if (radius != null)
 			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));
-		System.out.println("finished initializeMapFromJSON()");
 
 	}
 
