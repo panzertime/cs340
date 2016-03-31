@@ -47,8 +47,9 @@ public class Player {
 	private Boolean hasDiscarded;
 	private Integer playerID;
 
-	public Player(int playerID, int playerIndex, String name, CatanColor color)
+	public Player(int playerID, int playerIndex, String name, CatanColor color, Model game)
 	{
+		this.game = game;
 		this.playerIndex = playerIndex;
 		this.playerID = playerID;
 		this.userName = name;

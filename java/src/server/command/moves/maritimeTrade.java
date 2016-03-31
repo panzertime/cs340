@@ -51,7 +51,7 @@ public class maritimeTrade extends MovesCommand {
 	 * @param resString value representing a string
 	 * @return corresponding resource or null
 	 */
-	@Override
+	/*@Override
 	public ResourceType getResourceType(Object resString) {
 		ResourceType result = null;
 		try {
@@ -61,5 +61,5 @@ public class maritimeTrade extends MovesCommand {
 		}
 		
 		return result;
-	}
+	}*/
 }

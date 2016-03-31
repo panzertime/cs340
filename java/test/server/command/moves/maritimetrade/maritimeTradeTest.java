@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -99,6 +100,50 @@ public class maritimeTradeTest {
 	@Test
 	public void testExecute1() {
 		JSONObject args = new JSONObject();
+		JSONArray mta = new JSONArray();
+		mta.add("maritmeTrade");
+		args.put("type", mta);
+		args.put("playerIndex", (long) 0);
+		args.put("inputResource", "sheep");
+		args.put("outputResource", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		maritimeTrade mt = new maritimeTrade();
+		try {
+			mt.execute(args, cookie);
+			fail("Failed discardCards test where type arg "
+					+ "is invalid: [maritimeTrade]");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "type arg is invalid: [maritimeTrade]");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute2() {
+		JSONObject args = new JSONObject();
+		args.put("playerIndex", (long) 0);
+		args.put("inputResource", "sheep");
+		args.put("outputResource", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		maritimeTrade mt = new maritimeTrade();
+		try {
+			mt.execute(args, cookie);
+			fail("Failed discardCards test where type arg "
+					+ "is invalid: dne");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "type arg is invalid: dne");
+		}
+	}
+	
+	
+	//Invalid	
+	@Test
+	public void testExecute3() {
+		JSONObject args = new JSONObject();
 		args.put("type", "maritimeTrade");
 		args.put("playerIndex", (long) 0);
 		args.put("inputResource", "sheep");
@@ -113,6 +158,68 @@ public class maritimeTradeTest {
 		} catch (ServerAccessException e) {
 			System.out.println("Passed discardCards test where "
 					+ "index arg is invalid: wrong player");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute4() {
+		JSONObject args = new JSONObject();
+		args.put("type", "maritimeTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("inputResource", "sheeep");
+		args.put("outputResource", "sheep");
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		maritimeTrade mt = new maritimeTrade();
+		try {
+			mt.execute(args, cookie);
+			fail("Failed discardCards test where inputResource arg "
+					+ "is invalid: sheeep");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "inputResource arg is invalid: sheeep");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute5() {
+		JSONObject args = new JSONObject();
+		args.put("type", "maritimeTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("inputResource", "sheep");
+		args.put("outputResource", null);
+		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+				+ "\"playerID\":0}; catan.game=1";
+		maritimeTrade mt = new maritimeTrade();
+		try {
+			mt.execute(args, cookie);
+			fail("Failed discardCards test where outputResource arg "
+					+ "is invalid: null");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "outputResource arg is invalid: null");
+		}
+	}
+	
+	//Invalid	
+	@Test
+	public void testExecute6() {
+		JSONObject args = new JSONObject();
+		args.put("type", "maritimeTrade");
+		args.put("playerIndex", (long) 0);
+		args.put("inputResource", "sheep");
+		args.put("outputResource", "sheep");
+		String cookie = "catan.game=1";
+		maritimeTrade mt = new maritimeTrade();
+		try {
+			mt.execute(args, cookie);
+			fail("Failed discardCards test where cookie "
+					+ "is invalid: no player");
+		} catch (ServerAccessException e) {
+			System.out.println("Passed discardCards test where "
+					+ "cookie is invalid: no player");
 		}
 	}
 

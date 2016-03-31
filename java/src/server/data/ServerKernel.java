@@ -76,7 +76,7 @@ public class ServerKernel {
 				this.users.put(user.getUsername(), user);
 			}
 		} catch (UserException e) {
-			throw new ServerAccessException("User Already Had and ID");
+			throw new ServerAccessException("User Already Had an ID");
 		}
 	}
 	
@@ -91,7 +91,8 @@ public class ServerKernel {
 	 */
 	public boolean userExists(User user) throws UserException {
 		if(user.hasValidCrendentials()) {
-			if(this.users.containsKey(user.getUsername())) {
+			if(this.users.containsKey(user.getUsername()) ||
+					this.users.containsValue(user)) {
 				return true;
 			}
 		} else {
@@ -218,9 +219,8 @@ public class ServerKernel {
 	 * @post will reset all fields to zero
 	 */
 	public void reinitAll() {
-		this.games = new HashMap<Integer, Model>();
-		this.users = new HashMap<String, User>();
-		this.numOfGames = 0;
+		reinitGames();
+		reinitUsers();
 	}
 	
 	/**
@@ -240,5 +240,6 @@ public class ServerKernel {
 	 */
 	public void reinitUsers() {
 		this.users = new HashMap<String, User>();
+		User.resetIDs();
 	}
 }

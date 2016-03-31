@@ -1,29 +1,42 @@
 package server.handler;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
+import java.util.logging.*;
+import java.util.*;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.InputStream;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-
-import server.command.ICommand;
-import server.exception.ServerAccessException;
-import server.exception.UserException;
-import server.utils.CookieException;
+import com.sun.net.httpserver.Headers;
+import org.json.simple.*;
+import org.json.simple.parser.*;
+import shared.model.*;
+import server.*;
+import server.exception.*;
+import server.command.*;
+import server.command.user.*;
+import server.command.game.*;
+import server.command.games.*;
+import server.command.moves.*;
+import server.command.mock.*;
+import server.command.mock.user.*;
+import server.command.mock.game.*;
+import server.command.mock.games.*;
+import server.command.mock.moves.*;
+import server.utils.*;
 
 
 public class RequestHandler extends AbstractHttpHandler {
@@ -71,6 +84,8 @@ public class RequestHandler extends AbstractHttpHandler {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.log(Level.INFO, "Problem in handler: " + e.getMessage());
+			Headers oheaders = exchange.getResponseHeaders();
+			oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), URLEncoder.encode("application/json", "UTF-8"));
 			exchange.sendResponseHeaders(400, e.getMessage().length());
 			packBody(exchange.getResponseBody(), e.getMessage());			
 			exchange.close();
@@ -106,6 +121,16 @@ public class RequestHandler extends AbstractHttpHandler {
 		}
 		else if (URI.equals("/game/model")) {
 			// we'd have to actually check for a param here and set it
+			String version = new String();
+			version = exchange.getRequestURI().getQuery();
+			if (version == null) {
+				version = "";
+			}
+			if (!version.equals("")) {
+				version = version.substring(8);
+				server.command.game.model mCommand = (server.command.game.model) command;
+				mCommand.setVersion(Integer.parseInt(version));
+			}
 			reply = command.execute(null, cookie);
 
 			// we expect this to sometimes just return "true", which is not JSON
@@ -180,10 +205,6 @@ public class RequestHandler extends AbstractHttpHandler {
 			server.command.games.join gCommand = (server.command.games.join) command;
 			reply = command.execute(json, cookie);
 			gameCookie = gCommand.getCookie().toCookie();
-			// game cookie looks like:
-			//	Set­cookie: catan.game=NN;Path=/;
-			// is appended to end of other cookie, plaintext
-		//	newCookie = gcookie; // the original cookie we pulled from req
 			newCookie = "";
 			
 		}

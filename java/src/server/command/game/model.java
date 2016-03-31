@@ -13,7 +13,7 @@ public class model extends GameCommand {
 	private int version;
 	
 	public model() {
-		version = 0;
+		version = -1;
 	}
 	
 	@Override
@@ -24,11 +24,13 @@ public class model extends GameCommand {
 			Model game = getGameFromCookie(cookie);
 			int gameVersion = game.getVersion();
 			if(gameVersion == version) {
-				result = "\"true\"";
+				result = "true";
 			} else {
 				JSONObject jsonGame = game.toJSON();
 				result = jsonGame.toJSONString();
 			}
+		} else {
+			throw new ServerAccessException("Invalid Cookie");
 		}
 		return result;
 	}
