@@ -575,7 +575,7 @@ public class Model {
 		else
 			return false;
 		
-		if (!(portType != null && getActivePlayer().hasPort(portType)))
+		if (portType != null && !getActivePlayer().hasPort(portType))
 			return false;
 		return true;
 	}
