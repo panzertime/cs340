@@ -1496,6 +1496,8 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		String source = this.getPlayerName(playerIndex);
+		this.chatModel.addGameMessage(source + " used Road Builder",source);
 		version++;
 	}
 	
