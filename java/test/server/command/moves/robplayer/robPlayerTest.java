@@ -147,30 +147,6 @@ public class robPlayerTest {
 	
 	//Invalid	
 	@Test
-	public void testExecute3() {
-		JSONObject args = new JSONObject();
-		args.put("type", "robPlayer");
-		args.put("playerIndex", (long) 0);
-		args.put("victimIndex", (long) -1);
-		JSONObject loc = new JSONObject();
-		loc.put("x", (long) -1);
-		loc.put("y", (long) -1);
-		args.put("location", loc);
-		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=1";
-		robPlayer rp = new robPlayer();
-		try {
-			rp.execute(args, cookie);
-			fail("Failed robPlayer test where victimIndex "
-					+ "is invalid: out of bounds");
-		} catch (ServerAccessException e) {
-			System.out.println("Passed robPlayer test where victimIndex "
-					+ "is invalid: out of bounds");
-		}
-	}
-	
-	//Invalid	
-	@Test
 	public void testExecute4() {
 		JSONObject args = new JSONObject();
 		args.put("type", "robPlayer");
