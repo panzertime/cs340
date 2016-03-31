@@ -1242,6 +1242,7 @@ public class Model {
 					}
 				}
 			}
+			status = "Playing";
 		}
 		version++;
 	}
