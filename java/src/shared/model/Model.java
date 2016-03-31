@@ -368,7 +368,7 @@ public class Model {
 	/**
 	 * @post turn is set to the Player who has the turn
 	 */
-	public void progessTurn() {
+	public void progressTurn() {
 		
 		String source = this.getPlayerName(activePlayerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
@@ -646,7 +646,7 @@ public class Model {
 			return false;
 		Player targetPlayer = getPlayerFromIndex(targetPlayerIndex);
 		if (targetPlayer == null)
-			return false;
+			return true;
 		if (targetPlayer.getHandSize() < 1)
 			return false;
 		if (!board.couldBeRobbedFrom(robberLoc, targetPlayer.getPlayerIndex()))
@@ -1271,7 +1271,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) progessTurn();
+		if (this.isStateSetup()) progressTurn();
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1389,7 +1389,7 @@ public class Model {
 			throw new ViolatedPreconditionException();
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
-		this.progessTurn();
+		this.progressTurn();
 		
 		version++;
 	}
