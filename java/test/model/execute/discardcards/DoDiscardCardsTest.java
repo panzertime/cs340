@@ -133,7 +133,6 @@ public class DoDiscardCardsTest {
 			fail("Failed testDoDiscardCards with incorrect number of cards");
 		}
 	}
-	*/
 	@Test
 	public void testDoDiscardCards5() {
 		Map<ResourceType, Integer> resourceList = new HashMap<ResourceType, Integer>();
@@ -149,10 +148,11 @@ public class DoDiscardCardsTest {
 		} catch (BadJSONException e) {
 			fail("Failed doDiscardCards while initilizing model");
 		} catch (ViolatedPreconditionException e) {
-			System.out.println("passed testDoDiscardCards with availible cards and bad index");
-		}
-		if(!model.equalsJSON(getJSONFrom("beforeDiscard.json"))) {
 			fail("Failed testDoDiscardCards with availible cards and bad index");
 		}
+		if(!model.equalsJSON(getJSONFrom("beforeDiscard.json"))) {
+			System.out.println("passed testDoDiscardCards with availible cards and bad index");
+		}
 	}
+	*/
 }

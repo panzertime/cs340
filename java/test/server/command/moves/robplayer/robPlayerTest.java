@@ -1,6 +1,6 @@
 package server.command.moves.robplayer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -14,7 +14,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import server.command.moves.Monopoly;
 import server.command.moves.robPlayer;
 import server.data.ServerKernel;
 import server.data.User;

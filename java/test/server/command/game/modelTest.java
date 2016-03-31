@@ -1,6 +1,6 @@
 package server.command.game;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import org.json.simple.JSONObject;
 import org.junit.BeforeClass;
@@ -73,7 +73,7 @@ public class modelTest {
 		try {
 			m.setVersion(0);
 			String result = m.execute(args, cookie);
-			if(result.equals("\"true\"")) {
+			if(result.equals("true")) {
 				System.out.println("Passed model test where everything "
 						+ "is valid: returns \"true\" - Sam");
 			} else {
@@ -118,7 +118,7 @@ public class modelTest {
 		try {
 			m.setVersion(0);
 			String result = m.execute(args, cookie);
-			if(result.equals("\"true\"")) {
+			if(result.equals("true")) {
 				System.out.println("Passed model test where everything "
 						+ "is valid: returns \"true\" - Joshua");
 			} else {
