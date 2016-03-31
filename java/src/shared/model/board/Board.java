@@ -235,7 +235,7 @@ public class Board {
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
 			throw new BadJSONException();
-		System.out.println(jsonHexes.size() + "");
+		//System.out.println(jsonHexes.size() + "");
 		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
@@ -355,7 +355,7 @@ public class Board {
 		// Recursively link the hexes with edges and vertices
 		Hex centerHex = this.hexes.get(new HexLocation(0, 0));
 		for (HexLocation hexLoc : hexes.keySet()) {
-			System.out.println(hexLoc.toString());
+			//System.out.println(hexLoc.toString());
 		}
 
 
