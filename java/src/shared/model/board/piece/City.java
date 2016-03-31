@@ -17,8 +17,10 @@ public class City extends Building{
 	 */
 	@Override
 	public void produce(ResourceType type) throws NoRemainingResourceException {
-		owner.receiveResource(type, 2);
-		owner.getGame().getBank().sendResource(type, 2);
+		owner.getGame().getBank().sendResource(type, 1);
+		owner.receiveResource(type, 1);
+		owner.getGame().getBank().sendResource(type, 1);
+		owner.receiveResource(type, 1);
 	}
 
 }

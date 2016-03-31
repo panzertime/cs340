@@ -17,8 +17,8 @@ public class Settlement extends Building{
 	 */
 	@Override
 	public void produce(ResourceType type) throws NoRemainingResourceException {
-		owner.receiveResource(type, 1);
 		owner.getGame().getBank().sendResource(type, 1);
+		owner.receiveResource(type, 1);
 	}
 
 }

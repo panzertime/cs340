@@ -1237,8 +1237,8 @@ public class Model {
 					try {
 						b.produce(roll);
 					} catch (NoRemainingResourceException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						Log.debug("Bank ran outa its stuff \"No more my pretty!\"");
+						//e.printStackTrace();
 					}
 				}
 			}
