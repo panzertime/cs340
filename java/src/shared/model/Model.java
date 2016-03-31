@@ -368,42 +368,29 @@ public class Model {
 	/**
 	 * @post turn is set to the Player who has the turn
 	 */
-	public void getNextTurn(int playerIndex) {
-		String source = this.getPlayerName(playerIndex);
+	public void progessTurn() {
+		
+		String source = this.getPlayerName(activePlayerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
-
-		if (!this.getStatus().equals("SecondRound"))
-		{
-			
-			if (this.activePlayerIndex == players.size() - 1)
-			{
-				this.activePlayerIndex = 0;
+		
+		if (status.equals("FirstRound")) {
+			activePlayerIndex++;
+			if (activePlayerIndex > 3) {
+				status = "SecondRound";
+				activePlayerIndex = 3; 
 			}
-			else
-			{
-				this.activePlayerIndex++;
+		} else if (status.equals("SecondRound")) {
+			activePlayerIndex--;
+			if (activePlayerIndex < 0) {
+				status = "Rolling";
+				activePlayerIndex = 0;
 			}
+		} else if (status.equals("Playing")) {
+			activePlayerIndex++;
+			status = "Rolling";
+			if (activePlayerIndex > 3)
+				activePlayerIndex = 0;
 		}
-		else {
-			if (this.activePlayerIndex == 0 )
-			{
-				//this.activePlayerIndex = players.size() - 1;
-			}
-			else
-			{
-				this.activePlayerIndex--;
-			}
-		}
-		if (this.status.equals("FirstRound"))
-		{
-			if (activePlayerIndex == 0) this.status = "SecondRound";
-		}
-		else if (this.status.equals("SecondRound"))
-		{
-			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
-		}
-		else
-			this.status = "Rolling";
 	}
 
 	public Player getPlayerFromIndex(Integer playerIndex) {
@@ -1283,7 +1270,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) getNextTurn(playerIndex);
+		if (this.isStateSetup()) progessTurn();
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1398,7 +1385,7 @@ public class Model {
 			throw new ViolatedPreconditionException();
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
-		this.getNextTurn(playerIndex);
+		this.progessTurn();
 		
 		version++;
 	}
