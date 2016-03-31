@@ -682,6 +682,7 @@ public class Hand {
 
 	public Boolean hasCards(Map<ResourceType, Integer> resourceList) {
 
+		System.out.println("cheking if player has cards");
 		if (resourceList == null)
 			return false;
 		System.out.println("resourceList is not Null");
