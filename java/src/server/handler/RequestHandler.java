@@ -73,7 +73,7 @@ public class RequestHandler extends AbstractHttpHandler {
 				throw new ServerAccessException(verb);
 			}
 				
-			logger.log(Level.INFO, "Body has length " + reply.length());
+		//	logger.log(Level.INFO, "Body has length " + reply.length());
 			exchange.sendResponseHeaders(200, reply.length());
 			packBody(exchange.getResponseBody(), reply);
 			exchange.getResponseBody().close();
@@ -98,11 +98,11 @@ public class RequestHandler extends AbstractHttpHandler {
 			ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		String URI = exchange.getRequestURI().getPath();
-		logger.log(Level.INFO, "POST request to URI: " + URI);
+		logger.log(Level.INFO, "GET request to URI: " + URI);
 
 		String endpoint = endpointToClassName(URI);
 
-		logger.log(Level.INFO, "about to make command " + endpoint);
+	//	logger.log(Level.INFO, "about to make command " + endpoint);
 
 		Class proto_command = Class.forName(endpoint);
 		ICommand command = (ICommand) proto_command.newInstance();
@@ -168,12 +168,12 @@ public class RequestHandler extends AbstractHttpHandler {
 		logger.log(Level.INFO, "POST request to URI: " + URI);
 
 		String endpoint = endpointToClassName(URI);
-		logger.log(Level.INFO, "Endpoint selected: " + endpoint);
+	//	logger.log(Level.INFO, "Endpoint selected: " + endpoint);
 
 		Class proto_command = Class.forName(endpoint);
 		ICommand command = (ICommand) proto_command.newInstance();
 		
-		logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
+	///	logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
 
 
 		Headers headers = exchange.getRequestHeaders();
@@ -196,13 +196,13 @@ public class RequestHandler extends AbstractHttpHandler {
 
 		if (URI.equals("/user/login")) {
 			if (!fakeFlag) {
-				logger.log(Level.INFO, "Doing the login command");
+		//		logger.log(Level.INFO, "Doing the login command");
 				server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
 				reply = uCommand.execute(json, cookie);
 				newCookie = uCommand.getCookie().toCookie();
 			}
 			else {
-				logger.log(Level.INFO, "Doing the login command");
+		//		logger.log(Level.INFO, "Doing the login command");
 				server.command.mock.user.UserCommand uCommand = (server.command.mock.user.UserCommand) command;
 				reply = uCommand.execute(json, cookie);
 				newCookie = uCommand.getCookie().toCookie();
@@ -245,15 +245,15 @@ public class RequestHandler extends AbstractHttpHandler {
 		//oheaders.add(URLEncoder.encode("Content-type", "UTF-8"), "text/html");
 		if (!newCookie.equals("")) {
 			// set cookie header
-			logger.log(Level.INFO, "Unencoded cookie: " + newCookie);
+	//		logger.log(Level.INFO, "Unencoded cookie: " + newCookie);
 			String mutatedCookie = newCookie.substring(0, newCookie.length() - 8);
 			mutatedCookie = URLEncoder.encode(mutatedCookie, "UTF-8");
 		 	mutatedCookie += ";Path=/;"; 
-			logger.log(Level.INFO, "Encoded cookie: " + mutatedCookie);
+	//		logger.log(Level.INFO, "Encoded cookie: " + mutatedCookie);
 			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), mutatedCookie);
 		}
 		else if (!gameCookie.equals("")) { 
-			logger.log(Level.INFO, "Game cookie: " + gameCookie);
+	//		logger.log(Level.INFO, "Game cookie: " + gameCookie);
 			oheaders.add(URLEncoder.encode("Set-cookie", "UTF-8"), gameCookie);
 		}
 
@@ -293,21 +293,21 @@ public class RequestHandler extends AbstractHttpHandler {
 	}
 
 	private void packBody(OutputStream O, String data) throws IOException {
-		logger.log(Level.INFO, "Packing " + data);
+	//	logger.log(Level.INFO, "Packing " + data);
 		DataOutputStream body = 
 			new DataOutputStream(new BufferedOutputStream(O));
 		//body.write(data.getBytes());
 		body.writeBytes(data);
 		body.flush();
 
-		logger.log(Level.INFO, "Written: " + body.size());
+	//	logger.log(Level.INFO, "Written: " + body.size());
 		
 	//	body.flush();
 	//	body.close();
 	//	O.flush();
 	//	O.close();
 
-		logger.log(Level.INFO, "Done packing.");
+	//	logger.log(Level.INFO, "Done packing.");
 
 
 	}	

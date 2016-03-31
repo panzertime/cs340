@@ -21,7 +21,6 @@ import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
 import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
-import shared.model.board.hex.tiles.land.LandHex;
 import shared.model.board.hex.tiles.land.ProductionHex;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
@@ -112,7 +111,7 @@ public class Model {
 		int index = players.size();
 		if (index >= 4)
 			throw new JoinGameException();
-		players.put(index, new Player(playerID, index, playerName, color));
+		players.put(index, new Player(playerID, index, playerName, color, this));
 	}
 	
 	}
@@ -369,42 +368,29 @@ public class Model {
 	/**
 	 * @post turn is set to the Player who has the turn
 	 */
-	public void getNextTurn(int playerIndex) {
-		String source = this.getPlayerName(playerIndex);
+	public void progressTurn() {
+		
+		String source = this.getPlayerName(activePlayerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
-
-		if (!this.getStatus().equals("SecondRound"))
-		{
-			
-			if (this.activePlayerIndex == players.size() - 1)
-			{
-				this.activePlayerIndex = 0;
+		
+		if (status.equals("FirstRound")) {
+			activePlayerIndex++;
+			if (activePlayerIndex > 3) {
+				status = "SecondRound";
+				activePlayerIndex = 3; 
 			}
-			else
-			{
-				this.activePlayerIndex++;
+		} else if (status.equals("SecondRound")) {
+			activePlayerIndex--;
+			if (activePlayerIndex < 0) {
+				status = "Rolling";
+				activePlayerIndex = 0;
 			}
+		} else if (status.equals("Playing")) {
+			activePlayerIndex++;
+			status = "Rolling";
+			if (activePlayerIndex > 3)
+				activePlayerIndex = 0;
 		}
-		else {
-			if (this.activePlayerIndex == 0 )
-			{
-				//this.activePlayerIndex = players.size() - 1;
-			}
-			else
-			{
-				this.activePlayerIndex--;
-			}
-		}
-		if (this.status.equals("FirstRound"))
-		{
-			if (activePlayerIndex == 0) this.status = "SecondRound";
-		}
-		else if (this.status.equals("SecondRound"))
-		{
-			if (activePlayerIndex == players.size() - 1 ) this.status = "Rolling";
-		}
-		else
-			this.status = "Rolling";
 	}
 
 	public Player getPlayerFromIndex(Integer playerIndex) {
@@ -660,7 +646,7 @@ public class Model {
 			return false;
 		Player targetPlayer = getPlayerFromIndex(targetPlayerIndex);
 		if (targetPlayer == null)
-			return false;
+			return true;
 		if (targetPlayer.getHandSize() < 1)
 			return false;
 		if (!board.couldBeRobbedFrom(robberLoc, targetPlayer.getPlayerIndex()))
@@ -671,8 +657,8 @@ public class Model {
 	public Boolean canFinishTurn(Integer playerIndex) {
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (isStateSetup())
-			return true; //Weird check! Be careful to change this
+		/*if (isStateSetup())
+			return true; //Weird check! Be careful to change this*/
 		if (!isStatePlaying())
 			return false;
 		return true;
@@ -1251,11 +1237,12 @@ public class Model {
 					try {
 						b.produce(roll);
 					} catch (NoRemainingResourceException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						Log.debug("Bank ran outa its stuff \"No more my pretty!\"");
+						//e.printStackTrace();
 					}
 				}
 			}
+			status = "Playing";
 		}
 		version++;
 	}
@@ -1284,7 +1271,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) getNextTurn(playerIndex);
+		if (this.isStateSetup()) progressTurn();
 		version++;
 	}
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1359,6 +1346,7 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
+		version++;
 	}
 	
 	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex) throws ViolatedPreconditionException
@@ -1370,6 +1358,7 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1390,6 +1379,7 @@ public class Model {
 			e.printStackTrace();
 		}
 		this.status = "Playing";
+		version++;
 	}
 	
 	
@@ -1399,7 +1389,7 @@ public class Model {
 			throw new ViolatedPreconditionException();
 
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
-		this.getNextTurn(playerIndex);
+		this.progressTurn();
 		
 		version++;
 	}
@@ -1417,6 +1407,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1438,6 +1429,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	
 	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex) throws ViolatedPreconditionException
@@ -1464,6 +1456,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex) throws ViolatedPreconditionException	
@@ -1493,6 +1486,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	
 	public void doMonopoly(ResourceType resource, int playerIndex) 
@@ -1529,6 +1523,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doMonument(int playerIndex) throws ViolatedPreconditionException
@@ -1540,6 +1535,7 @@ public class Model {
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 
 	public void setID(int gameID) {

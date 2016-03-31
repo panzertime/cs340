@@ -27,16 +27,17 @@ public class create extends GamesCommand {
 						ports == null) {
 					throw new ServerAccessException("Invalid Parameters");
 				} else {
-			System.out.println("Making new Model()");
+					System.out.println("Broken - 0");
 					Model newModel = new Model(tiles, numbers, ports, name);
-			System.out.println("setting game ID");
+					System.out.println("Broken - 1");
 					int gameID = ServerKernel.sole().putGame(newModel);
-			System.out.println("getting final model?");
+					System.out.println("Broken - 2");
 					Model finalModel = ServerKernel.sole().getGame(gameID);
-			System.out.println("setting jsonResult");
+					System.out.println("Broken - 3");
 					JSONObject jsonResult = finalModel.getGamesList();
-			System.out.println("setting result");
+					System.out.println("Broken - 4");
 					result = jsonResult.toJSONString();
+					System.out.println("Broken - 5");
 				}
 			} else {
 				throw new ServerAccessException("Invalid Cookie");

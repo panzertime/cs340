@@ -328,7 +328,7 @@ public class ServerFacade {
 			json.put("type", "finishTurn");
 			json.put("playerIndex", playerIndex);
 			
-			return proxy.buildSettlement(json);
+			return proxy.finishTurn(json);
 		}
 		catch(Exception e){
 			throw new ServerException(e);
