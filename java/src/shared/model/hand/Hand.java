@@ -710,8 +710,15 @@ public class Hand {
 		int i = 0;
 		for (DevCard card: this.getDevCards())
 		{
-			if (card.isEnabled() && old)
-				i++;
+			if (card.getType() == type) {
+			if (old)
+			{
+				if (card.isEnabled()) i++;
+			}
+			else
+			{
+				if (!card.isEnabled()) i++;
+			}}
 		}
 		return i;
 	}

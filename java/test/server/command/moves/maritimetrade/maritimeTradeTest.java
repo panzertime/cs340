@@ -96,6 +96,27 @@ public class maritimeTradeTest {
 		}
 	}
 	
+	//Good - true
+		@Test
+		public void testExecute0() {
+			JSONObject args = new JSONObject();
+			args.put("type", "maritimeTrade");
+			args.put("playerIndex", (long) 0);
+			args.put("ratio", (long) 4);
+			args.put("inputResource", "wheat");
+			args.put("outputResource", "brick");
+			String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
+					+ "\"playerID\":0}; catan.game=0";
+			maritimeTrade mt = new maritimeTrade();
+			try {
+				mt.execute(args, cookie);
+				System.out.println("Passed maritimeTrade test where everything "
+						+ "is valid");
+			} catch (ServerAccessException e) {
+				fail("Failed maritimeTrade test where everything is valid");
+			}
+		}
+	
 	//Invalid	
 	@Test
 	public void testExecute1() {
