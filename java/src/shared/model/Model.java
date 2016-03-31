@@ -1367,9 +1367,14 @@ public class Model {
 			throw new ViolatedPreconditionException();
 		if(!canRobPlayerFrom(robLocation, playerIndex, victimIndex))
 			throw new ViolatedPreconditionException();
+		String victim = "nobody";
+		if (victimIndex != -1)
+			victim = this.getPlayerName(victimIndex); 
 		String source = this.getPlayerName(playerIndex);
-		this.chatModel.addGameMessage(source + " moved the robber and robbed " + this.getPlayerName(victimIndex), source);
+		this.chatModel.addGameMessage(source + " moved the robber and robbed " + victim, source);
 		this.board.placeRobber(robLocation);
+		if (victimIndex != -1)
+		{
 		try {
 			ResourceType rob = this.getPlayerFromIndex(victimIndex).drawRandomResourceCard();
 			this.getPlayerFromIndex(playerIndex).receiveResource(rob, 1);
@@ -1377,6 +1382,7 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
 		}
 		this.status = "Playing";
 		version++;
