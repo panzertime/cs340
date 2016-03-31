@@ -1346,6 +1346,7 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
+		version++;
 	}
 	
 	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex) throws ViolatedPreconditionException
@@ -1357,6 +1358,7 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1377,6 +1379,7 @@ public class Model {
 			e.printStackTrace();
 		}
 		this.status = "Playing";
+		version++;
 	}
 	
 	
@@ -1404,6 +1407,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1425,6 +1429,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	
 	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex) throws ViolatedPreconditionException
@@ -1451,6 +1456,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex) throws ViolatedPreconditionException	
@@ -1480,6 +1486,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
+		version++;
 	}
 	
 	public void doMonopoly(ResourceType resource, int playerIndex) 
@@ -1516,6 +1523,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		version++;
 	}
 	
 	public void doMonument(int playerIndex) throws ViolatedPreconditionException
@@ -1527,6 +1535,7 @@ public class Model {
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();
 		checkWinner(playerIndex);
+		version++;
 	}
 
 	public void setID(int gameID) {
