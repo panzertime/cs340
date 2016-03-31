@@ -1,42 +1,29 @@
 package server.handler;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-import java.util.logging.*;
-import java.util.*;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.InputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.Headers;
-import org.json.simple.*;
-import org.json.simple.parser.*;
-import shared.model.*;
-import server.*;
-import server.exception.*;
-import server.command.*;
-import server.command.user.*;
-import server.command.game.*;
-import server.command.games.*;
-import server.command.moves.*;
-import server.command.mock.*;
-import server.command.mock.user.*;
-import server.command.mock.game.*;
-import server.command.mock.games.*;
-import server.command.mock.moves.*;
-import server.utils.*;
+import com.sun.net.httpserver.HttpExchange;
+
+import server.command.ICommand;
+import server.exception.ServerAccessException;
+import server.exception.UserException;
+import server.utils.CookieException;
 
 
 public class RequestHandler extends AbstractHttpHandler {

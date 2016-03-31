@@ -509,14 +509,19 @@ public class Model {
 	public Boolean canDiscardCard(Map<ResourceType, Integer> resources, Integer playerIndex) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
-		if (!isActivePlayer(playerIndex))
+		System.out.println("chekcing canDiscardCards");
+		/*if (!isActivePlayer(playerIndex))
 			return false;
+		System.out.println(playerIndex + " is the active player");*/
 		if (!isStateDiscarding())
 			return false;
+		System.out.println("State is discarding");
 		if (!getActivePlayer().canDiscardCard())
 			return false;
+		System.out.println("Player can discard");
 		if (!getActivePlayer().hasCards(resources))
 			return false;
+		System.out.println("player has the same cards");
 		return true;
 	}
 	
@@ -646,7 +651,7 @@ public class Model {
 			return false;
 		Player targetPlayer = getPlayerFromIndex(targetPlayerIndex);
 		if (targetPlayer == null)
-			return true;
+			return true; //WARNING this is important so that you can rob no one
 		if (targetPlayer.getHandSize() < 1)
 			return false;
 		if (!board.couldBeRobbedFrom(robberLoc, targetPlayer.getPlayerIndex()))

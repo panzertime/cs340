@@ -682,26 +682,35 @@ public class Hand {
 
 	public Boolean hasCards(Map<ResourceType, Integer> resourceList) {
 
+		System.out.println("cheking if player has cards");
 		if (resourceList == null)
 			return false;
-		Integer w = resourceList.get(ResourceType.WOOD);
-		Integer b = resourceList.get(ResourceType.BRICK);
-		Integer s = resourceList.get(ResourceType.SHEEP);
-		Integer wh = resourceList.get(ResourceType.WHEAT);
-		Integer o = resourceList.get(ResourceType.ORE);
-		if (w == null || b == null || s == null || wh == null || o == null)
-			return false;
-
-		if (getWood() < w)
-			return false;
-		if (getBrick() < b)
-			return false;
-		if (getSheep() < s)
-			return false;
-		if (getWheat() < wh)
-			return false;
-		if (getOre() < o)
-			return false;
+		System.out.println("resourceList is not Null");
+		Integer wood = resourceList.get(ResourceType.WOOD);
+		Integer brick = resourceList.get(ResourceType.BRICK);
+		Integer sheep = resourceList.get(ResourceType.SHEEP);
+		Integer wheat = resourceList.get(ResourceType.WHEAT);
+		Integer ore = resourceList.get(ResourceType.ORE);
+		if (wood != null)
+			if (getWood() < wood)
+				return false;
+		System.out.println("there is enough wood");
+		if (brick != null)
+			if (getBrick() < brick)
+				return false;
+		System.out.println("there is enough brick");
+		if (sheep != null)
+			if (getSheep() < sheep)
+				return false;
+		System.out.println("there is enough sheep");
+		if (wheat != null)
+			if (getWheat() < wheat)
+				return false;
+		System.out.println("there is enough wheat");
+		if (ore != null)
+			if (getOre() < ore)
+				return false;
+		System.out.println("there is enough ore");
 		return true;
 	}
 	
