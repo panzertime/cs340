@@ -227,11 +227,21 @@ public class TradeModel {
 	{
 		switch(type)
 		{
-		case WOOD: wood = amount;
-		case BRICK: brick = amount;
-		case SHEEP: sheep = amount;
-		case WHEAT: wheat = amount;
-		case ORE: ore = amount;
+		case WOOD: 
+			wood = amount;
+			break;
+		case BRICK: 
+			brick = amount;
+			break;
+		case SHEEP: 
+			sheep = amount;
+			break;
+		case WHEAT: 
+			wheat = amount;
+			break;
+		case ORE: 
+			ore = amount;
+			break;
 		default: throw new ModelAccessException();
 		}		
 		
