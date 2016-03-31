@@ -657,8 +657,8 @@ public class Model {
 	public Boolean canFinishTurn(Integer playerIndex) {
 		if (!isActivePlayer(playerIndex))
 			return false;
-		if (isStateSetup())
-			return true; //Weird check! Be careful to change this
+		/*if (isStateSetup())
+			return true; //Weird check! Be careful to change this*/
 		if (!isStatePlaying())
 			return false;
 		return true;
