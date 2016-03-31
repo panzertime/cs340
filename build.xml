@@ -23,6 +23,7 @@
 	<property name="java.test" location="java/test"/>
 	<property name="java.lib" value="java/lib"/>
 	<property name="java.doc" value="java/docs"/>
+	<property name="java.demo.doc" value="${demo.dir}/docs"/>
 	
 	<property name="java.bin" location="java/bin"/>
 	<property name="java.bin.src" location="${java.bin}/src"/>
@@ -125,6 +126,11 @@
 		<mkdir dir="${java.dist}/images"/>
 		<copy todir="${java.dist}/images">
 			<fileset dir="${java.images}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${java.dist}/docs">
+			<fileset dir="${java.demo.doc}">
 				<include name="**"/>
 			</fileset>
 		</copy>
