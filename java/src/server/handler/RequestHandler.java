@@ -126,9 +126,14 @@ public class RequestHandler extends AbstractHttpHandler {
 			if (version == null) {
 				version = "";
 			}
-			if (!version.equals("")) {
+			if (!version.equals("") && !fakeFlag) {
 				version = version.substring(8);
 				server.command.game.model mCommand = (server.command.game.model) command;
+				mCommand.setVersion(Integer.parseInt(version));
+			}
+			else if (!version.equals("")) {
+				version = version.substring(8);
+				server.command.mock.game.model mCommand = (server.command.mock.game.model) command;
 				mCommand.setVersion(Integer.parseInt(version));
 			}
 			reply = command.execute(null, cookie);
@@ -190,23 +195,44 @@ public class RequestHandler extends AbstractHttpHandler {
 		logger.log(Level.INFO, "URI IS : ->" + URI + "<-");
 
 		if (URI.equals("/user/login")) {
-			logger.log(Level.INFO, "Doing the login command");
-			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(json, cookie);
-			newCookie = uCommand.getCookie().toCookie();
+			if (!fakeFlag) {
+				logger.log(Level.INFO, "Doing the login command");
+				server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
+				reply = uCommand.execute(json, cookie);
+				newCookie = uCommand.getCookie().toCookie();
+			}
+			else {
+				logger.log(Level.INFO, "Doing the login command");
+				server.command.mock.user.UserCommand uCommand = (server.command.mock.user.UserCommand) command;
+				reply = uCommand.execute(json, cookie);
+				newCookie = uCommand.getCookie().toCookie();
+			}
 		}
 		else if (URI.equals("/user/register")) {
-			server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
-			reply = uCommand.execute(json, cookie);
-			newCookie = uCommand.getCookie().toCookie();
-
+			if (!fakeFlag) {
+				server.command.user.UserCommand uCommand = (server.command.user.UserCommand) command;
+				reply = uCommand.execute(json, cookie);
+				newCookie = uCommand.getCookie().toCookie();
+			}
+			else {
+				server.command.mock.user.UserCommand uCommand = (server.command.mock.user.UserCommand) command;
+				reply = uCommand.execute(json, cookie);
+				newCookie = uCommand.getCookie().toCookie();
+			}
 		}
 		else if (URI.equals("/games/join")) {
-			server.command.games.join gCommand = (server.command.games.join) command;
-			reply = command.execute(json, cookie);
-			gameCookie = gCommand.getCookie().toCookie();
-			newCookie = "";
-			
+			if (!fakeFlag) {
+				server.command.games.join gCommand = (server.command.games.join) command;
+				reply = command.execute(json, cookie);
+				gameCookie = gCommand.getCookie().toCookie();
+				newCookie = "";
+			}
+			else {
+				server.command.mock.games.join gCommand = (server.command.mock.games.join) command;
+				reply = command.execute(json, cookie);
+				gameCookie = gCommand.getCookie().toCookie();
+				newCookie = "";
+			}	
 		}
 		else {
 			reply = command.execute(json, cookie);
