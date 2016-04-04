@@ -62,8 +62,6 @@ public class ServerKernel {
 	 * yet exist. Otherwise he will be deleted and this function will return 
 	 * false
 	 * @param user User object created from passed in credentials
-	 * @return Whether or not the operation was successful
-	 * @throws UserException user's credentials are invalid
 	 * @throws ServerAccessException username already exists
 	 */
 	public void addUser(User user) throws ServerAccessException {
