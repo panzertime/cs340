@@ -3,18 +3,19 @@ package server.persistance.mySQL;
 import java.util.List;
 
 import server.command.moves.MovesCommand;
-import server.persistance.CommandsDAO;
+import server.persistance.DatabaseException;
+import server.persistance.ICommandsDAO;
 
-public class SQLCommandsDAO implements CommandsDAO {
+public class SQLCommandsDAO implements ICommandsDAO {
 
 	@Override
-	public void saveCommmands(Integer gameID, MovesCommand movesCommand) {
+	public void saveCommmand(Integer gameID, MovesCommand movesCommand) throws DatabaseException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<MovesCommand> getCommands(Integer gameID) {
+	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
 		// TODO Auto-generated method stub
 		return null;
 	}

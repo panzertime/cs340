@@ -6,6 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import server.command.moves.MovesCommand;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import shared.model.Model;
@@ -239,5 +240,37 @@ public class ServerKernel {
 	public void reinitUsers() {
 		this.users = new HashMap<String, User>();
 		User.resetIDs();
+	}
+	private int persistFrequency;
+	
+
+	/**
+	 * @pre The game and the user exists
+	 * @post The user is added as part of the game, and the game is persisted
+	 * @param u - The user that will be added to the game
+	 * @param gameID - The ID of game that the user is being added to
+	 */
+	public void addUserToGame(User u, int gameID) {
+		
+	}
+	
+	/**
+	 * @pre the game exists and the command is valid with the correct command parameters
+	 * @post The command is persisted to the specific game
+	 * @param gameID The game to which the command should be persisted
+	 * @param cmd The command that needs to be persisted
+	 */
+	public void persistCommand(int gameID, MovesCommand cmd) {
+		
+	}
+	
+	/**
+	 * @pre the Game is valid
+	 * @post Loads the game from memory and updates it according to the commands and re-persists it
+	 * @param gameID The index of the game in the map
+	 * 
+	 */
+	private void updateGame(int gameID) {
+		
 	}
 }
