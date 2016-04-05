@@ -3,6 +3,8 @@ package shared.model;
 import java.util.List;
 import java.util.Map;
 
+import shared.model.board.Board;
+
 public class Achievements {
 
 	
@@ -34,25 +36,27 @@ public class Achievements {
 		return true;
 	}
 	/**
+	 * @param board 
 	 * @pre A Road has been built on the board by every player
 	 * @post The Player with the Longest Road is set as longestRoad and their haslongestRoad is set to true
 	 */
-	public boolean checkRoads(Map<Integer, Player> players) {
+	public boolean checkRoads(Map<Integer, Player> players, Board board) {
 		if (longestRoad == null)
 		{
 			for (Player p: players.values())
 			{
-				if (p.getRoadLength() >= 5)
-				longestRoad = p;
-				return true;
+				if (p.getRoadLength(board) >= 5) {
+					longestRoad = p;
+					return true;
+				}
 			}			
 		}
 		else
 		{
-			int max = longestRoad.getRoadLength();
+			int max = longestRoad.getRoadLength(board);
 			for (Player p: players.values())
 			{
-				if (p.getRoadLength() > max)
+				if (p.getRoadLength(board) > max)
 					longestRoad = p;
 				return true;
 			}
@@ -69,9 +73,10 @@ public class Achievements {
 		{
 			for (Player p: players.values())
 			{
-				if (p.getArmies() >= 3)
+				if (p.getArmies() >= 3) {
 					largestArmy = p;
-				return true;
+					return true;
+				}
 			}			
 		}
 		else

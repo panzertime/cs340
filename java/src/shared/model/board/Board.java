@@ -175,7 +175,7 @@ public class Board {
 		hexLoc.put("x", new Long(2));
 		hexLoc.put("y", new Long(-3));
 		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SE");
+		jsonHex.put("direction", "S");
 		ports[8] = new JSONObject(jsonHex);
 		
 		return ports;

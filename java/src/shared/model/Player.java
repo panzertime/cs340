@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
+import shared.model.board.Board;
 import shared.model.board.edge.Edge;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
@@ -533,23 +534,25 @@ public class Player {
 	//recursive road add algorithm
 	//add to set - continue left and right until no more
 	
-	public void addRoadsToSet(Road r, HashSet<Road> set)
+	public void addRoadsToSet(Road r, HashSet<Road> set, Board board)
 	{
 		set.add(r);
 		r.setMarked(true);
 
 		for (Vertex v: r.getEdge().getAllVertices())
 		{
-			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex)
+			v = board.getVertexAt(v.getVertexLocation());
+			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() == this.playerIndex)
 			{
-				for (Edge e: v.getAllEdges())
-				if (e.hasRoad())
-				{
-					Road road = e.getRoad();
-					if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
-						addRoadsToSet(road, set);
+				for (Edge e: v.getAllEdges()){
+					e = board.getEdgeAt(e.getEdgeLocation());
+					if (e.hasRoad())
+					{
+						Road road = e.getRoad();
+						if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
+							addRoadsToSet(road, set, board);
+					}
 				}
-						
 			}
 		}
 	}
@@ -566,8 +569,9 @@ public class Player {
 		return 0;
 	}
 	
-	public int getRoadLength() {
-		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>(); 
+	public int getRoadLength(Board board) {
+		clearMarks();
+		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>();
 		for (Road r: roads)
 		{
 			if (r.isPlaced())
@@ -575,7 +579,7 @@ public class Player {
 				if (!r.isMarked())
 				{
 					HashSet<Road> set = new HashSet<Road>();
-					this.addRoadsToSet(r, set);
+					this.addRoadsToSet(r, set, board);
 					sets.add(set);
 				}
 			}

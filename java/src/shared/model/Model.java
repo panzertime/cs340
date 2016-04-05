@@ -516,10 +516,10 @@ public class Model {
 		if (!isStateDiscarding())
 			return false;
 		System.out.println("State is discarding");
-		if (!getActivePlayer().canDiscardCard())
+		if (!getPlayerFromIndex(playerIndex).canDiscardCard())
 			return false;
 		System.out.println("Player can discard");
-		if (!getActivePlayer().hasCards(resources))
+		if (!getPlayerFromIndex(playerIndex).hasCards(resources))
 			return false;
 		System.out.println("player has the same cards");
 		return true;
@@ -1274,7 +1274,7 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			e.printStackTrace();
 		}
-		if (this.achievements.checkRoads(players))
+		if (this.achievements.checkRoads(players, board))
 		{
 			this.updatePoints();
 			this.checkWinner(playerIndex);
@@ -1494,7 +1494,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (this.achievements.checkRoads(players))
+		if (this.achievements.checkRoads(players, board))
 		{
 			this.updatePoints();
 			this.checkWinner(playerIndex);
