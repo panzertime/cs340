@@ -1385,7 +1385,6 @@ public class Model {
 		{
 		try {
 			ResourceType rob = this.getPlayerFromIndex(victimIndex).drawRandomResourceCard();
-			this.getPlayerFromIndex(playerIndex).receiveResource(rob, 1);
 			this.getPlayerFromIndex(victimIndex).sendResource(rob, 1);
 		} catch (NoRemainingResourceException e) {
 			

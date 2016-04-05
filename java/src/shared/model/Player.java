@@ -907,6 +907,7 @@ public class Player {
 	}
 
 	public void updateDevCards() {
+		this.playedDevelopmentCard = false;
 		for (DevCard card: this.hand.getDevCards())
 			card.setEnabled(true);
 	}
