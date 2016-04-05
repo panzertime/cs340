@@ -927,5 +927,13 @@ public class Player {
 		this.userColor = userColor;
 	}
 
+	public void incrementArmies() {
+		this.armies++;
+	}
+
+	public void playedDevCard() {
+		this.playedDevelopmentCard = true;
+	}
+
 
 }

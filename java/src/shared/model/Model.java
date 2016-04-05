@@ -1427,6 +1427,8 @@ public class Model {
 	{
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used a soldier", source);
+		this.getPlayerFromIndex(playerIndex).incrementArmies();
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 
 		this.doRobPlayer(robLocation, victimIndex, playerIndex);
 		Player p = this.getPlayerFromIndex(playerIndex);
@@ -1452,6 +1454,7 @@ public class Model {
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Year of Plenty and got a " + resource1.toString().toLowerCase() + " and a " + resource2.toString().toLowerCase(), source);
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 
 		try {
 			this.getBank().sendResource(resource1, 1);
@@ -1501,6 +1504,7 @@ public class Model {
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Road Builder",source);
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 		version++;
 	}
 	
@@ -1512,7 +1516,7 @@ public class Model {
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Monopoly and stole everyone's " + resource.toString().toLowerCase(), source);
-
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 		
 		for (Player p: players.values())
 		{
