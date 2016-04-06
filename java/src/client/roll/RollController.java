@@ -49,7 +49,7 @@ public class RollController extends Controller implements IRollController, GetMo
 	@Override
 	public void rollDice() {
 		if(this.getRollView() != null && this.getRollView().isModalShowing()){	
-		this.getRollView().closeModal();
+			this.getRollView().closeModal();
 		}
 		timer.purge();
 		timer.cancel();
