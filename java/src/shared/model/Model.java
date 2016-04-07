@@ -373,6 +373,15 @@ public class Model {
 		String source = this.getPlayerName(activePlayerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
 		
+		if (status.equals("Playing")) {
+			activePlayerIndex++;
+			status = "Rolling";
+			if (activePlayerIndex > 3)
+				activePlayerIndex = 0;
+		}
+	}
+	
+	private void progressSetupTurn() {
 		if (status.equals("FirstRound")) {
 			activePlayerIndex++;
 			if (activePlayerIndex > 3) {
@@ -385,11 +394,6 @@ public class Model {
 				status = "Rolling";
 				activePlayerIndex = 0;
 			}
-		} else if (status.equals("Playing")) {
-			activePlayerIndex++;
-			status = "Rolling";
-			if (activePlayerIndex > 3)
-				activePlayerIndex = 0;
 		}
 	}
 
@@ -1292,9 +1296,10 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) progressTurn();
+		if (this.isStateSetup()) progressSetupTurn();
 		version++;
 	}
+
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (free) {
