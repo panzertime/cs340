@@ -1224,11 +1224,23 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
-		if (!stillDiscarding())
+		this.getPlayerFromIndex(playerIndex).setHasDiscard();
+		
+		if (!stillDiscarding()) {
 			this.status = "Robbing";
+			clearPlayersDiscarding();
+		}
+		
 		version++;
 	}
 	
+	private void clearPlayersDiscarding() {
+		for (Player p: players.values())
+		{
+			p.clearHasDiscarded();
+		}
+	}
+
 	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (!canRollNumber(roll, playerIndex))

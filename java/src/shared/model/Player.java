@@ -343,6 +343,14 @@ public class Player {
 		return hasDiscarded;
 	}
 	
+	public void setHasDiscard() {
+		hasDiscarded = true;
+	}
+	
+	public void clearHasDiscarded() {
+		hasDiscarded = false;
+	}
+	
 	public Boolean hasDevCard(DevCardType type)
 	{
 		for (DevCard card : hand.getDevCards()) {
