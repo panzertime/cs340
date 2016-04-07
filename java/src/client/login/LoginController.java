@@ -4,7 +4,6 @@ import client.base.Controller;
 import client.base.IAction;
 import client.main.ClientPlayer;
 import client.misc.IMessageView;
-import client.misc.MessageView;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
@@ -64,7 +63,7 @@ public class LoginController extends Controller implements ILoginController {
 	@Override
 	public void start() {
 		
-		getLoginView().showModal((LoginView)getLoginView());
+		getLoginView().showModal();
 	}
 
 	@Override
@@ -80,12 +79,12 @@ public class LoginController extends Controller implements ILoginController {
 			ClientPlayer.sole().setUserID(userID);
 			ClientPlayer.sole().setUserName(username);
 			
-			getLoginView().closeModal((LoginView)getLoginView());
+			getLoginView().closeModal();
 			loginAction.execute();
 		} catch (ServerException e) {
 			messageView.setTitle("Error!");
 			messageView.setMessage("Sign in failed.");
-			messageView.showModal((MessageView)messageView);
+			messageView.showModal();
 		}
 	}
 
@@ -109,17 +108,17 @@ public class LoginController extends Controller implements ILoginController {
 				ClientPlayer.sole().setUserID(userID);
 				ClientPlayer.sole().setUserName(username);
 				
-				getLoginView().closeModal((LoginView)getLoginView());
+				getLoginView().closeModal();
 				loginAction.execute();
 			} catch (ServerException e) {
 				messageView.setTitle("Error!");
 				messageView.setMessage("Register failed.");
-				messageView.showModal((MessageView)messageView);
+				messageView.showModal();
 			}
 		} else {
 			messageView.setTitle("Warning!");
 			messageView.setMessage("Invalid username or password.");
-			messageView.showModal((MessageView)messageView);
+			messageView.showModal();
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package client.base;
 
-import javax.swing.JPanel;
-
 /**
  * Base interface for overlay views
  */
@@ -10,15 +8,13 @@ public interface IOverlayView extends IView
 	
 	/**
 	 * Displays the modal overlay view.
-	 * @param originalPanel TODO
 	 */
-	void showModal(JPanel originalPanel);
+	void showModal();
 	
 	/**
 	 * Closes the modal overlay view.
-	 * @param overlayPanel TODO
 	 */
-	void closeModal(JPanel overlayPanel);
+	void closeModal();
 	
 	/**
 	 * Indicates whether or not the overlay is currently showing.

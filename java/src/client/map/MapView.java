@@ -110,7 +110,7 @@ public class MapView extends PanelView implements IMapView
 		overlay = new MapOverlay(map);
 		overlay.setController(overlayController);
 		overlay.startDrop(pieceType, pieceColor, isCancelAllowed);
-		overlay.showModal((MapOverlay)overlay);
+		overlay.showModal();
 	}
 	
 	private IMapController overlayController = new IMapController() {
@@ -214,7 +214,7 @@ public class MapView extends PanelView implements IMapView
 		private void closeModal()
 		{
 			overlay.cancelDrop();
-			overlay.closeModal(overlay);
+			overlay.closeModal();
 		}
 	};
 	

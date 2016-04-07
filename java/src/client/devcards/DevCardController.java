@@ -52,32 +52,32 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startBuyCard() {
 		
-		getBuyCardView().showModal((BuyDevCardView)getBuyCardView());
+		getBuyCardView().showModal();
 	}
 
 	@Override
 	public void cancelBuyCard() {
 		
-		getBuyCardView().closeModal((BuyDevCardView)getBuyCardView());
+		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void buyCard() {
 		DoModelFacade doModelFacade = DoModelFacade.sole();
 		doModelFacade.doBuyDevCard();
-		getBuyCardView().closeModal((BuyDevCardView)getBuyCardView());
+		getBuyCardView().closeModal();
 	}
 
 	@Override
 	public void startPlayCard() {
 		
-		getPlayCardView().showModal((PlayDevCardView)getPlayCardView());
+		getPlayCardView().showModal();
 	}
 
 	@Override
 	public void cancelPlayCard() {
 
-		getPlayCardView().closeModal((BuyDevCardView)getBuyCardView());
+		getPlayCardView().closeModal();
 	}
 
 	@Override

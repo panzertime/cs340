@@ -5,7 +5,6 @@ import java.util.Map;
 
 import client.base.Controller;
 import client.misc.IWaitView;
-import client.misc.WaitView;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;
@@ -161,11 +160,11 @@ public class DiscardController extends Controller implements IDiscardController,
 
 	@Override
 	public void discard() {
-		getDiscardView().closeModal((DiscardView)getDiscardView());
+		getDiscardView().closeModal();
 		DoModelFacade.sole().doDiscard(this.getResourceList());
 		setToStandard();
 		if (GetModelFacade.sole().isStateDiscarding())
-			this.getWaitView().showModal((WaitView)getWaitView());
+			this.getWaitView().showModal();
 	}
 
 	private Map<ResourceType, Integer> getResourceList()
@@ -222,18 +221,18 @@ public class DiscardController extends Controller implements IDiscardController,
 		boolean mustDiscard = getModelFacade.mustDiscard();
 		if (mustDiscard && !this.getDiscardView().isModalShowing())
 		{
-			this.getDiscardView().showModal((DiscardView)getDiscardView());
+			this.getDiscardView().showModal();
 		}
 		else if(GetModelFacade.sole().isStateDiscarding() && !mustDiscard  && !this.getWaitView().isModalShowing())
-		{	this.getWaitView().showModal((WaitView)getWaitView());
+		{	this.getWaitView().showModal();
 		}
 		else if (!GetModelFacade.sole().isStateDiscarding() && this.getWaitView().isModalShowing())
 		{
-			this.getWaitView().closeModal((DiscardView)getDiscardView());
+			this.getWaitView().closeModal();
 		}
 		else if (!GetModelFacade.sole().isStateDiscarding() && this.getDiscardView().isModalShowing())
 		{
-			this.getDiscardView().closeModal((DiscardView)getDiscardView());
+			this.getDiscardView().closeModal();
 		}
 		int totalCards = woodMax + brickMax + sheepMax + wheatMax + oreMax;
 		discardNeeded = totalCards / 2;

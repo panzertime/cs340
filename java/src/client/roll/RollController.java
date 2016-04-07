@@ -47,7 +47,7 @@ public class RollController extends Controller implements IRollController, GetMo
 	@Override
 	public void rollDice() {
 		if(this.getRollView() != null && this.getRollView().isModalShowing()){	
-			this.getRollView().closeModal((RollView)getRollView());
+			this.getRollView().closeModal();
 		}
 		timer.purge();
 		timer.cancel();
@@ -65,7 +65,7 @@ public class RollController extends Controller implements IRollController, GetMo
 		getResultView().setRollValue(n);
 	//	} while (n == 7);
 		DoModelFacade.sole().doRollDice(n);
-		getResultView().showModal((RollResultView)getResultView());
+		getResultView().showModal();
 		
 	}
 
@@ -80,7 +80,7 @@ public class RollController extends Controller implements IRollController, GetMo
 		if (GetModelFacade.sole().isStateRolling() && GetModelFacade.sole().isTurn(ClientPlayer.sole().getUserIndex()) && !this.getRollView().isModalShowing() && !this.getResultView().isModalShowing())
 		{
 			hasRolled = false;
-			this.getRollView().showModal((RollView)getView());
+			this.getRollView().showModal();
 			//start = LocalDateTime.now();
 			//end = start.plusSeconds(4);
 			

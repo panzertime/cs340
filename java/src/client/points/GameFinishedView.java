@@ -89,7 +89,7 @@ public class GameFinishedView extends OverlayView implements IGameFinishedView {
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == okButton) {
-				closeModal(GameFinishedView.this);
+				closeModal();
 				Catan.closeGame();
 			}
 		}	

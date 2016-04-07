@@ -55,7 +55,7 @@ public class PointsController extends Controller implements IPointsController, G
 			getFinishedView().setWinner(getModelFacade.getWinnerName(), getModelFacade.isClientWinner());
 			if (!this.getFinishedView().isModalShowing())
 				{
-					this.getFinishedView().showModal((GameFinishedView)getFinishedView());
+					this.getFinishedView().showModal();
 				}
 		}
 

@@ -3,7 +3,6 @@ package client.map.state;
 import client.data.RobPlayerInfo;
 import client.main.ClientPlayer;
 import client.map.MapController;
-import client.map.RobView;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
@@ -49,7 +48,7 @@ public class SoldierMapState extends MapState {
 		robberLoc = hexLoc;
 		mapController.getView().placeRobber(hexLoc);
 		mapController.getRobView().setPlayers(GetModelFacade.sole().getRobbablePlayer(hexLoc));
-		mapController.getRobView().showModal((RobView)mapController.getRobView());
+		mapController.getRobView().showModal();
 	}
 
 	public void robPlayer(RobPlayerInfo victim) {

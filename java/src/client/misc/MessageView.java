@@ -66,7 +66,7 @@ public class MessageView extends OverlayView implements IMessageView {
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == closeButton) {
-				closeModal(MessageView.this);
+				closeModal();
 			}
 		}	
 	};

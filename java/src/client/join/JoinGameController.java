@@ -10,7 +10,6 @@ import client.data.GamesObserver;
 import client.data.PlayerInfo;
 import client.main.ClientPlayer;
 import client.misc.IMessageView;
-import client.misc.MessageView;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
@@ -103,7 +102,7 @@ public class JoinGameController extends Controller implements
 	public void start() {
 		Games.sole().getGamesFromServer();
 		updateGames();
-		getJoinGameView().showModal((JoinGameView)getJoinGameView());
+		getJoinGameView().showModal();
 	}
 	
 	private void updateGames() {
@@ -114,12 +113,12 @@ public class JoinGameController extends Controller implements
 
 	@Override
 	public void startCreateNewGame() {
-		getNewGameView().showModal((NewGameView)getNewGameView());
+		getNewGameView().showModal();
 	}
 
 	@Override
 	public void cancelCreateNewGame() {
-		getNewGameView().closeModal((NewGameView)getNewGameView());
+		getNewGameView().closeModal();
 		resetNewGameModal();
 	}
 
@@ -133,14 +132,14 @@ public class JoinGameController extends Controller implements
 		if(title.isEmpty()) {
 			messageView.setTitle("Warning!");
 			messageView.setMessage("The game title is empty.");
-			messageView.showModal((MessageView)messageView);
+			messageView.showModal();
 		} else {
 			try {
 				ServerFacade.get_instance().createNewGame(randHexes, randNums,
 						randPorts, title);
 				addYourselfToTheGameYouJustCreated(title);
 				updateGames();
-				getNewGameView().closeModal((NewGameView)getNewGameView());
+				getNewGameView().closeModal();
 				resetNewGameModal();
 			} catch (ServerException e) {
 				System.err.println("Could not add game");
@@ -204,7 +203,7 @@ public class JoinGameController extends Controller implements
 		int gameID = game.getId();
 		ClientPlayer.sole().setGameID(gameID);
 		Games.sole().setJoinedGame(gameID);
-		getSelectColorView().showModal((SelectColorView)getSelectColorView());
+		getSelectColorView().showModal();
 	}
 
 	private void enableAllColors() {
@@ -228,7 +227,7 @@ public class JoinGameController extends Controller implements
 
 	@Override
 	public void cancelJoinGame() {
-		getJoinGameView().closeModal((JoinGameView)getJoinGameView());
+		getJoinGameView().closeModal();
 		ClientPlayer.sole().setGameID(null);
 	}
 
@@ -240,8 +239,8 @@ public class JoinGameController extends Controller implements
 			ServerFacade.get_instance().joinGame(gameID, color);
 			
 			// If join succeeded
-			getSelectColorView().closeModal((SelectColorView)getSelectColorView());
-			getJoinGameView().closeModal((JoinGameView)getJoinGameView());
+			getSelectColorView().closeModal();
+			getJoinGameView().closeModal();
 			joinAction.execute();
 		} catch (ServerException e) {
 			System.err.println(e.getMessage());
@@ -252,9 +251,9 @@ public class JoinGameController extends Controller implements
 	@Override
 	public void update() {
 		if(getJoinGameView().isModalShowing() && Games.sole().hasChanged()) {
-			getJoinGameView().closeModal((JoinGameView)getJoinGameView());
+			getJoinGameView().closeModal();
 			updateGames();
-			getJoinGameView().showModal((JoinGameView)getJoinGameView());
+			getJoinGameView().showModal();
 		}
 	}
 }

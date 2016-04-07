@@ -79,7 +79,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			else {
 				getTradeOverlay().showGiveOptions(new ResourceType[5]);
 			}
-			getTradeOverlay().showModal((MaritimeTradeOverlay)getTradeOverlay());
+			getTradeOverlay().showModal();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 			int ratio = giveRatios.get(giveType);
 			DoModelFacade.sole().doMaritimeTrade(ratio, giveType, getType);
 			reset();
-			getTradeOverlay().closeModal((MaritimeTradeOverlay)getTradeOverlay());
+			getTradeOverlay().closeModal();
 		}
 		catch (Exception e) {
 			System.out.println(e.toString());
@@ -102,7 +102,7 @@ public class MaritimeTradeController extends Controller implements IMaritimeTrad
 	@Override
 	public void cancelTrade() {
 
-		getTradeOverlay().closeModal((MaritimeTradeOverlay)getTradeOverlay());
+		getTradeOverlay().closeModal();
 		reset();
 	}
 

@@ -74,7 +74,7 @@ public class RollView extends OverlayView implements IRollView {
 			
 			if (e.getSource() == rollButton) {
 				
-				closeModal(RollView.this);
+				closeModal();
 				
 				getController().rollDice();
 			}
