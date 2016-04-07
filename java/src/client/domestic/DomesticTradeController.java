@@ -153,11 +153,16 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			break;
 		}
 		
-		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
-	
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex) && resourcesNotZero());
+		
 		buttonPushed = false;
 
 		}
+	}
+	
+	private boolean resourcesNotZero()
+	{
+		return !(wood == 0 && brick == 0 && sheep == 0 && wheat == 0 && ore == 0);
 	}
 
 	@Override
@@ -200,7 +205,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 		break;
 		}
 		
-		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex) && resourcesNotZero());
 		
 		buttonPushed = false;
 
@@ -230,7 +235,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void setPlayerToTradeWith(int playerIndex) {
 		receiverIndex = playerIndex;
-		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex));
+		this.getTradeOverlay().setTradeEnabled(receiverIndex != ClientPlayer.sole().getUserIndex() && CanModelFacade.sole().canOfferTrade(getResourceList(), receiverIndex) && resourcesNotZero());
 
 	}
 
