@@ -509,19 +509,19 @@ public class Model {
 	public Boolean canDiscardCard(Map<ResourceType, Integer> resources, Integer playerIndex) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
-		System.out.println("chekcing canDiscardCards");
+		//System.out.println("chekcing canDiscardCards");
 		/*if (!isActivePlayer(playerIndex))
 			return false;
 		System.out.println(playerIndex + " is the active player");*/
 		if (!isStateDiscarding())
 			return false;
-		System.out.println("State is discarding");
+		//System.out.println("State is discarding");
 		if (!getPlayerFromIndex(playerIndex).canDiscardCard())
 			return false;
-		System.out.println("Player can discard");
+		//System.out.println("Player can discard");
 		if (!getPlayerFromIndex(playerIndex).hasCards(resources))
 			return false;
-		System.out.println("player has the same cards");
+		//System.out.println("player has the same cards");
 		return true;
 	}
 	
