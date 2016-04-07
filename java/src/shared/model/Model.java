@@ -888,7 +888,7 @@ public class Model {
 	public Boolean canAcceptTrade(Boolean willAccept, Integer playerIndex) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerIndex))
+		if (tradeModel.getReceiverIndex() != playerIndex)
 			return false;
 		if (!willAccept)
 			return true;	// Pay attention, breaking the norm here

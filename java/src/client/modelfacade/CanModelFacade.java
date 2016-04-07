@@ -205,7 +205,7 @@ public class CanModelFacade extends ModelFacade {
 	 * @return post
 	 */
 	public boolean canAcceptTrade() {
-		return gameModel.canAcceptTrade(true, ClientPlayer.sole().getUserID());
+		return gameModel.canAcceptTrade(true, ClientPlayer.sole().getUserIndex());
 	}
 	
 	public boolean canViewTrade() {
