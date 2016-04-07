@@ -29,7 +29,6 @@ public class buildSettlement extends MovesCommand {
 					throw new ServerAccessException("Unable to "
 							+ "perform move");
 				} catch (Exception e) {
-					e.printStackTrace();
 					throw new ServerAccessException("Invalid Parameter: "
 							+ "free");
 				}
