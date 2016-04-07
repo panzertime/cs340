@@ -56,6 +56,8 @@ public class Board {
 		JSONArray hexes = new JSONArray();
 		Long upperLimit = new Long(2);
 		Long lowerLimit = new Long(0);
+		HashMap<String, Object> robberLoc = new HashMap<String, Object>();
+
 		for (Long x = new Long(-2); x <=2; x++)
 		{
 			for (Long y = lowerLimit; y <= upperLimit; y++)
@@ -70,6 +72,10 @@ public class Board {
 				{
 					jsonHex.put("resource", type.toString().toLowerCase());
 					jsonHex.put("number", productionNumbersArray.remove());
+				}
+				else {
+					robberLoc.put("x", x);
+					robberLoc.put("y", y);
 				}
 				hexes.add(new JSONObject(jsonHex));
 			}
@@ -100,9 +106,6 @@ public class Board {
 		jsonMap.put("settlements", new JSONArray());
 		jsonMap.put("cities", new JSONArray());
 		jsonMap.put("radius", new Long(2));
-		HashMap<String, Object> robberLoc = new HashMap<String, Object>();
-		robberLoc.put("x", new Long(0));
-		robberLoc.put("y", new Long(-2));
 		jsonMap.put("robber", new JSONObject(robberLoc));
 		
 		try {
@@ -175,7 +178,7 @@ public class Board {
 		hexLoc.put("x", new Long(2));
 		hexLoc.put("y", new Long(-3));
 		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SE");
+		jsonHex.put("direction", "S");
 		ports[8] = new JSONObject(jsonHex);
 		
 		return ports;

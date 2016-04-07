@@ -7,3 +7,4 @@ dist/
 *.html
 *.log
 java/catan.log.lck
+java/catan.log.3

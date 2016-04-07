@@ -373,6 +373,15 @@ public class Model {
 		String source = this.getPlayerName(activePlayerIndex);
 		this.chatModel.addGameMessage(source + "'s turn just ended", source);
 		
+		if (status.equals("Playing")) {
+			activePlayerIndex++;
+			status = "Rolling";
+			if (activePlayerIndex > 3)
+				activePlayerIndex = 0;
+		}
+	}
+	
+	private void progressSetupTurn() {
 		if (status.equals("FirstRound")) {
 			activePlayerIndex++;
 			if (activePlayerIndex > 3) {
@@ -385,11 +394,6 @@ public class Model {
 				status = "Rolling";
 				activePlayerIndex = 0;
 			}
-		} else if (status.equals("Playing")) {
-			activePlayerIndex++;
-			status = "Rolling";
-			if (activePlayerIndex > 3)
-				activePlayerIndex = 0;
 		}
 	}
 
@@ -509,19 +513,19 @@ public class Model {
 	public Boolean canDiscardCard(Map<ResourceType, Integer> resources, Integer playerIndex) {
 		// this may need to be changed in the future if a non-active player can
 		// discard
-		System.out.println("chekcing canDiscardCards");
+		//System.out.println("chekcing canDiscardCards");
 		/*if (!isActivePlayer(playerIndex))
 			return false;
 		System.out.println(playerIndex + " is the active player");*/
 		if (!isStateDiscarding())
 			return false;
-		System.out.println("State is discarding");
-		if (!getActivePlayer().canDiscardCard())
+		//System.out.println("State is discarding");
+		if (!getPlayerFromIndex(playerIndex).canDiscardCard())
 			return false;
-		System.out.println("Player can discard");
-		if (!getActivePlayer().hasCards(resources))
+		//System.out.println("Player can discard");
+		if (!getPlayerFromIndex(playerIndex).hasCards(resources))
 			return false;
-		System.out.println("player has the same cards");
+		//System.out.println("player has the same cards");
 		return true;
 	}
 	
@@ -663,12 +667,13 @@ public class Model {
 	}
 
 	public Boolean canFinishTurn(Integer playerIndex) {
-		if (!isActivePlayer(playerIndex))
+		if (!isActivePlayer(playerIndex)) {
 			return false;
-		/*if (isStateSetup())
+		} else if (isStateSetup()) {
 			return true; //Weird check! Be careful to change this*/
-		if (!isStatePlaying())
+		} else if (!isStatePlaying()) {
 			return false;
+		}
 		return true;
 	}
 
@@ -888,7 +893,7 @@ public class Model {
 	public Boolean canAcceptTrade(Boolean willAccept, Integer playerIndex) {
 		if (tradeModel == null)
 			return false;
-		if (tradeModel.getReceiverIndex() != this.getIndexFromPlayerID(playerIndex))
+		if (tradeModel.getReceiverIndex() != playerIndex)
 			return false;
 		if (!willAccept)
 			return true;	// Pay attention, breaking the norm here
@@ -1223,11 +1228,23 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
-		if (!stillDiscarding())
+		this.getPlayerFromIndex(playerIndex).setHasDiscard();
+		
+		if (!stillDiscarding()) {
 			this.status = "Robbing";
+			clearPlayersDiscarding();
+		}
+		
 		version++;
 	}
 	
+	private void clearPlayersDiscarding() {
+		for (Player p: players.values())
+		{
+			p.clearHasDiscarded();
+		}
+	}
+
 	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (!canRollNumber(roll, playerIndex))
@@ -1274,14 +1291,15 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			e.printStackTrace();
 		}
-		if (this.achievements.checkRoads(players))
+		if (this.achievements.checkRoads(players, board))
 		{
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		if (this.isStateSetup()) progressTurn();
+		if (this.isStateSetup()) progressSetupTurn();
 		version++;
 	}
+
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (free) {
@@ -1386,7 +1404,6 @@ public class Model {
 		try {
 			ResourceType rob = this.getPlayerFromIndex(victimIndex).drawRandomResourceCard();
 			this.getPlayerFromIndex(playerIndex).receiveResource(rob, 1);
-			this.getPlayerFromIndex(victimIndex).sendResource(rob, 1);
 		} catch (NoRemainingResourceException e) {
 			
 		}
@@ -1427,6 +1444,8 @@ public class Model {
 	{
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used a soldier", source);
+		this.getPlayerFromIndex(playerIndex).incrementArmies();
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 
 		this.doRobPlayer(robLocation, victimIndex, playerIndex);
 		Player p = this.getPlayerFromIndex(playerIndex);
@@ -1452,6 +1471,7 @@ public class Model {
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Year of Plenty and got a " + resource1.toString().toLowerCase() + " and a " + resource2.toString().toLowerCase(), source);
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 
 		try {
 			this.getBank().sendResource(resource1, 1);
@@ -1494,13 +1514,14 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (this.achievements.checkRoads(players))
+		if (this.achievements.checkRoads(players, board))
 		{
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Road Builder",source);
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 		version++;
 	}
 	
@@ -1512,7 +1533,7 @@ public class Model {
 		}
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Monopoly and stole everyone's " + resource.toString().toLowerCase(), source);
-
+		this.getPlayerFromIndex(playerIndex).playedDevCard();
 		
 		for (Player p: players.values())
 		{

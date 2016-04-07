@@ -571,7 +571,7 @@ public class ServerProxy implements IServerProxy{
 			}
 			String response = submitRequest("GET", call);
 	//		System.out.println("Got this response as the model: " + response);
-			if(response.equals("{rue")){
+			if(response.equals("{rue") || response.equals("{true\"")){
 				return null;
 			}
 			return makeJSON(submitRequest("GET", call));

@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import client.map.pseudo.PseudoCity;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
+import shared.model.board.Board;
 import shared.model.board.edge.Edge;
 import shared.model.board.hex.tiles.water.PortType;
 import shared.model.board.piece.Building;
@@ -342,6 +343,14 @@ public class Player {
 		return hasDiscarded;
 	}
 	
+	public void setHasDiscard() {
+		hasDiscarded = true;
+	}
+	
+	public void clearHasDiscarded() {
+		hasDiscarded = false;
+	}
+	
 	public Boolean hasDevCard(DevCardType type)
 	{
 		for (DevCard card : hand.getDevCards()) {
@@ -533,23 +542,25 @@ public class Player {
 	//recursive road add algorithm
 	//add to set - continue left and right until no more
 	
-	public void addRoadsToSet(Road r, HashSet<Road> set)
+	public void addRoadsToSet(Road r, HashSet<Road> set, Board board)
 	{
 		set.add(r);
 		r.setMarked(true);
 
 		for (Vertex v: r.getEdge().getAllVertices())
 		{
-			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex)
+			v = board.getVertexAt(v.getVertexLocation());
+			if (!v.hasBuilding() || v.getBuilding().getOwner().getPlayerIndex() == this.playerIndex)
 			{
-				for (Edge e: v.getAllEdges())
-				if (e.hasRoad())
-				{
-					Road road = e.getRoad();
-					if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
-						addRoadsToSet(road, set);
+				for (Edge e: v.getAllEdges()){
+					e = board.getEdgeAt(e.getEdgeLocation());
+					if (e.hasRoad())
+					{
+						Road road = e.getRoad();
+						if (road.getOwner().getPlayerIndex() == this.playerIndex && !road.isMarked())
+							addRoadsToSet(road, set, board);
+					}
 				}
-						
 			}
 		}
 	}
@@ -561,13 +572,71 @@ public class Player {
 			r.setMarked(false);
 		}
 	}
-	public int findLongestPathInSet(HashSet<Road> set)
+	public int findLongestPathInSet(HashSet<Road> set, Board board)
 	{
-		return 0;
+		HashSet<Vertex> endpoints = new HashSet<Vertex>();
+		//find endpoints
+		for (Road r: set) {
+			for (Vertex v: r.getEdge().getAllVertices()) {
+				v = board.getVertexAt(v.getVertexLocation());
+				if (isEndPoint(v, r)) {
+					endpoints.add(v);
+				}
+			}
+		}
+		int max = 0;
+		for (Vertex v: endpoints) {
+			for (Edge e: v.getAllEdges()) {
+				e = board.getEdgeAt(e.getEdgeLocation());
+				if (e.hasRoad() && e.getRoad().getOwner().getPlayerIndex() == this.playerIndex) {
+			
+					int length = traverse(v, e, board, endpoints);
+					if (length > max) {
+						max = length;
+					}
+				}
+			}
+		}
+		return max;
 	}
 	
-	public int getRoadLength() {
-		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>(); 
+	private int traverse(Vertex v, Edge e, Board b, HashSet<Vertex> endSet) {
+		int length = 0;
+		Vertex other = b.getVertexAt(e.getOtherVertex(v).getVertexLocation());
+		length++;
+		if (endSet.contains(other)) {
+				return length;
+		} else {
+			Edge left = b.getEdgeAt(other.getLeftEdge(e).getEdgeLocation());
+			Edge right = b.getEdgeAt(other.getRightEdge(e).getEdgeLocation());
+			int l = 0, r = 0;
+			if (left.hasRoad() && left.getRoad().getOwner().getPlayerIndex() == this.getPlayerIndex()) {
+				l = 1 + traverse(other, left, b, endSet);
+			}
+			if (right.hasRoad() && right.getRoad().getOwner().getPlayerIndex() == this.getPlayerIndex()) {
+				r = 1 + traverse(other, right, b, endSet);
+			}
+			return Math.max(l, r);
+		}
+	}
+	
+	private boolean isEndPoint(Vertex v, Road r) {
+		if (v.hasBuilding() && v.getBuilding().getOwner().getPlayerIndex() != this.playerIndex)
+			return false;
+		if (v.getLeftEdge(r.getEdge()).hasRoad() && v.getLeftEdge(r.getEdge()).getRoad().getOwner().getPlayerIndex() == this.playerIndex)
+		{
+			return false;
+		}
+		if (v.getRightEdge(r.getEdge()).hasRoad() && v.getRightEdge(r.getEdge()).getRoad().getOwner().getPlayerIndex() == this.playerIndex)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	public int getRoadLength(Board board) {
+		clearMarks();
+		HashSet<HashSet<Road>> sets = new HashSet<HashSet<Road>>();
 		for (Road r: roads)
 		{
 			if (r.isPlaced())
@@ -575,7 +644,7 @@ public class Player {
 				if (!r.isMarked())
 				{
 					HashSet<Road> set = new HashSet<Road>();
-					this.addRoadsToSet(r, set);
+					this.addRoadsToSet(r, set, board);
 					sets.add(set);
 				}
 			}
@@ -583,8 +652,8 @@ public class Player {
 		int max = 0;
 		for (HashSet<Road> set: sets)
 		{
-			int i = set.size();
-			//int i = this.findLongestPathInSet(set);
+			//int i = set.size();
+			int i = this.findLongestPathInSet(set, board);
 			if (i > max)
 				max = i;
 		}
@@ -903,6 +972,7 @@ public class Player {
 	}
 
 	public void updateDevCards() {
+		this.playedDevelopmentCard = false;
 		for (DevCard card: this.hand.getDevCards())
 			card.setEnabled(true);
 	}
@@ -921,6 +991,14 @@ public class Player {
 
 	public void setUserColor(CatanColor userColor) {
 		this.userColor = userColor;
+	}
+
+	public void incrementArmies() {
+		this.armies++;
+	}
+
+	public void playedDevCard() {
+		this.playedDevelopmentCard = true;
 	}
 
 

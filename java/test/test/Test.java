@@ -100,7 +100,7 @@ public class Test {
 				"server.utils.CatanCookieTest",
 				
 				//mock commands
-				"server.command.mock.game.addAITest"
+				//"server.command.mock.game.addAITest"
 				
 				
 				
