@@ -663,12 +663,13 @@ public class Model {
 	}
 
 	public Boolean canFinishTurn(Integer playerIndex) {
-		if (!isActivePlayer(playerIndex))
+		if (!isActivePlayer(playerIndex)) {
 			return false;
-		/*if (isStateSetup())
+		} else if (isStateSetup()) {
 			return true; //Weird check! Be careful to change this*/
-		if (!isStatePlaying())
+		} else if (!isStatePlaying()) {
 			return false;
+		}
 		return true;
 	}
 
@@ -1223,11 +1224,23 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
-		if (!stillDiscarding())
+		this.getPlayerFromIndex(playerIndex).setHasDiscard();
+		
+		if (!stillDiscarding()) {
 			this.status = "Robbing";
+			clearPlayersDiscarding();
+		}
+		
 		version++;
 	}
 	
+	private void clearPlayersDiscarding() {
+		for (Player p: players.values())
+		{
+			p.clearHasDiscarded();
+		}
+	}
+
 	public void doRollNumber(int roll, int playerIndex) throws ViolatedPreconditionException
 	{
 		if (!canRollNumber(roll, playerIndex))
