@@ -1,20 +1,13 @@
 package client.login;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.main.ClientPlayer;
-import client.misc.*;
-import client.modelfacade.ModelFacade;
+import client.misc.IMessageView;
+import client.misc.MessageView;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.lang.reflect.*;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 
 /**
@@ -71,7 +64,7 @@ public class LoginController extends Controller implements ILoginController {
 	@Override
 	public void start() {
 		
-		getLoginView().showModal();
+		getLoginView().showModal((LoginView)getLoginView());
 	}
 
 	@Override
@@ -87,12 +80,12 @@ public class LoginController extends Controller implements ILoginController {
 			ClientPlayer.sole().setUserID(userID);
 			ClientPlayer.sole().setUserName(username);
 			
-			getLoginView().closeModal();
+			getLoginView().closeModal((LoginView)getLoginView());
 			loginAction.execute();
 		} catch (ServerException e) {
 			messageView.setTitle("Error!");
 			messageView.setMessage("Sign in failed.");
-			messageView.showModal();
+			messageView.showModal((MessageView)messageView);
 		}
 	}
 
@@ -116,17 +109,17 @@ public class LoginController extends Controller implements ILoginController {
 				ClientPlayer.sole().setUserID(userID);
 				ClientPlayer.sole().setUserName(username);
 				
-				getLoginView().closeModal();
+				getLoginView().closeModal((LoginView)getLoginView());
 				loginAction.execute();
 			} catch (ServerException e) {
 				messageView.setTitle("Error!");
 				messageView.setMessage("Register failed.");
-				messageView.showModal();
+				messageView.showModal((MessageView)messageView);
 			}
 		} else {
 			messageView.setTitle("Warning!");
 			messageView.setMessage("Invalid username or password.");
-			messageView.showModal();
+			messageView.showModal((MessageView)messageView);
 		}
 	}
 }

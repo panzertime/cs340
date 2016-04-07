@@ -1,8 +1,6 @@
 package client.roll;
 
-import java.time.LocalDateTime;
 import java.util.Random;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,7 +47,7 @@ public class RollController extends Controller implements IRollController, GetMo
 	@Override
 	public void rollDice() {
 		if(this.getRollView() != null && this.getRollView().isModalShowing()){	
-			this.getRollView().closeModal();
+			this.getRollView().closeModal((RollView)getRollView());
 		}
 		timer.purge();
 		timer.cancel();
@@ -67,7 +65,7 @@ public class RollController extends Controller implements IRollController, GetMo
 		getResultView().setRollValue(n);
 	//	} while (n == 7);
 		DoModelFacade.sole().doRollDice(n);
-		getResultView().showModal();
+		getResultView().showModal((RollResultView)getResultView());
 		
 	}
 
@@ -82,7 +80,7 @@ public class RollController extends Controller implements IRollController, GetMo
 		if (GetModelFacade.sole().isStateRolling() && GetModelFacade.sole().isTurn(ClientPlayer.sole().getUserIndex()) && !this.getRollView().isModalShowing() && !this.getResultView().isModalShowing())
 		{
 			hasRolled = false;
-			this.getRollView().showModal();
+			this.getRollView().showModal((RollView)getView());
 			//start = LocalDateTime.now();
 			//end = start.plusSeconds(4);
 			

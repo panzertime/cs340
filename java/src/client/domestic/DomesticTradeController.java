@@ -3,10 +3,11 @@ package client.domestic;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.base.*;
+import client.base.Controller;
 import client.data.PlayerInfo;
 import client.main.ClientPlayer;
-import client.misc.*;
+import client.misc.IWaitView;
+import client.misc.WaitView;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;
@@ -110,7 +111,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void startTrade() {
 
-		getTradeOverlay().showModal();
+		getTradeOverlay().showModal((DomesticTradeOverlay)getTradeOverlay());
 	}
 
 	@Override
@@ -216,9 +217,9 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	public void sendTradeOffer() {
 
 		DoModelFacade.sole().doOfferTrade(getResourceList(), receiverIndex);
-		getTradeOverlay().closeModal();
+		getTradeOverlay().closeModal((DomesticTradeOverlay)getTradeOverlay());
 		reset(false);
-		getWaitOverlay().showModal();
+		getWaitOverlay().showModal((WaitView)getWaitOverlay());
 	}
 
 	private Map<ResourceType, Integer> getResourceList()
@@ -349,7 +350,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 	@Override
 	public void cancelTrade() {
-		getTradeOverlay().closeModal();
+		getTradeOverlay().closeModal((DomesticTradeOverlay)getTradeOverlay());
 		this.reset(false);
 	}
 
@@ -358,7 +359,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 
 		DoModelFacade doModelFacade = DoModelFacade.sole();
 		doModelFacade.doAcceptTrade(willAccept);
-		getAcceptOverlay().closeModal();
+		getAcceptOverlay().closeModal((DomesticTradeOverlay)getTradeOverlay());
 		this.reset(false);
 	}
 
@@ -367,7 +368,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 	@Override
 	public void update() {
 		if (!GetModelFacade.sole().hasTradeOffer()) {
-			if (this.getWaitOverlay().isModalShowing()) this.getWaitOverlay().closeModal();
+			if (this.getWaitOverlay().isModalShowing()) this.getWaitOverlay().closeModal((DomesticTradeOverlay)getTradeOverlay());
 		}
 		if (tradingPartners == null)
 			{ tradingPartners = GetModelFacade.sole().getTradingPartners();
@@ -393,7 +394,7 @@ public class DomesticTradeController extends Controller implements IDomesticTrad
 			
 			this.getAcceptOverlay().setAcceptEnabled(CanModelFacade.sole().canAcceptTrade());
 			
-			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal();			
+			if (!this.getAcceptOverlay().isModalShowing()) this.getAcceptOverlay().showModal((AcceptTradeOverlay)getAcceptOverlay());			
 		}
 		woodMax = getModelFacade.getResourceAmount(ResourceType.WOOD);
 		brickMax = getModelFacade.getResourceAmount(ResourceType.BRICK);

@@ -1,9 +1,17 @@
 package client.base;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+
+import javax.swing.Box;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Base class for overlay views
@@ -42,7 +50,7 @@ public class OverlayView extends PanelView implements IOverlayView
 	 * Displays the overlay. The overlay is displayed on top of any other
 	 * overlays that are already visible.
 	 */
-	public void showModal()
+	public void showModal(JPanel originalPanel)
 	{
 		// Open the new overlay
 		JPanel overlayPanel = new JPanel();
@@ -91,33 +99,42 @@ public class OverlayView extends PanelView implements IOverlayView
 		
 		window.setGlassPane(overlayPanel);
 		overlayPanel.setVisible(true);
-		overlayStack.push(new OverlayInfo(this, overlayPanel));
+		overlayStack.push(new OverlayInfo(this, overlayPanel, originalPanel));
+		System.out.println("Stack(" + overlayStack.size() +") gained: " + originalPanel.getClass().toGenericString());
 	}
 	
 	/**
 	 * Hides the top-most overlay
 	 */
-	public void closeModal()
+	public void closeModal(JPanel originalPanel)
 	{
 		
-		assert overlayStack.size() > 0;
+		//assert overlayStack.size() > 0;
 		assert window.getGlassPane() == overlayStack.peek().getOverlayPanel();
 		
 		if(overlayStack.size() > 0)
 		{
-			
-			overlayStack.pop().getOverlayPanel().setVisible(false);
-			
-			if(overlayStack.size() > 0)
-			{
-				
-				window.setGlassPane(overlayStack.peek().getOverlayPanel());
-				overlayStack.peek().getOverlayPanel().setVisible(true);
-			}
-			else
-			{
-				window.setGlassPane(defaultGlassPane);
-				window.getGlassPane().setVisible(false);
+			Iterator<OverlayInfo> stackIt = overlayStack.iterator();
+			System.out.println("Searching stack(" + overlayStack.size() +") for: " + originalPanel.getClass().toGenericString());
+			while (stackIt.hasNext()) {
+				OverlayInfo stackPanelInfo = stackIt.next();
+				System.out.println(stackPanelInfo.getOriginalPanel().getClass().toGenericString());
+				if (stackPanelInfo.getOriginalPanel() == originalPanel) {
+					System.out.println("Found the Panel To Close!");
+					overlayStack.remove(stackPanelInfo);
+					stackPanelInfo.getOriginalPanel().setVisible(false);
+					if(overlayStack.size() > 0)
+					{
+						window.setGlassPane(overlayStack.peek().getOverlayPanel());
+						overlayStack.peek().getOverlayPanel().setVisible(true);
+					}
+					else
+					{
+						window.setGlassPane(defaultGlassPane);
+						window.getGlassPane().setVisible(false);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -145,12 +162,13 @@ public class OverlayView extends PanelView implements IOverlayView
 	{
 		private OverlayView overlayView;
 		private JPanel overlayPanel;
+		private JPanel originalPanel;
 		
-		public OverlayInfo(OverlayView overlayView, JPanel overlayPanel)
+		public OverlayInfo(OverlayView overlayView, JPanel overlayPanel, JPanel originalPanel)
 		{
-			
 			setOverlayView(overlayView);
 			setOverlayPanel(overlayPanel);
+			setOriginalPanel(originalPanel);
 		}
 		
 		public OverlayView getOverlayView()
@@ -175,6 +193,13 @@ public class OverlayView extends PanelView implements IOverlayView
 		{
 			
 			this.overlayPanel = overlayPanel;
+		}
+		public JPanel getOriginalPanel() {
+			return originalPanel;
+		}
+
+		public void setOriginalPanel(JPanel originalPanel) {
+			this.originalPanel = originalPanel;
 		}
 	}
 	

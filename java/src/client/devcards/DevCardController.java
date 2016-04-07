@@ -1,6 +1,7 @@
 package client.devcards;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.main.ClientPlayer;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
@@ -51,32 +52,32 @@ public class DevCardController extends Controller implements IDevCardController,
 	@Override
 	public void startBuyCard() {
 		
-		getBuyCardView().showModal();
+		getBuyCardView().showModal((BuyDevCardView)getBuyCardView());
 	}
 
 	@Override
 	public void cancelBuyCard() {
 		
-		getBuyCardView().closeModal();
+		getBuyCardView().closeModal((BuyDevCardView)getBuyCardView());
 	}
 
 	@Override
 	public void buyCard() {
 		DoModelFacade doModelFacade = DoModelFacade.sole();
 		doModelFacade.doBuyDevCard();
-		getBuyCardView().closeModal();
+		getBuyCardView().closeModal((BuyDevCardView)getBuyCardView());
 	}
 
 	@Override
 	public void startPlayCard() {
 		
-		getPlayCardView().showModal();
+		getPlayCardView().showModal((PlayDevCardView)getPlayCardView());
 	}
 
 	@Override
 	public void cancelPlayCard() {
 
-		getPlayCardView().closeModal();
+		getPlayCardView().closeModal((BuyDevCardView)getBuyCardView());
 	}
 
 	@Override

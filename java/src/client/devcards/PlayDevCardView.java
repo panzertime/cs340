@@ -1,20 +1,37 @@
 package client.devcards;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.base.*;
+import client.base.OverlayView;
 import client.modelfacade.CanModelFacade;
-import client.utils.*;
+import client.utils.FontUtils;
+import client.utils.ImageUtils;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
-
-import java.util.*;
 
 /**
  * "Play dev card" view implementation
@@ -119,9 +136,9 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 	}
 
 	@Override
-	public void showModal() {
+	public void showModal(JPanel originalPanel) {
 		reset();
-		super.showModal();
+		super.showModal(originalPanel);
 	}
 
 	@Override
@@ -155,11 +172,11 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 			} 
 			else if (e.getSource() == useButton) {
 				if (devCards.getSelectedDevCard() == DevCardType.MONOPOLY) {					
-					closeModal();
+					closeModal(PlayDevCardView.this);
 					getController().playMonopolyCard(resCard1.getSelectedResourceCard());
 				}
 				else if (devCards.getSelectedDevCard() == DevCardType.YEAROFPLENTY) {
-					closeModal();
+					closeModal(PlayDevCardView.this);
 					getController().playYearOfPlentyCard(resCard1.getSelectedResourceCard(),
 														resCard2.getSelectedResourceCard());
 				}
@@ -186,7 +203,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
 				
-				closeModal();
+				closeModal(null);
 				getController().playMonumentCard();
 			}
 			else if (selectedDevCard == DevCardType.ROADBUILDING) {
@@ -195,7 +212,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
 				
-				closeModal();
+				closeModal(null);
 				getController().playRoadBuildCard();
 			}
 			else if (selectedDevCard == DevCardType.KNIGHT) {
@@ -204,7 +221,7 @@ public class PlayDevCardView extends OverlayView implements IPlayDevCardView {
 				resCard1.setEnabled(false);
 				resCard2.setEnabled(false);
 				
-				closeModal();
+				closeModal(null);
 				getController().playSoldierCard();
 			}
 			else if (selectedDevCard == DevCardType.MONOPOLY) {

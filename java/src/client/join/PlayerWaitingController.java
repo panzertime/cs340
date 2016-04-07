@@ -2,7 +2,8 @@ package client.join;
 
 import java.util.List;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.data.GameInfo;
 import client.data.Games;
 import client.data.GamesObserver;
@@ -54,7 +55,7 @@ public class PlayerWaitingController extends Controller implements
 		if(curGame.isFull()) {
 			curGame.setPlayerIndex();
 			if(getView().isModalShowing()){
-				getView().closeModal();
+				getView().closeModal((PlayerWaitingView)getView());
 			}
 			ModelFacade.getModelFromServer();
 		} else {
@@ -65,7 +66,7 @@ public class PlayerWaitingController extends Controller implements
 				getView().setAIChoices(aiChoices);
 				getView().setPlayers(curGame.getPlayerArray());
 				if(!getView().isModalShowing()) {
-					getView().showModal();
+					getView().showModal((PlayerWaitingView)getView());
 				}
 			} catch (ServerException e) {
 				System.err.println("Server could not get AI List: " +
@@ -79,16 +80,16 @@ public class PlayerWaitingController extends Controller implements
 		if(curGame.isFull()) {
 			curGame.setPlayerIndex();
 			if(getView().isModalShowing()){
-				getView().closeModal();
+				getView().closeModal((PlayerWaitingView)getView());
 			}
 			ModelFacade.getModelFromServer();
 		} else {
 			getView().setPlayers(curGame.getPlayerArray());
 			if(!getView().isModalShowing()) {
-				getView().showModal();
+				getView().showModal((PlayerWaitingView)getView());
 			} else {
-				getView().closeModal();
-				getView().showModal();
+				getView().closeModal((PlayerWaitingView)getView());
+				getView().showModal((PlayerWaitingView)getView());
 			}
 		}
 	}
