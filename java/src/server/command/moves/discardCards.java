@@ -27,6 +27,7 @@ public class discardCards extends MovesCommand {
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {
+					e.printStackTrace();
 					throw new ServerAccessException("Unable to "
 							+ "perform move");
 				}

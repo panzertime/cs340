@@ -1,6 +1,6 @@
 package server.command.moves.discard;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -14,7 +14,6 @@ import org.json.simple.parser.ParseException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import server.command.moves.buyDevCard;
 import server.command.moves.discardCards;
 import server.data.ServerKernel;
 import server.data.User;
@@ -96,32 +95,6 @@ public class discardCardsTest {
 					+ "is valid");
 		} catch (ServerAccessException e) {
 			fail("Failed discardCards test where everything is valid");
-		}
-	}
-	
-	//Invalid	
-	@Test
-	public void testExecute1() {
-		JSONObject args = new JSONObject();
-		args.put("type", "discardCards");
-		args.put("playerIndex", (long) 1);
-		JSONObject discard = new JSONObject();
-		discard.put("brick", (long) 1);
-		discard.put("ore", (long) 1);
-		discard.put("sheep", (long) 1);
-		discard.put("wheat", (long) 1);
-		discard.put("wood", (long) 1);
-		args.put("discardedCards", discard);
-		String cookie = "catan.user={\"name\":\"Sam\",\"password\":\"sam\","
-				+ "\"playerID\":0}; catan.game=1";
-		discardCards dc = new discardCards();
-		try {
-			dc.execute(args, cookie);
-			fail("Failed discardCards test where index arg "
-					+ "is invalid: wrong player");
-		} catch (ServerAccessException e) {
-			System.out.println("Passed discardCards test where "
-					+ "index arg is invalid: wrong player");
 		}
 	}
 	

@@ -3,6 +3,7 @@ package shared.model.board;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -174,7 +175,7 @@ public class Board {
 		hexLoc.put("x", new Long(2));
 		hexLoc.put("y", new Long(-3));
 		jsonHex.put("location", new JSONObject(hexLoc));
-		jsonHex.put("direction", "SE");
+		jsonHex.put("direction", "S");
 		ports[8] = new JSONObject(jsonHex);
 		
 		return ports;
@@ -234,7 +235,7 @@ public class Board {
 		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
 		if (jsonHexes == null)
 			throw new BadJSONException();
-		System.out.println(jsonHexes.size() + "");
+		//System.out.println(jsonHexes.size() + "");
 		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
@@ -354,7 +355,7 @@ public class Board {
 		// Recursively link the hexes with edges and vertices
 		Hex centerHex = this.hexes.get(new HexLocation(0, 0));
 		for (HexLocation hexLoc : hexes.keySet()) {
-			System.out.println(hexLoc.toString());
+			//System.out.println(hexLoc.toString());
 		}
 
 

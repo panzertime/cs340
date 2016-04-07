@@ -64,22 +64,6 @@ public class CanSendChatTest {
 			System.out.println("passed canSendChat while no game exists");
 		}
 	}
-
-	//Good test
-	@Test
-	public void testCanSendChatLoggedIn() {
-		try {
-			initModel("jsonMap.txt");
-			if(CanModelFacade.sole().canSendChat() == true) {
-				System.out.println("passed canSendChat while player is in a normal game");
-			} else
-			{
-				fail("Failed canSendChat test while player was in a normal game");
-			}
-		} catch (NullPointerException e) {
-			fail("can send chat - Error when accessing model");
-		}
-	}
 	
 	
 	//not turn

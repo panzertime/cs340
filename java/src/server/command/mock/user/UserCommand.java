@@ -1,7 +1,7 @@
 package server.command.mock.user;
 
 import org.json.simple.JSONObject;
-
+import server.utils.*;
 import server.command.mock.Mock;
 
 /**
@@ -17,5 +17,12 @@ public abstract class UserCommand extends Mock {
 	@Override
 	public JSONObject jsonFromFile(String file) {
 		return jsonFromFile(filePath, file);
+	}
+
+	protected CatanCookie cookie;
+	
+	public CatanCookie getCookie() {
+	//	return new CatanCookie();
+		return null;
 	}
 }
