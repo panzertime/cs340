@@ -1,7 +1,11 @@
 package server.persistance.mongo;
 
 import server.persistance.DatabaseException;
+import server.persistance.ICommandsDAO;
 import server.persistance.IDAOFactory;
+import server.persistance.IGamesDAO;
+import server.persistance.IUsersDAO;
+import server.persistance.PersistanceManager;
 
 public class MongoDAOFactory implements IDAOFactory {
 	
@@ -18,7 +22,7 @@ public class MongoDAOFactory implements IDAOFactory {
 	 * @throws DatabaseException
 	 */
 	@Override
-	public MongoUsersDAO createUsersDAO() throws DatabaseException {
+	public MongoUsersDAO createUsersDAO(PersistanceManager pm) throws DatabaseException {
 		return new MongoUsersDAO();
 	}
 	
@@ -27,17 +31,14 @@ public class MongoDAOFactory implements IDAOFactory {
 	 * @throws DatabaseException
 	 */
 	@Override
-	public MongoGamesDAO createGamesDAO() throws DatabaseException {
+	public MongoGamesDAO createGamesDAO(PersistanceManager pm) throws DatabaseException {
 		return new MongoGamesDAO();
 	}
 
-	/** 
-	 * @return MongoCommandsDAO DAO for the Commands table of MyMongo database
-	 * @throws DatabaseException
-	 */
 	@Override
-	public MongoCommandsDAO createCommandsDAO() throws DatabaseException {
-		return new MongoCommandsDAO();
+	public MongoCommandsDAO createCommandsDAO(PersistanceManager pm) throws DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

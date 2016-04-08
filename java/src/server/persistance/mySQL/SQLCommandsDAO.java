@@ -35,7 +35,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			stmt = pm.getConnection().prepareStatement(query);
 			if (stmt.executeUpdate() == 1) {
 				stmt.setInt(1, gameID);
-				stmt.setBlog(2, movesCommand.getArguments());
+				stmt.setBlob(2, (Blob) movesCommand.getArguments());
 			}
 			else {
 				throw new DatabaseException("Could not insert command");
