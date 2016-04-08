@@ -25,6 +25,8 @@ import shared.model.hand.ResourceType;
  *
  */
 public abstract class MovesCommand implements ICommand {
+	
+	private JSONObject arguments;
 
 	//TODO fix duplication in GameCommand
 	/**
@@ -258,7 +260,7 @@ public abstract class MovesCommand implements ICommand {
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
 	 */
-	public void reExecute(Model game) {
-		
-	}
+	public abstract void reExecute(Model game);
+	
+	
 }

@@ -43,4 +43,10 @@ public class Year_of_Plenty extends MovesCommand {
 		return result;		
 	}
 
+	@Override
+	public void reExecute(Model game) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

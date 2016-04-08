@@ -43,6 +43,12 @@ public class maritimeTrade extends MovesCommand {
 		return result;
 	}
 
+	@Override
+	public void reExecute(Model game) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	/**
 	 * Takes in a string representing the name of a resource. If string is
 	 * valid it will return a resource of that type, otherwise it is null. 

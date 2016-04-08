@@ -38,4 +38,10 @@ public class rollNumber extends MovesCommand {
 		}
 		return result;
 	}
+
+	@Override
+	public void reExecute(Model game) {
+		// TODO Auto-generated method stub
+		
+	}
 }
