@@ -1,6 +1,8 @@
 package server.command.moves;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -293,5 +295,47 @@ public abstract class MovesCommand implements ICommand {
 	 */
 	public abstract void reExecute(Model game);
 	
+	/**
+	 * Converts the list of JSONCommands into a list of MovesCommands
+	 * @param jsonCommands Commands in JSONFormat
+	 * @return jsonCommands converted to MovesCommands
+	 * @throws ServerAccessException Invalid command
+	 */
+	public static List<MovesCommand> convertJSONListToCommandList
+			(List<JSONObject> jsonCommands)  throws ServerAccessException {
+		List<MovesCommand> result = new ArrayList<MovesCommand>();
+		for(JSONObject jsonCommand: jsonCommands) {
+			MovesCommand newMove = convertJSONToCommand(jsonCommand);
+			result.add(newMove);
+		}
+		return result;
+	}
+	
+	/**
+	 * Convert the JSONCommand into a MovesCommand
+	 * @param jsonCommand Command in JSONFormat
+	 * @return jsonCommand converted to MovesCommands
+	 * @throws ServerAccessException Invalid command
+	 */
+	public static MovesCommand convertJSONToCommand
+			(JSONObject jsonCommand)  throws ServerAccessException {
+		MovesCommand result = null;
+		try {
+			String commandName = (String) jsonCommand.get("type");
+			commandName = "server.command.moves." + commandName;
+				Class genericMoveCommand = Class.forName(commandName);
+				result = (MovesCommand) genericMoveCommand.newInstance();
+				result.arguments = jsonCommand;
+		} catch (ClassNotFoundException | 
+				InstantiationException | IllegalAccessException e) { 
+			e.printStackTrace();
+			throw new ServerAccessException
+					("Could not use reflection properly");
+		} catch (Exception e1) {
+			throw new ServerAccessException
+					("Stored command has invalid type");
+		}
+		return result;
+	}
 	
 }

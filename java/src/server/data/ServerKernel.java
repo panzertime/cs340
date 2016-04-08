@@ -1,6 +1,7 @@
 package server.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -9,6 +10,7 @@ import org.json.simple.JSONObject;
 import server.command.moves.MovesCommand;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
+import server.persistance.PersistanceManager;
 import shared.model.Model;
 
 /**
@@ -241,7 +243,10 @@ public class ServerKernel {
 		this.users = new HashMap<String, User>();
 		User.resetIDs();
 	}
+	
+	// Phase 4
 	private int persistFrequency;
+	private PersistanceManager pm;
 	
 
 	/**
