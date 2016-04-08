@@ -1,20 +1,12 @@
 package client.login;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.main.ClientPlayer;
-import client.misc.*;
-import client.modelfacade.ModelFacade;
+import client.misc.IMessageView;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
-
-import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.lang.reflect.*;
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 
 
 /**

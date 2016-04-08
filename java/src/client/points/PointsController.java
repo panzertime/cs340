@@ -1,7 +1,6 @@
 package client.points;
 
-import client.base.*;
-import client.main.Catan;
+import client.base.Controller;
 import client.main.ClientPlayer;
 import client.modelfacade.get.GetModelFacade;
 import client.modelfacade.get.GetModelFacadeListener;

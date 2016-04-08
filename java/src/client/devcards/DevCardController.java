@@ -1,6 +1,7 @@
 package client.devcards;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.main.ClientPlayer;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;

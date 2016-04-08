@@ -2,7 +2,8 @@ package client.join;
 
 import java.util.List;
 
-import client.base.*;
+import client.base.Controller;
+import client.base.IAction;
 import client.data.GameInfo;
 import client.data.Games;
 import client.data.GamesObserver;

@@ -1,9 +1,17 @@
 package client.base;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+
+import javax.swing.Box;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Base class for overlay views
@@ -44,6 +52,7 @@ public class OverlayView extends PanelView implements IOverlayView
 	 */
 	public void showModal()
 	{
+		System.out.println("showing a new panel");
 		// Open the new overlay
 		JPanel overlayPanel = new JPanel();
 		overlayPanel.setLayout(new BorderLayout());
@@ -91,7 +100,9 @@ public class OverlayView extends PanelView implements IOverlayView
 		
 		window.setGlassPane(overlayPanel);
 		overlayPanel.setVisible(true);
+		this.setVisible(true);
 		overlayStack.push(new OverlayInfo(this, overlayPanel));
+		System.out.println("Stack(" + overlayStack.size() +") gained: " + this.getClass().toGenericString());
 	}
 	
 	/**
@@ -100,24 +111,34 @@ public class OverlayView extends PanelView implements IOverlayView
 	public void closeModal()
 	{
 		
-		assert overlayStack.size() > 0;
+		//assert overlayStack.size() > 0;
 		assert window.getGlassPane() == overlayStack.peek().getOverlayPanel();
 		
 		if(overlayStack.size() > 0)
 		{
-			
-			overlayStack.pop().getOverlayPanel().setVisible(false);
-			
-			if(overlayStack.size() > 0)
-			{
-				
-				window.setGlassPane(overlayStack.peek().getOverlayPanel());
-				overlayStack.peek().getOverlayPanel().setVisible(true);
-			}
-			else
-			{
-				window.setGlassPane(defaultGlassPane);
-				window.getGlassPane().setVisible(false);
+			Iterator<OverlayInfo> stackIt = overlayStack.iterator();
+			System.out.println("Searching stack(" + overlayStack.size() +") for: " + this.getClass().toGenericString());
+			while (stackIt.hasNext()) {
+				OverlayInfo stackPanelInfo = stackIt.next();
+				System.out.println(stackPanelInfo.getOverlayView().getClass().toGenericString());
+				if (stackPanelInfo.getOverlayView() == this) {
+					System.out.println("Found the Panel To Close!");
+					overlayStack.remove(stackPanelInfo);
+					this.setVisible(false);
+					if(overlayStack.size() > 0)
+					{
+						System.out.println("	more stack");
+						window.setGlassPane(overlayStack.peek().getOverlayPanel());
+						overlayStack.peek().getOverlayPanel().setVisible(true);
+					}
+					else
+					{
+						System.out.println("	NO more stack");
+						window.setGlassPane(defaultGlassPane);
+						window.getGlassPane().setVisible(false);
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -148,7 +169,6 @@ public class OverlayView extends PanelView implements IOverlayView
 		
 		public OverlayInfo(OverlayView overlayView, JPanel overlayPanel)
 		{
-			
 			setOverlayView(overlayView);
 			setOverlayPanel(overlayPanel);
 		}

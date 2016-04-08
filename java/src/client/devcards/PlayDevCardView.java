@@ -1,20 +1,37 @@
 package client.devcards;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import client.base.*;
+import client.base.OverlayView;
 import client.modelfacade.CanModelFacade;
-import client.utils.*;
+import client.utils.FontUtils;
+import client.utils.ImageUtils;
 import shared.model.hand.ResourceType;
 import shared.model.hand.development.DevCardType;
-
-import java.util.*;
 
 /**
  * "Play dev card" view implementation

@@ -216,7 +216,7 @@ public abstract class MovesCommand implements ICommand {
 	 * Takes in a string and turns it into a resource
 	 * @pre string represents a valid Resource
 	 * @post a ResouceType is created
-	 * @param object value representing a string
+	 * @param resString value representing a string
 	 * @return corresponding resource
 	 */
 	public ResourceType getResourceType(Object resString) 
@@ -251,5 +251,14 @@ public abstract class MovesCommand implements ICommand {
 			throw new ServerAccessException("Invalid Parameter: HexLocation");
 		}
 		return result;
+	}
+	
+	/**
+	 * @pre The parameters of the command have been set and the game Model is valid
+	 * @post The command is executed again from the data in memory and the game is updated
+	 * @param game - The game to which the command will be performed
+	 */
+	public void reExecute(Model game) {
+		
 	}
 }

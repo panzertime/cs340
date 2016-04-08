@@ -24,8 +24,6 @@ import shared.model.board.piece.PieceType;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.definitions.CatanColor;
 
-import client.main.ClientPlayer;
-
 
 /**
  * Implementation for the map view

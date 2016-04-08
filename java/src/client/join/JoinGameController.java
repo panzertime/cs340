@@ -2,18 +2,17 @@ package client.join;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
-
-import client.base.*;
-import client.data.*;
+import client.base.Controller;
+import client.base.IAction;
+import client.data.GameInfo;
+import client.data.Games;
+import client.data.GamesObserver;
+import client.data.PlayerInfo;
 import client.main.ClientPlayer;
-import client.misc.*;
-import client.modelfacade.ModelFacade;
-import client.modelfacade.get.GetModelFacade;
+import client.misc.IMessageView;
 import client.servercommunicator.ServerException;
 import client.servercommunicator.ServerFacade;
 import shared.model.definitions.CatanColor;
-import shared.model.exceptions.BadJSONException;
 
 
 /**

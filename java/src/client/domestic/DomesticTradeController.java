@@ -3,10 +3,10 @@ package client.domestic;
 import java.util.HashMap;
 import java.util.Map;
 
-import client.base.*;
+import client.base.Controller;
 import client.data.PlayerInfo;
 import client.main.ClientPlayer;
-import client.misc.*;
+import client.misc.IWaitView;
 import client.modelfacade.CanModelFacade;
 import client.modelfacade.DoModelFacade;
 import client.modelfacade.get.GetModelFacade;

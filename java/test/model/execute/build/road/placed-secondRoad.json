@@ -612,10 +612,6 @@
       {
         "source": "Sam",
         "message": "Sam built a road"
-      },
-      {
-        "source": "Sam",
-        "message": "Sam's turn just ended"
       }
     ]
   },
