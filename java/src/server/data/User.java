@@ -60,6 +60,12 @@ public class User {
 		
 	}
 
+	public User(int userID, String username2, String password2) {
+		this.setUserID(userID);
+		this.username = username2;
+		this.password = password2;
+	}
+
 	/**
 	 * Used to assign a user an ID
 	 * @pre user should not have an ID

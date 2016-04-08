@@ -2,6 +2,8 @@ package server.persistance;
 
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import server.command.moves.MovesCommand;
 
 public interface ICommandsDAO {
@@ -17,6 +19,6 @@ public interface ICommandsDAO {
 	 * @param gameID gameId to match in returned commands
 	 * @return List list of commands run on the related game 
 	 */
-	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException;
+	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException;
 
 }

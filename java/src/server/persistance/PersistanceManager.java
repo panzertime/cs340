@@ -1,5 +1,8 @@
 package server.persistance;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 import server.command.moves.MovesCommand;
@@ -17,9 +20,9 @@ public class PersistanceManager {
 	 * @post PersistanceManager has DAOs initialized
 	 */
 	public PersistanceManager(IDAOFactory factory) throws DatabaseException {
-		usersDAO = factory.createUsersDAO();
-		gamesDAO = factory.createGamesDAO();
-		commandsDAO = factory.createCommandsDAO();
+		usersDAO = factory.createUsersDAO(this);
+		gamesDAO = factory.createGamesDAO(this);
+		commandsDAO = factory.createCommandsDAO(this);
 	}
 	
 	/**
@@ -96,5 +99,20 @@ public class PersistanceManager {
 	 */
 	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
 		return commandsDAO.getCommands(gameID);
+	}
+
+	public Connection getConnection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static void safeClose(PreparedStatement stmt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void safeClose(ResultSet rs) {
+		// TODO Auto-generated method stub
+		
 	}
 }

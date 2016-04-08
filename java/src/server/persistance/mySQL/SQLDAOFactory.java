@@ -2,6 +2,7 @@ package server.persistance.mySQL;
 
 import server.persistance.DatabaseException;
 import server.persistance.IDAOFactory;
+import server.persistance.PersistanceManager;
 
 public class SQLDAOFactory implements IDAOFactory {
 	
@@ -18,8 +19,8 @@ public class SQLDAOFactory implements IDAOFactory {
 	 * @throws DatabaseException
 	 */
 	@Override
-	public SQLUsersDAO createUsersDAO() throws DatabaseException {
-		return new SQLUsersDAO();
+	public SQLUsersDAO createUsersDAO(PersistanceManager pm) throws DatabaseException {
+		return new SQLUsersDAO(pm);
 	}
 	
 	/**
@@ -27,8 +28,8 @@ public class SQLDAOFactory implements IDAOFactory {
 	 * @throws DatabaseException
 	 */
 	@Override
-	public SQLGamesDAO createGamesDAO() throws DatabaseException {
-		return new SQLGamesDAO();
+	public SQLGamesDAO createGamesDAO(PersistanceManager pm) throws DatabaseException {
+		return new SQLGamesDAO(pm);
 	}
 
 	/**
@@ -36,8 +37,8 @@ public class SQLDAOFactory implements IDAOFactory {
 	 * @throws DatabaseException
 	 */
 	@Override
-	public SQLCommandsDAO createCommandsDAO() throws DatabaseException {
-		return new SQLCommandsDAO();
+	public SQLCommandsDAO createCommandsDAO(PersistanceManager pm) throws DatabaseException {
+		return new SQLCommandsDAO(pm);
 	}
 
 }
