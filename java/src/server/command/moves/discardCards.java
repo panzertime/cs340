@@ -30,9 +30,7 @@ public class discardCards extends MovesCommand {
 							(args.get("discardedCards"));
 					try {
 						game.doDiscardCards(discardedCards, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

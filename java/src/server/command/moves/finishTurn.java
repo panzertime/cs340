@@ -24,9 +24,7 @@ public class finishTurn extends MovesCommand {
 					int playerIndex = ((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doFinishTurn(playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject jsonResult = game.toJSON();
 						result = jsonResult.toJSONString();
 					} catch (ViolatedPreconditionException e) {

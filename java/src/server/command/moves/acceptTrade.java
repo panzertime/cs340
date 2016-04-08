@@ -2,7 +2,6 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -27,9 +26,7 @@ public class acceptTrade extends MovesCommand {
 								((Long) args.get("playerIndex")).intValue();
 						try {
 							game.doAcceptTrade(willAccept, playerIndex);
-							arguments = args;
-							int gameID = catanCookie.getGameID();
-							ServerKernel.sole().persistCommand(gameID, this);
+							persist(args, catanCookie);
 							JSONObject resultJSON = game.toJSON();
 							result = resultJSON.toJSONString();
 						} catch (ViolatedPreconditionException e) {

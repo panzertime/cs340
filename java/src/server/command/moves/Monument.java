@@ -26,9 +26,7 @@ public class Monument extends MovesCommand {
 							((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doMonument(playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

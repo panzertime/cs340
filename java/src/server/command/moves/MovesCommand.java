@@ -28,8 +28,27 @@ public abstract class MovesCommand implements ICommand {
 	
 	protected JSONObject arguments;
 
+	public JSONObject getArguments(){
+		return arguments;
+	}
+	
+	/**
+	 * Persists the Moves commands
+	 * @pre Command has already been executed and all parameters are valid
+	 * @post arguments are set and the Server saves the command
+	 * @param args JSONObject of args passed in from client
+	 * @param catanCookie converted CatanCookie passed in from client
+	 */
+	protected void persist(JSONObject args, CatanCookie catanCookie) {
+		arguments = args;
+		int gameID = catanCookie.getGameID();
+		ServerKernel.sole().persistCommand(gameID, this);
+	}
+	
 	/**
 	 * Turns a cookie String into a CatanCookie
+	 * @pre none
+	 * @post A CatanCookie is create
 	 * @param cookie Cookie String received
 	 * @return CatanCookie from the passed string
 	 * @throws CookieException invalid data in String

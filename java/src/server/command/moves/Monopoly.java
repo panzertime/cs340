@@ -28,9 +28,7 @@ public class Monopoly extends MovesCommand {
 							(args.get("resource"));
 					try {
 						game.doMonopoly(resource, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

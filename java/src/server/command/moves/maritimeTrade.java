@@ -34,9 +34,7 @@ public class maritimeTrade extends MovesCommand {
 						ResourceType output = getResourceType
 								(args.get("outputResource"));
 						game.doMaritimeTrade(ratio, input, output, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

@@ -30,9 +30,7 @@ public class Road_Building extends MovesCommand {
 							(args.get("spot2"));
 					try {
 						game.doRoad_Building(spot1, spot2, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

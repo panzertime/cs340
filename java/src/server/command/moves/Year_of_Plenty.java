@@ -31,9 +31,7 @@ public class Year_of_Plenty extends MovesCommand {
 							getResourceType(args.get("resource2"));
 					try {
 						game.doYear_of_Plenty(resource1, resource2, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

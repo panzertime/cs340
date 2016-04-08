@@ -2,7 +2,6 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -28,9 +27,7 @@ public class buildCity extends MovesCommand {
 							(args.get("vertexLocation"));
 					try {
 						game.doBuildCity(vertexLocation, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

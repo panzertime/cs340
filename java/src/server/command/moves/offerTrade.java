@@ -33,9 +33,7 @@ public class offerTrade extends MovesCommand {
 								((Long) args.get("receiver")).intValue();
 						game.doOfferTrade
 								(receiverIndex, resourceList, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

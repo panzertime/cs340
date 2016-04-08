@@ -26,9 +26,7 @@ public class sendChat extends MovesCommand {
 					try {
 						String content = (String) args.get("content");
 						game.doSendChat(content, playerIndex);
-						arguments = args;
-						int gameID = catanCookie.getGameID();
-						ServerKernel.sole().persistCommand(gameID, this);
+						persist(args, catanCookie);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
