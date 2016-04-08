@@ -26,7 +26,7 @@ public class acceptTrade extends MovesCommand {
 								((Long) args.get("playerIndex")).intValue();
 						try {
 							game.doAcceptTrade(willAccept, playerIndex);
-							persist(args, catanCookie);
+							persist(args, catanCookie, game);
 							JSONObject resultJSON = game.toJSON();
 							result = resultJSON.toJSONString();
 						} catch (ViolatedPreconditionException e) {

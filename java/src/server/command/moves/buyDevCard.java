@@ -2,12 +2,11 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
-import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 
 public class buyDevCard extends MovesCommand {
@@ -26,7 +25,7 @@ public class buyDevCard extends MovesCommand {
 							((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doBuyDevCard(playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

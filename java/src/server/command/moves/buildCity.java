@@ -27,7 +27,7 @@ public class buildCity extends MovesCommand {
 							(args.get("vertexLocation"));
 					try {
 						game.doBuildCity(vertexLocation, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

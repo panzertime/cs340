@@ -2,7 +2,7 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -30,7 +30,7 @@ public class robPlayer extends MovesCommand {
 						int victimIndex = 
 								((Long) args.get("victimIndex")).intValue();
 						game.doRobPlayer(robLocation, victimIndex, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

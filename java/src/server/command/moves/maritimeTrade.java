@@ -2,7 +2,7 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -34,7 +34,7 @@ public class maritimeTrade extends MovesCommand {
 						ResourceType output = getResourceType
 								(args.get("outputResource"));
 						game.doMaritimeTrade(ratio, input, output, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

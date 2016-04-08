@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -33,7 +33,7 @@ public class offerTrade extends MovesCommand {
 								((Long) args.get("receiver")).intValue();
 						game.doOfferTrade
 								(receiverIndex, resourceList, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

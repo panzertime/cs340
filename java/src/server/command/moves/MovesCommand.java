@@ -39,9 +39,12 @@ public abstract class MovesCommand implements ICommand {
 	 * @param args JSONObject of args passed in from client
 	 * @param catanCookie converted CatanCookie passed in from client
 	 */
-	protected void persist(JSONObject args, CatanCookie catanCookie) {
+	@SuppressWarnings("unchecked")
+	protected void persist(JSONObject args, CatanCookie catanCookie, Model game) {
 		arguments = args;
 		int gameID = catanCookie.getGameID();
+		int gameVersion = game.getVersion();
+		args.put("version", gameVersion);
 		ServerKernel.sole().persistCommand(gameID, this);
 	}
 	

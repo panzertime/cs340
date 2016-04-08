@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -30,7 +30,7 @@ public class discardCards extends MovesCommand {
 							(args.get("discardedCards"));
 					try {
 						game.doDiscardCards(discardedCards, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

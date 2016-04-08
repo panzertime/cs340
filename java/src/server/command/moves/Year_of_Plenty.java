@@ -2,12 +2,11 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
+
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
-import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 import shared.model.hand.ResourceType;
 
@@ -31,7 +30,7 @@ public class Year_of_Plenty extends MovesCommand {
 							getResourceType(args.get("resource2"));
 					try {
 						game.doYear_of_Plenty(resource1, resource2, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
