@@ -26,7 +26,7 @@ import shared.model.hand.ResourceType;
  */
 public abstract class MovesCommand implements ICommand {
 	
-	private JSONObject arguments;
+	protected JSONObject arguments;
 
 	//TODO fix duplication in GameCommand
 	/**

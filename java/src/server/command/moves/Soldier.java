@@ -24,6 +24,7 @@ public class Soldier extends MovesCommand {
 					int victimIndex = 
 							((Long) args.get("victimIndex")).intValue();
 					game.doSoldier(robLocation, victimIndex, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

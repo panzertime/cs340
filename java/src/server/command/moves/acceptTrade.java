@@ -21,6 +21,7 @@ public class acceptTrade extends MovesCommand {
 							((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doAcceptTrade(willAccept, playerIndex);
+						arguments = args;
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {

@@ -20,6 +20,7 @@ public class buyDevCard extends MovesCommand {
 						((Long) args.get("playerIndex")).intValue();
 				try {
 					game.doBuyDevCard(playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

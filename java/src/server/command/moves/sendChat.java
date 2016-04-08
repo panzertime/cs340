@@ -20,6 +20,7 @@ public class sendChat extends MovesCommand {
 				try {
 					String content = (String) args.get("content");
 					game.doSendChat(content, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

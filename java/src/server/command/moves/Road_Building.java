@@ -24,6 +24,7 @@ public class Road_Building extends MovesCommand {
 						(args.get("spot2"));
 				try {
 					game.doRoad_Building(spot1, spot2, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

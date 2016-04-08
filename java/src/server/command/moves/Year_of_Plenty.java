@@ -25,6 +25,7 @@ public class Year_of_Plenty extends MovesCommand {
 						getResourceType(args.get("resource2"));
 				try {
 					game.doYear_of_Plenty(resource1, resource2, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

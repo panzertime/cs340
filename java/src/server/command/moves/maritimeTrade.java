@@ -28,6 +28,7 @@ public class maritimeTrade extends MovesCommand {
 					ResourceType output = getResourceType
 							(args.get("outputResource"));
 					game.doMaritimeTrade(ratio, input, output, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

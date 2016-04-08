@@ -18,6 +18,7 @@ public class finishTurn extends MovesCommand {
 				int playerIndex = ((Long) args.get("playerIndex")).intValue();
 				try {
 					game.doFinishTurn(playerIndex);
+					arguments = args;
 					JSONObject jsonResult = game.toJSON();
 					result = jsonResult.toJSONString();
 				} catch (ViolatedPreconditionException e) {

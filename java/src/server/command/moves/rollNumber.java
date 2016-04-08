@@ -21,6 +21,7 @@ public class rollNumber extends MovesCommand {
 				try {
 					int roll = ((Long) args.get("number")).intValue();
 					game.doRollNumber(roll, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

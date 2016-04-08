@@ -23,6 +23,7 @@ public class buildRoad extends MovesCommand {
 				try {
 					boolean free = (boolean) args.get("free");
 					game.doBuildRoad(free, roadLocation, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {

@@ -24,6 +24,7 @@ public class discardCards extends MovesCommand {
 						(args.get("discardedCards"));
 				try {
 					game.doDiscardCards(discardedCards, playerIndex);
+					arguments = args;
 					JSONObject resultJSON = game.toJSON();
 					result = resultJSON.toJSONString();
 				} catch (ViolatedPreconditionException e) {
