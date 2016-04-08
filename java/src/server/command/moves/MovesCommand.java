@@ -25,8 +25,39 @@ import shared.model.hand.ResourceType;
  *
  */
 public abstract class MovesCommand implements ICommand {
+	
+	protected JSONObject arguments;
 
-	//TODO fix duplication in GameCommand
+	public JSONObject getArguments(){
+		return arguments;
+	}
+	
+	/**
+	 * Persists the Moves commands
+	 * @pre Command has already been executed and all parameters are valid
+	 * @post arguments are set and the Server saves the command
+	 * @param args JSONObject of args passed in from client
+	 * @param catanCookie converted CatanCookie passed in from client
+	 */
+	protected void persist(JSONObject args, CatanCookie catanCookie) {
+		arguments = args;
+		int gameID = catanCookie.getGameID();
+		ServerKernel.sole().persistCommand(gameID, this);
+	}
+	
+	/**
+	 * Turns a cookie String into a CatanCookie
+	 * @pre none
+	 * @post A CatanCookie is create
+	 * @param cookie Cookie String received
+	 * @return CatanCookie from the passed string
+	 * @throws CookieException invalid data in String
+	 */
+	public CatanCookie makeCatanCookie(String cookie) throws CookieException {
+		CatanCookie catanCookie = new CatanCookie(cookie, false);
+		return catanCookie;
+	}
+	
 	/**
 	 * Uses the passed string to check the database to see if the cookie
 	 * parameters are valid
@@ -35,11 +66,10 @@ public abstract class MovesCommand implements ICommand {
 	 * @param cookie the cookie string passed in the request
 	 * @return whether or not the username, password, ID and gameID are valid
 	 */
-	public boolean validCookie(String cookie) {
+	public boolean validCookie(CatanCookie catanCookie) {
 		boolean userExists = false;
 		boolean userInGame = false; 
 		try {
-			CatanCookie catanCookie = new CatanCookie(cookie, false);
 			User user = new User(catanCookie.getName(), 
 					catanCookie.getPassword(), catanCookie.getUserID());
 			userExists = ServerKernel.sole().userExists(user);
@@ -47,7 +77,7 @@ public abstract class MovesCommand implements ICommand {
 			if(ServerKernel.sole().gameExists(gameID)) {
 				userInGame = ServerKernel.sole().userIsInGame(gameID, user);
 			}
-		} catch (UserException | CookieException | ServerAccessException e) {
+		} catch (UserException | ServerAccessException e) {
 			//FOR DEBUG ONLY
 			//System.err.println(e.getMessage());
 		}
@@ -258,7 +288,7 @@ public abstract class MovesCommand implements ICommand {
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
 	 */
-	public void reExecute(Model game) {
-		
-	}
+	public abstract void reExecute(Model game);
+	
+	
 }

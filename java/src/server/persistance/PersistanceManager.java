@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 import server.command.moves.MovesCommand;
 import server.data.User;
 import shared.model.Model;
@@ -97,7 +99,7 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
-	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
+	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
 		return commandsDAO.getCommands(gameID);
 	}
 
