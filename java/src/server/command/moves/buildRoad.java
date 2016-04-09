@@ -51,15 +51,15 @@ public class buildRoad extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) 
+	public void reExecute(Model game) 
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			EdgeLocation roadLocation = makeEdgeLocation
-					(args.get("roadLocation"));
+					(arguments.get("roadLocation"));
 			try {
-				boolean free = (boolean) args.get("free");
+				boolean free = (boolean) arguments.get("free");
 				game.doBuildRoad(free, roadLocation, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "

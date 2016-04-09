@@ -55,15 +55,15 @@ public class offerTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+	public void reExecute(Model game) throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			Map<ResourceType, Integer> resourceList = 
-					this.makeResourceList(args.get("offer"));
+					this.makeResourceList(arguments.get("offer"));
 			try {
 				int receiverIndex = 
-						((Long) args.get("receiver")).intValue();
+						((Long) arguments.get("receiver")).intValue();
 				game.doOfferTrade
 						(receiverIndex, resourceList, playerIndex);
 			} catch (ViolatedPreconditionException e) {

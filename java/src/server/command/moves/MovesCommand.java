@@ -292,11 +292,10 @@ public abstract class MovesCommand implements ICommand {
 	 * @pre The parameters of the command have been set and the game Model is valid
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
-	 * @param args saved values in game
 	 * @throws ServerAccessException Something in command was unable to be 
 	 * redone
 	 */
-	public abstract void reExecute(Model game, JSONObject args) 
+	public abstract void reExecute(Model game) 
 			throws ServerAccessException;
 	
 	/**

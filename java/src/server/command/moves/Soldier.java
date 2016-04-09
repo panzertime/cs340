@@ -52,16 +52,16 @@ public class Soldier extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) 
+	public void reExecute(Model game) 
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			HexLocation robLocation = 
-					makeHexLocation(args.get("location"));
+					makeHexLocation(arguments.get("location"));
 			try {
 				int victimIndex = 
-						((Long) args.get("victimIndex")).intValue();
+						((Long) arguments.get("victimIndex")).intValue();
 				game.doSoldier(robLocation, victimIndex, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "

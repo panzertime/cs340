@@ -48,13 +48,13 @@ public class rollNumber extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args)
+	public void reExecute(Model game)
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			try {
-				int roll = ((Long) args.get("number")).intValue();
+				int roll = ((Long) arguments.get("number")).intValue();
 				game.doRollNumber(roll, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "

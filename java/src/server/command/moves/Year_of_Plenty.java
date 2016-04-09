@@ -52,15 +52,15 @@ public class Year_of_Plenty extends MovesCommand {
 	}
 	
 	@Override
-	public void reExecute(Model game, JSONObject args) 
+	public void reExecute(Model game) 
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			ResourceType resource1 = 
-					getResourceType(args.get("resource1"));
+					getResourceType(arguments.get("resource1"));
 			ResourceType resource2 = 
-					getResourceType(args.get("resource2"));
+					getResourceType(arguments.get("resource2"));
 			try {
 				game.doYear_of_Plenty(resource1, resource2, playerIndex);
 			} catch (ViolatedPreconditionException e) {

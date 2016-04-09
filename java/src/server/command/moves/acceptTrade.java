@@ -50,13 +50,13 @@ public class acceptTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) 
+	public void reExecute(Model game) 
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			try {
-				boolean willAccept = (boolean) args.get("willAccept");
+				boolean willAccept = (boolean) arguments.get("willAccept");
 				int playerIndex = 
-						((Long) args.get("playerIndex")).intValue();
+						((Long) arguments.get("playerIndex")).intValue();
 				try {
 					game.doAcceptTrade(willAccept, playerIndex);
 				} catch (ViolatedPreconditionException e) {

@@ -53,20 +53,20 @@ public class maritimeTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) 
+	public void reExecute(Model game) 
 			throws ServerAccessException {
-		if(validMovesArguments(args, getClass().getSimpleName())) {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) args.get("playerIndex")).intValue();
+					((Long) arguments.get("playerIndex")).intValue();
 			
 			try {
 				ResourceType input = getResourceType
-						(args.get("inputResource"));
-				Long longRatio = (Long) args.get("ratio");
+						(arguments.get("inputResource"));
+				Long longRatio = (Long) arguments.get("ratio");
 				Integer ratio = 
 						(longRatio == null) ? 4 : longRatio.intValue();
 				ResourceType output = getResourceType
-						(args.get("outputResource"));
+						(arguments.get("outputResource"));
 				game.doMaritimeTrade(ratio, input, output, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "
