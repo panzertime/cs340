@@ -52,8 +52,26 @@ public class Soldier extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			HexLocation robLocation = 
+					makeHexLocation(args.get("location"));
+			try {
+				int victimIndex = 
+						((Long) args.get("victimIndex")).intValue();
+				game.doSoldier(robLocation, victimIndex, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "victimIndex");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

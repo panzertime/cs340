@@ -48,8 +48,23 @@ public class sendChat extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			try {
+				String content = (String) args.get("content");
+				game.doSendChat(content, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "content");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

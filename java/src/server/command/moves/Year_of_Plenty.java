@@ -52,9 +52,27 @@ public class Year_of_Plenty extends MovesCommand {
 	}
 	
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			ResourceType resource1 = 
+					getResourceType(args.get("resource1"));
+			ResourceType resource2 = 
+					getResourceType(args.get("resource2"));
+			try {
+				game.doYear_of_Plenty(resource1, resource2, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "victimIndex");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 
 }

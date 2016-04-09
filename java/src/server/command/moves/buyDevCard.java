@@ -44,8 +44,19 @@ public class buyDevCard extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			try {
+				game.doBuyDevCard(playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

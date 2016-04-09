@@ -49,8 +49,23 @@ public class Road_Building extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			EdgeLocation spot1 = makeEdgeLocation
+					(args.get("spot1"));
+			EdgeLocation spot2 = makeEdgeLocation
+					(args.get("spot2"));
+			try {
+				game.doRoad_Building(spot1, spot2, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

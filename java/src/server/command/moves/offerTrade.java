@@ -56,7 +56,25 @@ public class offerTrade extends MovesCommand {
 
 	@Override
 	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			Map<ResourceType, Integer> resourceList = 
+					this.makeResourceList(args.get("offer"));
+			try {
+				int receiverIndex = 
+						((Long) args.get("receiver")).intValue();
+				game.doOfferTrade
+						(receiverIndex, resourceList, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "receiver");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

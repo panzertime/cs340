@@ -53,12 +53,31 @@ public class maritimeTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			
+			try {
+				ResourceType input = getResourceType
+						(args.get("inputResource"));
+				Long longRatio = (Long) args.get("ratio");
+				Integer ratio = 
+						(longRatio == null) ? 4 : longRatio.intValue();
+				ResourceType output = getResourceType
+						(args.get("outputResource"));
+				game.doMaritimeTrade(ratio, input, output, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 
-	/**
+	/*
 	 * Takes in a string representing the name of a resource. If string is
 	 * valid it will return a resource of that type, otherwise it is null. 
 	 * @pre none

@@ -43,8 +43,18 @@ public class finishTurn extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = ((Long) args.get("playerIndex")).intValue();
+			try {
+				game.doFinishTurn(playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Player cannot end "
+						+ "turn");
+			}					
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

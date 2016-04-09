@@ -50,8 +50,22 @@ public class discardCards extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game, JSONObject args) throws ServerAccessException {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ServerAccessException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) args.get("playerIndex")).intValue();
+			Map<ResourceType, Integer> discardedCards = makeResourceList
+					(args.get("discardedCards"));
+			try {
+				game.doDiscardCards(discardedCards, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				e.printStackTrace();
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }
