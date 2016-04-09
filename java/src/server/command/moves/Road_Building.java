@@ -2,7 +2,7 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-
+import server.exception.ReExecuteException;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -50,7 +50,7 @@ public class Road_Building extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
+	public void reExecute(Model game, JSONObject args) throws ReExecuteException {
 		// TODO Auto-generated method stub
 		
 	}

@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import server.command.ICommand;
 import server.data.ServerKernel;
 import server.data.User;
+import server.exception.ReExecuteException;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import server.utils.CatanCookie;
@@ -287,13 +288,16 @@ public abstract class MovesCommand implements ICommand {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @pre The parameters of the command have been set and the game Model is valid
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
+	 * @param args saved values in game
+	 * @throws ReExecuteException Some argument passed in was invalid
 	 */
-	public abstract void reExecute(Model game);
+	public abstract void reExecute(Model game, JSONObject args) 
+			throws ReExecuteException;
 	
 	/**
 	 * Converts the list of JSONCommands into a list of MovesCommands
@@ -323,7 +327,7 @@ public abstract class MovesCommand implements ICommand {
 		try {
 			String commandName = (String) jsonCommand.get("type");
 			commandName = "server.command.moves." + commandName;
-				Class genericMoveCommand = Class.forName(commandName);
+				Class<?> genericMoveCommand = Class.forName(commandName);
 				result = (MovesCommand) genericMoveCommand.newInstance();
 				result.arguments = jsonCommand;
 		} catch (ClassNotFoundException | 

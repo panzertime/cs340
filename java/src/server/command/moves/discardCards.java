@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-
+import server.exception.ReExecuteException;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -51,7 +51,7 @@ public class discardCards extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
+	public void reExecute(Model game, JSONObject args) throws ReExecuteException {
 		// TODO Auto-generated method stub
 		
 	}

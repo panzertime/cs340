@@ -2,6 +2,7 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
+import server.exception.ReExecuteException;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -50,8 +51,25 @@ public class acceptTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game, JSONObject args) 
+			throws ReExecuteException {
+		if(validMovesArguments(args, getClass().getSimpleName())) {
+			try {
+				boolean willAccept = (boolean) args.get("willAccept");
+				int playerIndex = 
+						((Long) args.get("playerIndex")).intValue();
+				try {
+					game.doAcceptTrade(willAccept, playerIndex);
+				} catch (ViolatedPreconditionException e) {
+					throw new ServerAccessException("Unable to "
+							+ "perform move");
+				}
+			} catch (Exception e) {
+				throw new ReExecuteException("Invalid Parameters: "
+						+ "willAccept");
+			}
+		} else {
+			throw new ReExecuteException("Invalid Parameters");
+		}
 	}
 }
