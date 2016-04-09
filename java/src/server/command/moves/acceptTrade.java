@@ -52,7 +52,7 @@ public class acceptTrade extends MovesCommand {
 
 	@Override
 	public void reExecute(Model game, JSONObject args) 
-			throws ReExecuteException {
+			throws ServerAccessException {
 		if(validMovesArguments(args, getClass().getSimpleName())) {
 			try {
 				boolean willAccept = (boolean) args.get("willAccept");
@@ -65,11 +65,11 @@ public class acceptTrade extends MovesCommand {
 							+ "perform move");
 				}
 			} catch (Exception e) {
-				throw new ReExecuteException("Invalid Parameters: "
+				throw new ServerAccessException("Invalid Parameters: "
 						+ "willAccept");
 			}
 		} else {
-			throw new ReExecuteException("Invalid Parameters");
+			throw new ServerAccessException("Invalid Parameters");
 		}
 	}
 }

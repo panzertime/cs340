@@ -10,7 +10,6 @@ import org.json.simple.JSONObject;
 import server.command.ICommand;
 import server.data.ServerKernel;
 import server.data.User;
-import server.exception.ReExecuteException;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
 import server.utils.CatanCookie;
@@ -294,10 +293,11 @@ public abstract class MovesCommand implements ICommand {
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
 	 * @param args saved values in game
-	 * @throws ReExecuteException Some argument passed in was invalid
+	 * @throws ServerAccessException Something in command was unable to be 
+	 * redone
 	 */
 	public abstract void reExecute(Model game, JSONObject args) 
-			throws ReExecuteException;
+			throws ServerAccessException;
 	
 	/**
 	 * Converts the list of JSONCommands into a list of MovesCommands
