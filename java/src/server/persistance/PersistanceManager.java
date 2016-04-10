@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import server.command.moves.MovesCommand;
 import server.data.User;
+import server.exception.ServerAccessException;
 import shared.model.Model;
 
 public class PersistanceManager {
@@ -89,8 +90,18 @@ public class PersistanceManager {
 	 * @return List of models
 	 * @throws DatabaseException
 	 */
-	public List<Model> getModel() throws DatabaseException {
+	public List<Model> getModels() throws DatabaseException {
 		return gamesDAO.getGames();
+	}
+	
+	/**
+	 * @pre database is up and available for reading, model exists
+	 * @return models
+	 * @throws DatabaseException
+	 */
+	public Model getModel(int gameID) throws DatabaseException {
+		//TODO - This function would be really useful
+		return null;
 	}
 	
 	/**
@@ -99,8 +110,15 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
-	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
-		return commandsDAO.getCommands(gameID);
+	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
+		List<MovesCommand> commands;
+		List<JSONObject> jsonCommands = commandsDAO.getCommands(gameID);
+		try {
+			commands = MovesCommand.convertJSONListToCommandList(jsonCommands);
+		} catch (ServerAccessException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		return commands;
 	}
 
 	public Connection getConnection() {
@@ -114,6 +132,14 @@ public class PersistanceManager {
 	}
 
 	public static void safeClose(ResultSet rs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//ServerKernel will know if it's adding a game or updating and both need
+	//quite different information, so we might as well make the two separate
+	//functions public
+	public void updateGame(Model game, int gameID) {
 		// TODO Auto-generated method stub
 		
 	}
