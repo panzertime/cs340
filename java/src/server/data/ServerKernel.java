@@ -291,11 +291,12 @@ public class ServerKernel {
 	 * @throws ServerAccessException User stored in DB had data error
 	 */
 	private void initUsersFromDB() throws DatabaseException, 
-			ServerAccessException {
-		List<User> users = pm.getUsers();
-		for(User user : users) {
-			this.users.put(user.getUsername(), user);
-		}
+    ServerAccessException {
+	List<User> users = pm.getUsers();
+	for(User user : users) {
+	    this.users.put(user.getUsername(), user);
+	}
+		User.updateID(users.size());
 	}
 
 	/**
@@ -354,57 +355,40 @@ public class ServerKernel {
 		}
 	}
 	
-	/**
-	 * @pre the game exists and the command is valid with the correct command parameters
-	 * @post The command is persisted to the specific game
-	 * @param gameID The game to which the command should be persisted
-	 * @param cmd The command that needs to be persisted
-	 * @throws DatabaseException Could not get or save something in the DB
-	 */
-	public void persistCommand(int gameID, MovesCommand cmd) {
-		//Using an Integer so it will store a pointer and I can manipulate
-		//the map directly. Hopefully this does not cause any errors.
-		Integer numOfCommands = this.persistenceTracker.get(gameID);
-		try {
-			pm.startTransaction();
-			if(numOfCommands == persistFrequency) {
-				updateGame(gameID, cmd);
-				numOfCommands = 0;
-			} else {
-				pm.saveCommand(gameID, cmd);
-				numOfCommands++;
-			}
-			pm.endTransaction(true);
-		} catch (DatabaseException e) {
-			System.err.println("Could not persist command");
-			e.printStackTrace();
-			try {
-				pm.endTransaction(false);
-			} catch (DatabaseException e1) {
-				System.err.println("Could not end transaction");
-				e1.printStackTrace();
-			}
-		} catch (ServerAccessException e) {
-			System.err.println("Could not re-execute command");
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * @pre the Game is valid, transaction has started
-	 * @post Loads the game from memory and updates it according to the commands and re-persists it
-	 * @param gameID The index of the game in the map
-	 * @throws DatabaseException Error accessing DB
-	 * @throws ServerAccessException Could not reexecute
-	 */
-	private void updateGame(int gameID, MovesCommand cmd) 
-			throws DatabaseException, ServerAccessException {
-		Model game = pm.getModel(gameID);
-		updateGame(gameID, game);
-		cmd.reExecute(game);
-		pm.saveGame(game);
-	}
-	
+    /**
+     * @pre the game exists and the command is valid with the correct command parameters
+     * @post The command is persisted to the specific game
+     * @param gameID The game to which the command should be persisted
+     * @param cmd The command that needs to be persisted
+     * @throws DatabaseException Could not get or save something in the DB
+     */
+    public void persistCommand(int gameID, MovesCommand cmd) {
+        Integer numOfCommands = this.persistenceTracker.get(gameID);
+        try {
+            pm.startTransaction();
+            if(numOfCommands == persistFrequency) {
+                Model model = this.games.get(gameID);
+                pm.saveGame(model);
+                pm.clearCommands(gameID);
+                numOfCommands = 0;
+            } else {
+                pm.saveCommand(gameID, cmd);
+                numOfCommands++;
+            }
+            this.persistenceTracker.replace(gameID, numOfCommands);
+            pm.endTransaction(true);
+        } catch (DatabaseException e) {
+            System.err.println("Could not persist command");
+            e.printStackTrace();
+            try {
+                pm.endTransaction(false);
+            } catch (DatabaseException e1) {
+                System.err.println("Could not end transaction");
+                e1.printStackTrace();
+            }
+        }
+    }
+
 	
 	private void addUserToDB(User user) {
 		try {

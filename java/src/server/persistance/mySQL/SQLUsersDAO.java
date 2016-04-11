@@ -3,6 +3,7 @@ package server.persistance.mySQL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SQLUsersDAO implements IUsersDAO {
 			stmt.setInt(1, user.getID());
 			stmt.setString(2, user.getUsername());
 			stmt.setString(3, user.getPassword());
-			if (stmt.executeUpdate() == 1) {
+			if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 			} else {
 				throw new DatabaseException("Could not insert user");
 			}
