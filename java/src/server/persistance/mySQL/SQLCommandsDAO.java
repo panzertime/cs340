@@ -56,7 +56,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			String query = "select commandBlog from command where gameID = ?";
+			String query = "select movesCommand from command where gameID = ?";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
 
@@ -82,6 +82,20 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		SQLConnection sqlconnection = (SQLConnection) connection;
 		
 		PreparedStatement stmt = null;
+		try {
+			String query = "delete from command where gameID = ?";
+			stmt = sqlconnection.prepareStatement(query);
+			stmt.setInt(1, gameID);
+			if (stmt.executeUpdate() == 1) {
+			} else {
+				throw new DatabaseException("Could not delete commands");
+			}
+		}catch (SQLException e) {
+			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
+			throw serverEx;
+		} finally {
+			sqlconnection.safeClose(stmt);
+		}
 	}
 
 }
