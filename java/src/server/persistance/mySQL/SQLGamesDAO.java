@@ -1,6 +1,7 @@
 package server.persistance.mySQL;
 
 import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,8 +37,10 @@ public class SQLGamesDAO implements IGamesDAO {
 				try {
 					query = "INSERT INTO game (gameID, gameBlob) VALUES (?, ?)";
 					stmt = sqlconnection.prepareStatement(query);
+					Blob blob = sqlconnection.createBlob();
+					blob.setBytes(1,  model.toJSON().toJSONString().getBytes());
 					stmt.setInt(1, model.getID());
-					stmt.setBlob(2, (Blob) model.toJSON());
+					stmt.setBlob(2, blob);
 					if (stmt.executeUpdate() == 1) {
 					} else {
 						throw new DatabaseException("Could not insert game");
@@ -51,7 +54,9 @@ public class SQLGamesDAO implements IGamesDAO {
 				try {
 					query = "update game set gameBlob = ? where gameID = ?";
 					stmt = sqlconnection.prepareStatement(query);
-					stmt.setBlob(1, (Blob) model.toJSON());
+					Blob blob = sqlconnection.createBlob();
+					blob.setBytes(1,  model.toJSON().toJSONString().getBytes());
+					stmt.setBlob(1, blob);
 					stmt.setInt(2, model.getID());
 					if (stmt.executeUpdate() == 1) {
 					} else {

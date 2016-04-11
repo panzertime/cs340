@@ -1,6 +1,7 @@
 package server.persistance.mySQL;
 
 import java.io.File;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +22,15 @@ public class SQLConnection implements IConnection {
 	
 	private Connection connection;
 
+	public Blob createBlob() throws DatabaseException {
+		try {
+			return connection.createBlob();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new DatabaseException();
+		}
+	}
+	
 	public PreparedStatement prepareStatement(String query) throws DatabaseException {
 		try {
 			return connection.prepareStatement(query);

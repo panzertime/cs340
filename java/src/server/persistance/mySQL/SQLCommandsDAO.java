@@ -1,6 +1,7 @@
 package server.persistance.mySQL;
 
 import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,8 +31,11 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		try {
 			String query = "INSERT INTO command (gameID, movesCommand) VALUES (?, ?)";
 			stmt = sqlconnection.prepareStatement(query);
+			Blob blob = sqlconnection.createBlob();
+			blob.setBytes(1,  movesCommand.getArguments().toJSONString().getBytes());
+			
 			stmt.setInt(1, gameID);
-			stmt.setBlob(2, (Blob) movesCommand.getArguments());
+			stmt.setBlob(2, blob);
 			if (stmt.executeUpdate() == 1) {
 			} else {
 				throw new DatabaseException("Could not insert command");
