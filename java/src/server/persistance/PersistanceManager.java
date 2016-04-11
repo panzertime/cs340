@@ -32,15 +32,32 @@ public class PersistanceManager {
 	 * @post Transaction is ready to be attempted
 	 */
 	public void startTransaction() throws DatabaseException {
-		
+		connection.startTransaction();
 	}
 	
 	/**
 	 * @throws DatabaseException
 	 * @post Transaction is entirely persisted to database
 	 */
-	public void endTransaction() throws DatabaseException {
-		
+	public void endTransaction(boolean commit) throws DatabaseException {
+		if (connection != null) {		
+			try {
+				if (commit) {
+					connection.commit();
+				}
+				else {
+					connection.rollback();
+				}
+			}
+			catch (DatabaseException e) {
+				System.out.println("Could not end transaction");
+				e.printStackTrace();
+			}
+			finally {
+				connection.safeClose();
+				connection = null;
+			}
+		}
 	}
 
 	/**
@@ -89,7 +106,8 @@ public class PersistanceManager {
 	 * @return List of models
 	 * @throws DatabaseException
 	 */
-	public List<Model> getModel() throws DatabaseException {
+
+	public List<Model> getModels() throws DatabaseException {
 		return gamesDAO.getGames(connection);
 	}
 	
@@ -100,6 +118,8 @@ public class PersistanceManager {
 	 */
 	public Model getModel(int gameID) throws DatabaseException {
 		//TODO - This function would be really useful
+		System.err.println("Error: getModel is not yet implemented "
+				+ "in PersistenceManager");
 		return null;
 	}
 	
@@ -109,36 +129,37 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
-	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
-		List<MovesCommand> commands;
-		List<JSONObject> jsonCommands = commandsDAO.getCommands(gameID);
-		try {
-			commands = MovesCommand.convertJSONListToCommandList(jsonCommands);
-		} catch (ServerAccessException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-		return commands;
+
+	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
+		return commandsDAO.getCommands(connection, gameID);
 	}
 
 	private IConnection getConnection() {
 		return connection;
 	}
 
-	public static void safeClose(PreparedStatement stmt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static void safeClose(ResultSet rs) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	//ServerKernel will know if it's adding a game or updating and both need
 	//quite different information, so we might as well make the two separate
 	//functions public
-	public void updateGame(Model game, int gameID) {
+	public void updateGame(Model game, int gameID) throws DatabaseException {
 		// TODO Auto-generated method stub
-		
+		System.err.println("Error: updateGame in PersistenceManager "
+				+ "is unimplemented");
+	}
+	
+	//This is necessary so that the commands can be cleared out after they
+	//have been executed
+	public void clearCommands(int gameID) throws DatabaseException {
+		// TODO Auto-generated method stub
+		System.err.println("Error: clearCommands in PersistenceManager "
+				+ "is unimplemented");
+	}
+
+	//We need this to clear out the DB when the command line argument is
+	//passed in
+	public void clearDatabase() throws DatabaseException {
+		// TODO Auto-generated method stub
+		System.err.println("Error: clearDatabase in PersistenceManager "
+				+ "is unimplemented");
 	}
 }

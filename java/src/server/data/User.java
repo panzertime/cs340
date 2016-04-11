@@ -1,8 +1,9 @@
 package server.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import server.exception.UserException;
 
@@ -24,6 +25,13 @@ public class User {
 	}
 
 	private String username;
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	private String password;
 	private Integer id;
 	
@@ -66,15 +74,6 @@ public class User {
 		this.password = password;
 	}
 
-	public User(JSONObject jsonUser) throws UserException {
-		try {
-			this.id = (Integer) jsonUser.get("id");
-			this.username = (String) jsonUser.get("username");
-			this.password = (String) jsonUser.get("password");
-		} catch(Exception e) {
-			throw new UserException("Invalid JSON");
-		}
-	}
 	/**
 	 * Used to assign a user an ID
 	 * @pre user should not have an ID
@@ -164,9 +163,33 @@ public class User {
 	}
 	
 	//PHASE 4
-	//public JSONObject toJSON()
+	public User(JSONObject jsonUser) throws UserException {
+		try {
+			this.id = ((Long) jsonUser.get("id")).intValue();
+			this.username = (String) jsonUser.get("username");
+			this.password = (String) jsonUser.get("password");
+		} catch(Exception e) {
+			throw new UserException("Invalid JSON");
+		}
+	}
 	
+	public JSONObject toJSON() {
+		Map<Object,Object> jsonObject = new HashMap<Object,Object>();
+		jsonObject.put("id", this.id);
+		jsonObject.put("username", this.username);
+		jsonObject.put("password", this.password);
+		JSONObject result = new JSONObject(jsonObject);
+		return result;
+	}
+
 	//DEBUG AND TESTING SECTION
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	/**
 	 * TESTING AND DEBUGGING ONLY: This is to be used for tests to make sure 
