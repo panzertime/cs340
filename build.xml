@@ -111,7 +111,10 @@
 	<target name="compileSrc" depends="init" description="compile the source " >
 		<javac destdir="${java.bin.src}" debug="true" includeantruntime="true">
 			<src path="${java.src}"/>
-			<classpath refid="java.lib.classpath"/>
+			<classpath>
+				<path refid="java.lib.classpath"/>
+				<pathelement location="${java.bin.src}"/>
+			</classpath>
 		</javac>
 	</target>
 
@@ -148,28 +151,32 @@
 				<include name="**"/>
 			</fileset>
 		</copy>
- 		<jar jarfile="${java.dist}/catan-client.jar" basedir="${java.bin.src}">
+ 		<jar jarfile="${java.dist}/catan-client.jar" duplicate="preserve" basedir="${java.bin.src}">
 			<manifest>
 				<attribute name="Main-Class" value="client.main.Catan"/>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
 			</manifest>
 		</jar>
- 		<jar jarfile="${java.dist}/catan-server.jar" basedir="${java.bin.src}">
+ 		<jar jarfile="${java.dist}/catan-server.jar" duplicate="preserve" basedir="${java.bin.src}">
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
-				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar;${java.bin}/server/persistance/IDAOFactory.class" />
+				<attribute name="Class-Path" value="${java.lib}"/>
 			</manifest>
 		</jar>
-		<jar jarfile="${java.plugin}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
+		<jar jarfile="${java.plugin}/catan-mongodb.jar" duplicate="preserve" basedir="${java.bin.src}/server/persistance/mongo">
 
   			<fileset dir="${java.bin.src}/server/persistance/mongo" />
-			<fileset dir="${java.lib}" />
+			<fileset file="${java.lib}/mongo-java-driver-2.13.3.jar" />
+			<manifest>
+				<attribute name="Class-Path" value="${java.lib}"/>
+			</manifest>
+
 			
 			<service type="server.persistance.IDAOFactory">
 				<provider classname="server.persistance.mongo.MongoDAOFactory" />
 			</service>
 		</jar>
-		<jar jarfile="${java.plugin}/catan-sqlite.jar" basedir="${java.bin.src}/server/persistance/mysql">
+		<jar jarfile="${java.plugin}/catan-sqlite.jar" duplicate="preserve" basedir="${java.bin.src}/server/persistance/mysql">
 			<service type="server.persistance.IDAOFactory">
 				<provider classname="server.persistance.mySQL.SQLDAOFactory" />
 			</service>	
@@ -193,13 +200,15 @@
 	<property name="checkpoint-frequency" value="10"/>
 		
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
-		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" classpath="${java.plugin}" fork="yes">
-			<classpath>
-				<pathelement path="${java.plugin}" />
-			</classpath>
+		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
 			<arg value="${persist-type}" />
 			<arg value="${checkpoint-frequency}" />
 			<arg value="${java.plugin}" />
+			<classpath>
+				<pathelement path="${java.plugin}"/>
+				<path refid="java.lib.classpath"/>
+			</classpath>
+
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
 				<enable/>
