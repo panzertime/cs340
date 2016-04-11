@@ -13,12 +13,12 @@ public interface ICommandsDAO {
 	 * @param movesCommand command to be stored in the database
 	 * @post movesCommand is stored in the database
 	 */
-	public void saveCommmand(Integer gameID, MovesCommand movesCommand) throws DatabaseException;
+	public void saveCommmand(IConnection connection, Integer gameID, MovesCommand movesCommand) throws DatabaseException;
 	
 	/**
 	 * @param gameID gameId to match in returned commands
 	 * @return List list of commands run on the related game 
 	 */
-	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException;
+	public List<JSONObject> getCommands(IConnection connection, Integer gameID) throws DatabaseException;
 
 }

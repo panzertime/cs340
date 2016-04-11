@@ -11,12 +11,12 @@ public interface IUsersDAO {
 	 * @post user is saved in the database
 	 * @throws DatabaseException
 	 */
-	public void saveUser(User user) throws DatabaseException;
+	public void saveUser(IConnection connection, User user) throws DatabaseException;
 	
 	/**
 	 * @return List all users in the database
 	 * @throws DatabaseException
 	 */
-	public List<User> getUsers() throws DatabaseException;
+	public List<User> getUsers(IConnection connection) throws DatabaseException;
 
 }

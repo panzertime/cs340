@@ -11,12 +11,12 @@ public interface IGamesDAO {
 	 * @post model is saved in the database
 	 * @throws DatabaseException
 	 */
-	public void saveGame(Model model) throws DatabaseException;
+	public void saveGame(IConnection connection, Model model) throws DatabaseException;
 	
 	/**
 	 * @return List list of all games in the database
 	 * @throws DatabaseException
 	 */
-	public List<Model> getGames() throws DatabaseException;
+	public List<Model> getGames(IConnection connection) throws DatabaseException;
 
 }
