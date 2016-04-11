@@ -24,6 +24,11 @@ public class User {
 		return idToBeAssigned++;
 	}
 
+	public static void updateID(int id) {
+        idToBeAssigned = id;
+    }
+	
+	
 	private String username;
 	/**
 	 * @param username the username to set
