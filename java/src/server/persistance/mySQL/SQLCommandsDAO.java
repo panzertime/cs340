@@ -76,4 +76,10 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		return commands;
 	}
 
+	@Override
+	public void deleteCommand(Integer gameID) throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

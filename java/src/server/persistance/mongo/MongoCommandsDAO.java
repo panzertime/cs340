@@ -23,4 +23,10 @@ public class MongoCommandsDAO implements ICommandsDAO {
 		return null;
 	}
 
+	@Override
+	public void deleteCommand(Integer gameID) throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
