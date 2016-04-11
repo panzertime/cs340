@@ -36,9 +36,9 @@ public class SQLGamesDAO implements IGamesDAO {
 				try {
 					query = "INSERT INTO game (gameID, gameBlob) VALUES (?)";
 					stmt = sqlconnection.prepareStatement(query);
+					stmt.setInt(1, model.getID());
+					stmt.setBlob(2, (Blob) model.toJSON());
 					if (stmt.executeUpdate() == 1) {
-						stmt.setInt(1, model.getID());
-						stmt.setBlob(2, (Blob) model.toJSON());
 					} else {
 						throw new DatabaseException("Could not insert game");
 					}
@@ -53,6 +53,10 @@ public class SQLGamesDAO implements IGamesDAO {
 					stmt = sqlconnection.prepareStatement(query);
 					stmt.setBlob(1, (Blob) model.toJSON());
 					stmt.setInt(2, model.getID());
+					if (stmt.executeUpdate() == 1) {
+					} else {
+						throw new DatabaseException("Could not update game");
+					}
 				} catch (SQLException e) {
 					throw new DatabaseException("Could not update game", e);
 				} finally {

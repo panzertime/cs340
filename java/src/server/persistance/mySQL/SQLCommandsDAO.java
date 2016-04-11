@@ -30,9 +30,9 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		try {
 			String query = "INSERT INTO command (gameID, movesCommand) VALUES (?, ?)";
 			stmt = sqlconnection.prepareStatement(query);
+			stmt.setInt(1, gameID);
+			stmt.setBlob(2, (Blob) movesCommand.getArguments());
 			if (stmt.executeUpdate() == 1) {
-				stmt.setInt(1, gameID);
-				stmt.setBlob(2, (Blob) movesCommand.getArguments());
 			} else {
 				throw new DatabaseException("Could not insert command");
 			}

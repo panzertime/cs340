@@ -26,10 +26,10 @@ public class SQLUsersDAO implements IUsersDAO {
 		try {
 			String query = "INSERT INTO user (userID, username, password) VALUES (?, ?, ?)";
 			stmt = sqlconnection.prepareStatement(query);
+			stmt.setInt(1, user.getID());
+			stmt.setString(2, user.getUsername());
+			stmt.setString(3, user.getPassword());
 			if (stmt.executeUpdate() == 1) {
-				stmt.setInt(1, user.getID());
-				stmt.setString(2, user.getUsername());
-				stmt.setString(3, user.getPassword());
 			} else {
 				throw new DatabaseException("Could not insert user");
 			}
