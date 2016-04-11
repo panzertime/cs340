@@ -135,7 +135,6 @@
 			</fileset>
 		</copy>
  		<jar jarfile="${java.dist}/catan-client.jar" basedir="${java.bin.src}">
-		
 			<manifest>
 				<attribute name="Main-Class" value="client.main.Catan"/>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
@@ -145,6 +144,12 @@
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
+			</manifest>
+		</jar>
+		<jar jarfile="${java.dist}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
+			<manifest>
+				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar"/>
+				<attribute name="Class-Path" value="lib/mongo-java-driver-2.13.3.jar"/>
 			</manifest>
 		</jar>
 	</target>

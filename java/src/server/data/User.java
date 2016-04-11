@@ -170,13 +170,9 @@ public class User {
 		return this.password;
 	}
 	
-<<<<<<< HEAD
-	
-=======
 	//PHASE 4
 	//public JSONObject toJSON()
->>>>>>> josh
-	
+
 	//DEBUG AND TESTING SECTION
 
 	/**

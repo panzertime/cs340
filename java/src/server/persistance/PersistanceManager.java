@@ -1,8 +1,5 @@
 package server.persistance;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -14,6 +11,7 @@ import shared.model.Model;
 
 public class PersistanceManager {
 	
+	private IConnection connection;
 	private IUsersDAO usersDAO;
 	private IGamesDAO gamesDAO;
 	private ICommandsDAO commandsDAO;
@@ -23,9 +21,10 @@ public class PersistanceManager {
 	 * @post PersistanceManager has DAOs initialized
 	 */
 	public PersistanceManager(IDAOFactory factory) throws DatabaseException {
-		usersDAO = factory.createUsersDAO(this);
-		gamesDAO = factory.createGamesDAO(this);
-		commandsDAO = factory.createCommandsDAO(this);
+		usersDAO = factory.createUsersDAO();
+		gamesDAO = factory.createGamesDAO();
+		commandsDAO = factory.createCommandsDAO();
+		connection = factory.createConnection();
 	}
 	
 	/**
@@ -51,7 +50,7 @@ public class PersistanceManager {
 	 * @post user is persisted to database
 	 */
 	public void saveUser(User user) throws DatabaseException {
-		usersDAO.saveUser(user);
+		usersDAO.saveUser(connection, user);
 	}
 	
 	/**
@@ -61,7 +60,7 @@ public class PersistanceManager {
 	 * @post game is persisted to database
 	 */
 	public void saveGame(Model model) throws DatabaseException {
-		gamesDAO.saveGame(model);
+		gamesDAO.saveGame(connection, model);
 		
 	}
 	
@@ -73,7 +72,7 @@ public class PersistanceManager {
 	 * @post command is persisted to database
 	 */
 	public void saveCommand(Integer gameID, MovesCommand command) throws DatabaseException {
-		commandsDAO.saveCommmand(gameID, command);
+		commandsDAO.saveCommmand(connection, gameID, command);
 	}
 	
 	/**
@@ -82,7 +81,7 @@ public class PersistanceManager {
 	 * @throws DatabaseException
 	 */
 	public List<User> getUsers() throws DatabaseException {
-		return usersDAO.getUsers();
+		return usersDAO.getUsers(connection);
 	}
 	
 	/**
@@ -90,8 +89,13 @@ public class PersistanceManager {
 	 * @return List of models
 	 * @throws DatabaseException
 	 */
+<<<<<<< HEAD
 	public List<Model> getModels() throws DatabaseException {
 		return gamesDAO.getGames();
+=======
+	public List<Model> getModel() throws DatabaseException {
+		return gamesDAO.getGames(connection);
+>>>>>>> jacob
 	}
 	
 	/**
@@ -110,6 +114,7 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
+<<<<<<< HEAD
 	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
 		List<MovesCommand> commands;
 		List<JSONObject> jsonCommands = commandsDAO.getCommands(gameID);
@@ -119,21 +124,14 @@ public class PersistanceManager {
 			throw new DatabaseException(e.getMessage());
 		}
 		return commands;
+=======
+	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
+		return commandsDAO.getCommands(connection, gameID);
+>>>>>>> jacob
 	}
 
-	public Connection getConnection() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public static void safeClose(PreparedStatement stmt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static void safeClose(ResultSet rs) {
-		// TODO Auto-generated method stub
-		
+	private IConnection getConnection() {
+		return connection;
 	}
 
 	//ServerKernel will know if it's adding a game or updating and both need
