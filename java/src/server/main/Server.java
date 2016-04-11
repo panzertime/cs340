@@ -3,11 +3,15 @@ package server.main;
 import java.io.*;
 import java.net.*;
 import java.util.logging.*;
+import java.util.*;
 
 import com.sun.net.httpserver.*;
 
 import server.*;
 import server.handler.*;
+import server.exception.*;
+import server.persistance.IDAOFactory;
+import server.data.ServerKernel;
 
 public class Server {
 
@@ -85,7 +89,29 @@ public class Server {
 	
 	public static void main(String[] args) {
 	//	new server(Integer.parseInt(args[0])).run();
-		new Server(8081).run();
+		try {	
+			int N = Integer.parseInt(args[1]);
+			IDAOFactory plugin = null;
+			ServiceLoader<IDAOFactory> pluginLoader = ServiceLoader.load(IDAOFactory.class);
+			for (IDAOFactory df : pluginLoader) {
+				String name = df.getClass().getSimpleName().toLowerCase();
+				System.out.println("Found plugin: " + name);
+				if (name.contains(args[0])) {
+					plugin = df;
+				}
+			}
+			if (plugin != null) {
+				// we'll always set Clear DB? to false for now
+				ServerKernel.sole().initPersistence(N, plugin, false);
+			}
+			else {
+				throw new ServerAccessException("Could not match plugin name " + args[0]);
+			}
+			new Server(8081).run();
+		}
+		catch (Exception e) {
+			logger.log(Level.INFO, "Fault starting server: " + e.getMessage());
+		}
 	}
 
 	public static void setFake(boolean isFake) {

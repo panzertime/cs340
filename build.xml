@@ -31,7 +31,11 @@
 	
 	<property name="java.images" location="java/images"/>
 	<property name="java.dist" location="java/dist"/>
-  
+	<property name="extensions" location="${java.ext.dirs}"/>
+	<property name="java.plugin" location="java/plugin"/>
+	<property name="java.ext.dirs" location="${java.ext.dirs}:${java.plugin}" />
+  	<property name="java.db" location="java/database"/>
+
 	<!-- CLASSPATHS -->
 	<!-- ********** -->
 	
@@ -41,6 +45,10 @@
 	
 	<path id="java.src.classpath">
 		<fileset dir="${java.bin.src}" includes="**/*.class"/>
+	</path>
+
+	<path id="java.plugin.classpath">
+		<fileset dir="${java.plugin}" includes="**/*.jar"/>
 	</path>
 
 	<!-- TARGETS -->
@@ -86,11 +94,18 @@
 		<mkdir dir="${java.bin.src}"/>
 		<mkdir dir="${java.bin.test}"/>
 		<mkdir dir="${java.dist}"/>
+		<mkdir dir="${java.plugin}"/>
+		<mkdir dir="${java.db}"/>
+		<mkdir dir="${java.doc}"/>
+		<copy todir="${java.doc}/api">
+			<fileset dir="${java.demo.doc}/api" />
+		</copy>
 	</target>
 		
 	<target name="clean" description="clean build files" >
 		<delete dir="${java.bin}"/>
 		<delete dir="${java.dist}"/>
+		<delete dir="${java.plugin}"/>
 		<delete dir="${java.doc}"/>
 	</target>
     
@@ -116,7 +131,7 @@
 		</javac>
 	</target>
 	
-	<target name="package" depends="compileSrc" description="package the jar file" >
+	<target name="package" depends="compileSrc" description="package the jar files" >
 		<mkdir dir="${java.dist}/lib"/>
 		<copy todir="${java.dist}/lib">
 			<fileset dir="${java.lib}">
@@ -144,14 +159,27 @@
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
+				<attribute name="Class-Path" value="${java.bin}/server/persistance/IDAOFactory.class" />
 			</manifest>
 		</jar>
-		<jar jarfile="${java.dist}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
+		<jar jarfile="${java.plugin}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
 			<manifest>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar"/>
 				<attribute name="Class-Path" value="lib/mongo-java-driver-2.13.3.jar"/>
 			</manifest>
+			<service type="server.persistance.IDAOFactory">
+				<provider classname="server.persistance.mongo.MongoDAOFactory" />
+			</service>
 		</jar>
+		<jar jarfile="${java.plugin}/catan-sqlite.jar" basedir="${java.bin.src}/server/persistance/mysql">
+			<service type="server.persistance.IDAOFactory">
+				<provider classname="server.persistance.mySQL.SQLDAOFactory" />
+			</service>	
+			<manifest>
+				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar"/>
+			</manifest>
+		</jar>
+
 	</target>
 	
 	<target name="our-client" depends="package" description="compiles, packages, and runs the student client">
@@ -163,8 +191,17 @@
 		</java>
 	</target>
  	
+	<property name="persist-type" value="mongo"/>
+	<property name="checkpoint-frequency" value="10"/>
+		
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
 		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+			<classpath>
+				<pathelement path="${java.plugin}" />
+			</classpath>
+			<arg value="${persist-type}" />
+			<arg value="${checkpoint-frequency}" />
+			<jvmarg value="${java.ext.dirs}" />
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
 				<enable/>
@@ -172,9 +209,13 @@
 		</java>
 	</target>
     
-    <target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">
-        <zip destfile="./tester.zip" basedir="${java.dist}" />
-    </target>
+	<target name="make-tester-zip" depends="package" description="makes a zip file for your testing team">
+     		<zip destfile="./tester.zip">
+			<fileset basedir="${java.dist}" />
+			<fileset basedir="${java.plugin}" />
+			<fileset basedir="${java.doc}" />
+		</zip>
+	</target>
 	
 	<target name="test" depends="compileTest" description="compiles and runs the JUnit tests " >
 		<java classname="test.Test" fork="yes">
@@ -220,5 +261,15 @@
 			<arg value="${ant.file}" /> 
 		</java> 
 	</target>
+	
+	<target name="clear-sql">
+	</target>
+
+	<target name="clear-mongo">
+	</target>
+
+	<target name="clear-dbs" description="resets both DBs to blank" depends="clear-sql, clear-mongo">
+	</target>
+
 </project>
 
