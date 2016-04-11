@@ -263,17 +263,13 @@ public class ServerKernel {
 	 * @param df
 	 * @throws ServerAccessException
 	 */
-	public void initPersistence(int freq, IDAOFactory df, boolean clearDB) 
+	public void initPersistence(int freq, IDAOFactory df) 
 			throws ServerAccessException {
 		try {
 			pm = new PersistanceManager(df);
 			pm.startTransaction();
-			if(clearDB) {
-				pm.clearDatabase();
-			} else {
-				initGamesFromDB();
-				initUsersFromDB();
-			}
+			initGamesFromDB();
+			initUsersFromDB();
 			pm.endTransaction(true);
 			persistFrequency = freq;
 		} catch (DatabaseException e) {
