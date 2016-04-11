@@ -1,6 +1,8 @@
 package server.command.moves;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -10,6 +12,7 @@ import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
+import server.persistance.DatabaseException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
@@ -39,9 +42,12 @@ public abstract class MovesCommand implements ICommand {
 	 * @param args JSONObject of args passed in from client
 	 * @param catanCookie converted CatanCookie passed in from client
 	 */
-	protected void persist(JSONObject args, CatanCookie catanCookie) {
+	@SuppressWarnings("unchecked")
+	protected void persist(JSONObject args, CatanCookie catanCookie, Model game) {
 		arguments = args;
 		int gameID = catanCookie.getGameID();
+		int gameVersion = game.getVersion();
+		args.put("version", gameVersion);
 		ServerKernel.sole().persistCommand(gameID, this);
 	}
 	
@@ -282,13 +288,58 @@ public abstract class MovesCommand implements ICommand {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @pre The parameters of the command have been set and the game Model is valid
 	 * @post The command is executed again from the data in memory and the game is updated
 	 * @param game - The game to which the command will be performed
+	 * @throws ServerAccessException Something in command was unable to be 
+	 * redone
 	 */
-	public abstract void reExecute(Model game);
+	public abstract void reExecute(Model game) 
+			throws ServerAccessException;
 	
+	/**
+	 * Converts the list of JSONCommands into a list of MovesCommands
+	 * @param jsonCommands Commands in JSONFormat
+	 * @return jsonCommands converted to MovesCommands
+	 * @throws ServerAccessException Invalid command
+	 */
+	public static List<MovesCommand> convertJSONListToCommandList
+			(List<JSONObject> jsonCommands)  throws ServerAccessException {
+		List<MovesCommand> result = new ArrayList<MovesCommand>();
+		for(JSONObject jsonCommand: jsonCommands) {
+			MovesCommand newMove = convertJSONToCommand(jsonCommand);
+			result.add(newMove);
+		}
+		return result;
+	}
+	
+	/**
+	 * Convert the JSONCommand into a MovesCommand
+	 * @param jsonCommand Command in JSONFormat
+	 * @return jsonCommand converted to MovesCommands
+	 * @throws ServerAccessException Invalid command
+	 */
+	public static MovesCommand convertJSONToCommand
+			(JSONObject jsonCommand)  throws ServerAccessException {
+		MovesCommand result = null;
+		try {
+			String commandName = (String) jsonCommand.get("type");
+			commandName = "server.command.moves." + commandName;
+				Class<?> genericMoveCommand = Class.forName(commandName);
+				result = (MovesCommand) genericMoveCommand.newInstance();
+				result.arguments = jsonCommand;
+		} catch (ClassNotFoundException | 
+				InstantiationException | IllegalAccessException e) { 
+			e.printStackTrace();
+			throw new ServerAccessException
+					("Could not use reflection properly");
+		} catch (Exception e1) {
+			throw new ServerAccessException
+					("Stored command has invalid type");
+		}
+		return result;
+	}
 	
 }

@@ -26,7 +26,7 @@ public class acceptTrade extends MovesCommand {
 								((Long) args.get("playerIndex")).intValue();
 						try {
 							game.doAcceptTrade(willAccept, playerIndex);
-							persist(args, catanCookie);
+							persist(args, catanCookie, game);
 							JSONObject resultJSON = game.toJSON();
 							result = resultJSON.toJSONString();
 						} catch (ViolatedPreconditionException e) {
@@ -50,8 +50,25 @@ public class acceptTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) 
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			try {
+				boolean willAccept = (boolean) arguments.get("willAccept");
+				int playerIndex = 
+						((Long) arguments.get("playerIndex")).intValue();
+				try {
+					game.doAcceptTrade(willAccept, playerIndex);
+				} catch (ViolatedPreconditionException e) {
+					throw new ServerAccessException("Unable to "
+							+ "perform move");
+				}
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameters: "
+						+ "willAccept");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -30,7 +29,7 @@ public class discardCards extends MovesCommand {
 							(args.get("discardedCards"));
 					try {
 						game.doDiscardCards(discardedCards, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -51,8 +50,22 @@ public class discardCards extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) 
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) arguments.get("playerIndex")).intValue();
+			Map<ResourceType, Integer> discardedCards = makeResourceList
+					(arguments.get("discardedCards"));
+			try {
+				game.doDiscardCards(discardedCards, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				e.printStackTrace();
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

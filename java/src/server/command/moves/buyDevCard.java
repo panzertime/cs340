@@ -2,12 +2,10 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
-import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 
 public class buyDevCard extends MovesCommand {
@@ -26,7 +24,7 @@ public class buyDevCard extends MovesCommand {
 							((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doBuyDevCard(playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -46,8 +44,19 @@ public class buyDevCard extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) 
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) arguments.get("playerIndex")).intValue();
+			try {
+				game.doBuyDevCard(playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

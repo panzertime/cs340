@@ -2,12 +2,10 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
-import shared.model.board.hex.HexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 
 public class rollNumber extends MovesCommand {
@@ -27,7 +25,7 @@ public class rollNumber extends MovesCommand {
 					try {
 						int roll = ((Long) args.get("number")).intValue();
 						game.doRollNumber(roll, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -50,8 +48,23 @@ public class rollNumber extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game)
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) arguments.get("playerIndex")).intValue();
+			try {
+				int roll = ((Long) arguments.get("number")).intValue();
+				game.doRollNumber(roll, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "number");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

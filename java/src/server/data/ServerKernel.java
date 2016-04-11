@@ -1,6 +1,7 @@
 package server.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -9,6 +10,9 @@ import org.json.simple.JSONObject;
 import server.command.moves.MovesCommand;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
+import server.persistance.DatabaseException;
+import server.persistance.IDAOFactory;
+import server.persistance.PersistanceManager;
 import shared.model.Model;
 
 /**
@@ -38,6 +42,7 @@ public class ServerKernel {
 	private ServerKernel() {
 		this.games = new HashMap<Integer, Model>();
 		this.users = new HashMap<String, User>();
+		this.persistenceTracker = new HashMap<Integer,Integer>();
 		this.numOfGames = 0;
 	}
 	
@@ -73,12 +78,13 @@ public class ServerKernel {
 			} else {
 				user.setUserID();
 				this.users.put(user.getUsername(), user);
+				addUserToDB(user);
 			}
 		} catch (UserException e) {
 			throw new ServerAccessException("User Already Had an ID");
 		}
 	}
-	
+
 	/**
 	 * Checks the username against the key in the
 	 * registered users list to see if it is a valid username.
@@ -190,6 +196,8 @@ public class ServerKernel {
 		int newGameID = newGameID();
 		this.games.put(newGameID, newModel);
 		newModel.setID(newGameID);
+		addGameToDB(newModel);
+		this.persistenceTracker.put(newGameID, 0);
 		
 		return newGameID;
 	}
@@ -241,17 +249,89 @@ public class ServerKernel {
 		this.users = new HashMap<String, User>();
 		User.resetIDs();
 	}
-	private int persistFrequency;
 	
+	// Phase 4
+	private int persistFrequencyLimit;
+	private PersistanceManager pm;
+	private Map<Integer,Integer> persistenceTracker;
+	
+	/**
+	 * 
+	 * @param freq
+	 * @param df
+	 * @throws ServerAccessException
+	 */
+	public void initPersistence(int freq, IDAOFactory df) 
+			throws ServerAccessException {
+		try {
+			pm = new PersistanceManager(df);
+			initGamesFromDB();
+			initUsersFromDB();
+			persistFrequencyLimit = freq - 1;
+		} catch (DatabaseException e) {
+			throw new ServerAccessException("Could not initialize database");
+		}
+	}
+	
+	/**
+	 * initializes Users from the database
+	 * @pre Users has been init, db has valid info
+	 * @post Users will include info from the DB
+	 * @throws DatabaseException Db could not be accessed properly
+	 * @throws ServerAccessException User stored in DB had data error
+	 */
+	private void initUsersFromDB() throws DatabaseException, 
+			ServerAccessException {
+		List<User> users = pm.getUsers();
+		for(User user : users) {
+			this.users.put(user.getUsername(), user);
+		}
+	}
 
 	/**
-	 * @pre The game and the user exists
-	 * @post The user is added as part of the game, and the game is persisted
-	 * @param u - The user that will be added to the game
-	 * @param gameID - The ID of game that the user is being added to
+	 * initializes Games from the database
+	 * @pre Games has been init, db has valid info
+	 * @post Games will included updated model info from the DB
+	 * @throws DatabaseException Db could not be accessed properly
+	 * @throws ServerAccessException Game or command stored in DB had error
 	 */
-	public void addUserToGame(User u, int gameID) {
-		
+	private void initGamesFromDB() throws DatabaseException, 
+			ServerAccessException {
+		List<Model> games = pm.getModels();
+		for(Model game : games) {
+			int gameID = game.getID();
+			updateGame(gameID, game);
+			this.games.put(gameID, game);
+		}
+	}
+
+	private void updateGame(int gameID, Model game) throws DatabaseException, 
+			ServerAccessException {
+		List<MovesCommand> commands = pm.getCommands(gameID);
+		//Might need to make sure commands are in order
+		for(MovesCommand command : commands) {
+			command.reExecute(game);
+		}
+	}
+
+	/**
+	 * The given game is updated in the database with the new player
+	 * @pre The game ID is valid and represents the given game, the game 
+	 * 		includes the updates as if the player were already added 
+	 * @post The given game is updated in the database with the new player 
+	 * @param game updated game with new Player
+	 * @param gameID Corresponding gameID
+	 */
+	public void addPlayerToGame(Model game, int gameID) {
+		try {
+			pm.startTransaction();
+			pm.updateGame(game, gameID);
+			pm.endTransaction();
+		} catch (DatabaseException e) {
+			System.err.println("Could not update game with new player in"
+					+ "the database");
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -259,18 +339,66 @@ public class ServerKernel {
 	 * @post The command is persisted to the specific game
 	 * @param gameID The game to which the command should be persisted
 	 * @param cmd The command that needs to be persisted
+	 * @throws DatabaseException Could not get or save something in the DB
 	 */
 	public void persistCommand(int gameID, MovesCommand cmd) {
-		
+		//Using an Integer so it will store a pointer and I can manipulate
+		//the map directly. Hopefully this does not cause any errors.
+		Integer numOfCommands = this.persistenceTracker.get(gameID);
+		try {
+			pm.startTransaction();
+			if(numOfCommands == persistFrequencyLimit) {
+				updateGame(gameID, cmd);
+				numOfCommands = 0;
+			} else {
+				pm.saveCommand(gameID, cmd);
+				numOfCommands++;
+			}
+			pm.endTransaction();
+		} catch (DatabaseException e) {
+			System.err.println("Could not persist command");
+			e.printStackTrace();
+		} catch (ServerAccessException e) {
+			System.err.println("Could not re-execute command");
+			e.printStackTrace();
+		}
 	}
 	
 	/**
-	 * @pre the Game is valid
+	 * @pre the Game is valid, transaction has started
 	 * @post Loads the game from memory and updates it according to the commands and re-persists it
 	 * @param gameID The index of the game in the map
-	 * 
+	 * @throws DatabaseException Error accessing DB
+	 * @throws ServerAccessException Could not reexecute
 	 */
-	private void updateGame(int gameID) {
-		
+	private void updateGame(int gameID, MovesCommand cmd) 
+			throws DatabaseException, ServerAccessException {
+		Model game = pm.getModel(gameID);
+		updateGame(gameID, game);
+		cmd.reExecute(game);
+		pm.updateGame(game, gameID);
+	}
+	
+	
+	private void addUserToDB(User user) {
+		try {
+			pm.startTransaction();
+			pm.saveUser(user);
+			pm.endTransaction();
+		} catch (DatabaseException e) {
+			System.err.println("Could not save user in database");
+			e.printStackTrace();
+		}
+	}
+
+	private void addGameToDB(Model newModel) {
+		try {
+			pm.startTransaction();
+			pm.saveGame(newModel);
+			pm.endTransaction();
+		} catch (DatabaseException e) {
+			System.err.println("Could not save game in database");
+			e.printStackTrace();
+		}
 	}
 }

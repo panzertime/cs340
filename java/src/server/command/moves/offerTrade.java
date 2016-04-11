@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -33,7 +32,7 @@ public class offerTrade extends MovesCommand {
 								((Long) args.get("receiver")).intValue();
 						game.doOfferTrade
 								(receiverIndex, resourceList, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -56,8 +55,26 @@ public class offerTrade extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) arguments.get("playerIndex")).intValue();
+			Map<ResourceType, Integer> resourceList = 
+					this.makeResourceList(arguments.get("offer"));
+			try {
+				int receiverIndex = 
+						((Long) arguments.get("receiver")).intValue();
+				game.doOfferTrade
+						(receiverIndex, resourceList, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			} catch (Exception e) {
+				throw new ServerAccessException("Invalid Parameter: "
+						+ "receiver");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

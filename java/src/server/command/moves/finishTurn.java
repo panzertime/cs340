@@ -2,7 +2,6 @@ package server.command.moves;
 
 import org.json.simple.JSONObject;
 
-import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
@@ -24,7 +23,7 @@ public class finishTurn extends MovesCommand {
 					int playerIndex = ((Long) args.get("playerIndex")).intValue();
 					try {
 						game.doFinishTurn(playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject jsonResult = game.toJSON();
 						result = jsonResult.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -44,8 +43,18 @@ public class finishTurn extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) 
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = ((Long) arguments.get("playerIndex")).intValue();
+			try {
+				game.doFinishTurn(playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Player cannot end "
+						+ "turn");
+			}					
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

@@ -27,7 +27,7 @@ public class buildCity extends MovesCommand {
 							(args.get("vertexLocation"));
 					try {
 						game.doBuildCity(vertexLocation, playerIndex);
-						persist(args, catanCookie);
+						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
 						result = resultJSON.toJSONString();
 					} catch (ViolatedPreconditionException e) {
@@ -47,8 +47,21 @@ public class buildCity extends MovesCommand {
 	}
 
 	@Override
-	public void reExecute(Model game) {
-		// TODO Auto-generated method stub
-		
+	public void reExecute(Model game) 
+			throws ServerAccessException {
+		if(validMovesArguments(arguments, getClass().getSimpleName())) {
+			int playerIndex = 
+					((Long) arguments.get("playerIndex")).intValue();
+			VertexLocation vertexLocation = makeVertexLocation
+					(arguments.get("vertexLocation"));
+			try {
+				game.doBuildCity(vertexLocation, playerIndex);
+			} catch (ViolatedPreconditionException e) {
+				throw new ServerAccessException("Unable to "
+						+ "perform move");
+			}
+		} else {
+			throw new ServerAccessException("Invalid Parameters");
+		}
 	}
 }

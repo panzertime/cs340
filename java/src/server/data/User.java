@@ -67,12 +67,21 @@ public class User {
 		
 	}
 
-	public User(int userID, String username2, String password2) {
+	public User(int userID, String username, String password) {
 		this.setUserID(userID);
-		this.username = username2;
-		this.password = password2;
+		this.username = username;
+		this.password = password;
 	}
 
+	public User(JSONObject jsonUser) throws UserException {
+		try {
+			this.id = (Integer) jsonUser.get("id");
+			this.username = (String) jsonUser.get("username");
+			this.password = (String) jsonUser.get("password");
+		} catch(Exception e) {
+			throw new UserException("Invalid JSON");
+		}
+	}
 	/**
 	 * Used to assign a user an ID
 	 * @pre user should not have an ID
@@ -161,7 +170,12 @@ public class User {
 		return this.password;
 	}
 	
+<<<<<<< HEAD
 	
+=======
+	//PHASE 4
+	//public JSONObject toJSON()
+>>>>>>> josh
 	
 	//DEBUG AND TESTING SECTION
 
