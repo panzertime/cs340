@@ -143,7 +143,7 @@ public class PersistanceManager {
 	//have been executed
 	public void clearCommands(int gameID) throws DatabaseException {
 		
-		this.commandsDAO.deleteCommand(gameID);
+		this.commandsDAO.deleteCommand(connection, gameID);
 	}
 
 	//We need this to clear out the DB when the command line argument is

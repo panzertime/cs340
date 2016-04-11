@@ -77,9 +77,11 @@ public class SQLCommandsDAO implements ICommandsDAO {
 	}
 
 	@Override
-	public void deleteCommand(Integer gameID) throws DatabaseException {
-		// TODO Auto-generated method stub
+	public void deleteCommand(IConnection connection, Integer gameID) throws DatabaseException {
+		if (gameID == null) throw new DatabaseException();
+		SQLConnection sqlconnection = (SQLConnection) connection;
 		
+		PreparedStatement stmt = null;
 	}
 
 }

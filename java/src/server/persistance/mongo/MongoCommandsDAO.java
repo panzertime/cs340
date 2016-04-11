@@ -24,7 +24,7 @@ public class MongoCommandsDAO implements ICommandsDAO {
 	}
 
 	@Override
-	public void deleteCommand(Integer gameID) throws DatabaseException {
+	public void deleteCommand(IConnection connection, Integer gameID) throws DatabaseException {
 		// TODO Auto-generated method stub
 		
 	}
