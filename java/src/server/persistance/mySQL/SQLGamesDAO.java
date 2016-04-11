@@ -1,13 +1,17 @@
 package server.persistance.mySQL;
 
 import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import server.persistance.DatabaseException;
 import server.persistance.IConnection;
@@ -37,8 +41,8 @@ public class SQLGamesDAO implements IGamesDAO {
 					query = "INSERT INTO game (gameID, gameBlob) VALUES (?, ?)";
 					stmt = sqlconnection.prepareStatement(query);
 					stmt.setInt(1, model.getID());
-					stmt.setBlob(2, (Blob) model.toJSON());
-					if (stmt.executeUpdate() == 1) {
+					stmt.setBytes(2, model.toJSON().toJSONString().getBytes());
+					if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 					} else {
 						throw new DatabaseException("Could not insert game");
 					}
@@ -51,9 +55,9 @@ public class SQLGamesDAO implements IGamesDAO {
 				try {
 					query = "update game set gameBlob = ? where gameID = ?";
 					stmt = sqlconnection.prepareStatement(query);
-					stmt.setBlob(1, (Blob) model.toJSON());
+					stmt.setBytes(1, model.toJSON().toJSONString().getBytes());
 					stmt.setInt(2, model.getID());
-					if (stmt.executeUpdate() == 1) {
+					if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 					} else {
 						throw new DatabaseException("Could not update game");
 					}
@@ -87,11 +91,15 @@ public class SQLGamesDAO implements IGamesDAO {
 
 			rs = stmt.executeQuery();
 			while (rs.next()) {
-				JSONObject gameJSON = (JSONObject) rs.getBlob(1);
-
+				byte[] bytes = rs.getBytes(1);
+				String JSONString = new String(bytes);
+				
 				try {
+					JSONParser jp = new JSONParser();
+					JSONObject gameJSON = (JSONObject) jp.parse(JSONString);
+
 					games.add(new Model(gameJSON));
-				} catch (BadJSONException e) {
+				} catch (ParseException | BadJSONException e) {
 					throw new DatabaseException(e);
 				}
 			}

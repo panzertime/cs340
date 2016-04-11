@@ -291,11 +291,12 @@ public class ServerKernel {
 	 * @throws ServerAccessException User stored in DB had data error
 	 */
 	private void initUsersFromDB() throws DatabaseException, 
-			ServerAccessException {
-		List<User> users = pm.getUsers();
-		for(User user : users) {
-			this.users.put(user.getUsername(), user);
-		}
+    ServerAccessException {
+	List<User> users = pm.getUsers();
+	for(User user : users) {
+	    this.users.put(user.getUsername(), user);
+	}
+		User.updateID(users.size());
 	}
 
 	/**

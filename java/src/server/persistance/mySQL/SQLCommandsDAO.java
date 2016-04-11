@@ -1,13 +1,17 @@
 package server.persistance.mySQL;
 
 import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import server.command.moves.MovesCommand;
 import server.persistance.DatabaseException;
@@ -31,8 +35,8 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			String query = "INSERT INTO command (gameID, movesCommand) VALUES (?, ?)";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
-			stmt.setBlob(2, (Blob) movesCommand.getArguments());
-			if (stmt.executeUpdate() == 1) {
+			stmt.setBytes(2, movesCommand.getArguments().toJSONString().getBytes());
+			if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 			} else {
 				throw new DatabaseException("Could not insert command");
 			}
@@ -62,9 +66,17 @@ public class SQLCommandsDAO implements ICommandsDAO {
 
 			rs = stmt.executeQuery();
 			while (rs.next()) {
-				JSONObject commandJSON = (JSONObject) rs.getBlob(1);
+				byte[] bytes = rs.getBytes(1);
+				String JSONString = new String(bytes);
 
-				commands.add(commandJSON);
+				JSONParser jp = new JSONParser();
+				JSONObject commandJSON;
+				try {
+					commandJSON = (JSONObject) jp.parse(JSONString);
+					commands.add(commandJSON);
+				} catch (ParseException e) {
+					throw new DatabaseException();
+				}
 			}
 		} catch (SQLException e) {
 			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
@@ -86,7 +98,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			String query = "delete from command where gameID = ?";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
-			if (stmt.executeUpdate() == 1) {
+			if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 			} else {
 				throw new DatabaseException("Could not delete commands");
 			}

@@ -138,6 +138,8 @@ public class Model {
 	public Model(JSONObject jsonMap) throws BadJSONException {
 		if (jsonMap == null)
 			throw new BadJSONException();
+		this.gameName = (String) jsonMap.get("name");
+		this.gameID = ((Long) jsonMap.get("gameID")).intValue();
 		bank = new Bank((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log"));
 		
@@ -197,6 +199,8 @@ public class Model {
 	public JSONObject toJSON()
 	{
 		JSONObject jsonMap = new JSONObject();
+		jsonMap.put("name", this.gameName);
+		jsonMap.put("gameID", this.gameID);
 		jsonMap.put("bank", bank.bankToJSON());
 		jsonMap.put("deck", bank.deckToJSON());
 		jsonMap.put("chat", this.getChatModel().getChatLog().toJSON());
