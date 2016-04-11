@@ -163,8 +163,8 @@
 		<jar jarfile="${java.plugin}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
 
   			<fileset dir="${java.bin.src}/server/persistance/mongo" />
-			<fileset dir="${java.lib}/json-simple-1.1.1.jar;${java.lib}/mongo-java-driver-2.13.3.jar" />
-
+			<fileset dir="${java.lib}" />
+			
 			<service type="server.persistance.IDAOFactory">
 				<provider classname="server.persistance.mongo.MongoDAOFactory" />
 			</service>
