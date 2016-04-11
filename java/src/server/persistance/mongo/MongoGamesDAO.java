@@ -25,6 +25,10 @@ public class MongoGamesDAO implements IGamesDAO {
 		if (connection == null)
 			throw new DatabaseException();
 		MongoConnection mongoConnection = (MongoConnection) connection;
+
+		DBCursor cursor = mongoConnection.getGamesCollection().find((DBObject) JSON.parse("{id:" + model.getID() + "}"));
+		if (cursor.hasNext())
+			mongoConnection.getGamesCollection().remove(cursor.next());
 		
 		mongoConnection.getGamesCollection().insert((DBObject) JSON.parse(model.toJSON().toJSONString()));
 	}
