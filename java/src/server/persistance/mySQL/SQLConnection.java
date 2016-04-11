@@ -14,7 +14,7 @@ import server.persistance.IConnection;
 public class SQLConnection implements IConnection {
 
 	
-	private static final String DATABASE_DIRECTORY = "database";
+	private static final String DATABASE_DIRECTORY = "java/database";
 	private static final String DATABASE_FILE = "catan.sqlite";
 	private static final String DATABASE_URL = "jdbc:sqlite:" + DATABASE_DIRECTORY +
 											 File.separator +  DATABASE_FILE;

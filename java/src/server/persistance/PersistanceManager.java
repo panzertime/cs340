@@ -55,7 +55,6 @@ public class PersistanceManager {
 			}
 			finally {
 				connection.safeClose();
-				connection = null;
 			}
 		}
 	}
@@ -138,28 +137,19 @@ public class PersistanceManager {
 		return connection;
 	}
 
-	//ServerKernel will know if it's adding a game or updating and both need
-	//quite different information, so we might as well make the two separate
-	//functions public
-	public void updateGame(Model game, int gameID) throws DatabaseException {
-		// TODO Auto-generated method stub
-		System.err.println("Error: updateGame in PersistenceManager "
-				+ "is unimplemented");
-	}
-	
+
 	//This is necessary so that the commands can be cleared out after they
 	//have been executed
 	public void clearCommands(int gameID) throws DatabaseException {
-		// TODO Auto-generated method stub
-		System.err.println("Error: clearCommands in PersistenceManager "
-				+ "is unimplemented");
+		
+		this.commandsDAO.deleteCommands(connection, gameID);
 	}
 
 	//We need this to clear out the DB when the command line argument is
 	//passed in
-	public void clearDatabase() throws DatabaseException {
-		// TODO Auto-generated method stub
-		System.err.println("Error: clearDatabase in PersistenceManager "
-				+ "is unimplemented");
-	}
+//	public void clearDatabase() throws DatabaseException {
+//		// TODO Auto-generated method stub
+//		System.err.println("Error: clearDatabase in PersistenceManager "
+//				+ "is unimplemented");
+//	}
 }

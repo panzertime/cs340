@@ -6,10 +6,37 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 import server.exception.UserException;
+import shared.model.exceptions.BadJSONException;
 
 public class User {
 	
 	private static Integer idToBeAssigned;
+	
+	public User(JSONObject jsonObject) throws BadJSONException {
+		if (jsonObject == null)
+			throw new BadJSONException();
+		String username = (String) jsonObject.get("username");
+		if (username == null)
+			throw new BadJSONException();
+		this.username = username;
+		String password = (String) jsonObject.get("password");
+		if (password == null)
+			throw new BadJSONException();
+		this.password = password;
+		Long id = ((Long) jsonObject.get("userID"));
+		if (id == null)
+			throw new BadJSONException();
+		this.userID = id.intValue();
+	}
+	
+	public JSONObject toJSON() {
+		JSONObject jsonUser = new JSONObject();
+		jsonUser.put("username", username);
+		jsonUser.put("password", password);
+		jsonUser.put("userID", userID);
+		return jsonUser;
+	}
+
 	
 	/**
 	 * Used to generate a new user id for a user
@@ -33,7 +60,7 @@ public class User {
 	}
 
 	private String password;
-	private Integer id;
+	private Integer userID;
 	
 	/**
 	 * Create a user object from a username and password
@@ -45,7 +72,7 @@ public class User {
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
-		id = null;
+		userID = null;
 	}
 
 	/**
@@ -60,7 +87,7 @@ public class User {
 	public User(String name, String password, Integer id) {
 		this.username = name;
 		this.password = password;
-		this.id = id;
+		this.userID = id;
 	}
 	
 	public User()
@@ -81,8 +108,8 @@ public class User {
 	 * @throws UserException User already had ID
 	 */
 	public void setUserID() throws UserException {
-		if(id == null) {
-			this.id = User.setID();
+		if(userID == null) {
+			this.userID = User.setID();
 		}
 		else {
 			throw new UserException("User already assigned an ID");
@@ -96,7 +123,7 @@ public class User {
 	 */
 	@Override
 	public int hashCode() {
-		return id;
+		return userID;
 	}
 
 	/**
@@ -113,7 +140,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
+		if (userID != other.userID)
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -155,7 +182,7 @@ public class User {
 	 * @return user ID
 	 */
 	public Integer getID() {
-		return this.id;
+		return this.userID;
 	}
 	
 	public String getPassword() {
@@ -199,7 +226,7 @@ public class User {
 	 * @param id ID
 	 */
 	public void setUserID(int id) {
-		this.id = id;
+		this.userID = id;
 	}
 	
 	/**

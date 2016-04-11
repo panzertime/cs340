@@ -28,17 +28,17 @@ public class SQLGamesDAO implements IGamesDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			String query = "select gameBlog from game where gameID = ?";
+			String query = "select gameBlob from game where gameID = ?";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, model.getID());
 			rs = stmt.executeQuery();
 			if (!rs.next()) {
 				try {
-					query = "INSERT INTO game (gameID, gameBlob) VALUES (?)";
+					query = "INSERT INTO game (gameID, gameBlob) VALUES (?, ?)";
 					stmt = sqlconnection.prepareStatement(query);
+					stmt.setInt(1, model.getID());
+					stmt.setBlob(2, (Blob) model.toJSON());
 					if (stmt.executeUpdate() == 1) {
-						stmt.setInt(1, model.getID());
-						stmt.setBlob(2, (Blob) model.toJSON());
 					} else {
 						throw new DatabaseException("Could not insert game");
 					}
@@ -49,10 +49,14 @@ public class SQLGamesDAO implements IGamesDAO {
 				}
 			} else {
 				try {
-					query = "update game set gameBlog = ? where gameID = ?";
+					query = "update game set gameBlob = ? where gameID = ?";
 					stmt = sqlconnection.prepareStatement(query);
 					stmt.setBlob(1, (Blob) model.toJSON());
 					stmt.setInt(2, model.getID());
+					if (stmt.executeUpdate() == 1) {
+					} else {
+						throw new DatabaseException("Could not update game");
+					}
 				} catch (SQLException e) {
 					throw new DatabaseException("Could not update game", e);
 				} finally {
