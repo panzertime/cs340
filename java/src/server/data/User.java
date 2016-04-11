@@ -1,8 +1,5 @@
 package server.data;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.simple.JSONObject;
 
 import server.exception.UserException;
@@ -189,26 +186,6 @@ public class User {
 		return this.password;
 	}
 	
-	//PHASE 4
-	public User(JSONObject jsonUser) throws UserException {
-		try {
-			this.id = ((Long) jsonUser.get("id")).intValue();
-			this.username = (String) jsonUser.get("username");
-			this.password = (String) jsonUser.get("password");
-		} catch(Exception e) {
-			throw new UserException("Invalid JSON");
-		}
-	}
-	
-	public JSONObject toJSON() {
-		Map<Object,Object> jsonObject = new HashMap<Object,Object>();
-		jsonObject.put("id", this.id);
-		jsonObject.put("username", this.username);
-		jsonObject.put("password", this.password);
-		JSONObject result = new JSONObject(jsonObject);
-		return result;
-	}
-
 	//DEBUG AND TESTING SECTION
 
 	/**
