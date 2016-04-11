@@ -32,15 +32,32 @@ public class PersistanceManager {
 	 * @post Transaction is ready to be attempted
 	 */
 	public void startTransaction() throws DatabaseException {
-		
+		connection.startTransaction();
 	}
 	
 	/**
 	 * @throws DatabaseException
 	 * @post Transaction is entirely persisted to database
 	 */
-	public void endTransaction() throws DatabaseException {
-		
+	public void endTransaction(boolean commit) throws DatabaseException {
+		if (connection != null) {		
+			try {
+				if (commit) {
+					connection.commit();
+				}
+				else {
+					connection.rollback();
+				}
+			}
+			catch (DatabaseException e) {
+				System.out.println("Could not end transaction");
+				e.printStackTrace();
+			}
+			finally {
+				connection.safeClose();
+				connection = null;
+			}
+		}
 	}
 
 	/**
