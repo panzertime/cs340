@@ -89,7 +89,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 	}
 
 	@Override
-	public void deleteCommand(IConnection connection, Integer gameID) throws DatabaseException {
+	public void deleteCommands(IConnection connection, Integer gameID) throws DatabaseException {
 		if (gameID == null) throw new DatabaseException();
 		SQLConnection sqlconnection = (SQLConnection) connection;
 		

@@ -21,6 +21,6 @@ public interface ICommandsDAO {
 	 */
 	public List<JSONObject> getCommands(IConnection connection, Integer gameID) throws DatabaseException;
 	
-	public void deleteCommand(IConnection connection, Integer gameID) throws DatabaseException;
+	public void deleteCommands(IConnection connection, Integer gameID) throws DatabaseException;
 
 }

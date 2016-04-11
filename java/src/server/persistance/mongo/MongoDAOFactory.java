@@ -1,5 +1,7 @@
 package server.persistance.mongo;
 
+import java.net.UnknownHostException;
+
 import server.persistance.DatabaseException;
 import server.persistance.IConnection;
 import server.persistance.IDAOFactory;
@@ -39,7 +41,12 @@ public class MongoDAOFactory implements IDAOFactory {
 
 	@Override
 	public IConnection createConnection() throws DatabaseException {
-		return new MongoConnection();
+		try {
+			return new MongoConnection();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			throw new DatabaseException();
+		}
 	}
 
 }
