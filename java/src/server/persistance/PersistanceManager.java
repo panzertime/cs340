@@ -55,7 +55,6 @@ public class PersistanceManager {
 			}
 			finally {
 				connection.safeClose();
-				connection = null;
 			}
 		}
 	}
