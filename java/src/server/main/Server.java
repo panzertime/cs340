@@ -90,19 +90,30 @@ public class Server {
 	public static void main(String[] args) {
 	//	new server(Integer.parseInt(args[0])).run();
 		try {	
+			File loc = new File(args[2]);
+			File[] flist = loc.listFiles(new FileFilter() {
+    					public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}
+		        	});
+    			URL[] urls = new URL[flist.length];
+        		for (int i = 0; i < flist.length; i++)
+            			urls[i] = flist[i].toURI().toURL();
+        		URLClassLoader ucl = new URLClassLoader(urls);
+
 			int N = Integer.parseInt(args[1]);
 			IDAOFactory plugin = null;
-			ServiceLoader<IDAOFactory> pluginLoader = ServiceLoader.load(IDAOFactory.class);
+			ServiceLoader<IDAOFactory> pluginLoader = ServiceLoader.load(IDAOFactory.class, ucl);
 			for (IDAOFactory df : pluginLoader) {
-				String name = df.getClass().getSimpleName().toLowerCase();
-				System.out.println("Found plugin: " + name);
-				if (name.contains(args[0])) {
+				String name = df.getClass().getSimpleName();
+				String sname = name.toLowerCase();
+				logger.log(Level.INFO, "Found plugin: " + name);
+				if (sname.contains(args[0])) {
+					logger.log(Level.INFO, "Using persistence plugin: " + name);
 					plugin = df;
+					break;
 				}
 			}
 			if (plugin != null) {
-				// we'll always set Clear DB? to false for now
-				ServerKernel.sole().initPersistence(N, plugin, false);
+				ServerKernel.sole().initPersistence(N, plugin);
 			}
 			else {
 				throw new ServerAccessException("Could not match plugin name " + args[0]);

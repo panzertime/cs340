@@ -33,7 +33,6 @@
 	<property name="java.dist" location="java/dist"/>
 	<property name="extensions" location="${java.ext.dirs}"/>
 	<property name="java.plugin" location="java/plugin"/>
-	<property name="java.ext.dirs" location="${java.ext.dirs}:${java.plugin}" />
   	<property name="java.db" location="java/database"/>
 
 	<!-- CLASSPATHS -->
@@ -158,15 +157,14 @@
  		<jar jarfile="${java.dist}/catan-server.jar" basedir="${java.bin.src}">
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
-				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
-				<attribute name="Class-Path" value="${java.bin}/server/persistance/IDAOFactory.class" />
+				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar;${java.bin}/server/persistance/IDAOFactory.class" />
 			</manifest>
 		</jar>
 		<jar jarfile="${java.plugin}/catan-mongodb.jar" basedir="${java.bin.src}/server/persistance/mongo">
-			<manifest>
-				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar"/>
-				<attribute name="Class-Path" value="lib/mongo-java-driver-2.13.3.jar"/>
-			</manifest>
+
+  			<fileset dir="${java.bin.src}/server/persistance/mongo" />
+			<fileset dir="${java.lib}/json-simple-1.1.1.jar;${java.lib}/mongo-java-driver-2.13.3.jar" />
+
 			<service type="server.persistance.IDAOFactory">
 				<provider classname="server.persistance.mongo.MongoDAOFactory" />
 			</service>
@@ -195,13 +193,13 @@
 	<property name="checkpoint-frequency" value="10"/>
 		
 	<target name="our-server" depends="package" description="compiles, packages, and runs the student server">
-		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" fork="yes">
+		<java jar="${java.dist}/catan-server.jar" dir="${java.dist}" classpath="${java.plugin}" fork="yes">
 			<classpath>
 				<pathelement path="${java.plugin}" />
 			</classpath>
 			<arg value="${persist-type}" />
 			<arg value="${checkpoint-frequency}" />
-			<jvmarg value="${java.ext.dirs}" />
+			<arg value="${java.plugin}" />
 			<sysproperty key="com.sun.management.jmxremote" value=""/>
 			<assertions>
 				<enable/>
