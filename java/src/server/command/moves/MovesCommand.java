@@ -12,6 +12,7 @@ import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
+import server.persistance.DatabaseException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;

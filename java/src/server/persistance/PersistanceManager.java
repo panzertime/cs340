@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import server.command.moves.MovesCommand;
 import server.data.User;
+import server.exception.ServerAccessException;
 import shared.model.Model;
 
 public class PersistanceManager {
@@ -93,16 +94,51 @@ public class PersistanceManager {
 	}
 	
 	/**
+	 * @pre database is up and available for reading, model exists
+	 * @return models
+	 * @throws DatabaseException
+	 */
+	public Model getModel(int gameID) throws DatabaseException {
+		//TODO - This function would be really useful
+		return null;
+	}
+	
+	/**
 	 * @pre database is up and available for reading
 	 * @param gameID ID of game to be fetched
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
-	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
-		return commandsDAO.getCommands(connection, gameID);
+	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
+		List<MovesCommand> commands;
+		List<JSONObject> jsonCommands = commandsDAO.getCommands(gameID);
+		try {
+			commands = MovesCommand.convertJSONListToCommandList(jsonCommands);
+		} catch (ServerAccessException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+		return commands;
 	}
 
 	private IConnection getConnection() {
 		return connection;
+	}
+
+	public static void safeClose(PreparedStatement stmt) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void safeClose(ResultSet rs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	//ServerKernel will know if it's adding a game or updating and both need
+	//quite different information, so we might as well make the two separate
+	//functions public
+	public void updateGame(Model game, int gameID) {
+		// TODO Auto-generated method stub
+		
 	}
 }
