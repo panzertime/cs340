@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
 			stmt.setBytes(2, movesCommand.getArguments().toJSONString().getBytes());
-			if (stmt.executeUpdate() == 1) {
+			if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 			} else {
 				throw new DatabaseException("Could not insert command");
 			}
@@ -97,7 +98,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			String query = "delete from command where gameID = ?";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
-			if (stmt.executeUpdate() == 1) {
+			if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 			} else {
 				throw new DatabaseException("Could not delete commands");
 			}

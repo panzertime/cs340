@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class SQLGamesDAO implements IGamesDAO {
 					stmt = sqlconnection.prepareStatement(query);
 					stmt.setInt(1, model.getID());
 					stmt.setBytes(2, model.toJSON().toJSONString().getBytes());
-					if (stmt.executeUpdate() == 1) {
+					if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 					} else {
 						throw new DatabaseException("Could not insert game");
 					}
@@ -56,7 +57,7 @@ public class SQLGamesDAO implements IGamesDAO {
 					stmt = sqlconnection.prepareStatement(query);
 					stmt.setBytes(1, model.toJSON().toJSONString().getBytes());
 					stmt.setInt(2, model.getID());
-					if (stmt.executeUpdate() == 1) {
+					if (stmt.executeUpdate() != Statement.EXECUTE_FAILED) {
 					} else {
 						throw new DatabaseException("Could not update game");
 					}
