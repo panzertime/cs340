@@ -50,6 +50,9 @@
 		<fileset dir="${java.plugin}" includes="**/*.jar"/>
 	</path>
 
+
+
+
 	<!-- TARGETS -->
 	<!-- ******* -->
      
@@ -160,15 +163,16 @@
  		<jar jarfile="${java.dist}/catan-server.jar" duplicate="preserve" basedir="${java.bin.src}">
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
-				<attribute name="Class-Path" value="${java.lib}"/>
+				<attribute name="Class-Path" value="lib/*.jar"/>
 			</manifest>
 		</jar>
 		<jar jarfile="${java.plugin}/catan-mongodb.jar" duplicate="preserve" basedir="${java.bin.src}/server/persistance/mongo">
 
   			<fileset dir="${java.bin.src}/server/persistance/mongo" />
-			<fileset file="${java.lib}/mongo-java-driver-2.13.3.jar" />
+			<zipgroupfileset dir="${java.lib}" includes="*.jar" excludes=""/>
+			
 			<manifest>
-				<attribute name="Class-Path" value="${java.lib}"/>
+				<attribute name="Class-Path" value="lib/*.jar"/>
 			</manifest>
 
 			
@@ -176,12 +180,14 @@
 				<provider classname="server.persistance.mongo.MongoDAOFactory" />
 			</service>
 		</jar>
+
+
 		<jar jarfile="${java.plugin}/catan-sqlite.jar" duplicate="preserve" basedir="${java.bin.src}/server/persistance/mysql">
 			<service type="server.persistance.IDAOFactory">
 				<provider classname="server.persistance.mySQL.SQLDAOFactory" />
 			</service>	
 			<manifest>
-				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar"/>
+				<attribute name="Class-Path" value="${java.lib}/*.jar"/>
 			</manifest>
 		</jar>
 
