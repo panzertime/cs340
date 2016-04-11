@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import server.persistance.DatabaseException;
 import server.persistance.IConnection;
@@ -59,6 +60,17 @@ public class SQLConnection implements IConnection {
 		}
 		
 	}
+	
+	public static void safeClose(Statement stmt) {
+		if (stmt != null) {
+			try {
+				stmt.close();
+			}
+			catch (SQLException e) {
+				// ...
+			}
+		}
+	}
 
 	@Override
 	public void commit() throws DatabaseException {
@@ -105,5 +117,36 @@ public class SQLConnection implements IConnection {
 			DatabaseException serverEx = new DatabaseException("Could not load database driver", e);
 			throw serverEx; 
 		}
+	}
+	
+	public void clearDatabase() throws DatabaseException {
+		Statement stmt = null;
+		try {
+			stmt = connection.createStatement();
+		      
+		      String sql = "DROP TABLE user ";
+		      stmt.executeUpdate(sql);
+		      sql = "DROP TABLE command ";
+		      stmt.executeUpdate(sql);
+		      sql = "DROP TABLE game ";
+		      stmt.executeUpdate(sql);
+		      sql = "create table user("
+		    		   	+ "userID int not null unique"
+			      		+ "	username varChar(255) not null unique,"
+			      		+ "	password varChar(255);"
+			      		+ "create table command("
+		    		   	+ "commandID int not null unique"
+			      		+ "	movesCommand blob;"
+			      		+ "create table game("
+		    		   	+ "gameID int not null unique"
+			      		+ "	gameBlob blob;";
+		      stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			throw new DatabaseException(e);
+		}
+		finally {
+			this.safeClose(stmt);
+		}
+
 	}
 }
