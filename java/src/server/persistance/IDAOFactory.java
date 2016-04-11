@@ -1,6 +1,6 @@
 package server.persistance;
 
-public interface IDAOFactory {
+public interface IDAOFactory extends Iterable {
 	
 	/**
 	 * @return UsersDAO DAO to interact with the database implementation containing the users
