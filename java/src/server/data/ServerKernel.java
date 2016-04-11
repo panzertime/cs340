@@ -343,7 +343,7 @@ public class ServerKernel {
 	public void addPlayerToGame(Model game, int gameID) {
 		try {
 			pm.startTransaction();
-			pm.updateGame(game, gameID);
+			pm.saveGame(game);
 			pm.endTransaction(true);
 		} catch (DatabaseException e) {
 			System.err.println("Could not update game with new player in"
@@ -406,7 +406,7 @@ public class ServerKernel {
 		Model game = pm.getModel(gameID);
 		updateGame(gameID, game);
 		cmd.reExecute(game);
-		pm.updateGame(game, gameID);
+		pm.saveGame(game);
 	}
 	
 	
