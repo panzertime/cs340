@@ -107,7 +107,7 @@ public class PersistanceManager {
 	 * @throws DatabaseException
 	 */
 
-	public List<Model> getModel() throws DatabaseException {
+	public List<Model> getModels() throws DatabaseException {
 		return gamesDAO.getGames(connection);
 	}
 	
@@ -118,6 +118,8 @@ public class PersistanceManager {
 	 */
 	public Model getModel(int gameID) throws DatabaseException {
 		//TODO - This function would be really useful
+		System.err.println("Error: getModel is not yet implemented "
+				+ "in PersistenceManager");
 		return null;
 	}
 	
@@ -139,8 +141,25 @@ public class PersistanceManager {
 	//ServerKernel will know if it's adding a game or updating and both need
 	//quite different information, so we might as well make the two separate
 	//functions public
-	public void updateGame(Model game, int gameID) {
+	public void updateGame(Model game, int gameID) throws DatabaseException {
 		// TODO Auto-generated method stub
-		
+		System.err.println("Error: updateGame in PersistenceManager "
+				+ "is unimplemented");
+	}
+	
+	//This is necessary so that the commands can be cleared out after they
+	//have been executed
+	public void clearCommands(int gameID) throws DatabaseException {
+		// TODO Auto-generated method stub
+		System.err.println("Error: clearCommands in PersistenceManager "
+				+ "is unimplemented");
+	}
+
+	//We need this to clear out the DB when the command line argument is
+	//passed in
+	public void clearDatabase() throws DatabaseException {
+		// TODO Auto-generated method stub
+		System.err.println("Error: clearDatabase in PersistenceManager "
+				+ "is unimplemented");
 	}
 }

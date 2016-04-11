@@ -44,6 +44,7 @@ public class ServerKernel {
 		this.users = new HashMap<String, User>();
 		this.persistenceTracker = new HashMap<Integer,Integer>();
 		this.numOfGames = 0;
+		this.persistFrequency = 5;
 	}
 	
 	/**
@@ -125,6 +126,7 @@ public class ServerKernel {
 	 * @post none
 	 * @return list of all the games on server
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONArray getGames() {
 		JSONArray gamesList = new JSONArray();
 		
@@ -251,7 +253,7 @@ public class ServerKernel {
 	}
 	
 	// Phase 4
-	private int persistFrequencyLimit;
+	private int persistFrequency;
 	private PersistanceManager pm;
 	private Map<Integer,Integer> persistenceTracker;
 	
@@ -261,18 +263,30 @@ public class ServerKernel {
 	 * @param df
 	 * @throws ServerAccessException
 	 */
-	public void initPersistence(int freq, IDAOFactory df) 
+	public void initPersistence(int freq, IDAOFactory df, boolean clearDB) 
 			throws ServerAccessException {
 		try {
 			pm = new PersistanceManager(df);
-			initGamesFromDB();
-			initUsersFromDB();
-			persistFrequencyLimit = freq - 1;
+			pm.startTransaction();
+			if(clearDB) {
+				pm.clearDatabase();
+			} else {
+				initGamesFromDB();
+				initUsersFromDB();
+			}
+			pm.endTransaction(true);
+			persistFrequency = freq;
 		} catch (DatabaseException e) {
+			try {
+				pm.endTransaction(false);
+			} catch (DatabaseException e1) {
+				System.err.println("Could not end transaction");
+				e1.printStackTrace();
+			}
 			throw new ServerAccessException("Could not initialize database");
 		}
 	}
-	
+
 	/**
 	 * initializes Users from the database
 	 * @pre Users has been init, db has valid info
@@ -290,7 +304,7 @@ public class ServerKernel {
 
 	/**
 	 * initializes Games from the database
-	 * @pre Games has been init, db has valid info
+	 * @pre Games has been init, db has valid info, db has started transaction
 	 * @post Games will included updated model info from the DB
 	 * @throws DatabaseException Db could not be accessed properly
 	 * @throws ServerAccessException Game or command stored in DB had error
@@ -303,15 +317,19 @@ public class ServerKernel {
 			updateGame(gameID, game);
 			this.games.put(gameID, game);
 		}
+		this.numOfGames = games.size();
 	}
 
 	private void updateGame(int gameID, Model game) throws DatabaseException, 
 			ServerAccessException {
-		List<MovesCommand> commands = pm.getCommands(gameID);
+		List<JSONObject> jsonCommands = pm.getCommands(gameID);
+		List<MovesCommand> commands = 
+				MovesCommand.convertJSONListToCommandList(jsonCommands);
 		//Might need to make sure commands are in order
 		for(MovesCommand command : commands) {
 			command.reExecute(game);
 		}
+		pm.clearCommands(gameID);
 	}
 
 	/**
@@ -325,12 +343,18 @@ public class ServerKernel {
 	public void addPlayerToGame(Model game, int gameID) {
 		try {
 			pm.startTransaction();
-			pm.updateGame(game, gameID);
-			pm.endTransaction();
+			pm.saveGame(game);
+			pm.endTransaction(true);
 		} catch (DatabaseException e) {
 			System.err.println("Could not update game with new player in"
 					+ "the database");
 			e.printStackTrace();
+			try {
+				pm.endTransaction(false);
+			} catch (DatabaseException e1) {
+				System.err.println("Could not end transaction");
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -347,17 +371,23 @@ public class ServerKernel {
 		Integer numOfCommands = this.persistenceTracker.get(gameID);
 		try {
 			pm.startTransaction();
-			if(numOfCommands == persistFrequencyLimit) {
+			if(numOfCommands == persistFrequency) {
 				updateGame(gameID, cmd);
 				numOfCommands = 0;
 			} else {
 				pm.saveCommand(gameID, cmd);
 				numOfCommands++;
 			}
-			pm.endTransaction();
+			pm.endTransaction(true);
 		} catch (DatabaseException e) {
 			System.err.println("Could not persist command");
 			e.printStackTrace();
+			try {
+				pm.endTransaction(false);
+			} catch (DatabaseException e1) {
+				System.err.println("Could not end transaction");
+				e1.printStackTrace();
+			}
 		} catch (ServerAccessException e) {
 			System.err.println("Could not re-execute command");
 			e.printStackTrace();
@@ -376,7 +406,7 @@ public class ServerKernel {
 		Model game = pm.getModel(gameID);
 		updateGame(gameID, game);
 		cmd.reExecute(game);
-		pm.updateGame(game, gameID);
+		pm.saveGame(game);
 	}
 	
 	
@@ -384,10 +414,16 @@ public class ServerKernel {
 		try {
 			pm.startTransaction();
 			pm.saveUser(user);
-			pm.endTransaction();
+			pm.endTransaction(true);
 		} catch (DatabaseException e) {
 			System.err.println("Could not save user in database");
 			e.printStackTrace();
+			try {
+				pm.endTransaction(false);
+			} catch (DatabaseException e1) {
+				System.err.println("Could not end transaction");
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -395,10 +431,16 @@ public class ServerKernel {
 		try {
 			pm.startTransaction();
 			pm.saveGame(newModel);
-			pm.endTransaction();
+			pm.endTransaction(true);
 		} catch (DatabaseException e) {
 			System.err.println("Could not save game in database");
 			e.printStackTrace();
+			try {
+				pm.endTransaction(false);
+			} catch (DatabaseException e1) {
+				System.err.println("Could not end transaction");
+				e1.printStackTrace();
+			}
 		}
 	}
 }
