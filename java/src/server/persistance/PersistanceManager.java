@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 
 import server.command.moves.MovesCommand;
 import server.data.User;
+import server.exception.ServerAccessException;
 import shared.model.Model;
 
 public class PersistanceManager {
@@ -31,15 +32,31 @@ public class PersistanceManager {
 	 * @post Transaction is ready to be attempted
 	 */
 	public void startTransaction() throws DatabaseException {
-		
+		connection.startTransaction();
 	}
 	
 	/**
 	 * @throws DatabaseException
 	 * @post Transaction is entirely persisted to database
 	 */
-	public void endTransaction() throws DatabaseException {
-		
+	public void endTransaction(boolean commit) throws DatabaseException {
+		if (connection != null) {		
+			try {
+				if (commit) {
+					connection.commit();
+				}
+				else {
+					connection.rollback();
+				}
+			}
+			catch (DatabaseException e) {
+				System.out.println("Could not end transaction");
+				e.printStackTrace();
+			}
+			finally {
+				connection.safeClose();
+			}
+		}
 	}
 
 	/**
@@ -88,8 +105,21 @@ public class PersistanceManager {
 	 * @return List of models
 	 * @throws DatabaseException
 	 */
-	public List<Model> getModel() throws DatabaseException {
+
+	public List<Model> getModels() throws DatabaseException {
 		return gamesDAO.getGames(connection);
+	}
+	
+	/**
+	 * @pre database is up and available for reading, model exists
+	 * @return models
+	 * @throws DatabaseException
+	 */
+	public Model getModel(int gameID) throws DatabaseException {
+		//TODO - This function would be really useful
+		System.err.println("Error: getModel is not yet implemented "
+				+ "in PersistenceManager");
+		return null;
 	}
 	
 	/**
@@ -98,6 +128,7 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
+
 	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
 		return commandsDAO.getCommands(connection, gameID);
 	}
@@ -105,4 +136,20 @@ public class PersistanceManager {
 	private IConnection getConnection() {
 		return connection;
 	}
+
+
+	//This is necessary so that the commands can be cleared out after they
+	//have been executed
+	public void clearCommands(int gameID) throws DatabaseException {
+		
+		this.commandsDAO.deleteCommands(connection, gameID);
+	}
+
+	//We need this to clear out the DB when the command line argument is
+	//passed in
+//	public void clearDatabase() throws DatabaseException {
+//		// TODO Auto-generated method stub
+//		System.err.println("Error: clearDatabase in PersistenceManager "
+//				+ "is unimplemented");
+//	}
 }

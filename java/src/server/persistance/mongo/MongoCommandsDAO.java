@@ -39,7 +39,6 @@ public class MongoCommandsDAO implements ICommandsDAO {
 			throw new DatabaseException();
 		if (connection == null)
 			throw new DatabaseException();
-
 		List<JSONObject> commands = new ArrayList<JSONObject>();
 
 		MongoConnection mongoConnection = (MongoConnection) connection;
@@ -49,5 +48,20 @@ public class MongoCommandsDAO implements ICommandsDAO {
 			commands.add((JSONObject) cursor.next());
 		}
 		return commands;
+	}
+	
+	@Override
+	public void deleteCommands(IConnection connection, Integer gameID) throws DatabaseException {
+		if (gameID == null)
+			throw new DatabaseException();
+		if (connection == null)
+			throw new DatabaseException();
+
+		MongoConnection mongoConnection = (MongoConnection) connection;
+		
+		DBCursor cursor = mongoConnection.getCommandsCollection().find();
+		while (cursor.hasNext()) {
+			mongoConnection.getCommandsCollection().remove(cursor.next());
+		}
 	}
 }

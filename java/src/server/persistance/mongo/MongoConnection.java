@@ -6,10 +6,10 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
+import server.persistance.DatabaseException;
 import server.persistance.IConnection;
 
 public class MongoConnection implements IConnection {
-
 	private DB db;
 	
 	public MongoConnection() throws UnknownHostException {
@@ -32,5 +32,29 @@ public class MongoConnection implements IConnection {
 	
 	public DBCollection getCommandsCollection() {
 		return db.getCollection("Commands");
+	}
+	
+	@Override
+	public void safeClose() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void commit() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rollback() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startTransaction() throws DatabaseException {
+		// TODO Auto-generated method stub
+		
 	}
 }

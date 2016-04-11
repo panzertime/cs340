@@ -30,9 +30,9 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		try {
 			String query = "INSERT INTO command (gameID, movesCommand) VALUES (?, ?)";
 			stmt = sqlconnection.prepareStatement(query);
+			stmt.setInt(1, gameID);
+			stmt.setBlob(2, (Blob) movesCommand.getArguments());
 			if (stmt.executeUpdate() == 1) {
-				stmt.setInt(1, gameID);
-				stmt.setBlob(2, (Blob) movesCommand.getArguments());
 			} else {
 				throw new DatabaseException("Could not insert command");
 			}
@@ -56,7 +56,7 @@ public class SQLCommandsDAO implements ICommandsDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			String query = "select commandBlog from command where gameID = ?";
+			String query = "select movesCommand from command where gameID = ?";
 			stmt = sqlconnection.prepareStatement(query);
 			stmt.setInt(1, gameID);
 
@@ -74,6 +74,28 @@ public class SQLCommandsDAO implements ICommandsDAO {
 			sqlconnection.safeClose(stmt);
 		}
 		return commands;
+	}
+
+	@Override
+	public void deleteCommands(IConnection connection, Integer gameID) throws DatabaseException {
+		if (gameID == null) throw new DatabaseException();
+		SQLConnection sqlconnection = (SQLConnection) connection;
+		
+		PreparedStatement stmt = null;
+		try {
+			String query = "delete from command where gameID = ?";
+			stmt = sqlconnection.prepareStatement(query);
+			stmt.setInt(1, gameID);
+			if (stmt.executeUpdate() == 1) {
+			} else {
+				throw new DatabaseException("Could not delete commands");
+			}
+		}catch (SQLException e) {
+			DatabaseException serverEx = new DatabaseException(e.getMessage(), e);
+			throw serverEx;
+		} finally {
+			sqlconnection.safeClose(stmt);
+		}
 	}
 
 }
