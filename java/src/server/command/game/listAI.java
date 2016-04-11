@@ -10,7 +10,7 @@ public class listAI extends GameCommand {
 			throws ServerAccessException {
 		String result = null;
 		if(validCookie(cookie)) {
-			result = "[]";
+			result = "[DummyAI]";
 		} else {
 			throw new ServerAccessException("Invalid Cookie");
 		}

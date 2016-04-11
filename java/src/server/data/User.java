@@ -24,6 +24,13 @@ public class User {
 	}
 
 	private String username;
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	private String password;
 	private Integer id;
 	
@@ -154,7 +161,16 @@ public class User {
 		return this.password;
 	}
 	
+	
+	
 	//DEBUG AND TESTING SECTION
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	/**
 	 * TESTING AND DEBUGGING ONLY: This is to be used for tests to make sure 
