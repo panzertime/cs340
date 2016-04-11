@@ -89,13 +89,9 @@ public class PersistanceManager {
 	 * @return List of models
 	 * @throws DatabaseException
 	 */
-<<<<<<< HEAD
-	public List<Model> getModels() throws DatabaseException {
-		return gamesDAO.getGames();
-=======
+
 	public List<Model> getModel() throws DatabaseException {
 		return gamesDAO.getGames(connection);
->>>>>>> jacob
 	}
 	
 	/**
@@ -114,20 +110,9 @@ public class PersistanceManager {
 	 * @return List of commands not persisted to the gameID
 	 * @throws DatabaseException
 	 */
-<<<<<<< HEAD
-	public List<MovesCommand> getCommands(Integer gameID) throws DatabaseException {
-		List<MovesCommand> commands;
-		List<JSONObject> jsonCommands = commandsDAO.getCommands(gameID);
-		try {
-			commands = MovesCommand.convertJSONListToCommandList(jsonCommands);
-		} catch (ServerAccessException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-		return commands;
-=======
+
 	public List<JSONObject> getCommands(Integer gameID) throws DatabaseException {
 		return commandsDAO.getCommands(connection, gameID);
->>>>>>> jacob
 	}
 
 	private IConnection getConnection() {
