@@ -1,5 +1,8 @@
 package server.persistance.files;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -14,7 +17,14 @@ public class FileCommandsDAO implements ICommandsDAO {
 	@Override
 	public void saveCommmand(IConnection connection, Integer gameID, MovesCommand movesCommand)
 			throws DatabaseException {
-		// TODO Auto-generated method stub
+		try {
+			PrintWriter writer = new PrintWriter("data/command/" + gameID + ".txt", "UTF-8");
+			writer.println(movesCommand.getArguments().toJSONString());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			throw new DatabaseException();
+		}
+		
 
 	}
 

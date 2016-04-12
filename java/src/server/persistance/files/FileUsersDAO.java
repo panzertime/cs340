@@ -15,7 +15,7 @@ public class FileUsersDAO implements IUsersDAO {
 	@Override
 	public void saveUser(IConnection connection, User user) throws DatabaseException {
 		try {
-			PrintWriter writer = new PrintWriter(user.getID() + ".txt", "UTF-8");
+			PrintWriter writer = new PrintWriter("data/user/" + user.getID() + ".txt", "UTF-8");
 			writer.println(user.toJSON().toJSONString());
 			writer.close();
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
