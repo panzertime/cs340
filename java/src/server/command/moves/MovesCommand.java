@@ -47,8 +47,14 @@ public abstract class MovesCommand implements ICommand {
 		arguments = args;
 		int gameID = catanCookie.getGameID();
 		int gameVersion = game.getVersion();
+		this.gameVersion = gameVersion;
 		args.put("version", gameVersion);
 		ServerKernel.sole().persistCommand(gameID, this);
+	}
+	
+	int gameVersion;
+	public int getGameVersion() {
+		return this.gameVersion;
 	}
 	
 	/**
