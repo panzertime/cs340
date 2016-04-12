@@ -2,6 +2,7 @@ package server.persistance.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -41,7 +42,7 @@ public class MongoUsersDAO implements IUsersDAO {
 		DBCursor cursor = mongoConnection.getUsersCollection().find();
 		while (cursor.hasNext()) {
 			try {
-				users.add(new User((JSONObject) cursor.next()));
+				users.add(new User(new JSONObject((Map)cursor.next())));
 			} catch (BadJSONException e) {
 				Log.error("Mongo DB is ill formated, unable to interpret a user");
 				e.printStackTrace();

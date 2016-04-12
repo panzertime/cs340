@@ -81,11 +81,11 @@ public class Hand {
 		if (resourceList == null || deckList == null)
 			throw new BadJSONException();
 
-		Long wood = ((Long) resourceList.get("wood"));
-		Long brick = ((Long) resourceList.get("brick"));
-		Long sheep = ((Long) resourceList.get("sheep"));
-		Long wheat = ((Long) resourceList.get("wheat"));
-		Long ore = ((Long) resourceList.get("ore"));
+		Number wood = ((Number) resourceList.get("wood"));
+		Number brick = ((Number) resourceList.get("brick"));
+		Number sheep = ((Number) resourceList.get("sheep"));
+		Number wheat = ((Number) resourceList.get("wheat"));
+		Number ore = ((Number) resourceList.get("ore"));
 
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null)
 			throw new BadJSONException();
@@ -97,11 +97,11 @@ public class Hand {
 		this.ore = ore.intValue();
 
 		devCards = new ArrayList<DevCard>();
-		Long yOP = ((Long) deckList.get("yearOfPlenty"));
-		Long mono = ((Long) deckList.get("monopoly"));
-		Long sol = ((Long) deckList.get("soldier"));
-		Long rB = ((Long) deckList.get("roadBuilding"));
-		Long monu = ((Long) deckList.get("monument"));
+		Number yOP = ((Number) deckList.get("yearOfPlenty"));
+		Number mono = ((Number) deckList.get("monopoly"));
+		Number sol = ((Number) deckList.get("soldier"));
+		Number rB = ((Number) deckList.get("roadBuilding"));
+		Number monu = ((Number) deckList.get("monument"));
 
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null)
 			throw new BadJSONException();
@@ -138,11 +138,11 @@ public class Hand {
 		if (resourceList == null || deckList == null)
 			return false;
 
-		Long wood = ((Long) resourceList.get("wood"));
-		Long brick = ((Long) resourceList.get("brick"));
-		Long sheep = ((Long) resourceList.get("sheep"));
-		Long wheat = ((Long) resourceList.get("wheat"));
-		Long ore = ((Long) resourceList.get("ore"));
+		Number wood = ((Number) resourceList.get("wood"));
+		Number brick = ((Number) resourceList.get("brick"));
+		Number sheep = ((Number) resourceList.get("sheep"));
+		Number wheat = ((Number) resourceList.get("wheat"));
+		Number ore = ((Number) resourceList.get("ore"));
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null)
 			return false;
 
@@ -157,11 +157,11 @@ public class Hand {
 		if (this.ore != ore.intValue())
 			return false;
 
-		Long yearOfPlenty = ((Long) deckList.get("yearOfPlenty"));
-		Long monopoly = ((Long) deckList.get("monopoly"));
-		Long soldier = ((Long) deckList.get("soldier"));
-		Long roadBuilder = ((Long) deckList.get("roadBuilding"));
-		Long monument = ((Long) deckList.get("monument"));
+		Number yearOfPlenty = ((Number) deckList.get("yearOfPlenty"));
+		Number monopoly = ((Number) deckList.get("monopoly"));
+		Number soldier = ((Number) deckList.get("soldier"));
+		Number roadBuilder = ((Number) deckList.get("roadBuilding"));
+		Number monument = ((Number) deckList.get("monument"));
 		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null)
 			return false;
 
@@ -201,11 +201,11 @@ public class Hand {
 
 		if (resourceList == null || oldDevList == null || newDevList == null)
 			throw new BadJSONException();
-		Long wood = ((Long) resourceList.get("wood"));
-		Long brick = ((Long) resourceList.get("brick"));
-		Long sheep = ((Long) resourceList.get("sheep"));
-		Long wheat = ((Long) resourceList.get("wheat"));
-		Long ore = ((Long) resourceList.get("ore"));
+		Number wood = ((Number) resourceList.get("wood"));
+		Number brick = ((Number) resourceList.get("brick"));
+		Number sheep = ((Number) resourceList.get("sheep"));
+		Number wheat = ((Number) resourceList.get("wheat"));
+		Number ore = ((Number) resourceList.get("ore"));
 
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null)
 			throw new BadJSONException();
@@ -217,11 +217,11 @@ public class Hand {
 		this.ore = ore.intValue();
 		devCards = new ArrayList<DevCard>();
 
-		Long yOP = ((Long) oldDevList.get("yearOfPlenty"));
-		Long mono = ((Long) oldDevList.get("monopoly"));
-		Long sol = ((Long) oldDevList.get("soldier"));
-		Long rB = ((Long) oldDevList.get("roadBuilding"));
-		Long monu = ((Long) oldDevList.get("monument"));
+		Number yOP = ((Number) oldDevList.get("yearOfPlenty"));
+		Number mono = ((Number) oldDevList.get("monopoly"));
+		Number sol = ((Number) oldDevList.get("soldier"));
+		Number rB = ((Number) oldDevList.get("roadBuilding"));
+		Number monu = ((Number) oldDevList.get("monument"));
 
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null)
 			throw new BadJSONException();
@@ -255,11 +255,11 @@ public class Hand {
 			card.setEnabled(true);
 			devCards.add(card);
 		}
-		yOP = ((Long) newDevList.get("yearOfPlenty"));
-		mono = ((Long) newDevList.get("monopoly"));
-		sol = ((Long) newDevList.get("soldier"));
-		rB = ((Long) newDevList.get("roadBuilding"));
-		monu = ((Long) newDevList.get("monument"));
+		yOP = ((Number) newDevList.get("yearOfPlenty"));
+		mono = ((Number) newDevList.get("monopoly"));
+		sol = ((Number) newDevList.get("soldier"));
+		rB = ((Number) newDevList.get("roadBuilding"));
+		monu = ((Number) newDevList.get("monument"));
 
 		if (yOP == null || mono == null || sol == null || rB == null || monu == null)
 			throw new BadJSONException();
@@ -297,26 +297,21 @@ public class Hand {
 
 	}
 
-
 	public Hand(boolean bank) {
 		this.devCards = new ArrayList<DevCard>();
 
-		if (bank)
-		{
-			for (ResourceType type: ResourceType.values())
+		if (bank) {
+			for (ResourceType type : ResourceType.values())
 				this.receiveResource(type, 19);
-			for (int i = 0; i < 12; i++)
-			{
+			for (int i = 0; i < 12; i++) {
 				DevCard e = new Knight();
 				this.devCards.add(e);
 			}
-			for (int i = 0; i < 5; i++)
-			{
+			for (int i = 0; i < 5; i++) {
 				DevCard e = new Monument();
 				this.devCards.add(e);
 			}
-			for (int i = 0; i < 2; i++)
-			{
+			for (int i = 0; i < 2; i++) {
 				DevCard e = new YearOfPlenty();
 				this.devCards.add(e);
 				e = new RoadBuilding();
@@ -324,8 +319,7 @@ public class Hand {
 				e = new Monopoly();
 				this.devCards.add(e);
 			}
-			
-			
+
 		}
 	}
 
@@ -333,11 +327,11 @@ public class Hand {
 		if (resourceList == null || oldDevList == null || newDevList == null)
 			return false;
 
-		Long wood = ((Long) resourceList.get("wood"));
-		Long brick = ((Long) resourceList.get("brick"));
-		Long sheep = ((Long) resourceList.get("sheep"));
-		Long wheat = ((Long) resourceList.get("wheat"));
-		Long ore = ((Long) resourceList.get("ore"));
+		Number wood = ((Number) resourceList.get("wood"));
+		Number brick = ((Number) resourceList.get("brick"));
+		Number sheep = ((Number) resourceList.get("sheep"));
+		Number wheat = ((Number) resourceList.get("wheat"));
+		Number ore = ((Number) resourceList.get("ore"));
 		if (wood == null || brick == null || sheep == null || wheat == null || ore == null)
 			return false;
 
@@ -352,11 +346,11 @@ public class Hand {
 		if (this.ore != ore.intValue())
 			return false;
 
-		Long yearOfPlenty = ((Long) oldDevList.get("yearOfPlenty"));
-		Long monopoly = ((Long) oldDevList.get("monopoly"));
-		Long soldier = ((Long) oldDevList.get("soldier"));
-		Long roadBuilder = ((Long) oldDevList.get("roadBuilding"));
-		Long monument = ((Long) oldDevList.get("monument"));
+		Number yearOfPlenty = ((Number) oldDevList.get("yearOfPlenty"));
+		Number monopoly = ((Number) oldDevList.get("monopoly"));
+		Number soldier = ((Number) oldDevList.get("soldier"));
+		Number roadBuilder = ((Number) oldDevList.get("roadBuilding"));
+		Number monument = ((Number) oldDevList.get("monument"));
 		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null)
 			return false;
 
@@ -392,11 +386,11 @@ public class Hand {
 		if (yOP != 0 || mono != 0 || sol != 0 || rB != 0 || monu != 0)
 			return false;
 
-		yearOfPlenty = ((Long) newDevList.get("yearOfPlenty"));
-		monopoly = ((Long) newDevList.get("monopoly"));
-		soldier = ((Long) newDevList.get("soldier"));
-		roadBuilder = ((Long) newDevList.get("roadBuilding"));
-		monument = ((Long) newDevList.get("monument"));
+		yearOfPlenty = ((Number) newDevList.get("yearOfPlenty"));
+		monopoly = ((Number) newDevList.get("monopoly"));
+		soldier = ((Number) newDevList.get("soldier"));
+		roadBuilder = ((Number) newDevList.get("roadBuilding"));
+		monument = ((Number) newDevList.get("monument"));
 		if (yearOfPlenty == null || monopoly == null || soldier == null || roadBuilder == null || monument == null)
 			return false;
 
@@ -668,7 +662,6 @@ public class Hand {
 		return devCards.size();
 	}
 
-
 	/**
 	 * @return the devCards
 	 */
@@ -682,10 +675,10 @@ public class Hand {
 
 	public Boolean hasCards(Map<ResourceType, Integer> resourceList) {
 
-		//System.out.println("cheking if player has cards");
+		// System.out.println("cheking if player has cards");
 		if (resourceList == null)
 			return false;
-		//System.out.println("resourceList is not Null");
+		// System.out.println("resourceList is not Null");
 		Integer wood = resourceList.get(ResourceType.WOOD);
 		Integer brick = resourceList.get(ResourceType.BRICK);
 		Integer sheep = resourceList.get(ResourceType.SHEEP);
@@ -694,46 +687,44 @@ public class Hand {
 		if (wood != null)
 			if (getWood() < wood)
 				return false;
-		//System.out.println("there is enough wood");
+		// System.out.println("there is enough wood");
 		if (brick != null)
 			if (getBrick() < brick)
 				return false;
-		//System.out.println("there is enough brick");
+		// System.out.println("there is enough brick");
 		if (sheep != null)
 			if (getSheep() < sheep)
 				return false;
-		//System.out.println("there is enough sheep");
+		// System.out.println("there is enough sheep");
 		if (wheat != null)
 			if (getWheat() < wheat)
 				return false;
-		//System.out.println("there is enough wheat");
+		// System.out.println("there is enough wheat");
 		if (ore != null)
 			if (getOre() < ore)
 				return false;
-		//System.out.println("there is enough ore");
+		// System.out.println("there is enough ore");
 		return true;
 	}
-	
-	public int getCards(DevCardType type, boolean old)
-	{
+
+	public int getCards(DevCardType type, boolean old) {
 		int i = 0;
-		for (DevCard card: this.getDevCards())
-		{
+		for (DevCard card : this.getDevCards()) {
 			if (card.getType() == type) {
-			if (old)
-			{
-				if (card.isEnabled()) i++;
+				if (old) {
+					if (card.isEnabled())
+						i++;
+				} else {
+					if (!card.isEnabled())
+						i++;
+				}
 			}
-			else
-			{
-				if (!card.isEnabled()) i++;
-			}}
 		}
 		return i;
 	}
 
-	//JOSHUA
-	//TODO Maybe make this a map from the get-go?
+	// JOSHUA
+	// TODO Maybe make this a map from the get-go?
 	public JSONObject deckToJSON() {
 		Map deckMap = devCardToMap();
 		JSONObject deck = new JSONObject(deckMap);
@@ -742,17 +733,18 @@ public class Hand {
 
 	/**
 	 * Converts the list of Dev cards into a map
-	 * @pre assume no bad Dev card was ever made(Risky assumption now that
-	 * we are making the server and not taking something in from a JSON)
+	 * 
+	 * @pre assume no bad Dev card was ever made(Risky assumption now that we
+	 *      are making the server and not taking something in from a JSON)
 	 * @post nothing is changed, value is returned
 	 * @return Map of the Dev Cards with their values
 	 */
 	private Map devCardToMap() {
 		Map<String, Integer> devCardMap = new HashMap<String, Integer>();
-		int yearOfPlenty  = 0, soldier = 0, monopoly = 0, monument = 0; 
-		int roadBuilding  = 0;
-		for(DevCard devCard : this.devCards) {
-			switch(devCard.getClass().getSimpleName()) {
+		int yearOfPlenty = 0, soldier = 0, monopoly = 0, monument = 0;
+		int roadBuilding = 0;
+		for (DevCard devCard : this.devCards) {
+			switch (devCard.getClass().getSimpleName()) {
 			case "YearOfPlenty":
 				yearOfPlenty++;
 				break;
@@ -770,7 +762,7 @@ public class Hand {
 				break;
 			}
 		}
-		
+
 		devCardMap.put("yearOfPlenty", yearOfPlenty);
 		devCardMap.put("soldier", soldier);
 		devCardMap.put("monopoly", monopoly);
@@ -778,6 +770,6 @@ public class Hand {
 		devCardMap.put("roadBuilding", roadBuilding);
 		return devCardMap;
 	}
-	//END JOSHUA
-	
+	// END JOSHUA
+
 }

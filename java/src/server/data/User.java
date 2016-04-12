@@ -20,7 +20,7 @@ public class User {
 		if (password == null)
 			throw new BadJSONException();
 		this.password = password;
-		Long id = ((Long) jsonObject.get("userID"));
+		Number id = ((Number) jsonObject.get("userID"));
 		if (id == null)
 			throw new BadJSONException();
 		this.userID = id.intValue();

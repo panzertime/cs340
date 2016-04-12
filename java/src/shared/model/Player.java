@@ -77,19 +77,19 @@ public class Player {
 		if (userName == null)
 			throw new BadJSONException();
 		this.userName = userName;
-		Long userIndex = ((Long) player.get("playerIndex"));
+		Number userIndex = ((Number) player.get("playerIndex"));
 		if (userIndex == null)
 			throw new BadJSONException();
 		this.playerIndex = userIndex.intValue();
-		Long armies = ((Long) player.get("soldiers"));
+		Number armies = ((Number) player.get("soldiers"));
 		if (armies == null)
 			throw new BadJSONException();
 		this.armies = armies.intValue();
-		Long monuments = ((Long) player.get("monuments"));
+		Number monuments = ((Number) player.get("monuments"));
 		if (monuments == null)
 			throw new BadJSONException();
 		this.monuments = monuments.intValue();
-		Long points = ((Long) player.get("victoryPoints"));
+		Number points = ((Number) player.get("victoryPoints"));
 		if (points == null)
 			throw new BadJSONException();
 		this.points = points.intValue();
@@ -97,13 +97,13 @@ public class Player {
 		if (playedDevelopmentCard == null)
 			throw new BadJSONException();
 		this.playedDevelopmentCard = playedDevelopmentCard;
-		hand = new Hand((JSONObject) player.get("resources"), (JSONObject) player.get("oldDevCards"),
-				(JSONObject) player.get("newDevCards"));
+		hand = new Hand(new JSONObject((Map) player.get("resources")), new JSONObject((Map) player.get("oldDevCards")),
+				new JSONObject((Map) player.get("newDevCards")));
 		Boolean hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null)
 			throw new BadJSONException();
 		this.hasDiscarded = hasDiscarded;
-		Long playerID = ((Long) player.get("playerID"));
+		Number playerID = ((Number) player.get("playerID"));
 		if (playerID == null)
 			throw new BadJSONException();
 		this.playerID = playerID.intValue();
@@ -125,22 +125,22 @@ public class Player {
 			return false;
 		if (!this.userName.equals(userName))
 			return false;
-		Long userIndex = ((Long) player.get("playerIndex"));
+		Number userIndex = ((Number) player.get("playerIndex"));
 		if (userIndex == null)
 			return false;
 		if (this.playerIndex != userIndex.intValue())
 			return false;
-		Long armies = ((Long) player.get("soldiers"));
+		Number armies = ((Number) player.get("soldiers"));
 		if (armies == null)
 			return false;
 		if (this.armies != armies.intValue())
 			return false;
-		Long monuments = ((Long) player.get("monuments"));
+		Number monuments = ((Number) player.get("monuments"));
 		if (monuments == null)
 			return false;
 		if (this.monuments != monuments.intValue())
 			return false;
-		Long points = ((Long) player.get("victoryPoints"));
+		Number points = ((Number) player.get("victoryPoints"));
 		if (points == null)
 			return false;
 		if (this.points != points.intValue())
@@ -154,7 +154,7 @@ public class Player {
 		Boolean hasDiscarded = (Boolean) player.get("discarded");
 		if (hasDiscarded == null || hasDiscarded != this.hasDiscarded)
 			return false;
-		Long playerID = ((Long) player.get("playerID"));
+		Number playerID = ((Number) player.get("playerID"));
 		if (playerID == null)
 			return false;
 		if (this.playerID != playerID.intValue())
@@ -572,7 +572,7 @@ public class Player {
 			r.setMarked(false);
 		}
 	}
-	public int findLongestPathInSet(HashSet<Road> set, Board board)
+	public int findNumberestPathInSet(HashSet<Road> set, Board board)
 	{
 		HashSet<Vertex> endpoints = new HashSet<Vertex>();
 		//find endpoints
@@ -653,7 +653,7 @@ public class Player {
 		for (HashSet<Road> set: sets)
 		{
 			//int i = set.size();
-			int i = this.findLongestPathInSet(set, board);
+			int i = this.findNumberestPathInSet(set, board);
 			if (i > max)
 				max = i;
 		}

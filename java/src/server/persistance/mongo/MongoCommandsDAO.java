@@ -2,6 +2,7 @@ package server.persistance.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -45,7 +46,7 @@ public class MongoCommandsDAO implements ICommandsDAO {
 
 		DBCursor cursor = mongoConnection.getCommandsCollection().find();
 		while (cursor.hasNext()) {
-			commands.add((JSONObject) cursor.next());
+			commands.add(new JSONObject((Map)cursor.next()));
 		}
 		return commands;
 	}

@@ -11,14 +11,14 @@ import shared.model.exceptions.BadJSONException;
 public class HexLocation
 {
 	public HexLocation(JSONObject json) throws BadJSONException {
-		Object x = json.get("x");
+		Number x = (Number)json.get("x");
 		if (x == null)
 			throw new BadJSONException();
-		Object y = json.get("y");
+		Number y = (Number)json.get("y");
 		if (y == null)
 			throw new BadJSONException();
-		setX(((Long)x).intValue());
-		setY(((Long)y).intValue());
+		setX(x.intValue());
+		setY(y.intValue());
 	}
 	
 	public HexLocation(Integer x, Integer y) {

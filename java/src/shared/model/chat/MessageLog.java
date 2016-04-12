@@ -1,7 +1,6 @@
 package shared.model.chat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class MessageLog {
 		messageList = new ArrayList<Message>();
 		for (int i = 0; i < messageLine.size(); i++)
 		{
-			messageList.add(new Message((JSONObject)messageLine.get(i)));
+			messageList.add(new Message(new JSONObject((Map) messageLine.get(i))));
 		}
 	}
 	

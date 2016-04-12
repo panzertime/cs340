@@ -2,8 +2,8 @@ package shared.model.board;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -235,46 +235,51 @@ public class Board {
 	
 	public void initializeMapFromJSON(JSONObject jsonMap) throws BadJSONException {
 		hexes = new HashMap<HexLocation, Hex>();
-		JSONArray jsonHexes = (JSONArray) jsonMap.get("hexes");
+		JSONArray jsonHexes = new JSONArray();
+		jsonHexes.addAll((Collection) jsonMap.get("hexes"));
 		if (jsonHexes == null)
 			throw new BadJSONException();
 		//System.out.println(jsonHexes.size() + "");
 		if (jsonHexes.size() != 19)
 			throw new BadJSONException();
 
-		JSONArray jsonPorts = (JSONArray) jsonMap.get("ports");
+		JSONArray jsonPorts = new JSONArray();
+		jsonPorts.addAll((Collection) jsonMap.get("ports"));
 		if (jsonPorts == null)
 			throw new BadJSONException();
 		if (jsonPorts.size() != 9)
 			throw new BadJSONException();
 
-		JSONArray jsonRoads = (JSONArray) jsonMap.get("roads");
+		JSONArray jsonRoads = new JSONArray();
+		jsonRoads.addAll((Collection) jsonMap.get("roads"));
 		if (jsonRoads == null)
 			throw new BadJSONException();
 
-		JSONArray jsonSettlements = (JSONArray) jsonMap.get("settlements");
+		JSONArray jsonSettlements = new JSONArray();
+		jsonSettlements.addAll((Collection) jsonMap.get("settlements"));
 		if (jsonSettlements == null)
 			throw new BadJSONException();
 
-		JSONArray jsonCities = (JSONArray) jsonMap.get("cities");
+		JSONArray jsonCities = new JSONArray();
+		jsonCities.addAll((Collection) jsonMap.get("cities"));
 		if (jsonCities == null)
 			throw new BadJSONException();
 
-		JSONObject jsonRobber = (JSONObject) jsonMap.get("robber");
+		JSONObject jsonRobber = new JSONObject((Map) jsonMap.get("robber"));
 		if (jsonRobber == null)
 			throw new BadJSONException();
 
 
 		// add land hexes to the map
 		for (Object hexObject : jsonHexes) {
-			JSONObject jsonHex = (JSONObject) hexObject;
+			JSONObject jsonHex = new JSONObject((Map)  hexObject);
 
-			JSONObject jsonHexLoc = (JSONObject) jsonHex.get("location");
+			JSONObject jsonHexLoc = new JSONObject((Map) jsonHex.get("location"));
 			if (jsonHexLoc == null)
 				throw new BadJSONException();
 			HexLocation hexLoc = new HexLocation(jsonHexLoc);
 
-			Long numberLong = (Long) jsonHex.get("number");
+			Number numberLong = (Number) jsonHex.get("number");
 			Integer number = null;
 			if (numberLong != null)
 				number = numberLong.intValue();
@@ -309,9 +314,9 @@ public class Board {
 
 		//add ports and water hexes to the map
 		for (Object portObject : jsonPorts) {
-			JSONObject jsonPort = (JSONObject) portObject;
+			JSONObject jsonPort = new JSONObject((Map) portObject);
 
-			JSONObject jsonHexLoc = (JSONObject) jsonPort.get("location");
+			JSONObject jsonHexLoc = new JSONObject((Map) jsonPort.get("location"));
 			if (jsonHexLoc == null)
 				throw new BadJSONException();
 			HexLocation hexLoc = new HexLocation(jsonHexLoc);
@@ -367,9 +372,9 @@ public class Board {
 
 		// place roads
 		for (Object roadObject : jsonRoads) {
-			JSONObject jsonRoad = (JSONObject) roadObject;
+			JSONObject jsonRoad = new JSONObject((Map) roadObject);
 
-			Long ownerIndexLong = (Long) jsonRoad.get("owner");
+			Number ownerIndexLong = (Number) jsonRoad.get("owner");
 			if (ownerIndexLong == null)
 				throw new BadJSONException();
 			Integer ownerID = ownerIndexLong.intValue();
@@ -382,7 +387,7 @@ public class Board {
 			if (road == null)
 				throw new BadJSONException();
 
-			JSONObject jsonEdgeLoc = (JSONObject) jsonRoad.get("location");
+			JSONObject jsonEdgeLoc = new JSONObject((Map) jsonRoad.get("location"));
 			if (jsonEdgeLoc == null)
 				throw new BadJSONException();
 			HexLocation hexLoc = new HexLocation(jsonEdgeLoc);
@@ -426,9 +431,9 @@ public class Board {
 		}
 		// place settlements
 		for (Object settlementObject : jsonSettlements) {
-			JSONObject jsonSettlement = (JSONObject) settlementObject;
+			JSONObject jsonSettlement = new JSONObject((Map) settlementObject);
 
-			Long ownerIndexLong = (Long) jsonSettlement.get("owner");
+			Number ownerIndexLong = (Number) jsonSettlement.get("owner");
 			if (ownerIndexLong == null)
 				throw new BadJSONException();
 			Integer ownerID = ownerIndexLong.intValue();
@@ -441,7 +446,7 @@ public class Board {
 			if (settlement == null)
 				throw new BadJSONException();
 
-			JSONObject jsonVertexLoc = (JSONObject) jsonSettlement.get("location");
+			JSONObject jsonVertexLoc = new JSONObject((Map) jsonSettlement.get("location"));
 			if (jsonVertexLoc == null)
 				throw new BadJSONException();
 			HexLocation hexLoc = new HexLocation(jsonVertexLoc);
@@ -453,7 +458,7 @@ public class Board {
 
 			buildSettlement(settlement, vertexLoc);
 		}
-		Long radius = (Long) jsonMap.get("radius");
+		Number radius = (Number) jsonMap.get("radius");
 		if (radius != null)
 			this.radius = radius.intValue();
 		robber = new Robber(getHexAt(new HexLocation(jsonRobber)));

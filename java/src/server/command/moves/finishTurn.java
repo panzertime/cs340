@@ -46,7 +46,7 @@ public class finishTurn extends MovesCommand {
 	public void reExecute(Model game) 
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
-			int playerIndex = ((Long) arguments.get("playerIndex")).intValue();
+			int playerIndex = ((Number) arguments.get("playerIndex")).intValue();
 			try {
 				game.doFinishTurn(playerIndex);
 			} catch (ViolatedPreconditionException e) {

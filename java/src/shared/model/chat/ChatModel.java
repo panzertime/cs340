@@ -1,6 +1,6 @@
 package shared.model.chat;
 
-import java.util.Map;
+import java.util.Collection;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,12 +14,18 @@ public class ChatModel {
 	{
 		if (chatList == null)
 			chatLog = new MessageLog();
-		else	
-			chatLog = new MessageLog((JSONArray)chatList.get("lines"));
+		else {
+			JSONArray messageList = new JSONArray();
+			messageList.addAll((Collection)chatList.get("lines"));
+			chatLog = new MessageLog(messageList);
+		}
 		if (gameList == null)
 			gameLog = new MessageLog();
-		else
-			gameLog = new MessageLog((JSONArray)gameList.get("lines"));
+		else{
+			JSONArray messageList = new JSONArray();
+			messageList.addAll((Collection)gameList.get("lines"));
+			gameLog = new MessageLog(messageList);
+		}
 	}
 	
 	public ChatModel() {

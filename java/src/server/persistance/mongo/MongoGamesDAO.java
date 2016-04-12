@@ -2,6 +2,7 @@ package server.persistance.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
@@ -26,7 +27,7 @@ public class MongoGamesDAO implements IGamesDAO {
 			throw new DatabaseException();
 		MongoConnection mongoConnection = (MongoConnection) connection;
 
-		DBCursor cursor = mongoConnection.getGamesCollection().find((DBObject) JSON.parse("{id:" + model.getID() + "}"));
+		DBCursor cursor = mongoConnection.getGamesCollection().find((DBObject) JSON.parse("{gameID:" + model.getID() + "}"));
 		if (cursor.hasNext())
 			mongoConnection.getGamesCollection().remove(cursor.next());
 		
@@ -44,7 +45,7 @@ public class MongoGamesDAO implements IGamesDAO {
 		DBCursor cursor = mongoConnection.getGamesCollection().find();
 		while (cursor.hasNext()) {
 			try {
-				games.add(new Model((JSONObject) cursor.next()));
+				games.add(new Model(new JSONObject((Map) cursor.next())));
 			} catch (BadJSONException e) {
 				Log.error("Mongo DB is ill formated, unable to interpret a game");
 				e.printStackTrace();

@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 
 import server.command.moves.MovesCommand;
 import server.data.User;
-import server.exception.ServerAccessException;
 import shared.model.Model;
 
 public class PersistanceManager {
@@ -21,10 +20,10 @@ public class PersistanceManager {
 	 * @post PersistanceManager has DAOs initialized
 	 */
 	public PersistanceManager(IDAOFactory factory) throws DatabaseException {
+		connection = factory.createConnection();
 		usersDAO = factory.createUsersDAO();
 		gamesDAO = factory.createGamesDAO();
 		commandsDAO = factory.createCommandsDAO();
-		connection = factory.createConnection();
 	}
 	
 	/**

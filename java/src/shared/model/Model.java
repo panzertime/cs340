@@ -1,6 +1,7 @@
 package shared.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,37 +140,39 @@ public class Model {
 		if (jsonMap == null)
 			throw new BadJSONException();
 		this.gameName = (String) jsonMap.get("name");
-		this.gameID = ((Long) jsonMap.get("gameID")).intValue();
-		bank = new Bank((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck"));
-		chatModel = new ChatModel((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log"));
+		this.gameID = ((Number) jsonMap.get("gameID")).intValue();
+		bank = new Bank(new JSONObject((Map) jsonMap.get("bank")), new JSONObject((Map) jsonMap.get("deck")));
+		chatModel = new ChatModel(new JSONObject((Map) jsonMap.get("chat")), new JSONObject((Map) jsonMap.get("log")));
 		
-		JSONArray playerList = (JSONArray) jsonMap.get("players");
+		JSONArray playerList = new JSONArray();
+		playerList.addAll((Collection) jsonMap.get("players"));
+		
 		if (playerList == null)
 			throw new BadJSONException();
 		players = new HashMap<Integer, Player>();
 		for (int i = 0; i < playerList.size(); i++) {
-			JSONObject jsonPlayer = (JSONObject) playerList.get(i);
+			JSONObject jsonPlayer = new JSONObject((Map) playerList.get(i));
 			Player player = new Player(jsonPlayer, this);
 			players.put(player.getPlayerIndex(), player);
 		}
 		
-		board = new Board((JSONObject) jsonMap.get("map"), this);
+		board = new Board(new JSONObject((Map) jsonMap.get("map")), this);
 
-		Long version = ((Long) jsonMap.get("version"));
+		Number version = ((Number) jsonMap.get("version"));
 		if (version == null)
 			throw new BadJSONException();
 		this.version = version.intValue();
 
-		Long winnerID = ((Long) jsonMap.get("winner"));
+		Number winnerID = ((Number) jsonMap.get("winner"));
 		if (winnerID == null)
 			throw new BadJSONException();
 		this.winnerID = winnerID.intValue();
 
-		JSONObject turnTracker = (JSONObject) jsonMap.get("turnTracker");
+		JSONObject turnTracker = new JSONObject((Map) jsonMap.get("turnTracker"));
 		if (turnTracker == null)
 			throw new BadJSONException();
 
-		Long activePlayerIndex = ((Long) turnTracker.get("currentTurn"));
+		Number activePlayerIndex = ((Number) turnTracker.get("currentTurn"));
 		if (activePlayerIndex == null)
 			throw new BadJSONException();
 		this.activePlayerIndex = activePlayerIndex.intValue();
@@ -183,8 +186,8 @@ public class Model {
 			Log.error(e);
 			throw new BadJSONException();
 		}
-		Long longestRoadOwnerID = ((Long) turnTracker.get("longestRoad"));
-		Long largestArmyOwnerID = ((Long) turnTracker.get("largestArmy"));
+		Number longestRoadOwnerID = ((Number) turnTracker.get("longestRoad"));
+		Number largestArmyOwnerID = ((Number) turnTracker.get("largestArmy"));
 		if (longestRoadOwnerID == null || largestArmyOwnerID == null)
 			throw new BadJSONException();
 		achievements = new Achievements(getPlayerFromIndex(longestRoadOwnerID.intValue()),
