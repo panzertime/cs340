@@ -339,19 +339,21 @@ public class ServerKernel {
 	 * @param gameID Corresponding gameID
 	 */
 	public void addPlayerToGame(Model game, int gameID) {
-		try {
-			pm.startTransaction();
-			pm.saveGame(game);
-			pm.endTransaction(true);
-		} catch (DatabaseException e) {
-			System.err.println("Could not update game with new player in"
-					+ "the database");
-			e.printStackTrace();
+		if(pm != null) {
 			try {
-				pm.endTransaction(false);
-			} catch (DatabaseException e1) {
-				System.err.println("Could not end transaction");
-				e1.printStackTrace();
+				pm.startTransaction();
+				pm.saveGame(game);
+				pm.endTransaction(true);
+			} catch (DatabaseException e) {
+				System.err.println("Could not update game with new player in"
+						+ "the database");
+				e.printStackTrace();
+				try {
+					pm.endTransaction(false);
+				} catch (DatabaseException e1) {
+					System.err.println("Could not end transaction");
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -364,63 +366,69 @@ public class ServerKernel {
      * @throws DatabaseException Could not get or save something in the DB
      */
     public void persistCommand(int gameID, MovesCommand cmd) {
-        Integer numOfCommands = this.persistenceTracker.get(gameID);
-        try {
-            pm.startTransaction();
-            if(numOfCommands == persistFrequency) {
-                Model model = this.games.get(gameID);
-                pm.saveGame(model);
-                pm.clearCommands(gameID);
-                numOfCommands = 0;
-            } else {
-                pm.saveCommand(gameID, cmd);
-                numOfCommands++;
-            }
-            this.persistenceTracker.replace(gameID, numOfCommands);
-            pm.endTransaction(true);
-        } catch (DatabaseException e) {
-            System.err.println("Could not persist command");
-            e.printStackTrace();
-            try {
-                pm.endTransaction(false);
-            } catch (DatabaseException e1) {
-                System.err.println("Could not end transaction");
-                e1.printStackTrace();
-            }
-        }
+    	if(pm != null) {
+	        Integer numOfCommands = this.persistenceTracker.get(gameID);
+	        try {
+	            pm.startTransaction();
+	            if(numOfCommands == persistFrequency) {
+	                Model model = this.games.get(gameID);
+	                pm.saveGame(model);
+	                pm.clearCommands(gameID);
+	                numOfCommands = 0;
+	            } else {
+	                pm.saveCommand(gameID, cmd);
+	                numOfCommands++;
+	            }
+	            this.persistenceTracker.replace(gameID, numOfCommands);
+	            pm.endTransaction(true);
+	        } catch (DatabaseException e) {
+	            System.err.println("Could not persist command");
+	            e.printStackTrace();
+	            try {
+	                pm.endTransaction(false);
+	            } catch (DatabaseException e1) {
+	                System.err.println("Could not end transaction");
+	                e1.printStackTrace();
+	            }
+	        }
+    	}
     }
 
 	
 	private void addUserToDB(User user) {
-		try {
-			pm.startTransaction();
-			pm.saveUser(user);
-			pm.endTransaction(true);
-		} catch (DatabaseException e) {
-			System.err.println("Could not save user in database");
-			e.printStackTrace();
+		if(pm != null) {
 			try {
-				pm.endTransaction(false);
-			} catch (DatabaseException e1) {
-				System.err.println("Could not end transaction");
-				e1.printStackTrace();
+				pm.startTransaction();
+				pm.saveUser(user);
+				pm.endTransaction(true);
+			} catch (DatabaseException e) {
+				System.err.println("Could not save user in database");
+				e.printStackTrace();
+				try {
+					pm.endTransaction(false);
+				} catch (DatabaseException e1) {
+					System.err.println("Could not end transaction");
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
 
 	private void addGameToDB(Model newModel) {
-		try {
-			pm.startTransaction();
-			pm.saveGame(newModel);
-			pm.endTransaction(true);
-		} catch (DatabaseException e) {
-			System.err.println("Could not save game in database");
-			e.printStackTrace();
+		if(pm != null) {
 			try {
-				pm.endTransaction(false);
-			} catch (DatabaseException e1) {
-				System.err.println("Could not end transaction");
-				e1.printStackTrace();
+				pm.startTransaction();
+				pm.saveGame(newModel);
+				pm.endTransaction(true);
+			} catch (DatabaseException e) {
+				System.err.println("Could not save game in database");
+				e.printStackTrace();
+				try {
+					pm.endTransaction(false);
+				} catch (DatabaseException e1) {
+					System.err.println("Could not end transaction");
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

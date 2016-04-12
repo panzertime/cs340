@@ -139,7 +139,10 @@ public class Model {
 		if (jsonMap == null)
 			throw new BadJSONException();
 		this.gameName = (String) jsonMap.get("name");
-		this.gameID = ((Long) jsonMap.get("gameID")).intValue();
+		Long tmpGameID = (Long) jsonMap.get("gameID");
+		if(tmpGameID != null) {
+			this.gameID = tmpGameID.intValue();
+		}
 		bank = new Bank((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log"));
 		
@@ -924,6 +927,7 @@ public class Model {
 	public Boolean canSendChat(String message, Integer playerIndex) {
 		if (playerIndex == null)
 			return false;
+		//System.out.print("");
 		if (getPlayerFromIndex(playerIndex) == null)
 			return false;
 		if (message == null)
