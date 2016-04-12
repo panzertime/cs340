@@ -22,7 +22,7 @@ public class Road_Building extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					EdgeLocation spot1 = makeEdgeLocation
 							(args.get("spot1"));
 					EdgeLocation spot2 = makeEdgeLocation
@@ -53,7 +53,7 @@ public class Road_Building extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			EdgeLocation spot1 = makeEdgeLocation
 					(arguments.get("spot1"));
 			EdgeLocation spot2 = makeEdgeLocation

@@ -1,17 +1,22 @@
 package server.main;
 
-import java.io.*;
-import java.net.*;
-import java.util.logging.*;
-import java.util.*;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpServer;
 
-import server.*;
-import server.handler.*;
-import server.exception.*;
-import server.persistance.IDAOFactory;
 import server.data.ServerKernel;
+import server.handler.AbstractHttpHandler;
+import server.handler.NullHandler;
+import server.handler.RequestHandler;
+import server.handler.fileHandler;
+import server.persistance.mongo.MongoDAOFactory;
 
 public class Server {
 
@@ -89,7 +94,7 @@ public class Server {
 	
 	public static void main(String[] args) {
 	//	new server(Integer.parseInt(args[0])).run();
-		try {	
+		try {/*	
 			File loc = new File(args[2]);
 			File[] flist = loc.listFiles(new FileFilter() {
     					public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}
@@ -117,10 +122,12 @@ public class Server {
 			}
 			else {
 				throw new ServerAccessException("Could not match plugin name " + args[0]);
-			}
+			}*/
+			ServerKernel.sole().initPersistence(5, new MongoDAOFactory());
 			new Server(8081).run();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			logger.log(Level.INFO, "Fault starting server: " + e.getMessage());
 		}
 	}

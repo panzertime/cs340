@@ -22,7 +22,7 @@ public class Year_of_Plenty extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					ResourceType resource1 = 
 							getResourceType(args.get("resource1"));
 					ResourceType resource2 = 
@@ -56,7 +56,7 @@ public class Year_of_Plenty extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			ResourceType resource1 = 
 					getResourceType(arguments.get("resource1"));
 			ResourceType resource2 = 

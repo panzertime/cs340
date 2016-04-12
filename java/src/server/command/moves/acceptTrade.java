@@ -23,7 +23,7 @@ public class acceptTrade extends MovesCommand {
 						boolean willAccept = (boolean) args.get("willAccept");
 						Model game = getGameFromCookie(cookie);
 						int playerIndex = 
-								((Long) args.get("playerIndex")).intValue();
+								((Number) args.get("playerIndex")).intValue();
 						try {
 							game.doAcceptTrade(willAccept, playerIndex);
 							persist(args, catanCookie, game);
@@ -56,7 +56,7 @@ public class acceptTrade extends MovesCommand {
 			try {
 				boolean willAccept = (boolean) arguments.get("willAccept");
 				int playerIndex = 
-						((Long) arguments.get("playerIndex")).intValue();
+						((Number) arguments.get("playerIndex")).intValue();
 				try {
 					game.doAcceptTrade(willAccept, playerIndex);
 				} catch (ViolatedPreconditionException e) {

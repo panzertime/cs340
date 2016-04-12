@@ -22,12 +22,12 @@ public class Soldier extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					HexLocation robLocation = 
 							makeHexLocation(args.get("location"));
 					try {
 						int victimIndex = 
-								((Long) args.get("victimIndex")).intValue();
+								((Number) args.get("victimIndex")).intValue();
 						game.doSoldier(robLocation, victimIndex, playerIndex);
 						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
@@ -56,12 +56,12 @@ public class Soldier extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			HexLocation robLocation = 
 					makeHexLocation(arguments.get("location"));
 			try {
 				int victimIndex = 
-						((Long) arguments.get("victimIndex")).intValue();
+						((Number) arguments.get("victimIndex")).intValue();
 				game.doSoldier(robLocation, victimIndex, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "

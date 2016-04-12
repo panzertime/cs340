@@ -1,4 +1,2 @@
-Apr 11, 2016 10:23:02 PM server.main.Server run
-INFO: Initializing HTTP Server
-Apr 11, 2016 10:23:02 PM server.main.Server run
-INFO: Starting HTTP Server
+Apr 11, 2016 10:55:24 PM server.main.Server main
+INFO: Fault starting server: java.lang.Integer cannot be cast to java.lang.Long

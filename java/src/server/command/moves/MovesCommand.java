@@ -187,9 +187,9 @@ public abstract class MovesCommand implements ICommand {
 	public VertexLocation makeVertexLocation(Object vertLocJSON) throws ServerAccessException {
 		VertexLocation result = null;
 		try {
-			JSONObject vertLoc = (JSONObject) vertLocJSON;
-			int x = ((Long) vertLoc.get("x")).intValue();
-			int y = ((Long) vertLoc.get("y")).intValue();
+			JSONObject vertLoc = new JSONObject((Map) vertLocJSON);
+			int x = ((Number) vertLoc.get("x")).intValue();
+			int y = ((Number) vertLoc.get("y")).intValue();
 			String dir = (String) vertLoc.get("direction");
 			HexLocation hexLoc = new HexLocation(x, y);
 			VertexDirection vertDir = VertexDirection.fromJSON(dir);
@@ -214,9 +214,9 @@ public abstract class MovesCommand implements ICommand {
 	public EdgeLocation makeEdgeLocation(Object roadLocJSON) throws ServerAccessException {
 		EdgeLocation result = null;
 		try {
-			JSONObject roadLoc = (JSONObject) roadLocJSON;
-			int x = ((Long) roadLoc.get("x")).intValue();
-			int y = ((Long) roadLoc.get("y")).intValue();
+			JSONObject roadLoc = new JSONObject((Map) roadLocJSON);
+			int x = ((Number) roadLoc.get("x")).intValue();
+			int y = ((Number) roadLoc.get("y")).intValue();
 			String dir = (String) roadLoc.get("direction");
 			HexLocation hexLoc = new HexLocation(x, y);
 			EdgeDirection edgeDir = EdgeDirection.fromJSON(dir);
@@ -242,11 +242,11 @@ public abstract class MovesCommand implements ICommand {
 		Map<ResourceType, Integer> result = new HashMap<ResourceType, Integer>();
 		try {
 			JSONObject resList = (JSONObject) resListJSON;
-			int brick = ((Long) resList.get("brick")).intValue();
-			int ore = ((Long) resList.get("ore")).intValue();
-			int sheep = ((Long) resList.get("sheep")).intValue();
-			int wheat = ((Long) resList.get("wheat")).intValue();
-			int wood = ((Long) resList.get("wood")).intValue();
+			int brick = ((Number) resList.get("brick")).intValue();
+			int ore = ((Number) resList.get("ore")).intValue();
+			int sheep = ((Number) resList.get("sheep")).intValue();
+			int wheat = ((Number) resList.get("wheat")).intValue();
+			int wood = ((Number) resList.get("wood")).intValue();
 
 			result.put(ResourceType.BRICK, brick);
 			result.put(ResourceType.ORE, ore);
@@ -294,8 +294,8 @@ public abstract class MovesCommand implements ICommand {
 		HexLocation result = null;
 		try {
 			JSONObject hexLoc = (JSONObject) hexLocJSON;
-			int x = ((Long) hexLoc.get("x")).intValue();
-			int y = ((Long) hexLoc.get("y")).intValue();
+			int x = ((Number) hexLoc.get("x")).intValue();
+			int y = ((Number) hexLoc.get("y")).intValue();
 			result = new HexLocation(x, y);
 		} catch (Exception e) {
 			throw new ServerAccessException("Invalid Parameter: HexLocation");

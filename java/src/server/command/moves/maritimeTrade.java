@@ -22,12 +22,12 @@ public class maritimeTrade extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					
 					try {
 						ResourceType input = getResourceType
 								(args.get("inputResource"));
-						Long longRatio = (Long) args.get("ratio");
+						Number longRatio = (Number) args.get("ratio");
 						Integer ratio = 
 								(longRatio == null) ? 4 : longRatio.intValue();
 						ResourceType output = getResourceType
@@ -57,12 +57,12 @@ public class maritimeTrade extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			
 			try {
 				ResourceType input = getResourceType
 						(arguments.get("inputResource"));
-				Long longRatio = (Long) arguments.get("ratio");
+				Number longRatio = (Number) arguments.get("ratio");
 				Integer ratio = 
 						(longRatio == null) ? 4 : longRatio.intValue();
 				ResourceType output = getResourceType

@@ -24,12 +24,12 @@ public class offerTrade extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					Map<ResourceType, Integer> resourceList = 
 							this.makeResourceList(args.get("offer"));
 					try {
 						int receiverIndex = 
-								((Long) args.get("receiver")).intValue();
+								((Number) args.get("receiver")).intValue();
 						game.doOfferTrade
 								(receiverIndex, resourceList, playerIndex);
 						persist(args, catanCookie, game);
@@ -58,12 +58,12 @@ public class offerTrade extends MovesCommand {
 	public void reExecute(Model game) throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			Map<ResourceType, Integer> resourceList = 
 					this.makeResourceList(arguments.get("offer"));
 			try {
 				int receiverIndex = 
-						((Long) arguments.get("receiver")).intValue();
+						((Number) arguments.get("receiver")).intValue();
 				game.doOfferTrade
 						(receiverIndex, resourceList, playerIndex);
 			} catch (ViolatedPreconditionException e) {

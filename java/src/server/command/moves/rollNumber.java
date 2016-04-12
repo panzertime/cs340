@@ -21,9 +21,9 @@ public class rollNumber extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					try {
-						int roll = ((Long) args.get("number")).intValue();
+						int roll = ((Number) args.get("number")).intValue();
 						game.doRollNumber(roll, playerIndex);
 						persist(args, catanCookie, game);
 						JSONObject resultJSON = game.toJSON();
@@ -52,9 +52,9 @@ public class rollNumber extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			try {
-				int roll = ((Long) arguments.get("number")).intValue();
+				int roll = ((Number) arguments.get("number")).intValue();
 				game.doRollNumber(roll, playerIndex);
 			} catch (ViolatedPreconditionException e) {
 				throw new ServerAccessException("Unable to "

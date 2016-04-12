@@ -20,7 +20,7 @@ public class finishTurn extends MovesCommand {
 			if(validCookie(catanCookie)) {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
-					int playerIndex = ((Long) args.get("playerIndex")).intValue();
+					int playerIndex = ((Number) args.get("playerIndex")).intValue();
 					try {
 						game.doFinishTurn(playerIndex);
 						persist(args, catanCookie, game);

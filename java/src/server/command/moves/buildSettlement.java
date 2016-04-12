@@ -22,7 +22,7 @@ public class buildSettlement extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					VertexLocation vertexLocation = makeVertexLocation
 							(args.get("vertexLocation"));
 					try {
@@ -55,7 +55,7 @@ public class buildSettlement extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			VertexLocation vertexLocation = makeVertexLocation
 					(arguments.get("vertexLocation"));
 			try {

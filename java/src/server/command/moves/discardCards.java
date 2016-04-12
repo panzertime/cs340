@@ -24,7 +24,7 @@ public class discardCards extends MovesCommand {
 				if(validMovesArguments(args, getClass().getSimpleName())) {
 					Model game = getGameFromCookie(cookie);
 					int playerIndex = 
-							((Long) args.get("playerIndex")).intValue();
+							((Number) args.get("playerIndex")).intValue();
 					Map<ResourceType, Integer> discardedCards = makeResourceList
 							(args.get("discardedCards"));
 					try {
@@ -54,7 +54,7 @@ public class discardCards extends MovesCommand {
 			throws ServerAccessException {
 		if(validMovesArguments(arguments, getClass().getSimpleName())) {
 			int playerIndex = 
-					((Long) arguments.get("playerIndex")).intValue();
+					((Number) arguments.get("playerIndex")).intValue();
 			Map<ResourceType, Integer> discardedCards = makeResourceList
 					(arguments.get("discardedCards"));
 			try {
