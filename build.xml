@@ -159,12 +159,14 @@
 				<attribute name="Main-Class" value="client.main.Catan"/>
 				<attribute name="Class-Path" value="lib/json-simple-1.1.1.jar" />
 			</manifest>
+ 			<zipgroupfileset dir="${java.lib}" includes="*.jar" excludes=""/>
 		</jar>
  		<jar jarfile="${java.dist}/catan-server.jar" duplicate="preserve" basedir="${java.bin.src}">
 			<manifest>
 				<attribute name="Main-Class" value="server.main.Server"/>
 				<attribute name="Class-Path" value="lib/*.jar"/>
 			</manifest>
+ 			<zipgroupfileset dir="${java.lib}" includes="*.jar" excludes=""/>
 		</jar>
 		<jar jarfile="${java.plugin}/catan-mongodb.jar" duplicate="preserve" basedir="${java.bin.src}/server/persistance/mongo">
 
