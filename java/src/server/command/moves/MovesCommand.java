@@ -293,7 +293,7 @@ public abstract class MovesCommand implements ICommand {
 	public HexLocation makeHexLocation(Object hexLocJSON) throws ServerAccessException {
 		HexLocation result = null;
 		try {
-			JSONObject hexLoc = (JSONObject) hexLocJSON;
+			JSONObject hexLoc = new JSONObject((Map)hexLocJSON);
 			int x = ((Number) hexLoc.get("x")).intValue();
 			int y = ((Number) hexLoc.get("y")).intValue();
 			result = new HexLocation(x, y);
