@@ -16,6 +16,7 @@ import client.map.pseudo.PseudoHex;
 import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
+import server.data.AI;
 import shared.logger.Log;
 import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
@@ -45,9 +46,24 @@ public class Model {
 		listeners.add(newListener);
 	}
 	
+	private static List<AI> AIlisteners = new ArrayList<AI>();
+	
+	public static void registerAIListener(AI newListener) {
+		AIlisteners.add(newListener);
+	}
+
+	
 	public static void shareNewModel(Model model) {
 		for (ModelFacade listener : listeners)
 			listener.updateModel(model);
+		for (AI listener : AIlisteners) {
+			try {
+				listener.play(model);
+			} catch (ViolatedPreconditionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
 	}
  
 	private Board board;
@@ -99,12 +115,13 @@ public class Model {
 		this.version = 0;
 	}
 	
-	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
+	public int joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
 	{
 	Integer i = this.getIndexFromPlayerID(playerID);
 	if (i != null)
 	{
 		this.getPlayerFromIndex(i).setUserColor(color);
+		return i;
 	}
 	else
 	{
@@ -112,6 +129,7 @@ public class Model {
 		if (index >= 4)
 			throw new JoinGameException();
 		players.put(index, new Player(playerID, index, playerName, color, this));
+		return players.size() - 1;
 	}
 	
 	}
@@ -1184,7 +1202,7 @@ public class Model {
 		if (!this.canSendChat(message, playerIndex))
 			throw new ViolatedPreconditionException();
 		this.getChatModel().doSendChat(message, this.getPlayerName(playerIndex));
-		version++;
+		versionIncrement();
 	}
 	
 
@@ -1220,7 +1238,7 @@ public class Model {
 
 		}
 		this.tradeModel = null;
-		version++;
+		versionIncrement();
 	}
 	
 	public void doDiscardCards(Map<ResourceType, Integer> discardedCards, int playerIndex) throws ViolatedPreconditionException
@@ -1243,7 +1261,7 @@ public class Model {
 			clearPlayersDiscarding();
 		}
 		
-		version++;
+		versionIncrement();
 	}
 	
 	private void clearPlayersDiscarding() {
@@ -1277,7 +1295,7 @@ public class Model {
 			}
 			status = "Playing";
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doBuildRoad(boolean free, EdgeLocation roadLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1305,7 +1323,7 @@ public class Model {
 			this.checkWinner(playerIndex);
 		}
 		if (this.isStateSetup()) progressSetupTurn();
-		version++;
+		versionIncrement();
 	}
 
 	public void doBuildSettlement(boolean free, VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
@@ -1341,7 +1359,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
-		version++;
+		versionIncrement();
 	}
 	public void doBuildCity(VertexLocation vertexLocation, int playerIndex) throws ViolatedPreconditionException
 	{
@@ -1358,7 +1376,7 @@ public class Model {
 		}
 		updatePoints();
 		checkWinner(playerIndex);
-		version++;
+		versionIncrement();
 	}
 	
 	public void doOfferTrade(int receiverIndex, Map<ResourceType, Integer> resourceList, int playerIndex) throws ViolatedPreconditionException
@@ -1380,7 +1398,7 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doMaritimeTrade(int ratio, ResourceType input, ResourceType output, int playerIndex) throws ViolatedPreconditionException
@@ -1392,7 +1410,7 @@ public class Model {
 		} catch (NoRemainingResourceException e) {
 			e.printStackTrace();
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doRobPlayer(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1417,7 +1435,7 @@ public class Model {
 		}
 		}
 		this.status = "Playing";
-		version++;
+		versionIncrement();
 	}
 	
 	
@@ -1429,7 +1447,7 @@ public class Model {
 		this.getPlayerFromIndex(playerIndex).updateDevCards();
 		this.progressTurn();
 		
-		version++;
+		versionIncrement();
 	}
 	
 	public void doBuyDevCard(int playerIndex) throws ViolatedPreconditionException
@@ -1445,7 +1463,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doSoldier(HexLocation robLocation, int victimIndex, int playerIndex) throws ViolatedPreconditionException
@@ -1469,7 +1487,7 @@ public class Model {
 			this.updatePoints();
 			this.checkWinner(playerIndex);
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doYear_of_Plenty(ResourceType resource1, ResourceType resource2, int playerIndex) throws ViolatedPreconditionException
@@ -1497,7 +1515,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doRoad_Building(EdgeLocation spot1, EdgeLocation spot2, int playerIndex) throws ViolatedPreconditionException	
@@ -1530,7 +1548,7 @@ public class Model {
 		String source = this.getPlayerName(playerIndex);
 		this.chatModel.addGameMessage(source + " used Road Builder",source);
 		this.getPlayerFromIndex(playerIndex).playedDevCard();
-		version++;
+		versionIncrement();
 	}
 	
 	public void doMonopoly(ResourceType resource, int playerIndex) 
@@ -1567,7 +1585,7 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		version++;
+		versionIncrement();
 	}
 	
 	public void doMonument(int playerIndex) throws ViolatedPreconditionException
@@ -1579,7 +1597,7 @@ public class Model {
 		p.setMonuments(p.getVictoryPointsOfMonuments());
 		this.updatePoints();
 		checkWinner(playerIndex);
-		version++;
+		versionIncrement();
 	}
 
 	public void setID(int gameID) {
@@ -1588,5 +1606,16 @@ public class Model {
 	
 	public int getID() {
 		return this.gameID;
+	}
+	
+	public void versionIncrement()
+	{
+		version++;
+		Model.shareNewModel(this);
+	}
+	
+	public boolean hasTradeOffer(int playerIndex) {
+		if (!this.hasTradeOffer()) return false;
+		return (this.tradeModel.getReceiverIndex() == playerIndex);
 	}
 }

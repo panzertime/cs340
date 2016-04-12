@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
+import server.command.games.AISelector;
 import server.data.AI;
 import server.data.ServerKernel;
 import server.data.User;
@@ -19,25 +20,25 @@ public class addAI extends GameCommand {
 
 	private CatanCookie cookie;
 
-	// class variable
-	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
-
-	final java.util.Random rand = new java.util.Random();
-
-	// consider using a Map<String,Boolean> to say whether the identifier is being used or not 
-	final Set<String> identifiers = new HashSet<String>();
-
-	public String randomIdentifier() {
-	    StringBuilder builder = new StringBuilder();
-	    while(builder.toString().length() == 0) {
-	        int length = rand.nextInt(5)+5;
-	        for(int i = 0; i < length; i++)
-	            builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
-	        if(identifiers.contains(builder.toString())) 
-	            builder = new StringBuilder();
-	    }
-	    return builder.toString();
-	}
+//	// class variable
+//	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+//
+//	final java.util.Random rand = new java.util.Random();
+//
+//	// consider using a Map<String,Boolean> to say whether the identifier is being used or not 
+//	final Set<String> identifiers = new HashSet<String>();
+//
+//	public String randomIdentifier() {
+//	    StringBuilder builder = new StringBuilder();
+//	    while(builder.toString().length() == 0) {
+//	        int length = rand.nextInt(5)+5;
+//	        for(int i = 0; i < length; i++)
+//	            builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+//	        if(identifiers.contains(builder.toString())) 
+//	            builder = new StringBuilder();
+//	    }
+//	    return builder.toString();
+//	}
 
 
 	@Override
@@ -45,16 +46,22 @@ public class addAI extends GameCommand {
 			throws ServerAccessException {
 		if(validCookie(cookie))
 		{
+			if (AISelector.sole() == null) AISelector.initiate();
 			User user = new AI();
-			user.setUsername(this.randomIdentifier());
-			user.setPassword("dummy");
+			user.setUsername(AISelector.sole().getNextName());
+			user.setPassword("dummy"); //can't access Users...
 			ServerKernel.sole().addUser(user);
 			try {
-				int gameToJoin = ((Long) args.get("id")).intValue();
+				Model model = getGameFromCookie(cookie);
+				int gameToJoin = model.getID();
 				if(ServerKernel.sole().gameExists(gameToJoin)) {
 					Model game = ServerKernel.sole().getGame(gameToJoin);
 					this.cookie = new CatanCookie(game);
-					game.joinGame(user.getID(), user.getUsername(), CatanColor.GREEN);
+					CatanColor color = AISelector.sole().getNextColor();
+					int index = game.joinGame(user.getID(), user.getUsername(), color);
+					((AI)user).setIndex(index);
+					game.registerAIListener((AI) user);
+					AISelector.sole().addToColorsUsed(color);
 					
 				} else {
 					throw new ServerAccessException("Invalid Game");
@@ -67,5 +74,19 @@ public class addAI extends GameCommand {
 			throw new ServerAccessException("Invalid Cookie");
 		}
 		return "Sucess";
+	}
+	
+	public Model getGameFromCookie(String cookie) {
+		Model game = null;
+			CatanCookie catanCookie;
+			try {
+				catanCookie = new CatanCookie(cookie, false);
+				int gameID = catanCookie.getGameID();
+				game = ServerKernel.sole().getGame(gameID);
+			} catch (CookieException | ServerAccessException e) {
+				//FOR DEBUG ONLY
+				//System.err.println(e.getMessage());
+			}
+		return game;
 	}
 }
