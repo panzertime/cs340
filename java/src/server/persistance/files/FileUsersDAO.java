@@ -1,0 +1,24 @@
+package server.persistance.files;
+
+import java.util.List;
+
+import server.data.User;
+import server.persistance.DatabaseException;
+import server.persistance.IConnection;
+import server.persistance.IUsersDAO;
+
+public class FileUsersDAO implements IUsersDAO {
+
+	@Override
+	public void saveUser(IConnection connection, User user) throws DatabaseException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<User> getUsers(IConnection connection) throws DatabaseException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
