@@ -91,9 +91,7 @@ public class FileCommandsDAO implements ICommandsDAO {
     	File[] files = dir.listFiles(new FilenameFilter() { 
     	         public boolean accept(File dir, String filename)
     	              { return filename.endsWith(".txt") && filename.startsWith("" + gameID); }
-    	} );
-    	JSONParser jp = new JSONParser();
-    	
+    	} );   	
     	if (files!= null) for (File f: files) {
     		f.delete();
     	}
