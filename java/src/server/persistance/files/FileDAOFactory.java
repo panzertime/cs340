@@ -12,25 +12,25 @@ public class FileDAOFactory implements IDAOFactory {
 	@Override
 	public IUsersDAO createUsersDAO() throws DatabaseException {
 		// TODO Auto-generated method stub
-		return null;
+		return new FileUsersDAO();
 	}
 
 	@Override
 	public IGamesDAO createGamesDAO() throws DatabaseException {
 		// TODO Auto-generated method stub
-		return null;
+		return new FileGamesDAO();
 	}
 
 	@Override
 	public ICommandsDAO createCommandsDAO() throws DatabaseException {
 		// TODO Auto-generated method stub
-		return null;
+		return new FileCommandsDAO();
 	}
 
 	@Override
 	public IConnection createConnection() throws DatabaseException {
 		// TODO Auto-generated method stub
-		return null;
+		return new FileConnection();
 	}
 
 }

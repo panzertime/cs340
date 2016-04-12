@@ -1,5 +1,8 @@
 package server.persistance.files;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import server.data.User;
@@ -11,7 +14,14 @@ public class FileUsersDAO implements IUsersDAO {
 
 	@Override
 	public void saveUser(IConnection connection, User user) throws DatabaseException {
-		// TODO Auto-generated method stub
+		try {
+			PrintWriter writer = new PrintWriter(user.getID() + ".txt", "UTF-8");
+			writer.println(user.toJSON().toJSONString());
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			throw new DatabaseException();
+		}
+		
 
 	}
 
