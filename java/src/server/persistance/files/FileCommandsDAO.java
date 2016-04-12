@@ -1,9 +1,11 @@
 package server.persistance.files;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,20 +30,28 @@ public class FileCommandsDAO implements ICommandsDAO {
 	public void saveCommmand(IConnection connection, Integer gameID, MovesCommand movesCommand)
 			throws DatabaseException {
 		try {
-			PrintWriter writer = new PrintWriter("data/command/" + gameID + "version" + movesCommand.getGameVersion() + ".txt", "UTF-8");
-			writer.println(movesCommand.getArguments().toJSONString());
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			File file = new File("java/data/command/" + gameID + "version" + movesCommand.getGameVersion() + ".txt");
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(movesCommand.getArguments().toJSONString());
+			bw.close();
+		} catch (IOException e) {
 			throw new DatabaseException();
-		}
-		
+		} 
+
 
 	}
 
 	@Override
 	public List<JSONObject> getCommands(IConnection connection, Integer gameID) throws DatabaseException {
 		List<JSONObject> result = new ArrayList<JSONObject>();
-		File dir = new File("data/command/");
+		File dir = new File("java/data/command/");
 
     	File[] files = dir.listFiles(new FilenameFilter() { 
     	         public boolean accept(File dir, String filename)
@@ -76,7 +86,7 @@ public class FileCommandsDAO implements ICommandsDAO {
 	@Override
 	public void deleteCommands(IConnection connection, Integer gameID) throws DatabaseException {
 		List<JSONObject> result = new ArrayList<JSONObject>();
-		File dir = new File("data/command/");
+		File dir = new File("java/data/command/");
 
     	File[] files = dir.listFiles(new FilenameFilter() { 
     	         public boolean accept(File dir, String filename)
@@ -84,7 +94,7 @@ public class FileCommandsDAO implements ICommandsDAO {
     	} );
     	JSONParser jp = new JSONParser();
     	
-    	for (File f: files) {
+    	if (files!= null) for (File f: files) {
     		f.delete();
     	}
 

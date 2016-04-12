@@ -9,6 +9,10 @@ import server.persistance.IUsersDAO;
 
 public class FileDAOFactory implements IDAOFactory {
 
+	public FileDAOFactory() throws DatabaseException {
+		
+	}
+	
 	@Override
 	public IUsersDAO createUsersDAO() throws DatabaseException {
 		// TODO Auto-generated method stub

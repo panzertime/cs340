@@ -1,9 +1,11 @@
 package server.persistance.files;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,12 +28,26 @@ public class FileGamesDAO implements IGamesDAO {
 	@Override
 	public void saveGame(IConnection connection, Model model) throws DatabaseException {
 		try {
-			PrintWriter writer = new PrintWriter("data/game/" + model.getID() + ".txt", "UTF-8");
-			writer.println(model.toJSON().toJSONString());
-			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			File file = new File("java/data/game/" + model.getID() + ".txt");
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			else { //else clear it
+				PrintWriter writer = new PrintWriter(file);
+				writer.print("");
+				writer.close();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(model.toJSON().toJSONString());
+			bw.close();
+		} catch (IOException e) {
 			throw new DatabaseException();
-		}
+		} 
+
 
 	}
 
@@ -40,7 +56,7 @@ public class FileGamesDAO implements IGamesDAO {
 	@Override
 	public List<Model> getGames(IConnection connection) throws DatabaseException {
 		List<Model> result = new ArrayList<Model>();
-		File dir = new File("data/game/");
+		File dir = new File("java/data/game/");
 
     	File[] files = dir.listFiles(new FilenameFilter() { 
     	         public boolean accept(File dir, String filename)
@@ -48,7 +64,7 @@ public class FileGamesDAO implements IGamesDAO {
     	} );
     	JSONParser jp = new JSONParser();
     	
-    	for (File f: files) {
+    	if (files!= null) for (File f: files) {
     		String jsontext = null;
     		BufferedReader in;
     		try {
