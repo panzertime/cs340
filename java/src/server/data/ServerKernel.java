@@ -313,6 +313,7 @@ public class ServerKernel {
 			int gameID = game.getID();
 			updateGame(gameID, game);
 			this.games.put(gameID, game);
+			this.persistenceTracker.put(gameID, 0);
 		}
 		this.numOfGames = games.size();
 	}

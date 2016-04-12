@@ -60,19 +60,19 @@ public class FileCommandsDAO implements ICommandsDAO {
     	JSONParser jp = new JSONParser();
     	
     	for (File f: files) {
-    		String jsontext = null;
+    		StringBuilder jsontext = new StringBuilder();
     		BufferedReader in;
     		try {
     		    in = new BufferedReader(new FileReader(f));
     		    String str;
     		    while ((str = in.readLine()) != null)
-    		        jsontext.concat(str);
+    		        jsontext.append(str);
     			in.close();
     		} catch (IOException e) {
     			throw new DatabaseException(e);
     		} 
     		try {
-				result.add((JSONObject) jp.parse(jsontext));
+				result.add((JSONObject) jp.parse(jsontext.toString()));
 			} catch (ParseException e) {
 				throw new DatabaseException(e);
 			}

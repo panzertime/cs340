@@ -65,19 +65,19 @@ public class FileGamesDAO implements IGamesDAO {
     	JSONParser jp = new JSONParser();
     	
     	if (files!= null) for (File f: files) {
-    		String jsontext = null;
+    		StringBuilder jsontext = new StringBuilder();
     		BufferedReader in;
     		try {
     		    in = new BufferedReader(new FileReader(f));
     		    String str;
     		    while ((str = in.readLine()) != null)
-    		        jsontext.concat(str);
+    		        jsontext.append(str);
     			in.close();
     		} catch (IOException e) {
     			throw new DatabaseException(e);
     		} 
     		try {
-				result.add(new Model((JSONObject) jp.parse(jsontext)));
+				result.add(new Model((JSONObject) jp.parse(jsontext.toString())));
 			} catch (BadJSONException | ParseException e) {
 				throw new DatabaseException(e);
 			}
