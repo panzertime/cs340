@@ -11,6 +11,7 @@ import server.*;
 import server.handler.*;
 import server.exception.*;
 import server.persistance.IDAOFactory;
+import server.persistance.mySQL.SQLDAOFactory;
 import server.data.ServerKernel;
 
 public class Server {
@@ -90,7 +91,7 @@ public class Server {
 	public static void main(String[] args) {
 	//	new server(Integer.parseInt(args[0])).run();
 		try {	
-			File loc = new File(args[2]);
+/*			File loc = new File(args[2]);
 			File[] flist = loc.listFiles(new FileFilter() {
     					public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}
 		        	});
@@ -117,7 +118,8 @@ public class Server {
 			}
 			else {
 				throw new ServerAccessException("Could not match plugin name " + args[0]);
-			}
+			}*/
+			ServerKernel.sole().initPersistence(5, new SQLDAOFactory());
 			new Server(8081).run();
 		}
 		catch (Exception e) {
