@@ -50,7 +50,7 @@ public class SettlementsAI extends AI {
 			}
 			discardedCards.put(ResourceType.values()[j], value);
 		}
-		game.doDiscardCards(discardedCards, playerIndex);
+		if (game.canDiscardCard(discardedCards, playerIndex)) game.doDiscardCards(discardedCards, playerIndex);
 		
 	}
 
