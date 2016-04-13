@@ -79,7 +79,7 @@ public class LongestRoadAI extends AI {
 		}
 		}
 			
-		game.doFinishTurn(playerIndex);
+		if (game.canFinishTurn(playerIndex)) game.doFinishTurn(playerIndex);
 	}
 
 	@Override

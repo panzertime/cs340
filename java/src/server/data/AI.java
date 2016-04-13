@@ -6,7 +6,9 @@ import java.util.Random;
 import client.modelfacade.DoModelFacade;
 import shared.model.Model;
 import shared.model.board.edge.Edge;
+import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.piece.City;
 import shared.model.board.piece.Settlement;
 import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
@@ -60,6 +62,38 @@ public abstract class AI extends User {
 	abstract void AIDiscard(Model game, int playerIndex) throws ViolatedPreconditionException;
 	
 	public void AIRob(Model game, int playerIndex) throws ViolatedPreconditionException {
+		for (Integer i: game.getPlayerIndices())
+		{
+			if (i != playerIndex)
+			{
+				for (City c: game.getPlayerFromIndex(i).getCities())
+				{
+					if (c.isPlaced())
+					{
+						for (Hex h: c.getVertex().getAllHexes()) {
+							if (h.isBuildable()) {
+								if (game.canRobPlayerFrom(h.getHexLocation(), playerIndex, i))
+								{game.doRobPlayer(h.getHexLocation(), i, playerIndex);
+								return;}
+							}
+						}
+					}
+				}
+				for (Settlement s: game.getPlayerFromIndex(i).getSettlements())
+				{
+					if (s.isPlaced())
+					{
+						for (Hex h: s.getVertex().getAllHexes()) {
+							if (h.isBuildable()) {
+								if (game.canRobPlayerFrom(h.getHexLocation(), playerIndex, i))
+								{game.doRobPlayer(h.getHexLocation(), i, playerIndex);
+								return;}
+							}
+						}
+					}
+				}
+			}
+		}
 	Integer upperLimit = new Integer(2);
 	Integer lowerLimit = new Integer(0);
 	for (Integer x = new Integer(-2); x <=2; x++)
