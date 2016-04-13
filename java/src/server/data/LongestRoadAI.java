@@ -4,8 +4,13 @@ import java.util.HashMap;
 
 import shared.model.Model;
 import shared.model.board.edge.Edge;
+import shared.model.board.hex.Hex;
 import shared.model.board.hex.HexLocation;
+import shared.model.board.hex.tiles.land.ClayHex;
+import shared.model.board.hex.tiles.land.ForestHex;
+import shared.model.board.piece.Road;
 import shared.model.board.piece.Settlement;
+import shared.model.board.vertex.Vertex;
 import shared.model.board.vertex.VertexDirection;
 import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
@@ -13,6 +18,8 @@ import shared.model.hand.ResourceType;
 
 public class LongestRoadAI extends AI {
 
+	
+	public String getAIType() { return "LongestRoad";}
 	public LongestRoadAI() {
 		
 	}
@@ -47,6 +54,31 @@ public class LongestRoadAI extends AI {
 	@Override
 	void AIPlay(Model game, int playerIndex) throws ViolatedPreconditionException {
 		// TODO Auto-generated method stub
+		ResourceType resourceNeeded;
+		if (game.getResourceAmount(ResourceType.WOOD, playerIndex) > game.getResourceAmount(ResourceType.BRICK, playerIndex) )
+		resourceNeeded = ResourceType.WOOD;
+		else
+			resourceNeeded = ResourceType.BRICK;
+		if (game.getResourceAmount(ResourceType.WHEAT, playerIndex) > 4 && game.canMaritimeTrade(playerIndex, 4, ResourceType.WHEAT, resourceNeeded)) game.doMaritimeTrade(4, ResourceType.WHEAT, resourceNeeded, playerIndex);
+		if (game.getResourceAmount(ResourceType.SHEEP, playerIndex) > 4 && game.canMaritimeTrade(playerIndex, 4, ResourceType.SHEEP, resourceNeeded))game.doMaritimeTrade(4, ResourceType.SHEEP, resourceNeeded, playerIndex);
+		if (game.getResourceAmount(ResourceType.ORE, playerIndex) > 4 && game.canMaritimeTrade(playerIndex, 4, ResourceType.ORE, resourceNeeded))game.doMaritimeTrade(4, ResourceType.ORE, resourceNeeded, playerIndex);
+		
+		if (game.canBuyRoad(playerIndex)) {
+		for (Road r: game.getPlayerFromIndex(playerIndex).getRoads()) {
+		if (r.isPlaced()) {
+			for (Vertex v: r.getEdge().getAllVertices()) {
+			Edge e = v.getLeftEdge(r.getEdge());
+			{
+				if (game.canBuildRoad(playerIndex, e.getEdgeLocation()))
+				{	game.doBuildRoad(false, e.getEdgeLocation(), playerIndex);
+				
+				}
+			}
+		}
+		}
+		}
+		}
+			
 		game.doFinishTurn(playerIndex);
 	}
 
@@ -63,16 +95,24 @@ public class LongestRoadAI extends AI {
 				for (VertexDirection dir: VertexDirection.values())
 				{
 					VertexLocation v = new VertexLocation(hexLoc, dir);
+					int howmany = 0;
+					for (Hex h: game.getBoard().getVertexAt(v).getAllHexes()) {
+						if (h instanceof ForestHex || h instanceof ClayHex)
+							howmany++;
+					}
+					if (howmany >= 2) {
 					if (game.canSetupSettlement(playerIndex, v)) {
 						game.doBuildSettlement(true, v, playerIndex);
 						return;
-					}
+					}}
 				}
 
 			}
 			if (x < 0) lowerLimit--;
 			if (x >= 0) upperLimit--;
 		}
+		
+		super.AISetupSettlement(game, playerIndex);
 	}
 
 	@Override

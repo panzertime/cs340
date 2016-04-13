@@ -20,6 +20,8 @@ public abstract class AI extends User {
 		
 	}
 	
+	
+	public abstract String getAIType();
 	//added as Model listener
 	//notified when Model initiated or version updated
 	public void play(Model game, int playerIndex) throws ViolatedPreconditionException {
@@ -75,7 +77,28 @@ public abstract class AI extends User {
 	
 	abstract void AIPlay(Model game, int playerIndex) throws ViolatedPreconditionException;
 
-	abstract void AISetupSettlement(Model game, int playerIndex) throws ViolatedPreconditionException;
+	void AISetupSettlement(Model game, int playerIndex) throws ViolatedPreconditionException {
+		Integer upperLimit = new Integer(2);
+		Integer lowerLimit = new Integer(0);
+		for (Integer x = new Integer(-2); x <=2; x++)
+		{
+			for (Integer y = lowerLimit; y <= upperLimit; y++)
+			{
+				HexLocation hexLoc = new HexLocation(x, y);
+				for (VertexDirection dir: VertexDirection.values())
+				{
+					VertexLocation v = new VertexLocation(hexLoc, dir);
+					if (game.canSetupSettlement(playerIndex, v)) {
+						{	game.doBuildSettlement(true, v, playerIndex);
+						return;}
+					}
+				}
+
+			}
+			if (x < 0) lowerLimit--;
+			if (x >= 0) upperLimit--;
+		}
+	}
 	abstract void AISetupRoad(Model game, int playerIndex) throws ViolatedPreconditionException; 
 	
 

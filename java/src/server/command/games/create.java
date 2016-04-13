@@ -2,6 +2,7 @@ package server.command.games;
 
 import org.json.simple.JSONObject;
 
+import server.command.game.AISelector;
 import server.data.ServerKernel;
 import server.exception.ServerAccessException;
 import shared.model.Model;
@@ -29,6 +30,8 @@ public class create extends GamesCommand {
 				} else {
 					Model newModel = new Model(tiles, numbers, ports, name);
 					int gameID = ServerKernel.sole().putGame(newModel);
+					if (AISelector.sole() == null) AISelector.initiate();
+					AISelector.sole().addGameColors(newModel);
 					Model finalModel = ServerKernel.sole().getGame(gameID);
 					JSONObject jsonResult = finalModel.getGamesList();
 					result = jsonResult.toJSONString();

@@ -17,6 +17,11 @@ import client.map.pseudo.PseudoRoad;
 import client.map.pseudo.PseudoSettlement;
 import client.modelfacade.ModelFacade;
 import server.data.AI;
+import server.data.LargestArmyAI;
+import server.data.LongestRoadAI;
+import server.data.ServerKernel;
+import server.data.SettlementsAI;
+import server.data.User;
 import shared.logger.Log;
 import shared.model.board.Board;
 import shared.model.board.edge.EdgeLocation;
@@ -46,18 +51,20 @@ public class Model {
 		listeners.add(newListener);
 	}
 	
-	private static List<AI> AIlisteners = new ArrayList<AI>();
-	private static List<Integer> AIlistenerIndices = new ArrayList<Integer>();
+	private List<AI> AIlisteners = new ArrayList<AI>();
+	private List<Integer> AIlistenerIndices = new ArrayList<Integer>();
 	
-	public static void registerAIListener(AI newListener, int index) {
+	public void registerAIListener(AI newListener, int index) {
 		AIlisteners.add(newListener);
 		AIlistenerIndices.add(index);
 	}
-
 	
 	public static void shareNewModel(Model model) {
 		for (ModelFacade listener : listeners)
 			listener.updateModel(model);
+	}
+	
+	public void shareModel(Model model) {
 		for (int i = 0; i < AIlisteners.size(); i++) {
 			try {
 				AIlisteners.get(i).play(model, AIlistenerIndices.get(i));
@@ -166,6 +173,7 @@ public class Model {
 		if(tmpGameID != null) {
 			this.gameID = tmpGameID.intValue();
 		}
+		
 		bank = new Bank((JSONObject) jsonMap.get("bank"), (JSONObject) jsonMap.get("deck"));
 		chatModel = new ChatModel((JSONObject) jsonMap.get("chat"), (JSONObject) jsonMap.get("log"));
 		
@@ -220,11 +228,59 @@ public class Model {
 			tradeModel = null;
 		else
 			tradeModel = new TradeModel((JSONObject) jsonMap.get("tradeOffer"));
+		
+		//Time to get the AI listeners
+				JSONArray AIjsons = (JSONArray) jsonMap.get("AIs");
+				if (AIjsons == null || !ServerKernel.initialized())
+				{
+				}
+				else {
+					for (int i = 0; i < AIjsons.size(); i++)
+					{
+						JSONObject AIJson = (JSONObject) AIjsons.get(i);
+						Integer index = ((Long)AIJson.get("AIindex")).intValue();
+						String type = (String) AIJson.get("AItype");
+						if (index == null) throw new BadJSONException();
+						if (type == null) throw new BadJSONException();
+						this.AIlistenerIndices.add(index);
+						String username = this.getPlayerFromIndex(index).getUserName();
+						User user = ServerKernel.sole().getUserByName(username);
+						AI ai;
+						if (type.equals("LongestRoad")) {
+							ai = new LongestRoadAI(ServerKernel.sole().getUserByName(user.getUsername()));
+						}
+						else if (type.equals("LargestArmy")) {
+							ai = new LargestArmyAI(ServerKernel.sole().getUserByName(user.getUsername()));
+						}
+						else if (type.equals("Settlements")) {
+							ai = new SettlementsAI(ServerKernel.sole().getUserByName(user.getUsername()));
+						}
+						else
+						{
+							//should never reach
+							ai = null;
+							throw new BadJSONException();
+						}
+						this.AIlisteners.add(ai);
+						
+					}
+				}
+				
+				this.versionIncrement();
 	}
 	
 	public JSONObject toJSON()
 	{
 		JSONObject jsonMap = new JSONObject();
+		JSONArray AIarray = new JSONArray();
+		for (int i = 0; i < AIlisteners.size(); i++) {
+			HashMap<String, Object> aiMap = new HashMap<String, Object>();
+			aiMap.put("AItype", AIlisteners.get(i).getAIType());
+			aiMap.put("AIindex", AIlistenerIndices.get(i));
+			JSONObject aiJSON = new JSONObject(aiMap);
+			AIarray.add(aiJSON);
+		}
+		jsonMap.put("AIs", AIarray);
 		jsonMap.put("name", this.gameName);
 		jsonMap.put("gameID", this.gameID);
 		jsonMap.put("bank", bank.bankToJSON());
@@ -1616,7 +1672,7 @@ public class Model {
 	public void versionIncrement()
 	{
 		version++;
-		Model.shareNewModel(this);
+		this.shareModel(this);
 	}
 	
 	public boolean hasTradeOffer(int playerIndex) {

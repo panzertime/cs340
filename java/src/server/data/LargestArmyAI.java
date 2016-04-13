@@ -13,7 +13,7 @@ import shared.model.hand.ResourceType;
 
 public class LargestArmyAI extends AI {
 
-	
+	public String getAIType() { return "LargestArmy";}
 	public LargestArmyAI() {
 		
 	}

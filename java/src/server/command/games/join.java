@@ -33,7 +33,7 @@ public class join extends GamesCommand {
 					int index = game.getNextPlayerIndex();
 					game.joinGame(user.getID(), user.getUsername(), color);
 					if (AISelector.sole() == null) AISelector.initiate();
-					AISelector.sole().addToColorsUsed(color, index);
+					AISelector.sole().addToColorsUsed(game.getID(), color, index);
 					ServerKernel.sole().addPlayerToGame(game,gameToJoin);
 					result = "Success";
 				} else {

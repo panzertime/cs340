@@ -13,7 +13,7 @@ import shared.model.hand.ResourceType;
 
 public class SettlementsAI extends AI {
 
-	
+	public String getAIType() { return "Settlements";}
 	public SettlementsAI() {
 		
 	}

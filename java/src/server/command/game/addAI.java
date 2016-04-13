@@ -73,7 +73,7 @@ public class addAI extends GameCommand {
 				if(ServerKernel.sole().gameExists(gameToJoin)) {
 					Model game = ServerKernel.sole().getGame(gameToJoin);
 					this.cookie = new CatanCookie(game);
-					CatanColor color = AISelector.sole().getNextColor();
+					CatanColor color = AISelector.sole().getNextColor(game.getID());
 					int index = game.getNextPlayerIndex();
 					user.setUsername(AISelector.sole().getName(index));
 					user.setPassword("dummy"); //can't access Users...
@@ -103,7 +103,7 @@ public class addAI extends GameCommand {
 
 					game.joinGame(user.getID(), user.getUsername(), color);
 					game.registerAIListener((AI) user, index);
-					AISelector.sole().addToColorsUsed(color, index);
+					AISelector.sole().addToColorsUsed(game.getID(), color, index);
 					
 				} else {
 					throw new ServerAccessException("Invalid Game");

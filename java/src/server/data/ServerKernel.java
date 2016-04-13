@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import server.command.game.AISelector;
 import server.command.moves.MovesCommand;
 import server.exception.ServerAccessException;
 import server.exception.UserException;
@@ -58,8 +59,14 @@ public class ServerKernel {
 		if(_instance == null) {
 			_instance = new ServerKernel();
 		}
-		
+		serverInitialized = true;
 		return _instance;
+	}
+	
+	private static boolean serverInitialized = false;
+	public static boolean initialized()
+	{
+		return serverInitialized;
 	}
 	
 	/**
@@ -272,8 +279,9 @@ public class ServerKernel {
 		try {
 			pm = new PersistanceManager(df);
 			pm.startTransaction();
-			initGamesFromDB();
 			initUsersFromDB();
+			initGamesFromDB();
+			
 			pm.endTransaction(true);
 			persistFrequency = freq;
 		} catch (DatabaseException e) {
@@ -314,6 +322,7 @@ public class ServerKernel {
 			ServerAccessException {
 		List<Model> games = pm.getModels();
 		for(Model game : games) {
+			AISelector.sole().addGameColors(game);
 			int gameID = game.getID();
 			updateGame(gameID, game);
 			this.games.put(gameID, game);
