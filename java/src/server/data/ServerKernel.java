@@ -120,6 +120,10 @@ public class ServerKernel {
 		
 	}
 	
+	public User getUserByName(String username) {
+		return users.get(username);
+	}
+	
 	/**
 	 * Give the caller a list of all the games available 
 	 * @pre games list has been created, user had been validated
@@ -432,4 +436,6 @@ public class ServerKernel {
 			}
 		}
 	}
+
+	
 }

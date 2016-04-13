@@ -11,18 +11,17 @@ import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 import shared.model.hand.ResourceType;
 
-public class SettlementsAI extends AI {
+public class LongestRoadAI extends AI {
 
-	
-	public SettlementsAI() {
+	public LongestRoadAI() {
 		
 	}
-	public SettlementsAI(User userByName) {
+	public LongestRoadAI(User userByName) {
 		this.setUserID(userByName.getID());
 		this.setPassword(userByName.getPassword());
 		this.setUsername(userByName.getUsername());
 	}
-	
+
 	@Override
 	void AIDiscard(Model game, int playerIndex) throws ViolatedPreconditionException {
 		int totalcards = 0;
@@ -42,8 +41,7 @@ public class SettlementsAI extends AI {
 			}
 			discardedCards.put(ResourceType.values()[j], value);
 		}
-		game.doDiscardCards(discardedCards, playerIndex);
-		
+		game.doDiscardCards(discardedCards, playerIndex);		
 	}
 
 	@Override
@@ -66,8 +64,8 @@ public class SettlementsAI extends AI {
 				{
 					VertexLocation v = new VertexLocation(hexLoc, dir);
 					if (game.canSetupSettlement(playerIndex, v)) {
-						{	game.doBuildSettlement(true, v, playerIndex);
-						return;}
+						game.doBuildSettlement(true, v, playerIndex);
+						return;
 					}
 				}
 
@@ -84,12 +82,13 @@ public class SettlementsAI extends AI {
 		if (s.isPlaced()) {
 			for (Edge e: s.getVertex().getAllEdges())
 			{
-				if (game.canSetupRoad(playerIndex, e.getEdgeLocation())) {
-					game.doBuildRoad(true, e.getEdgeLocation(), playerIndex);
-					return; }
+				if (game.canSetupRoad(playerIndex, e.getEdgeLocation()))
+				{	game.doBuildRoad(true, e.getEdgeLocation(), playerIndex);
+				return;}
 			}
 		}
 	}
+
 	}
 	
 	

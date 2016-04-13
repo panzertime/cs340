@@ -2,6 +2,7 @@ package server.command.games;
 
 import org.json.simple.JSONObject;
 
+import server.command.game.AISelector;
 import server.data.ServerKernel;
 import server.data.User;
 import server.exception.ServerAccessException;
@@ -29,9 +30,10 @@ public class join extends GamesCommand {
 				if(ServerKernel.sole().gameExists(gameToJoin)) {
 					Model game = ServerKernel.sole().getGame(gameToJoin);
 					this.cookie = new CatanCookie(game);
+					int index = game.getNextPlayerIndex();
 					game.joinGame(user.getID(), user.getUsername(), color);
 					if (AISelector.sole() == null) AISelector.initiate();
-					AISelector.sole().addToColorsUsed(color);
+					AISelector.sole().addToColorsUsed(color, index);
 					ServerKernel.sole().addPlayerToGame(game,gameToJoin);
 					result = "Success";
 				} else {

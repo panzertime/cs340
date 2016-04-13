@@ -47,18 +47,20 @@ public class Model {
 	}
 	
 	private static List<AI> AIlisteners = new ArrayList<AI>();
+	private static List<Integer> AIlistenerIndices = new ArrayList<Integer>();
 	
-	public static void registerAIListener(AI newListener) {
+	public static void registerAIListener(AI newListener, int index) {
 		AIlisteners.add(newListener);
+		AIlistenerIndices.add(index);
 	}
 
 	
 	public static void shareNewModel(Model model) {
 		for (ModelFacade listener : listeners)
 			listener.updateModel(model);
-		for (AI listener : AIlisteners) {
+		for (int i = 0; i < AIlisteners.size(); i++) {
 			try {
-				listener.play(model);
+				AIlisteners.get(i).play(model, AIlistenerIndices.get(i));
 			} catch (ViolatedPreconditionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -115,13 +117,17 @@ public class Model {
 		this.version = 0;
 	}
 	
-	public int joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
+	public int getNextPlayerIndex() {
+		return players.values().size();
+	}
+
+	
+	public void joinGame(int playerID, String playerName, CatanColor color) throws JoinGameException
 	{
 	Integer i = this.getIndexFromPlayerID(playerID);
 	if (i != null)
 	{
 		this.getPlayerFromIndex(i).setUserColor(color);
-		return i;
 	}
 	else
 	{
@@ -129,7 +135,6 @@ public class Model {
 		if (index >= 4)
 			throw new JoinGameException();
 		players.put(index, new Player(playerID, index, playerName, color, this));
-		return players.size() - 1;
 	}
 	
 	}

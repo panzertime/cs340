@@ -6,11 +6,15 @@ import java.util.Set;
 
 import org.json.simple.JSONObject;
 
-import server.command.games.AISelector;
+
 import server.data.AI;
+import server.data.LargestArmyAI;
+import server.data.LongestRoadAI;
 import server.data.ServerKernel;
+import server.data.SettlementsAI;
 import server.data.User;
 import server.exception.ServerAccessException;
+import server.exception.UserException;
 import server.utils.CatanCookie;
 import server.utils.CookieException;
 import shared.model.Model;
@@ -46,11 +50,23 @@ public class addAI extends GameCommand {
 			throws ServerAccessException {
 		if(validCookie(cookie))
 		{
+			User user;
 			if (AISelector.sole() == null) AISelector.initiate();
-			User user = new AI();
-			user.setUsername(AISelector.sole().getNextName());
-			user.setPassword("dummy"); //can't access Users...
-			ServerKernel.sole().addUser(user);
+			String type = (String) args.get("AIType");
+			if (type.equals("LongestRoadAI")) {
+				user = new LongestRoadAI();
+			}
+			else if (type.equals("LargestArmyAI")) {
+				user = new LargestArmyAI();
+			}
+			else if (type.equals("SettlementsAI")) {
+				user = new SettlementsAI();
+			}
+			else
+			{
+				//should never reach
+				user = null;
+			}
 			try {
 				Model model = getGameFromCookie(cookie);
 				int gameToJoin = model.getID();
@@ -58,10 +74,36 @@ public class addAI extends GameCommand {
 					Model game = ServerKernel.sole().getGame(gameToJoin);
 					this.cookie = new CatanCookie(game);
 					CatanColor color = AISelector.sole().getNextColor();
-					int index = game.joinGame(user.getID(), user.getUsername(), color);
-					((AI)user).setIndex(index);
-					game.registerAIListener((AI) user);
-					AISelector.sole().addToColorsUsed(color);
+					int index = game.getNextPlayerIndex();
+					user.setUsername(AISelector.sole().getName(index));
+					user.setPassword("dummy"); //can't access Users...
+					try {
+						if (!ServerKernel.sole().userExists(user)) //Is this necessary???
+						{
+							ServerKernel.sole().addUser(user);
+						}
+						else {
+							if (type.equals("LongestRoadAI")) {
+								user = new LongestRoadAI(ServerKernel.sole().getUserByName(user.getUsername()));
+							}
+							else if (type.equals("LargestArmyAI")) {
+								user = new LargestArmyAI(ServerKernel.sole().getUserByName(user.getUsername()));
+							}
+							else if (type.equals("SettlementsAI")) {
+								user = new SettlementsAI(ServerKernel.sole().getUserByName(user.getUsername()));
+							}
+							else
+							{
+								//should never reach
+								user = null;
+							}
+						}
+					} catch (UserException e1) {
+					}
+
+					game.joinGame(user.getID(), user.getUsername(), color);
+					game.registerAIListener((AI) user, index);
+					AISelector.sole().addToColorsUsed(color, index);
 					
 				} else {
 					throw new ServerAccessException("Invalid Game");

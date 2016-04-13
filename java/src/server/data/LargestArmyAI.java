@@ -11,13 +11,13 @@ import shared.model.board.vertex.VertexLocation;
 import shared.model.exceptions.ViolatedPreconditionException;
 import shared.model.hand.ResourceType;
 
-public class SettlementsAI extends AI {
+public class LargestArmyAI extends AI {
 
 	
-	public SettlementsAI() {
+	public LargestArmyAI() {
 		
 	}
-	public SettlementsAI(User userByName) {
+	public LargestArmyAI(User userByName) {
 		this.setUserID(userByName.getID());
 		this.setPassword(userByName.getPassword());
 		this.setUsername(userByName.getUsername());
@@ -32,15 +32,15 @@ public class SettlementsAI extends AI {
 		int discardNeeded = totalcards / 2;
 		HashMap<ResourceType, Integer> discardedCards = new HashMap<ResourceType, Integer>();
 		
-		for (int j = ResourceType.values().length - 1; j >= 0; j--) {
+		for (ResourceType type: ResourceType.values()) {
 			int value = 0;
-			for (int i = 0; i < game.getResourceAmount(ResourceType.values()[j], playerIndex); i++) {
+			for (int i = 0; i < game.getResourceAmount(type, playerIndex); i++) {
 				if (i < discardNeeded) {
 					discardNeeded--;
 					value++;
 				}
 			}
-			discardedCards.put(ResourceType.values()[j], value);
+			discardedCards.put(type, value);
 		}
 		game.doDiscardCards(discardedCards, playerIndex);
 		
@@ -84,13 +84,14 @@ public class SettlementsAI extends AI {
 		if (s.isPlaced()) {
 			for (Edge e: s.getVertex().getAllEdges())
 			{
-				if (game.canSetupRoad(playerIndex, e.getEdgeLocation())) {
-					game.doBuildRoad(true, e.getEdgeLocation(), playerIndex);
-					return; }
+				if (game.canSetupRoad(playerIndex, e.getEdgeLocation()))
+				{	game.doBuildRoad(true, e.getEdgeLocation(), playerIndex);
+					return;}
 			}
 		}
 	}
+
 	}
-	
-	
+
+
 }

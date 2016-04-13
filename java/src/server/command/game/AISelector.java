@@ -1,4 +1,4 @@
-package server.command.games;
+package server.command.game;
 
 import java.util.ArrayList;
 
@@ -18,18 +18,21 @@ public class AISelector {
 	public AISelector() {
 		names = new ArrayList<String>();
 		colorsUsed = new ArrayList<CatanColor>();
+		for (int i = 0; i < 4; i ++)
+			colorsUsed.add(null);
+		names.add("Samwise");
 		names.add("Frodo");
 		names.add("Pippin");
 		names.add("Merry");
 	}
 	
-	public String getNextName() {
-		String s = names.remove(0);
+	public String getName(int index) {
+		String s = names.get(index);
 		return s;
 	}
 	
-	public void addToColorsUsed(CatanColor c) {
-		colorsUsed.add(c);
+	public void addToColorsUsed(CatanColor c, int index) {
+		colorsUsed.set(index, c);
 	}
 	
 	public CatanColor getNextColor() {
