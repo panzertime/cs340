@@ -41,6 +41,7 @@ public class LongestRoadAI extends AI {
 		for (int j = ResourceType.values().length - 1; j >= 0; j--) {
 			int value = 0;
 			for (int i = 0; i < game.getResourceAmount(ResourceType.values()[j], playerIndex); i++) {
+				
 				if (i < discardNeeded) {
 					discardNeeded--;
 					value++;

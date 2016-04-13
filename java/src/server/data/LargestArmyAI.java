@@ -41,6 +41,7 @@ public class LargestArmyAI extends AI {
 		for (ResourceType type: ResourceType.values()) {
 			int value = 0;
 			for (int i = 0; i < game.getResourceAmount(type, playerIndex); i++) {
+				
 				if (i < discardNeeded) {
 					discardNeeded--;
 					value++;
@@ -48,7 +49,7 @@ public class LargestArmyAI extends AI {
 			}
 			discardedCards.put(type, value);
 		}
-		game.doDiscardCards(discardedCards, playerIndex);
+		if (game.canDiscardCard(discardedCards, playerIndex)) game.doDiscardCards(discardedCards, playerIndex);
 		
 	}
 
